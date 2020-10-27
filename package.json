@@ -1,0 +1,29 @@
+{
+  "name": "project-b",
+  "version": "1.0.0",
+  "description": "Blog app by Erick Frederick.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pepeyen/project-b.git"
+  },
+  "keywords": [
+    "blog",
+    "posts"
+  ],
+  "author": "Erick Frederick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pepeyen/project-b/issues"
+  },
+  "homepage": "https://github.com/pepeyen/project-b#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.6"
+  }
+}
