@@ -14,9 +14,16 @@ app.get('/',function(req,res){
     res.status(200).send(`Welcome to login`);
 });
 app.post('/api/login',(req,res) => {
-    res.status(200).json({
-        succes: true
-    });
+    if(req.body.email === 'erickfcaldeira@gmail.com' && req.body.password === 'noel'){
+        res.status(200).json({
+            success: true
+        });
+    }else{
+        res.status(404).json({
+            success: false,
+            description: 'Invalid username or password'
+        });
+    }
 });
 
 const port = process.env.PORT||8080;
