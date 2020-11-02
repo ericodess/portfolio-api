@@ -35,25 +35,24 @@ const verifyJWT = (req, res, next) => {
 
 app.use(morgan('dev'));
 app.use(cors({
-    origin: `${process.env.ORIGIN_ADDRESS || 'http://localhost'}`,
+    origin: `${process.env.ORIGIN_ADDRESS || 'http://localhost:3000'}`,
     credentials: true
 }));
 app.use(cookieParser());
 app.use(bodyparser.urlencoded({extended : false}));
 app.use(bodyparser.json());
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+    connectionLimit: 10,
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME
 });
 
-connection.connect((error) => {
-    if(error){
-        console.log('Error while connectection to the database: ', error);
-    }
-});
+const getConnection = () => {
+    return pool;
+}
 
 //Server routes
 app.get('/',function(req,res){
@@ -61,6 +60,8 @@ app.get('/',function(req,res){
 });
 
 app.post('/api/login',(req,res) => {
+    const connection = getConnection();
+
     connection.query(`SELECT user_id FROM user_table WHERE user_email = '${req.body.email}' AND user_password = '${req.body.password}'`, (error,result) => {
         if(error){
             res.status(500).json({
@@ -90,12 +91,12 @@ app.post('/api/login',(req,res) => {
                 loggedUserId: userId
             });
         }
-
-        connection.end();
     });
 });
 
 app.get('/api/client/:clientId', verifyJWT, (req, res, next) => {
+    const connection = getConnection();
+
     connection.query(`SELECT * FROM user_table WHERE user_id = ${req.params.clientId}`, (error,result) => {
         if(error){
             res.status(500).json({
@@ -117,8 +118,6 @@ app.get('/api/client/:clientId', verifyJWT, (req, res, next) => {
                 }
             });
         }
-
-        connection.end();
     });
 });
 
