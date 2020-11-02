@@ -35,7 +35,7 @@ const verifyJWT = (req, res, next) => {
 
 app.use(morgan('dev'));
 app.use(cors({
-    origin: `${process.env.ORIGIN_ADDRESS || 'http://localhost'}:${process.env.ORIGIN_PORT || 3000}`,
+    origin: `${process.env.ORIGIN_ADDRESS || 'http://localhost'}`,
     credentials: true
 }));
 app.use(cookieParser());
