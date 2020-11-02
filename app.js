@@ -62,7 +62,7 @@ app.get('/',function(req,res){
 app.post('/api/login',(req,res) => {
     const connection = getConnection();
 
-    connection.query(`SELECT user_id FROM user_table WHERE user_email = '${req.body.email}' AND user_password = '${req.body.password}'`, (error,result) => {
+    connection.query(`SELECT user_id FROM user_table WHERE user_email LIKE BINARY '${req.body.email}' AND user_password LIKE BINARY '${req.body.password}'`, (error,result) => {
         if(error){
             res.status(500).json({
                 success: false,
