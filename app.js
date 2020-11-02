@@ -42,34 +42,18 @@ app.use(cookieParser());
 app.use(bodyparser.urlencoded({extended : false}));
 app.use(bodyparser.json());
 
-let connection;
+const connection = mysql.createConnection({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME
+});
 
-const handleDisconnect = () => {
-    connection = mysql.createConnection({
-        host: process.env.DATABASE_HOST,
-        user: process.env.DATABASE_USER,
-        password: process.env.DATABASE_PASSWORD,
-        database: process.env.DATABASE_NAME
-    });
-    
-    connection.connect((error) => {
-        if(error){
-            console.log('Error while connectection to the database: ', error);
-            setTimeout(handleDisconnect, 2000);
-        }
-    });
-
-    connection.on('error', (error) => {
-        console.log('Database error: ', error);
-        if(error.code === 'PROTOCOL_CONNECTION_LOST'){
-            handleDisconnect();
-        }else{
-            throw error;
-        }
-    });
-};
-
-handleDisconnect();
+connection.connect((error) => {
+    if(error){
+        console.log('Error while connectection to the database: ', error);
+    }
+});
 
 //Server routes
 app.get('/',function(req,res){
@@ -106,6 +90,8 @@ app.post('/api/login',(req,res) => {
                 loggedUserId: userId
             });
         }
+
+        connection.end();
     });
 });
 
@@ -131,6 +117,8 @@ app.get('/api/client/:clientId', verifyJWT, (req, res, next) => {
                 }
             });
         }
+
+        connection.end();
     });
 });
 
