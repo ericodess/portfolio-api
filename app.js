@@ -42,18 +42,34 @@ app.use(cookieParser());
 app.use(bodyparser.urlencoded({extended : false}));
 app.use(bodyparser.json());
 
-const connection = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME
-});
+let connection;
 
-connection.connect((error) => {
-    if(error){
-        throw error;
-    }
-});
+const handleDisconnect = () => {
+    connection = mysql.createConnection({
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USER,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_NAME
+    });
+    
+    connection.connect((error) => {
+        if(error){
+            console.log('Error while connectection to the database: ', error);
+            setTimeout(handleDisconnect, 2000);
+        }
+    });
+
+    connection.on('error', (error) => {
+        console.log('Database error: ', error);
+        if(error.code === 'PROTOCOL_CONNECTION_LOST'){
+            handleDisconnect();
+        }else{
+            throw error;
+        }
+    });
+};
+
+handleDisconnect();
 
 //Server routes
 app.get('/',function(req,res){
