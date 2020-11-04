@@ -97,7 +97,7 @@ app.post('/api/login',(req,res) => {
     });
 });
 
-app.get('/api/client/:clientId', verifyJWT, (req, res, next) => {
+app.get('/api/client/:clientId', (req, res, next) => {
     const connection = getConnection();
 
     connection.query("SELECT * FROM user_table WHERE user_id = ?", [
