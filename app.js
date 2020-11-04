@@ -59,10 +59,10 @@ app.get('/',function(req,res){
     res.status(200).send(`Welcome to login`);
 });
 
-app.post('/api/login',(req,res) => {
+app.post('/api/auth',(req,res) => {
     const connection = getConnection();
 
-    connection.query("SELECT user_id FROM user_table WHERE user_email LIKE BINARY ? AND user_password LIKE BINARY ?", [
+    connection.query("SELECT user_name FROM user_table WHERE user_email LIKE BINARY ? AND user_password LIKE BINARY ?", [
         req.body.email,
         req.body.password
     ],(error,result) => {
@@ -79,9 +79,9 @@ app.post('/api/login',(req,res) => {
                 description: 'Invalid username or password'
             });
         }else{
-            const userId = result[0].user_id;
+            const userName = result[0].user_name;
 
-            const access_token = jwt.sign({userId}, process.env.SECRET, {
+            const access_token = jwt.sign({userName}, process.env.SECRET, {
                 expiresIn: 600
             });
 
@@ -91,17 +91,41 @@ app.post('/api/login',(req,res) => {
             });
             res.status(200).json({
                 success: true,
-                loggedUserId: userId
+                loggedUser: userName
             });
         }
     });
 });
 
-app.get('/api/client/:clientId', (req, res, next) => {
+app.get('/api/users', (req, res, next) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM user_table WHERE user_id = ?", [
-        req.params.clientId
+    connection.query("SELECT user_id,user_name FROM user_table", (error,result) => {
+        if(error){
+            res.status(500).json({
+                success: false,
+                description: 'Server error, please try again'
+            });
+        }
+        if(result.length === 0){
+            res.status(401).json({
+                success: false,
+                description: 'No users found'
+            });
+        }else{
+            res.status(200).json({
+                success: true,
+                user_info: result
+            });
+        }
+    });
+});
+
+app.get('/api/user/:clientName', (req, res, next) => {
+    const connection = getConnection();
+
+    connection.query("SELECT * FROM user_table WHERE user_name = ?", [
+        req.params.clientName
     ], (error,result) => {
         if(error){
             res.status(500).json({
