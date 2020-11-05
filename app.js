@@ -14,6 +14,8 @@ const cookieParser = require('cookie-parser');
 const root = require('./routes/root');
 const auth = require('./routes/auth');
 const users = require('./routes/users');
+const blob = require('./routes/blob');
+
 app.use(morgan('dev'));
 app.use(cors({
     origin: `${process.env.ORIGIN_ADDRESS || 'http://localhost:3000'}`,
@@ -26,6 +28,7 @@ app.use(bodyparser.json());
 app.use('/', root);
 app.use('/api/auth', auth);
 app.use('/api/users', users);
+app.use('/blob', blob);
 
 const port = process.env.PORT||8080;
 app.listen(port);
