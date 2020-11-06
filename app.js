@@ -28,7 +28,6 @@ app.use(bodyparser.json());
 app.use('/', root);
 app.use('/api/auth', auth);
 app.use('/api/users', users);
-app.use('/blob', blob);
 app.use('/api/posts', posts);
 
 const port = process.env.PORT||8080;
