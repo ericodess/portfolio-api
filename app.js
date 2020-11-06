@@ -14,7 +14,7 @@ const cookieParser = require('cookie-parser');
 const root = require('./routes/root');
 const auth = require('./routes/auth');
 const users = require('./routes/users');
-const blob = require('./routes/blob');
+const posts = require('./routes/posts');
 
 app.use(morgan('dev'));
 app.use(cors({
@@ -29,6 +29,7 @@ app.use('/', root);
 app.use('/api/auth', auth);
 app.use('/api/users', users);
 app.use('/blob', blob);
+app.use('/api/posts', posts);
 
 const port = process.env.PORT||8080;
 app.listen(port);
