@@ -32,7 +32,7 @@ router.get('/', (req, res, next) => {
         }else{
             res.status(200).json({
                 success: true,
-                user_info: result
+                users: result
             });
         }
     });
@@ -41,7 +41,7 @@ router.get('/', (req, res, next) => {
 router.get('/:clientName', (req, res, next) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM user_table WHERE user_name = ?", [
+    connection.query("SELECT user_id,user_name FROM user_table WHERE user_name = ?", [
         req.params.clientName
     ], (error,result) => {
         if(error){
@@ -58,10 +58,7 @@ router.get('/:clientName', (req, res, next) => {
         }else{
             res.status(200).json({
                 success: true,
-                user_info: {
-                    userId: result[0].user_id,
-                    userName: result[0].user_name
-                }
+                users: result[0]
             });
         }
     });
