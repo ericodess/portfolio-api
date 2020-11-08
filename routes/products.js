@@ -17,7 +17,7 @@ const getConnection = () => {
 router.get('/', (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM product_table", (error,result) => {
+    connection.query("SELECT * FROM products", (error,result) => {
         if(error){
             res.status(500).json({
                 success: false,
@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
 router.get('/:productId', (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM product_table WHERE product_id = ?", [
+    connection.query("SELECT * FROM products WHERE product_id = ?", [
         req.params.productId
     ], (error,result) => {
         if(error){

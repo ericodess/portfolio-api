@@ -17,7 +17,7 @@ const getConnection = () => {
 router.get('/', (req, res, next) => {
     const connection = getConnection();
 
-    connection.query("SELECT user_id,user_name FROM user_table", (error,result) => {
+    connection.query("SELECT user_id,user_name FROM users", (error,result) => {
         if(error){
             res.status(500).json({
                 success: false,
@@ -41,7 +41,7 @@ router.get('/', (req, res, next) => {
 router.get('/:clientName', (req, res, next) => {
     const connection = getConnection();
 
-    connection.query("SELECT user_id,user_name FROM user_table WHERE user_name = ?", [
+    connection.query("SELECT user_id,user_name FROM users WHERE user_name = ?", [
         req.params.clientName
     ], (error,result) => {
         if(error){

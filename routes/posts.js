@@ -17,7 +17,7 @@ const getConnection = () => {
 router.get('/', (req, res, next) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM post_table", (error,result) => {
+    connection.query("SELECT * FROM posts", (error,result) => {
         if(error){
             res.status(500).json({
                 success: false,
@@ -41,7 +41,7 @@ router.get('/', (req, res, next) => {
 router.get('/:postId', (req, res, next) => {
     const connection = getConnection();
 
-    connection.query("SELECT post_id,post_title,post_theme,post_author FROM post_table WHERE post_id = ?", [
+    connection.query("SELECT * FROM posts WHERE post_id = ?", [
         req.params.postId
     ], (error,result) => {
         if(error){
@@ -64,11 +64,11 @@ router.get('/:postId', (req, res, next) => {
     });
 });
 
-router.get('/author/:postAuthorId', (req, res, next) => {
+router.get('/author/:postAuthor', (req, res, next) => {
     const connection = getConnection();
 
-    connection.query("SELECT post_id,post_title,post_theme,post_author FROM post_table WHERE post_author = ?", [
-        req.params.postAuthorId
+    connection.query("SELECT * FROM posts WHERE post_author = ?", [
+        req.params.postAuthor
     ], (error,result) => {
         if(error){
             res.status(500).json({
@@ -79,7 +79,7 @@ router.get('/author/:postAuthorId', (req, res, next) => {
         if(result.length === 0){
             res.status(401).json({
                 success: false,
-                description: 'Post not found'
+                description: 'No posts found'
             });
         }else{
             res.status(200).json({

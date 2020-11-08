@@ -38,7 +38,7 @@ const verifyJWT = (req, res, next) => {
 router.post('/',(req,res) => {
     const connection = getConnection();
 
-    connection.query("SELECT user_name FROM user_table WHERE user_email LIKE BINARY ? AND user_password LIKE BINARY ?", [
+    connection.query("SELECT user_name FROM users WHERE user_email LIKE BINARY ? AND user_password LIKE BINARY ?", [
         req.body.email,
         req.body.password
     ],(error,result) => {
