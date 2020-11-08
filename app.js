@@ -16,6 +16,7 @@ const auth = require('./routes/auth');
 const users = require('./routes/users');
 const posts = require('./routes/posts');
 const products = require('./routes/products');
+const podcasts = require('./routes/podcasts');
 
 app.use(morgan('dev'));
 app.use(cors({
@@ -31,6 +32,7 @@ app.use('/api/auth', auth);
 app.use('/api/users', users);
 app.use('/api/posts', posts);
 app.use('/api/products', products);
+app.use('/api/podcasts', podcasts);
 
 const port = process.env.PORT||8080;
 app.listen(port);
