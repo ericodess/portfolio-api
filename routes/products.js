@@ -1,18 +1,9 @@
 const express = require('express');
-const mysql = require('mysql');
+
+//Models
+const getConnection = require('../models/createPool');
 
 const router = express.Router();
-
-const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME
-});
-const getConnection = () => {
-    return pool;
-};
 
 router.get('/', (req, res) => {
     const connection = getConnection();

@@ -1,18 +1,11 @@
 const express = require('express');
-const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
 
+//Models
+const getConnection = require('../models/createPool');
+
 const router = express.Router();
-const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME
-});
-const getConnection = () => {
-    return pool;
-};
+
 const verifyJWT = (req, res, next) => {
     const access_token = req.cookies.access_token;
 
@@ -35,7 +28,7 @@ const verifyJWT = (req, res, next) => {
     });
 };
 
-router.post('/',(req,res) => {
+router.post('/',(req, res) => {
     const connection = getConnection();
 
     connection.query("SELECT user_name FROM users WHERE user_email LIKE BINARY ? AND user_password LIKE BINARY ?", [

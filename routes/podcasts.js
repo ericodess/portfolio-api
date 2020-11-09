@@ -1,20 +1,11 @@
 const express = require('express');
-const mysql = require('mysql');
+
+//Models
+const getConnection = require('../models/createPool');
 
 const router = express.Router();
 
-const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME
-});
-const getConnection = () => {
-    return pool;
-};
-
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
     const connection = getConnection();
 
     connection.query("SELECT * FROM podcasts", (error,result) => {
@@ -38,7 +29,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('/:podcastId', (req, res, next) => {
+router.get('/:podcastId', (req, res) => {
     const connection = getConnection();
 
     connection.query("SELECT * FROM podcasts WHERE podcast_id = ?", [
@@ -64,7 +55,7 @@ router.get('/:podcastId', (req, res, next) => {
     });
 });
 
-router.get('/author/:podcastAuthor', (req, res, next) => {
+router.get('/author/:podcastAuthor', (req, res) => {
     const connection = getConnection();
 
     connection.query("SELECT * FROM podcasts WHERE podcast_author = ?", [
