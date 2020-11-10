@@ -1,8 +1,8 @@
-const e = require('express');
 const express = require('express');
 
 //Models
 const getConnection = require('../models/createPool');
+const getQuery = require('../models/createQuery');
 
 const router = express.Router();
 
@@ -25,18 +25,13 @@ const generateCourseList = (course) => {
     return coursesList;
 };
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     const connection = getConnection();
-
-    connection.query("SELECT * FROM courses", (error,result) => {
-        if(error){
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        }
+ 
+    await getQuery(connection,"SELECT * FROM courses")
+    .then(result => {
         if(result.length === 0){
-            res.status(401).json({
+            res.status(200).json({
                 success: false,
                 description: 'No courses found'
             });
@@ -48,23 +43,23 @@ router.get('/', (req, res) => {
                 courses: coursesList
             });
         }
-    });
+    })
+    .catch((error) => {
+        res.status(500).json({
+            success: false,
+            description: 'Server error, please try again'
+        });
+    })
+
 });
 
-router.get('/:courseId', (req, res) => {
+router.get('/:courseId', async (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM courses WHERE course_id = ?", [
-        req.params.courseId
-    ], (error,result) => {
-        if(error){
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        }
+    await getQuery(connection, 'SELECT * FROM courses WHERE course_id = ?', [req.params.courseId])
+    .then(result => {
         if(result.length === 0){
-            res.status(401).json({
+            res.status(404).json({
                 success: false,
                 description: 'No course found'
             });
@@ -76,23 +71,24 @@ router.get('/:courseId', (req, res) => {
                 courses: coursesList[0]
             });
         }
-    });
+    })
+    .catch(error => {
+        res.status(500).json({
+            success: false,
+            description: 'Server error, please try again'
+        });
+    })
 });
 
-router.get('/author/:courseAuthor', (req, res) => {
+router.get('/author/:courseAuthor', async (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM courses WHERE course_author = ?", [
+    await getQuery("SELECT * FROM courses WHERE course_author = ?", [
         req.params.courseAuthor
-    ], (error,result) => {
-        if(error){
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        }
+    ])
+    .then(result => {
         if(result.length === 0){
-            res.status(401).json({
+            res.status(404).json({
                 success: false,
                 description: 'No courses found'
             });
@@ -104,7 +100,13 @@ router.get('/author/:courseAuthor', (req, res) => {
                 posts: courseList
             });
         }
-    });
+    })
+    .catch(() => {
+        res.status(500).json({
+            success: false,
+            description: 'Server error, please try again'
+        });
+    })
 });
 
 module.exports = router;

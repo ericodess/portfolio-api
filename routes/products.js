@@ -2,21 +2,17 @@ const express = require('express');
 
 //Models
 const getConnection = require('../models/createPool');
+const getQuery = require('../models/createQuery');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM products", (error,result) => {
-        if(error){
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        }
+    await getQuery(connection, "SELECT * FROM products")
+    .then(result => {
         if(result.length === 0){
-            res.status(401).json({
+            res.status(404).json({
                 success: false,
                 description: 'No products found'
             });
@@ -26,23 +22,24 @@ router.get('/', (req, res) => {
                 products: result
             });
         }
-    });
+    })
+    .catch(error => {
+        res.status(500).json({
+            success: false,
+            description: 'Server error, please try again'
+        });
+    })
 });
 
-router.get('/:productId', (req, res) => {
+router.get('/:productId', async (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM products WHERE product_id = ?", [
+    await getQuery(connection, "SELECT * FROM products WHERE product_id = ?", [
         req.params.productId
-    ], (error,result) => {
-        if(error){
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        }
+    ])
+    .then(result => {
         if(result.length === 0){
-            res.status(401).json({
+            res.status(404).json({
                 success: false,
                 description: 'Product not found'
             });
@@ -52,7 +49,13 @@ router.get('/:productId', (req, res) => {
                 products: result[0]
             });
         }
-    });
+    })
+    .catch(() => {
+        res.status(500).json({
+            success: false,
+            description: 'Server error, please try again'
+        });
+    })
 });
 
 module.exports = router;

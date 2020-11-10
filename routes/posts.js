@@ -2,21 +2,17 @@ const express = require('express');
 
 //Models
 const getConnection = require('../models/createPool');
+const getQuery = require('../models/createQuery');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM posts", (error,result) => {
-        if(error){
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        }
+    await getQuery(connection, "SELECT * FROM posts")
+    .then(result => {
         if(result.length === 0){
-            res.status(401).json({
+            res.status(404).json({
                 success: false,
                 description: 'No posts found'
             });
@@ -26,23 +22,24 @@ router.get('/', (req, res) => {
                 posts: result
             });
         }
-    });
+    })
+    .catch(() => {
+        res.status(500).json({
+            success: false,
+            description: 'Server error, please try again'
+        });
+    })
 });
 
-router.get('/:postId', (req, res) => {
+router.get('/:postId', async (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM posts WHERE post_id = ?", [
+    await getQuery(connection, "SELECT * FROM posts WHERE post_id = ?", [
         req.params.postId
-    ], (error,result) => {
-        if(error){
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        }
+    ])
+    .then(result => {
         if(result.length === 0){
-            res.status(401).json({
+            res.status(404).json({
                 success: false,
                 description: 'Post not found'
             });
@@ -52,23 +49,24 @@ router.get('/:postId', (req, res) => {
                 posts: result[0]
             });
         }
-    });
+    })
+    .catch(() => {
+        res.status(500).json({
+            success: false,
+            description: 'Server error, please try again'
+        });
+    })
 });
 
-router.get('/author/:postAuthor', (req, res) => {
+router.get('/author/:postAuthor', async (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM posts WHERE post_author = ?", [
+    await getQuery(connection, "SELECT * FROM posts WHERE post_author = ?", [
         req.params.postAuthor
-    ], (error,result) => {
-        if(error){
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        }
+    ])
+    .then(result => {
         if(result.length === 0){
-            res.status(401).json({
+            res.status(404).json({
                 success: false,
                 description: 'No posts found'
             });
@@ -78,7 +76,13 @@ router.get('/author/:postAuthor', (req, res) => {
                 posts: result
             });
         }
-    });
+    })
+    .catch(() => {
+        res.status(500).json({
+            success: false,
+            description: 'Server error, please try again'
+        });
+    })
 });
 
 module.exports = router;

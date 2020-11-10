@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 //Models
 const getConnection = require('../models/createPool');
+const getQuery = require('../models/createQuery');
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ const verifyJWT = (req, res, next) => {
     const access_token = req.cookies.access_token;
 
     if(!access_token){
-        return res.status(401).json({
+        return res.status(403).json({
             success: false,
             description: 'No access_token provided'
         });
@@ -28,20 +29,21 @@ const verifyJWT = (req, res, next) => {
     });
 };
 
-router.post('/',(req, res) => {
+router.get('/', (req, res) => {
+    res.status(405).json({
+        success: false,
+        description: 'Invalid method, please use POST'
+    });
+})
+
+router.post('/', async (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT user_name FROM users WHERE user_email LIKE BINARY ? AND user_password LIKE BINARY ?", [
+    await getQuery(connection,"SELECT user_name FROM users WHERE user_email LIKE BINARY ? AND user_password LIKE BINARY ?", [
         req.body.email,
         req.body.password
-    ],(error,result) => {
-        if(error){
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        }
-
+    ])
+    .then(result => {
         if(result.length === 0){
             res.status(401).json({
                 success: false,
@@ -63,7 +65,13 @@ router.post('/',(req, res) => {
                 loggedUser: userName
             });
         }
-    });
+    })
+    .catch(() => {
+        res.status(500).json({
+            success: false,
+            description: 'Server error, please try again'
+        });
+    })
 });
 
 module.exports = router;
