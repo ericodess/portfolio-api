@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 //Models
-const getConnection = require('../models/createPool');
+const getConnection = require('../../models/createPool');
 
 const router = express.Router();
 

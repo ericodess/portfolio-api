@@ -1,7 +1,7 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../models/createPool');
+const getConnection = require('../../models/createPool');
 
 const router = express.Router();
 

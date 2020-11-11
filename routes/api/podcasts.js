@@ -1,14 +1,14 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../models/createPool');
+const getConnection = require('../../models/createPool');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM posts", (error,result) => {
+    connection.query("SELECT * FROM podcasts", (error,result) => {
         if(error){
             res.status(500).json({
                 success: false,
@@ -18,22 +18,22 @@ router.get('/', (req, res) => {
         if(result.length === 0){
             res.status(401).json({
                 success: false,
-                description: 'No posts found'
+                description: 'No podcasts found'
             });
         }else{
             res.status(200).json({
                 success: true,
-                posts: result
+                podcasts: result
             });
         }
     });
 });
 
-router.get('/:postId', (req, res) => {
+router.get('/:podcastId', (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM posts WHERE post_id = ?", [
-        req.params.postId
+    connection.query("SELECT * FROM podcasts WHERE podcast_id = ?", [
+        req.params.podcastId
     ], (error,result) => {
         if(error){
             res.status(500).json({
@@ -44,22 +44,22 @@ router.get('/:postId', (req, res) => {
         if(result.length === 0){
             res.status(401).json({
                 success: false,
-                description: 'Post not found'
+                description: 'Podcast not found'
             });
         }else{
             res.status(200).json({
                 success: true,
-                posts: result[0]
+                podcasts: result[0]
             });
         }
     });
 });
 
-router.get('/author/:postAuthor', (req, res) => {
+router.get('/author/:podcastAuthor', (req, res) => {
     const connection = getConnection();
 
-    connection.query("SELECT * FROM posts WHERE post_author = ?", [
-        req.params.postAuthor
+    connection.query("SELECT * FROM podcasts WHERE podcast_author = ?", [
+        req.params.podcastAuthor
     ], (error,result) => {
         if(error){
             res.status(500).json({
@@ -70,12 +70,12 @@ router.get('/author/:postAuthor', (req, res) => {
         if(result.length === 0){
             res.status(401).json({
                 success: false,
-                description: 'No posts found'
+                description: 'No podcasts found'
             });
         }else{
             res.status(200).json({
                 success: true,
-                posts: result
+                podcasts: result
             });
         }
     });
