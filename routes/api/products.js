@@ -1,29 +1,33 @@
 const express = require('express');
 
 //Models
+<<<<<<< HEAD:routes/products.js
 const getConnection = require('../models/createPool');
 const getQuery = require('../models/createQuery');
+=======
+const getConnection = require('../../models/createPool');
+>>>>>>> development:routes/api/products.js
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
     const connection = getConnection();
 
-    await getQuery(connection, "SELECT * FROM posts")
+    await getQuery(connection, "SELECT * FROM products")
     .then(result => {
         if(result.length === 0){
             res.status(404).json({
                 success: false,
-                description: 'No posts found'
+                description: 'No products found'
             });
         }else{
             res.status(200).json({
                 success: true,
-                posts: result
+                products: result
             });
         }
     })
-    .catch(() => {
+    .catch(error => {
         res.status(500).json({
             success: false,
             description: 'Server error, please try again'
@@ -31,49 +35,22 @@ router.get('/', async (req, res) => {
     })
 });
 
-router.get('/:postId', async (req, res) => {
+router.get('/:productId', async (req, res) => {
     const connection = getConnection();
 
-    await getQuery(connection, "SELECT * FROM posts WHERE post_id = ?", [
-        req.params.postId
+    await getQuery(connection, "SELECT * FROM products WHERE product_id = ?", [
+        req.params.productId
     ])
     .then(result => {
         if(result.length === 0){
             res.status(404).json({
                 success: false,
-                description: 'Post not found'
+                description: 'Product not found'
             });
         }else{
             res.status(200).json({
                 success: true,
-                posts: result[0]
-            });
-        }
-    })
-    .catch(() => {
-        res.status(500).json({
-            success: false,
-            description: 'Server error, please try again'
-        });
-    })
-});
-
-router.get('/author/:postAuthor', async (req, res) => {
-    const connection = getConnection();
-
-    await getQuery(connection, "SELECT * FROM posts WHERE post_author = ?", [
-        req.params.postAuthor
-    ])
-    .then(result => {
-        if(result.length === 0){
-            res.status(404).json({
-                success: false,
-                description: 'No posts found'
-            });
-        }else{
-            res.status(200).json({
-                success: true,
-                posts: result
+                products: result[0]
             });
         }
     })

@@ -1,25 +1,29 @@
 const express = require('express');
 
 //Models
+<<<<<<< HEAD:routes/users.js
 const getConnection = require('../models/createPool');
 const getQuery = require('../models/createQuery');
+=======
+const getConnection = require('../../models/createPool');
+>>>>>>> development:routes/api/users.js
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
     const connection = getConnection();
 
-    await getQuery(connection, "SELECT * FROM podcasts")
+    await getQuery(connection, "SELECT user_id,user_name FROM users")
     .then(result => {
         if(result.length === 0){
             res.status(404).json({
                 success: false,
-                description: 'No podcasts found'
+                description: 'No users found'
             });
         }else{
             res.status(200).json({
                 success: true,
-                podcasts: result
+                users: result
             });
         }
     })
@@ -29,50 +33,24 @@ router.get('/', async (req, res) => {
             description: 'Server error, please try again'
         });
     })
-    
 });
 
-router.get('/:podcastId', async (req, res) => {
+router.get('/:clientName', async (req, res) => {
     const connection = getConnection();
 
-    await getQuery(connection, "SELECT * FROM podcasts WHERE podcast_id = ?", [
-        req.params.podcastId
+    await getQuery(connection, "SELECT user_id,user_name FROM users WHERE user_name = ?", [
+        req.params.clientName
     ])
     .then(result => {
         if(result.length === 0){
             res.status(404).json({
                 success: false,
-                description: 'Podcast not found'
+                description: 'User not found'
             });
         }else{
             res.status(200).json({
                 success: true,
-                podcasts: result[0]
-            });
-        }
-    })
-    .catch(() => {
-        res.status(500).json({
-            success: false,
-            description: 'Server error, please try again'
-        });
-    })
-});
-
-router.get('/author/:podcastAuthor', async (req, res) => {
-    const connection = getConnection();
-
-    await getQuery("SELECT * FROM podcasts WHERE podcast_author = ?", [req.params.podcastAuthor])
-    .then(result => {
-        if(result.length === 0){
-            res.status(404).json({
-                success: false,
-                description: 'No podcasts found'
-            });
-        }else{
-            res.status(200).json({
-                success: true,
-                podcasts: result
+                users: result[0]
             });
         }
     })
