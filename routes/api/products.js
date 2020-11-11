@@ -1,12 +1,8 @@
 const express = require('express');
 
 //Models
-<<<<<<< HEAD:routes/products.js
-const getConnection = require('../models/createPool');
-const getQuery = require('../models/createQuery');
-=======
 const getConnection = require('../../models/createPool');
->>>>>>> development:routes/api/products.js
+const getQuery = require('../../models/createQuery');
 
 const router = express.Router();
 

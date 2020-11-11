@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 
 //Routes
 const root = require('./routes/root');
-const api = require('./routes/api');
+const api = require('./routes/apis');
 
 app.use(morgan('dev'));
 app.use(cors({

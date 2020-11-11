@@ -1,12 +1,8 @@
 const express = require('express');
 
 //Models
-<<<<<<< HEAD:routes/podcasts.js
-const getConnection = require('../models/createPool');
-const getQuery = require('../models/createQuery');
-=======
 const getConnection = require('../../models/createPool');
->>>>>>> development:routes/api/podcasts.js
+const getQuery = require('../../models/createQuery');
 
 const router = express.Router();
 
