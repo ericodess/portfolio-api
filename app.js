@@ -24,6 +24,7 @@ app.use(bodyparser.urlencoded({extended : false}));
 app.use(bodyparser.json());
 
 app.use('/', root);
+app.use('/static', express.static('public'))
 app.use('/api', api);
 
 const port = process.env.PORT||8080;

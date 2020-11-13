@@ -1,0 +1,179 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+a{
+    color: black;
+    text-decoration: none;
+    -webkit-transition: color ease-in-out .1s;
+    -moz-transition: color ease-in-out .1s;
+    -ms-transition: color ease-in-out .1s;
+    -o-transition: color ease-in-out .1s;
+    transition: color ease-in-out .1s;
+}
+a:hover{
+    color: #73A8A0;
+    text-decoration: underline;
+    cursor: pointer !important;
+}
+.--flex-column{
+    display: flex;
+    flex-direction: column;
+}
+.--flex-row{
+    display: flex;
+    flex-direction: row;
+    gap: 0 2vh;
+}
+.--flex-centered{
+    align-items: center;
+}
+.container{
+    margin: 0 auto 5vh auto;
+    width: 80%;
+}
+.container__line{
+    width: 100%;
+    border-top: .1vh solid black;
+    text-align: center;
+    margin: 8vh 0 3vh 0;
+}
+.container__title{
+    display: inline-block;
+    font-family: 'Roboto', serif;
+    font-weight: 600;
+    font-size: 4vh;
+    background-color: white;
+    margin: -2vh 0 5vh 0;
+    padding: 0 2vh;
+}
+.navbar{
+    display: flex;
+    flex-direction: row;
+    font-family: 'Roboto', serif;
+    align-items: center;
+    margin: 2vh 0 0 0;
+}
+.navbar__logo{
+    font-size: 3vh;
+    font-weight: 600;
+    width: 27.5vh;
+}
+.navbar__logo h3{
+    display: inline-block;
+    width: 27.5vh;
+}
+.navbar__logo div{
+    background-color: #3d3d3d;
+    padding: .2vh 0 .2vh 0;
+    width: 0%;
+    -webkit-transition: all ease-in-out .2s;
+    -moz-transition: all ease-in-out .2s;
+    -ms-transition: all ease-in-out .2s;
+    -o-transition: all ease-in-out .2s;
+    transition: all ease-in-out .2s;
+}
+.navbar__logo:hover h3{
+    cursor: pointer !important;
+    background-color: #73A8A0;
+}
+.navbar__logo:hover div{
+    width: 100%;
+    cursor: default;
+    color: white
+}
+.navbar__items{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin: 0 0 0 auto;
+}
+.navbar__item{
+    color: black;
+    font-size: 2vh;
+}
+.api__block{
+    text-align: center;
+}
+.api__block .api__block-title{
+    font-family: 'Roboto Mono', serif;
+    font-weight: 500;
+    font-size: 2.5vh;
+    -webkit-transition: all ease-in-out .2s;
+    -moz-transition: all ease-in-out .2s;
+    -ms-transition: all ease-in-out .2s;
+    -o-transition: all ease-in-out .2s;
+    transition: all ease-in-out .2s;
+}
+.api__block:hover .api__block-title{
+    color: #73A8A0;
+    text-decoration: underline;
+}
+.api__example{
+    font-family: 'Roboto Mono', serif;
+    font-size: 1.5vh;
+    color: #e5e5e5;
+    padding: 0 2vh 0 2vh !important;
+    width: 70vh;
+    height: 28vh;
+    margin: 2vh 0 0 0 !important;
+}
+.api__submit{
+    font-family: 'Roboto', serif;
+    background-color: transparent;
+    border: .1vh solid black;
+    margin: 6vh 0 0 0;
+    font-size: 2vh;
+    padding: 1vh 3vh 1vh 3vh;
+    transition: all ease-in-out .2s;
+    width: 20%;
+}
+.api__submit:hover{
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}

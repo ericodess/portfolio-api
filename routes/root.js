@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 
 const router = express.Router();
 
@@ -9,7 +8,7 @@ const options = {
 };
 
 router.get('/', (req,res) => {
-    res.status(200).sendFile("home.html", options, (error) => {
+    res.status(200).sendFile("index.html", options, (error) => {
         if(error) {
             res.status(404).json({
                 success: false,
