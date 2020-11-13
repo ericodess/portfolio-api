@@ -62,7 +62,7 @@ router.get('/:podcastId', async (req, res) => {
 router.get('/author/:podcastAuthor', async (req, res) => {
     const connection = getConnection();
 
-    await getQuery("SELECT * FROM podcasts WHERE podcast_author = ?", [req.params.podcastAuthor])
+    await getQuery(connection, "SELECT * FROM podcasts WHERE podcast_author = ?", [req.params.podcastAuthor])
     .then(result => {
         if(result.length === 0){
             res.status(404).json({

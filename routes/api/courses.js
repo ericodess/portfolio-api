@@ -83,7 +83,7 @@ router.get('/:courseId', async (req, res) => {
 router.get('/author/:courseAuthor', async (req, res) => {
     const connection = getConnection();
 
-    await getQuery("SELECT * FROM courses WHERE course_author = ?", [
+    await getQuery(connection, "SELECT * FROM courses WHERE course_author = ?", [
         req.params.courseAuthor
     ])
     .then(result => {
