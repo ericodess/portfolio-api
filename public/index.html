@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
             rel="stylesheet"
             href="static/style/main.css"
@@ -20,10 +21,10 @@
         <header class="container">
             <nav class="navbar">
                 <a
-                    class="navbar__logo"
+                    class="navbar__logo --transiotional"
                     href="/"
                 >
-                    <div>
+                    <div class="--transiotional">
                         <h3>Project Namah Wiki</h3>
                     </div>
                 </a>
@@ -44,8 +45,8 @@
                 <div class="container__line">
                     <h2 class="container__title">Data Fetch Example</h2>
                 </div>
-                <div class="--flex-row">
-                    <div class="api__block">
+                <div class="--grid-fill">
+                    <div class="api__block --transiotional">
                         <span class="api__block-title">Code</span>
                         <pre class="api__example">
                             <code
@@ -67,7 +68,7 @@
                     </div>
                 </div>
                 <button
-                    class="api__submit"
+                    class="api__submit --transiotional"
                     onclick="getAPI();"
                 >
                     Fetch API
@@ -75,6 +76,40 @@
                 <div class="container__line">
                     <h2 class="container__title">Endpoints</h2>
                 </div>
+                <div class="api__endpoints">
+                    <div class="api__endpoint">
+                        <span class="api__endpoint-title">Auth</span>
+                        <span>POST <span class="api__endpoint-link">/api/auth</span></span>
+                    </div>
+                    <div class="api__endpoint --transiotional">
+                        <span class="api__endpoint-title">Users</span>
+                        <span>GET <a href="/api/users">/api/users</a></span>
+                        <span>GET <a href="/api/users/Namahcast">/api/users/:userName</a></span>
+                    </div>
+                    <div class="api__endpoint --transiotional">
+                        <span class="api__endpoint-title">Posts</span>
+                        <span>GET <a href="/api/posts">/api/posts</a></span>
+                        <span>GET <a href="/api/posts/681">/api/posts/:postId</a></span>
+                        <span>GET <a href="/api/posts/author/Namahblogger">/api/posts/author/:postAuthor</a></span>
+                    </div>
+                    <div class="api__endpoint --transiotional">
+                        <span class="api__endpoint-title">Products</span>
+                        <span>GET <a href="/api/products">/api/products</a></span>
+                        <span>GET <a href="/api/products/39">/api/products/:productId</a></span>
+                    </div>
+                    <div class="api__endpoint --transiotional">
+                        <span class="api__endpoint-title">Podcast</span>
+                        <span>GET <a href="/api/podcasts">/api/podcasts</a></span> 
+                        <span>GET <a href="/api/podcasts/121">/api/podcasts/:podcastId</a></span>
+                        <span>GET <a href="/api/podcasts/author/Namahcast">/api/podcasts/author/:podcastAuthor</a></span>
+                    </div>
+                    <div class="api__endpoint --transiotional">
+                        <span class="api__endpoint-title">Courses</span>
+                        <span>GET <a href="/api/courses">/api/courses</a></span> 
+                        <span>GET <a href="/api/courses/12023154">/api/courses/:courseId</a></span>
+                        <span>GET <a href="/api/courses/author/Fernanda Cunha">/api/courses/author/:courseAuthor</a></span>
+                    </div>
+                </div>    
             </article>
         </main>
         <script src="static/js/prism.js" data-manual></script>

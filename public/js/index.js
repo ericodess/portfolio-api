@@ -28,15 +28,7 @@ const getAPI = () => {
         return response.json();
     })
     .then(data => {
-        exampleResponse =`
-{
-    "success": ${data.success},
-    "posts": {
-        "posts_id": ${data.posts.post_id},
-        "posts_title": "${data.posts.post_title}",
-        "posts_author": "${data.posts.post_author}"
-    }
-}`;
+        exampleResponse = '\n' + JSON.stringify(data, null, '   ');
         apiResponse.textContent = exampleResponse;
         Prism.highlightElement(apiResponse);
     });
