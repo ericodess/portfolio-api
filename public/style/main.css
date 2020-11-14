@@ -69,8 +69,12 @@ a{
     width: 100%;
 }
 .--active{
+    border-color: black !important;
     background-color: black !important;
     color: white !important;
+}
+.--disabled{
+    color: #5b857e;
 }
 .container{
     margin: 0 auto 2.5rem auto;
@@ -101,7 +105,7 @@ a{
 .navbar__logo{
     font-weight: 600;
     font-size: 1.5rem;
-    width: 13.5rem;
+    width: 10.2rem;
 }
 .navbar__logo h3{
     display: inline-block;
@@ -154,10 +158,6 @@ a{
     width: 50%;
     height: 3rem;
 }
-.api__submit:active, .api__submit:focus{
-    background-color: black;
-    color: white;
-}
 .api__endpoints{
     width: 100%;
     display: grid;
@@ -170,6 +170,7 @@ a{
     border: .1rem solid black;
     min-height: 5rem;
     padding: 0 .6rem 1rem .6rem ;
+    gap: 1rem 0;
 }
 .api__endpoint span{
     font-family: 'Roboto', serif;
@@ -183,7 +184,10 @@ a{
     background-color: white;
     font-size: 1rem;
     padding: 0 .6rem;
-    margin: -.6rem 0 .6rem 0;
+    margin: -.6rem 0 0 0;
+}
+.api__button{
+    height: 3rem;
 }
 .api__buttons{
     display: grid;
@@ -193,12 +197,23 @@ a{
     gap: 1rem .6rem;
 }
 .api__buttons button{
+    width: 100%;
     background-color: transparent;
     border: .1rem solid #73A8A0;
     color: black;
     font-family: 'Roboto', serif;
     font-size: .8rem;
-    padding: .6rem 1rem;
+    padding: .5rem 1rem;
+}
+.api__button-list-extra{
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+    margin: .6rem 0 0 0;
+    gap: .6rem 0;
+}
+.api__button-list-extra button{
+    background-color: #f7f7f7;
 }
 @media (min-width: 801px){
     .--transiotional{
@@ -216,7 +231,7 @@ a{
         transition: all ease-in-out .1s;
     }
     a:hover{
-        color: #73A8A0;
+        color: #415e59;
         text-decoration: underline;
         cursor: pointer !important;
     }
@@ -245,10 +260,10 @@ a{
     }
     .navbar__logo{
         font-size: 3vh;
-        width: 27.5vh;
+        width: 21vh;
     }
     .navbar__logo h3{
-        width: 27.5vh;
+        width: 21vh;
     }
     .navbar__logo div{
         background-color: #3d3d3d;
@@ -286,7 +301,7 @@ a{
     }
     .api__submit{
         border: .1vh solid black;
-        margin: 6vh 0 0 0;
+        margin: 2vh 0 0 0;
         font-size: 2vh;
         padding: 1vh 3vh 1vh 3vh;
         width: 20%;
@@ -305,12 +320,12 @@ a{
         border: .1vh solid black;
         min-height: 10vh;
         padding: 0 1vh 2vh 1vh;
+        gap: 2vh 0;
     }
     .api__endpoint:hover{
         border-color: #73A8A0;
     }
     .api__endpoint:hover .api__endpoint-title{
-        color: #73A8A0;
         text-decoration: underline;
     }
     .api__endpoint a, .api__endpoint .api__endpoint-link{
@@ -319,12 +334,15 @@ a{
     .api__endpoint-title{
         font-size: 2vh;
         padding: 0 1vh;
-        margin: -1vh 0 1vh 0;
+        margin: -1vh 0 0 0;
+    }
+    .api__button{
+        height: 5vh;
     }
     .api__buttons{
         grid-template-columns: repeat(auto-fit, minmax(10vh, 1fr));
         margin: 2vh 0 1vh 0; 
-        gap: 0 1vh;
+        gap: 1vh 1vh;
     }
     .api__buttons button{
         -webkit-transition: all ease-in-out .2s;
@@ -341,5 +359,9 @@ a{
         border: .1vh solid black;
         color: white;
         background-color: black;
+    }
+    .api__button-list-extra{
+        margin: 1vh 0 1vh 0;
+        gap: 1vh 0;
     }
 }

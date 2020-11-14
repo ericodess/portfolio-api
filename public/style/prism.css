@@ -129,8 +129,8 @@ div.code-toolbar {
 
 div.code-toolbar > .toolbar {
 	position: absolute;
-	top: .4em;
-	right: .4em;
+	top: 1em;
+	right: 1.3em;
 	transition: opacity 0.3s ease-in-out;
 	opacity: 0;
 }

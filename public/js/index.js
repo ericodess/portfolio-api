@@ -9,16 +9,24 @@ let apiCode = {
 };
 
 const setActiveButton = (targetButtonId) => {
-    const buttonList = document.getElementsByClassName('api__buttons')[0];
-    const buttonChildrenList = buttonList.children;
+    const buttonList = document.getElementsByClassName('api__button');
+    const buttonExtraList = document.getElementById(`${targetButtonId}-endpoints-list`)
 
-    for(let index = 0; index < buttonChildrenList.length; index ++){
-        buttonChildrenList[index].classList.remove('--active');
+    for(let index = 0; index < buttonList .length; index ++){
+        if(document.getElementById(`${buttonList[index].id}-endpoints-list`) !== null && buttonExtraList !== null){
+            document.getElementById(`${buttonList[index].id}-endpoints-list`).style.visibility = 'hidden';
+        }
+
+        buttonList[index].classList.remove('--active');
     }
 
     const currentButton = document.getElementById(targetButtonId);
 
     currentButton.classList.add('--active');
+
+    if(buttonExtraList !== null){
+        buttonExtraList.style.visibility = "visible";
+    }
 
     exampleResponse = `
 {}`;
@@ -39,8 +47,8 @@ const getAPI = () => {
 };
 
 const setAPICode = (codeType) => {
+    const splittedCodyType = codeType.split('-')[0];
 
-    
     switch (codeType) {
         case 'auth':
             const myHeaders = new Headers(); 
@@ -58,42 +66,71 @@ const setAPICode = (codeType) => {
             };
 
             break;
-
-        case 'courses':
+        case splittedCodyType:
             apiCode.codeType = codeType;
-            apiCode.codeParam = '12023154';
-            apiCode.codeOptions = {method: 'GET'};
-
-            break;
-
-        case 'podcasts':
-            apiCode.codeType = codeType;
-            apiCode.codeParam = '121';
             apiCode.codeOptions = {method: 'GET'};
             
+            switch (splittedCodyType) {
+                case 'courses':
+                    apiCode.codeParam = '12023154';
+        
+                    break;
+        
+                case 'podcasts':
+                    apiCode.codeParam = '121';
+                    
+                    break;
+        
+                case 'products':
+                    apiCode.codeParam = '39';
+                    
+                    break;
+        
+                case 'posts':
+                    apiCode.codeParam = '681';
+        
+                    break;
+        
+                case 'users':
+                    apiCode.codeParam = 'Namahcast';
+        
+                    break;
+            };
+
+            break;
+        
+        case `${splittedCodyType}-all`:
+            apiCode.codeType = splittedCodyType;
+            apiCode.codeOptions = {method: 'GET'};
+            apiCode.codeParam = '';
+
             break;
 
-        case 'products':
-            apiCode.codeType = codeType;
-            apiCode.codeParam = '39';
+        case `${splittedCodyType}-author`:
+            apiCode.codeType = splittedCodyType;
             apiCode.codeOptions = {method: 'GET'};
-            
-            break;
 
-        case 'posts':
-            apiCode.codeType = codeType;
-            apiCode.codeOptions = {method: 'GET'};
-            apiCode.codeParam = '681';
+            switch (splittedCodyType) {
+                case 'courses':
+                    apiCode.codeParam = 'author/Fernanda Cunha';
 
-            break;
-
-        case 'users':
-            apiCode.codeType = codeType;
-            apiCode.codeOptions = {method: 'GET'};
-            apiCode.codeParam = 'Namahcast';
+                    break;
+        
+                case 'podcasts':
+                    apiCode.codeParam = 'author/Namahcast';
+                    
+                    break;
+        
+                case 'posts':
+                    apiCode.codeParam = 'author/Namahblogger';
+        
+                    break;
+        
+            };
 
             break;
     }
+    apiCode.codeParam = apiCode.codeParam === '' ? apiCode.codeParam : encodeURI(apiCode.codeParam);
 
 exampleCode =`
 fetch('https://project-namah.herokuapp.com/api/${apiCode.codeType}/${apiCode.codeParam}',${JSON.stringify(apiCode.codeOptions, null, '    ').replace(/[^\w\s:@.'-{}]/gi, '')})

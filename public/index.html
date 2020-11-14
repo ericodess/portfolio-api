@@ -2,7 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+        />
         <link
             rel="stylesheet"
             href="static/style/main.css"
@@ -15,29 +18,19 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono"
         >
-        <title>Project Namah Wiki</title>
+        <title>Project Namah</title>
     </head>
     <body>
         <header class="container">
             <nav class="navbar">
                 <a
-                    class="navbar__logo --transiotional"
+                    class="navbar__logo"
                     href="/"
                 >
                     <div class="--transiotional">
-                        <h3>Project Namah Wiki</h3>
+                        <h3>Project Namah</h3>
                     </div>
                 </a>
-                <ul class="navbar__items">
-                    <li class="navbar__item">
-                        <a
-                            class="navbar__link"
-                            href="/guide"
-                        >
-                            Guide
-                        </a>
-                    </li>
-                </ul>
             </nav>
         </header>
         <main>
@@ -56,15 +49,149 @@
                             </code>
                         </pre>
                         <ul class="api__buttons">
-                            <button id='auth' onclick="setAPICode('auth');">Auth</button>
-                            <button id='courses' onclick="setAPICode('courses');">Courses</button>
-                            <button id='podcasts' onclick="setAPICode('podcasts');">Podcast</button>
-                            <button id='posts' onclick="setAPICode('posts');">Posts</button>
-                            <button id='products' onclick="setAPICode('products');">Products</button>
-                            <button id='users'onclick="setAPICode('users');">Users</button>
+                            <div class="api__button-list">
+                                <button
+                                    class="api__button"
+                                    id='auth' 
+                                    onclick="setAPICode('auth')"
+                                >
+                                    Auth
+                                </button>
+                                <div 
+                                    id="auth-endpoints-list"
+                                    class="api__button-list-extra"
+                                >
+                                </div>
+                            </div>
+                            <div class="api__button-list">
+                                <button
+                                    class="api__button"
+                                    id='courses'
+                                    onclick="setAPICode('courses')"
+                                >
+                                    Courses by Id
+                                </button>
+                                <div 
+                                    id="courses-endpoints-list"
+                                    class="api__button-list-extra"
+                                >
+                                    <button
+                                        class="api__button"
+                                        id='courses-author'
+                                        onclick="setAPICode('courses-author')"
+                                    >
+                                        Courses by Author
+                                    </button>
+                                    <button
+                                        class="api__button"
+                                        id='courses-all'
+                                        onclick="setAPICode('courses-all')"
+                                    >
+                                        Courses List
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="api__button-list">
+                                <button
+                                    class="api__button"
+                                    id='podcasts'
+                                    onclick="setAPICode('podcasts')"
+                                >
+                                    Podcast by Id
+                                </button>
+                                <div 
+                                    id="podcasts-endpoints-list"
+                                    class="api__button-list-extra"
+                                >
+                                    <button
+                                        class="api__button"
+                                        id='podcasts-author'
+                                        onclick="setAPICode('podcasts-author')"
+                                    >
+                                        Podcasts by Author
+                                    </button>
+                                    <button
+                                        class="api__button"
+                                        id='podcasts-all'
+                                        onclick="setAPICode('podcasts-all')"
+                                    >
+                                        Podcasts List
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="api__button-list">
+                                <button
+                                    class="api__button"
+                                    id='posts'
+                                    onclick="setAPICode('posts')"
+                                >
+                                    Posts by Id
+                                </button>
+                                <div 
+                                    id="posts-endpoints-list"
+                                    class="api__button-list-extra"
+                                >
+                                    <button
+                                        class="api__button"
+                                        id='posts-author'
+                                        onclick="setAPICode('posts-author')"
+                                    >
+                                        Posts by Author
+                                    </button>
+                                    <button
+                                        class="api__button"
+                                        id='posts-all'
+                                        onclick="setAPICode('posts-all')"
+                                    >
+                                        Posts List
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="api__button-list">
+                                <button
+                                    class="api__button"
+                                    id='products'
+                                    onclick="setAPICode('products')"
+                                >
+                                    Products by Id
+                                </button>
+                                <div 
+                                    id="products-endpoints-list"
+                                    class="api__button-list-extra"
+                                >
+                                    <button
+                                        class="api__button"
+                                        id='products-all'
+                                        onclick="setAPICode('products-all')"
+                                    >
+                                        Products List
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="api__button-list">
+                                <button
+                                    class="api__button"
+                                    id='users'
+                                    onclick="setAPICode('users')"
+                                >
+                                    Users by Username
+                                </button>
+                                <div 
+                                    id="users-endpoints-list"
+                                    class="api__button-list-extra"
+                                >
+                                    <button
+                                        class="api__button"
+                                        id='users-all'
+                                        onclick="setAPICode('users-all')"
+                                    >
+                                        Users List
+                                    </button>
+                                </div>
+                            </div>
                         </ul>
                     </div>
-                    <div class="api__block">
+                    <div class="api__block --transiotional">
                         <span class="api__block-title">Response</span>
                         <pre class="api__example">
                             <code
@@ -77,7 +204,7 @@
                 </div>
                 <button
                     class="api__submit --transiotional"
-                    onclick="getAPI();"
+                    onclick="getAPI(1);"
                 >
                     Fetch API
                 </button>
@@ -87,7 +214,7 @@
                 <div class="api__endpoints">
                     <div class="api__endpoint">
                         <span class="api__endpoint-title">Auth</span>
-                        <span>POST <span class="api__endpoint-link">/api/auth</span></span>
+                        <span>POST <span class="api__endpoint-link --disabled">/api/auth</span></span>
                     </div>
                     <div class="api__endpoint --transiotional">
                         <span class="api__endpoint-title">Courses</span>
