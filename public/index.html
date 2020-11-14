@@ -55,6 +55,14 @@
                             >
                             </code>
                         </pre>
+                        <ul class="api__buttons">
+                            <button id='auth' onclick="setAPICode('auth');">Auth</button>
+                            <button id='courses' onclick="setAPICode('courses');">Courses</button>
+                            <button id='podcasts' onclick="setAPICode('podcasts');">Podcast</button>
+                            <button id='posts' onclick="setAPICode('posts');">Posts</button>
+                            <button id='products' onclick="setAPICode('products');">Products</button>
+                            <button id='users'onclick="setAPICode('users');">Users</button>
+                        </ul>
                     </div>
                     <div class="api__block">
                         <span class="api__block-title">Response</span>
@@ -82,9 +90,16 @@
                         <span>POST <span class="api__endpoint-link">/api/auth</span></span>
                     </div>
                     <div class="api__endpoint --transiotional">
-                        <span class="api__endpoint-title">Users</span>
-                        <span>GET <a href="/api/users">/api/users</a></span>
-                        <span>GET <a href="/api/users/Namahcast">/api/users/:userName</a></span>
+                        <span class="api__endpoint-title">Courses</span>
+                        <span>GET <a href="/api/courses">/api/courses</a></span> 
+                        <span>GET <a href="/api/courses/12023154">/api/courses/:courseId</a></span>
+                        <span>GET <a href="/api/courses/author/Fernanda Cunha">/api/courses/author/:courseAuthor</a></span>
+                    </div>
+                    <div class="api__endpoint --transiotional">
+                        <span class="api__endpoint-title">Podcast</span>
+                        <span>GET <a href="/api/podcasts">/api/podcasts</a></span> 
+                        <span>GET <a href="/api/podcasts/121">/api/podcasts/:podcastId</a></span>
+                        <span>GET <a href="/api/podcasts/author/Namahcast">/api/podcasts/author/:podcastAuthor</a></span>
                     </div>
                     <div class="api__endpoint --transiotional">
                         <span class="api__endpoint-title">Posts</span>
@@ -98,16 +113,9 @@
                         <span>GET <a href="/api/products/39">/api/products/:productId</a></span>
                     </div>
                     <div class="api__endpoint --transiotional">
-                        <span class="api__endpoint-title">Podcast</span>
-                        <span>GET <a href="/api/podcasts">/api/podcasts</a></span> 
-                        <span>GET <a href="/api/podcasts/121">/api/podcasts/:podcastId</a></span>
-                        <span>GET <a href="/api/podcasts/author/Namahcast">/api/podcasts/author/:podcastAuthor</a></span>
-                    </div>
-                    <div class="api__endpoint --transiotional">
-                        <span class="api__endpoint-title">Courses</span>
-                        <span>GET <a href="/api/courses">/api/courses</a></span> 
-                        <span>GET <a href="/api/courses/12023154">/api/courses/:courseId</a></span>
-                        <span>GET <a href="/api/courses/author/Fernanda Cunha">/api/courses/author/:courseAuthor</a></span>
+                        <span class="api__endpoint-title">Users</span>
+                        <span>GET <a href="/api/users">/api/users</a></span>
+                        <span>GET <a href="/api/users/Namahcast">/api/users/:userName</a></span>
                     </div>
                 </div>    
             </article>

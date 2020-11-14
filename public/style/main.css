@@ -51,6 +51,10 @@ a{
     color: black;
     text-decoration: none;
 }
+.--flex--row{
+    display: flex;
+    flex-direction: row;
+}
 .--flex-column{
     display: flex;
     flex-direction: column;
@@ -63,6 +67,10 @@ a{
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
     gap: 2rem 1rem;
     width: 100%;
+}
+.--active{
+    background-color: black !important;
+    color: white !important;
 }
 .container{
     margin: 0 auto 2.5rem auto;
@@ -176,6 +184,21 @@ a{
     font-size: 1rem;
     padding: 0 .6rem;
     margin: -.6rem 0 .6rem 0;
+}
+.api__buttons{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+    margin: 1rem 0 .6rem 0; 
+    justify-content: center;
+    gap: 1rem .6rem;
+}
+.api__buttons button{
+    background-color: transparent;
+    border: .1rem solid #73A8A0;
+    color: black;
+    font-family: 'Roboto', serif;
+    font-size: .8rem;
+    padding: .6rem 1rem;
 }
 @media (min-width: 801px){
     .--transiotional{
@@ -297,5 +320,21 @@ a{
         font-size: 2vh;
         padding: 0 1vh;
         margin: -1vh 0 1vh 0;
+    }
+    .api__buttons{
+        grid-template-columns: repeat(auto-fit, minmax(10vh, 1fr));
+        margin: 2vh 0 1vh 0; 
+        gap: 0 1vh;
+    }
+    .api__buttons button{
+        border: .1vh solid #73A8A0;
+        font-size: 1.5vh;
+        padding: .5vh 1.5vh;
+    }
+    .api__buttons button:hover{
+        cursor: pointer;
+        border: .1vh solid black;
+        color: white;
+        background-color: black;
     }
 }
