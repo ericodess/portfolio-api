@@ -10,14 +10,16 @@ let apiCode = {
 
 const setActiveButton = (targetButtonId) => {
     const buttonList = document.getElementsByClassName('api__button');
-    const buttonExtraList = document.getElementById(`${targetButtonId}-endpoints-list`)
+    const buttonExtraList = document.getElementById(`${targetButtonId}-endpoints-list`);
 
     for(let index = 0; index < buttonList .length; index ++){
-        if(document.getElementById(`${buttonList[index].id}-endpoints-list`) !== null && buttonExtraList !== null){
-            document.getElementById(`${buttonList[index].id}-endpoints-list`).style.visibility = 'hidden';
+        let currentButton = buttonList[index];
+
+        if(document.getElementById(`${currentButton.id}-endpoints-list`) !== null && buttonExtraList !== null){
+            document.getElementById(`${currentButton.id}-endpoints-list`).style.visibility = 'hidden';
         }
 
-        buttonList[index].classList.remove('--active');
+        currentButton.classList.remove('--active');
     }
 
     const currentButton = document.getElementById(targetButtonId);
@@ -41,96 +43,36 @@ const getAPI = () => {
     })
     .then(data => {
         exampleResponse = '\n' + JSON.stringify(data, null, '   ');
+
         apiResponse.textContent = exampleResponse;
         Prism.highlightElement(apiResponse);
     });
 };
 
-const setAPICode = (codeType) => {
+const setAPICode = (codeType,codeParam) => {
+    codeParam = codeParam ?? '';
+
     const splittedCodyType = codeType.split('-')[0];
 
-    switch (codeType) {
-        case 'auth':
-            const myHeaders = new Headers(); 
-            myHeaders.append("Content-Type", "application/json"); 
+    if(splittedCodyType === 'auth'){
+        const myHeaders = new Headers(); 
+        myHeaders.append("Content-Type", "application/json"); 
 
-            apiCode.codeType = codeType;
-            apiCode.codeParam = ''
-            apiCode.codeOptions = {
-                headers: myHeaders,
-                method: 'POST',
-                body: {
-                    email: "namahcast@big-bang-web.br",
-                    password: "123456"
-                }
-            };
-
-            break;
-        case splittedCodyType:
-            apiCode.codeType = codeType;
-            apiCode.codeOptions = {method: 'GET'};
-            
-            switch (splittedCodyType) {
-                case 'courses':
-                    apiCode.codeParam = '12023154';
-        
-                    break;
-        
-                case 'podcasts':
-                    apiCode.codeParam = '121';
-                    
-                    break;
-        
-                case 'products':
-                    apiCode.codeParam = '39';
-                    
-                    break;
-        
-                case 'posts':
-                    apiCode.codeParam = '681';
-        
-                    break;
-        
-                case 'users':
-                    apiCode.codeParam = 'Namahcast';
-        
-                    break;
-            };
-
-            break;
-        
-        case `${splittedCodyType}-all`:
-            apiCode.codeType = splittedCodyType;
-            apiCode.codeOptions = {method: 'GET'};
-            apiCode.codeParam = '';
-
-            break;
-
-        case `${splittedCodyType}-author`:
-            apiCode.codeType = splittedCodyType;
-            apiCode.codeOptions = {method: 'GET'};
-
-            switch (splittedCodyType) {
-                case 'courses':
-                    apiCode.codeParam = 'author/Fernanda Cunha';
-
-                    break;
-        
-                case 'podcasts':
-                    apiCode.codeParam = 'author/Namahcast';
-                    
-                    break;
-        
-                case 'posts':
-                    apiCode.codeParam = 'author/Namahblogger';
-        
-                    break;
-        
-            };
-
-            break;
+        apiCode.codeType = splittedCodyType;
+        apiCode.codeOptions = {
+            headers: myHeaders,
+            method: "'POST'",
+            body: {
+                email: "'namahcast@big-bang-web.br'",
+                password: "'123456'"
+            }
+        };
+    }else{
+        apiCode.codeType = splittedCodyType;
+        apiCode.codeOptions = {method: "'GET'"};
     }
-    apiCode.codeParam = apiCode.codeParam === '' ? apiCode.codeParam : encodeURI(apiCode.codeParam);
+
+    apiCode.codeParam = codeParam === '' ? codeParam : encodeURI(codeParam);
 
 exampleCode =`
 fetch('https://project-namah.herokuapp.com/api/${apiCode.codeType}/${apiCode.codeParam}',${JSON.stringify(apiCode.codeOptions, null, '    ').replace(/[^\w\s:@.'-{}]/gi, '')})
@@ -140,16 +82,15 @@ fetch('https://project-namah.herokuapp.com/api/${apiCode.codeType}/${apiCode.cod
 .then(data => {
     console.log(data);
 })`;
-    apiCode.codeOptions.body = JSON.stringify(apiCode.codeOptions.body);
+    if(apiCode.codeOptions.body !== null && apiCode.codeOptions.body !== undefined){
+        apiCode.codeOptions.body = JSON.stringify(apiCode.codeOptions.body).replace(/[']/g, "");
+    };
+    apiCode.codeOptions.method = apiCode.codeOptions.method.replace(/[']/g, "");
+
     apiExample.textContent = exampleCode;
+
     setActiveButton(codeType);
     Prism.highlightElement(apiExample);
 };
 
 setAPICode('users');
-
-apiExample.textContent = exampleCode;
-Prism.highlightElement(apiExample);
-
-apiResponse.textContent = exampleResponse;
-Prism.highlightElement(apiResponse);
