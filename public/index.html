@@ -5,7 +5,11 @@
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1"
-        />
+        >
+        <meta 
+            name="description" 
+            content="This is the back-end for the Namah Project"
+        >
         <link
             rel="stylesheet"
             href="static/style/main.css"
@@ -27,7 +31,7 @@
                     class="navbar__logo"
                     href="/"
                 >
-                    <div class="--transiotional">
+                    <div>
                         <h3>Project Namah</h3>
                     </div>
                 </a>
@@ -49,7 +53,7 @@
                             </code>
                         </pre>
                         <ul class="api__buttons">
-                            <div class="api__button-list">
+                            <li class="api__button-list">
                                 <button
                                     class="api__button"
                                     id='auth' 
@@ -62,8 +66,8 @@
                                     class="api__button-list-extra"
                                 >
                                 </div>
-                            </div>
-                            <div class="api__button-list">
+                            </li>
+                            <li class="api__button-list">
                                 <button
                                     class="api__button"
                                     id='courses'
@@ -90,8 +94,8 @@
                                         Courses List
                                     </button>
                                 </div>
-                            </div>
-                            <div class="api__button-list">
+                            </li>
+                            <li class="api__button-list">
                                 <button
                                     class="api__button"
                                     id='podcasts'
@@ -118,8 +122,8 @@
                                         Podcasts List
                                     </button>
                                 </div>
-                            </div>
-                            <div class="api__button-list">
+                            </li>
+                            <li class="api__button-list">
                                 <button
                                     class="api__button"
                                     id='posts'
@@ -146,8 +150,8 @@
                                         Posts List
                                     </button>
                                 </div>
-                            </div>
-                            <div class="api__button-list">
+                            </li>
+                            <li class="api__button-list">
                                 <button
                                     class="api__button"
                                     id='products'
@@ -167,8 +171,8 @@
                                         Products List
                                     </button>
                                 </div>
-                            </div>
-                            <div class="api__button-list">
+                            </li>
+                            <li class="api__button-list">
                                 <button
                                     class="api__button"
                                     id='users'
@@ -188,7 +192,7 @@
                                         Users List
                                     </button>
                                 </div>
-                            </div>
+                            </li>
                         </ul>
                     </div>
                     <div class="api__block --transiotional">
@@ -211,40 +215,40 @@
                 <div class="container__line">
                     <h2 class="container__title">Endpoints</h2>
                 </div>
-                <div class="api__endpoints">
-                    <div class="api__endpoint">
+                <ul class="api__endpoints --transiotional">
+                    <li class="api__endpoint">
                         <span class="api__endpoint-title">Auth</span>
                         <span>POST <span class="api__endpoint-link --disabled">/api/auth</span></span>
-                    </div>
-                    <div class="api__endpoint --transiotional">
+                    </li>
+                    <li class="api__endpoint">
                         <span class="api__endpoint-title">Courses</span>
                         <span>GET <a href="/api/courses">/api/courses</a></span> 
                         <span>GET <a href="/api/courses/12023154">/api/courses/:courseId</a></span>
                         <span>GET <a href="/api/courses/author/Fernanda Cunha">/api/courses/author/:courseAuthor</a></span>
-                    </div>
-                    <div class="api__endpoint --transiotional">
+                    </li>
+                    <li class="api__endpoint">
                         <span class="api__endpoint-title">Podcast</span>
                         <span>GET <a href="/api/podcasts">/api/podcasts</a></span> 
                         <span>GET <a href="/api/podcasts/121">/api/podcasts/:podcastId</a></span>
                         <span>GET <a href="/api/podcasts/author/Namahcast">/api/podcasts/author/:podcastAuthor</a></span>
-                    </div>
-                    <div class="api__endpoint --transiotional">
+                    </li>
+                    <li class="api__endpoint">
                         <span class="api__endpoint-title">Posts</span>
                         <span>GET <a href="/api/posts">/api/posts</a></span>
                         <span>GET <a href="/api/posts/681">/api/posts/:postId</a></span>
                         <span>GET <a href="/api/posts/author/Namahblogger">/api/posts/author/:postAuthor</a></span>
-                    </div>
-                    <div class="api__endpoint --transiotional">
+                    </li>
+                    <li class="api__endpoint">
                         <span class="api__endpoint-title">Products</span>
                         <span>GET <a href="/api/products">/api/products</a></span>
                         <span>GET <a href="/api/products/39">/api/products/:productId</a></span>
-                    </div>
-                    <div class="api__endpoint --transiotional">
+                    </li>
+                    <li class="api__endpoint">
                         <span class="api__endpoint-title">Users</span>
                         <span>GET <a href="/api/users">/api/users</a></span>
                         <span>GET <a href="/api/users/Namahcast">/api/users/:userName</a></span>
-                    </div>
-                </div>    
+                    </li>
+                </ul>    
             </article>
         </main>
         <script src="static/js/prism.js" data-manual></script>

@@ -217,18 +217,18 @@ a{
 }
 @media (min-width: 801px){
     .--transiotional{
-        -webkit-transition: all ease-in-out .2s;
-        -moz-transition: all ease-in-out .2s;
-        -ms-transition: all ease-in-out .2s;
-        -o-transition: all ease-in-out .2s;
-        transition: all ease-in-out .2s;
+        -webkit-transition: background-color ease-in-out .2s;
+        -moz-transition: background-color ease-in-out .2s;
+        -ms-transition: background-color ease-in-out .2s;
+        -o-transition: background-color ease-in-out .2s;
+        transition: background-color ease-in-out .2s;
     }
     a {
-        -webkit-transition: all ease-in-out .1s;
-        -moz-transition: all ease-in-out .1s;
-        -ms-transition: all ease-in-out .1s;
-        -o-transition: all ease-in-out .1s;
-        transition: all ease-in-out .1s;
+        -webkit-transition: color ease-in-out .1s;
+        -moz-transition: color ease-in-out .1s;
+        -ms-transition: color ease-in-out .1s;
+        -o-transition: color ease-in-out .1s;
+        transition: color ease-in-out .1s;
     }
     a:hover{
         color: #415e59;
@@ -266,6 +266,11 @@ a{
         width: 21vh;
     }
     .navbar__logo div{
+        -webkit-transition: width ease-in-out .2s;
+        -moz-transition: width ease-in-out .2s;
+        -ms-transition: width ease-in-out .2s;
+        -o-transition: width ease-in-out .2s;
+        transition: width ease-in-out .2s;
         background-color: #3d3d3d;
         padding: .2vh 0 .2vh 0;
         width: 0%;
@@ -317,6 +322,11 @@ a{
         gap: 2vh 1vh;
     }
     .api__endpoint{
+        -webkit-transition: border-color ease-in-out .2s;
+        -moz-transition: border-color ease-in-out .2s;
+        -ms-transition: border-color ease-in-out .2s;
+        -o-transition: border-color ease-in-out .2s;
+        transition: border-color ease-in-out .2s;
         border: .1vh solid black;
         min-height: 10vh;
         padding: 0 1vh 2vh 1vh;
@@ -345,11 +355,11 @@ a{
         gap: 1vh 1vh;
     }
     .api__buttons button{
-        -webkit-transition: all ease-in-out .2s;
-        -moz-transition: all ease-in-out .2s;
-        -ms-transition: all ease-in-out .2s;
-        -o-transition: all ease-in-out .2s;
-        transition: all ease-in-out .2s;
+        -webkit-transition: background-color ease-in-out .2s;
+        -moz-transition: background-color ease-in-out .2s;
+        -ms-transition: background-color ease-in-out .2s;
+        -o-transition: background-color ease-in-out .2s;
+        transition: background-color ease-in-out .2s;
         border: .1vh solid #73A8A0;
         font-size: 1.5vh;
         padding: .5vh 1.5vh;
