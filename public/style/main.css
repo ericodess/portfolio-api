@@ -187,7 +187,7 @@ a{
     margin: -.6rem 0 0 0;
 }
 .api__button{
-    height: 3rem;
+    height: 4rem;
 }
 .api__buttons{
     display: grid;
@@ -347,7 +347,7 @@ a{
         margin: -1vh 0 0 0;
     }
     .api__button{
-        height: 5vh;
+        height: 6vh;
     }
     .api__buttons{
         grid-template-columns: repeat(auto-fit, minmax(10vh, 1fr));
