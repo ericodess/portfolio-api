@@ -62,6 +62,35 @@ router.get('/:podcastId', (req, res) => {
     });
 });
 
+router.get('/offset/:podcastsOffset', (req, res) => {
+    getConnection(async (error,connection) => {
+        await getQuery(connection, "SELECT * FROM podcasts LIMIT ?", [
+            parseInt(req.params.podcastsOffset)
+        ])
+        .then(result => {
+            if(result.length === 0){
+                res.status(404).json({
+                    success: false,
+                    description: 'No podcasts found'
+                });
+            }else{
+                res.status(200).json({
+                    success: true,
+                    podcasts: result
+                });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                success: false,
+                description: 'Server error, please try again'
+            });
+        })
+
+        connection.release();
+    });
+});
+
 router.get('/author/:podcastAuthor', (req, res) => {
     getConnection(async (error,connection) => {
         await getQuery(connection, "SELECT * FROM podcasts WHERE podcast_author = ?", [req.params.podcastAuthor])

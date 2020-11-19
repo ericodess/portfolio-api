@@ -10,7 +10,7 @@ const generateCourseList = (course) => {
     let coursesList = [course.length];
 
     course.forEach((element,index) => {
-        coursesList[index] = {
+        coursesList[index] = { 
             course_id: element.course_id,
             course_author: element.course_author,
             course_title: element.course_title,
@@ -44,6 +44,37 @@ router.get('/', (req, res) => {
             }
         })
         .catch(() => {
+            res.status(500).json({
+                success: false,
+                description: 'Server error, please try again'
+            });
+        })
+
+        connection.release();
+    });
+});
+
+router.get('/offset/:courseOffset', (req, res) => {
+    getConnection(async (error,connection) => {
+        await getQuery(connection, "SELECT * FROM courses LIMIT ?", [
+            parseInt(req.params.courseOffset)
+        ])
+        .then(result => {
+            if(result.length === 0){
+                res.status(404).json({
+                    success: false,
+                    description: 'No courses found'
+                });
+            }else{
+                const coursesList = generateCourseList(result);
+
+                res.status(200).json({
+                    success: true,
+                    courses: coursesList
+                });
+            }
+        })
+        .catch(error => {
             res.status(500).json({
                 success: false,
                 description: 'Server error, please try again'
