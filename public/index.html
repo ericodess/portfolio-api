@@ -170,6 +170,13 @@
                                     >
                                         Products List
                                     </button>
+                                    <button
+                                        class="api__button"
+                                        id='products-all-limited'
+                                        onclick="setAPICode('products-all-limited','offset/3')"
+                                    >
+                                        Products List with offset
+                                    </button>
                                 </div>
                             </li>
                             <li class="api__button-list">
@@ -190,6 +197,27 @@
                                         onclick="setAPICode('users-all')"
                                     >
                                         Users List
+                                    </button>
+                                </div>
+                            </li>
+                            <li class="api__button-list">
+                                <button
+                                    class="api__button"
+                                    id='banners'
+                                    onclick="setAPICode('banners','552')"
+                                >
+                                    Banners by Id
+                                </button>
+                                <div 
+                                    id="banners-endpoints-list"
+                                    class="api__button-list-extra"
+                                >
+                                    <button
+                                        class="api__button"
+                                        id='banners-all'
+                                        onclick="setAPICode('banners-all')"
+                                    >
+                                        Banners List
                                     </button>
                                 </div>
                             </li>
@@ -247,6 +275,11 @@
                         <span class="api__endpoint-title">Users</span>
                         <span>GET <a href="/api/users">/api/users</a></span>
                         <span>GET <a href="/api/users/Namahcast">/api/users/:userName</a></span>
+                    </li>
+                    <li class="api__endpoint">
+                        <span class="api__endpoint-title">Banners</span>
+                        <span>GET <a href="/api/banners">/api/banners</a></span>
+                        <span>GET <a href="/api/banners/552">/api/banners/:bannerId</a></span>
                     </li>
                 </ul>    
             </article>

@@ -93,4 +93,4 @@ fetch('https://project-namah.herokuapp.com/api/${apiCode.codeType}/${apiCode.cod
     Prism.highlightElement(apiExample);
 };
 
-setAPICode('users','Namahcast');
+setAPICode('auth');
