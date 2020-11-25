@@ -9,6 +9,7 @@ const products = require('./api/products');
 const podcasts = require('./api/podcasts');
 const courses = require('./api/courses');
 const banners = require('./api/banners');
+const concepts = require('./api/concetps');
 
 router.use('/auth', auth);
 router.use('/users', users);
@@ -17,5 +18,6 @@ router.use('/products', products);
 router.use('/podcasts', podcasts);
 router.use('/courses', courses);
 router.use('/banners', banners);
+router.use('/concepts', concepts);
 
 module.exports = router;

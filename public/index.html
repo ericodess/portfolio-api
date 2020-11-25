@@ -61,11 +61,6 @@
                                 >
                                     Auth
                                 </button>
-                                <div 
-                                    id="auth-endpoints-list"
-                                    class="api__button-list-extra"
-                                >
-                                </div>
                             </li>
                             <li class="api__button-list">
                                 <button
@@ -235,6 +230,15 @@
                                     </button>
                                 </div>
                             </li>
+                            <li class="api__button-list">
+                                <button
+                                    class="api__button"
+                                    id='concepts-all-limited'
+                                    onclick="setAPICode('concepts-all-limited','offset/3')"
+                                >
+                                    Concepts List with offset
+                                </button>
+                            </li>
                         </ul>
                     </div>
                     <div class="api__block --transiotional">
@@ -297,6 +301,10 @@
                         <span class="api__endpoint-title">Banners</span>
                         <span>GET <a href="/api/banners">/api/banners</a></span>
                         <span>GET <a href="/api/banners/552">/api/banners/:bannerId</a></span>
+                    </li>
+                    <li class="api__endpoint">
+                        <span class="api__endpoint-title">Concepts</span>
+                        <span>GET <a href="/api/concepts/offset/3">/api/concepts/:conceptOffset</a></span>
                     </li>
                 </ul>    
             </article>
