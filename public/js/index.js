@@ -12,23 +12,33 @@ const setActiveButton = (targetButtonId) => {
     const buttonList = document.getElementsByClassName('api__button');
     const buttonExtraList = document.getElementById(`${targetButtonId}-endpoints-list`);
 
-    for(let index = 0; index < buttonList .length; index ++){
+    for(let index = 0; index < buttonList.length; index ++){
         let currentButton = buttonList[index];
 
         if(document.getElementById(`${currentButton.id}-endpoints-list`) !== null && buttonExtraList !== null){
-            document.getElementById(`${currentButton.id}-endpoints-list`).style.visibility = 'hidden';
+            document.getElementById(`${currentButton.id}-endpoints-list`).style.display = 'none';
         }
 
         currentButton.classList.remove('--active');
-    }
+    };
 
     const currentButton = document.getElementById(targetButtonId);
 
     currentButton.classList.add('--active');
 
     if(buttonExtraList !== null){
-        buttonExtraList.style.visibility = "visible";
+        buttonExtraList.style.display = 'flex';
     }
+
+    for(let index = 0; index < buttonList.length; index ++){
+        let currentElement = buttonList[index];
+
+        if(currentButton.parentElement.id !== `${currentElement.id.split('-')[0]}-endpoints-list`){
+            if(currentElement.id !== currentButton.id && document.getElementById(`${currentElement.id}-endpoints-list`)){
+                document.getElementById(`${currentElement.id}-endpoints-list`).style.display = 'none'
+            }
+        }
+    };
 
     exampleResponse = `
 {}`;
