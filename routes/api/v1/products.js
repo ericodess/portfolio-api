@@ -2,8 +2,8 @@ const express = require('express');
 const querystring = require('querystring');
 
 //Models
-const getConnection = require('../../models/createPool');
-const getQuery = require('../../models/createQuery');
+const getConnection = require('../../../models/createPool');
+const getQuery = require('../../../models/createQuery');
 
 const router = express.Router();
 

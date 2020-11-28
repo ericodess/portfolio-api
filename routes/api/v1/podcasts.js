@@ -1,45 +1,53 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../models/createPool');
-const getQuery = require('../../models/createQuery');
+const getConnection = require('../../../models/createPool');
+const getQuery = require('../../../models/createQuery');
 
 const router = express.Router();
 
-const generateCourseList = (course) => {
-    let coursesList = [course.length];
-
-    course.forEach((element,index) => {
-        coursesList[index] = { 
-            course_id: element.course_id,
-            course_author: element.course_author,
-            course_title: element.course_title,
-            course_description: element.course_description,
-            course_date: {
-                course_start_date: element.course_start_date,
-                course_end_date: element.course_end_date
-            }
-        }
-    });
-
-    return coursesList;
-};
-
 router.get('/', (req, res) => {
     getConnection(async (error,connection) => {
-        await getQuery(connection,"SELECT * FROM courses")
+        await getQuery(connection, "SELECT * FROM podcasts")
         .then(result => {
             if(result.length === 0){
-                res.status(200).json({
+                res.status(404).json({
                     success: false,
-                    description: 'No courses found'
+                    description: 'No podcasts found'
                 });
             }else{
-                const coursesList = generateCourseList(result);
-
                 res.status(200).json({
                     success: true,
-                    courses: coursesList
+                    podcasts: result
+                });
+            }
+        })
+        .catch(() => {
+            res.status(500).json({
+                success: false,
+                description: 'Server error, please try again'
+            });
+        })
+
+        connection.release();
+    });  
+});
+
+router.get('/:podcastId', (req, res) => {
+    getConnection(async (error,connection) => {
+        await getQuery(connection, "SELECT * FROM podcasts WHERE podcast_id = ?", [
+            req.params.podcastId
+        ])
+        .then(result => {
+            if(result.length === 0){
+                res.status(404).json({
+                    success: false,
+                    description: 'Podcast not found'
+                });
+            }else{
+                res.status(200).json({
+                    success: true,
+                    podcasts: result[0]
                 });
             }
         })
@@ -54,23 +62,21 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/offset/:courseOffset', (req, res) => {
+router.get('/offset/:podcastsOffset', (req, res) => {
     getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT * FROM courses LIMIT ?", [
-            parseInt(req.params.courseOffset)
+        await getQuery(connection, "SELECT * FROM podcasts LIMIT ?", [
+            parseInt(req.params.podcastsOffset)
         ])
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
                     success: false,
-                    description: 'No courses found'
+                    description: 'No podcasts found'
                 });
             }else{
-                const coursesList = generateCourseList(result);
-
                 res.status(200).json({
                     success: true,
-                    courses: coursesList
+                    podcasts: result
                 });
             }
         })
@@ -85,52 +91,19 @@ router.get('/offset/:courseOffset', (req, res) => {
     });
 });
 
-router.get('/:courseId', (req, res) => {
+router.get('/author/:podcastAuthor', (req, res) => {
     getConnection(async (error,connection) => {
-        await getQuery(connection, 'SELECT * FROM courses WHERE course_id = ?', [req.params.courseId])
+        await getQuery(connection, "SELECT * FROM podcasts WHERE podcast_author = ?", [req.params.podcastAuthor])
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
                     success: false,
-                    description: 'No course found'
+                    description: 'No podcasts found'
                 });
             }else{
-                const coursesList = generateCourseList(result);
-
                 res.status(200).json({
                     success: true,
-                    courses: coursesList[0]
-                });
-            }
-        })
-        .catch(() => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        })
-
-        connection.release();
-    });
-});
-
-router.get('/author/:courseAuthor', (req, res) => {
-    getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT * FROM courses WHERE course_author = ?", [
-            req.params.courseAuthor
-        ])
-        .then(result => {
-            if(result.length === 0){
-                res.status(404).json({
-                    success: false,
-                    description: 'No courses found'
-                });
-            }else{
-                const courseList = generateCourseList(result);
-    
-                res.status(200).json({
-                    success: true,
-                    posts: courseList
+                    podcasts: result
                 });
             }
         })

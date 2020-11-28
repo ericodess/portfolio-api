@@ -1,8 +1,8 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../models/createPool');
-const getQuery = require('../../models/createQuery');
+const getConnection = require('../../../models/createPool');
+const getQuery = require('../../../models/createQuery');
 
 const router = express.Router();
 
@@ -26,34 +26,8 @@ const generateCourseList = (course) => {
 };
 
 router.get('/', (req, res) => {
-    let queryClauses;
-
-    if(Object.keys(req.query).length === 0 && req.query.constructor === Object){
-        queryClauses = '*'
-    }else{
-        queryClauses = '';
-
-        Object.keys(req.query).map((element, index) => {
-            if(element !== 'offset'){
-                if(index === Object.keys(req.query).length - 1){
-                    queryClauses = queryClauses + ` course_${element} = :query_${element}`;
-                }else{
-                    if(index === 0){
-                        queryClauses = `WHERE course_${element} = :query_${element} AND`;
-                    }else{
-                        queryClauses = queryClauses + ` course_${element} = :query_${element} AND`;
-                    }
-                }
-            }
-        })
-    }
-    console.log(queryClauses)
     getConnection(async (error,connection) => {
-        await getQuery(connection,`SELECT * FROM courses ${queryClauses}`, {
-            query_id: !req.query.id || req.query.id === '' ? '' : parseInt(req.query.id),
-            query_author: !req.query.author || req.query.author === '' ? '' : req.query.author,
-            offset: !req.query.offset || req.query.offset === '' || req.query.offset === 0 ? 10 : parseInt(req.query.offset),
-        })
+        await getQuery(connection,"SELECT * FROM courses")
         .then(result => {
             if(result.length === 0){
                 res.status(200).json({
@@ -69,8 +43,7 @@ router.get('/', (req, res) => {
                 });
             }
         })
-        .catch((error) => {
-            console.log(error)
+        .catch(() => {
             res.status(500).json({
                 success: false,
                 description: 'Server error, please try again'
