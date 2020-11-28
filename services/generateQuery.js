@@ -1,5 +1,5 @@
 const generateQuery = ({requestQueries, targetItems, targetTable, targetIsBinary}) => {
-    targetIsBinary = targetIsBinary ?? false;
+    targetIsBinary = targetIsBinary === null || targetIsBinary === undefined ? false : targetIsBinary;
 
     let queryClauses = `SELECT ${targetItems === '' || targetItems === null || targetItems === undefined ? '*' : targetItems} FROM ${targetTable}`,
     queryParameters = [];

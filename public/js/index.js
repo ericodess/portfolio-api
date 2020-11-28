@@ -61,8 +61,8 @@ const getAPI = () => {
 };
 
 const setAPICode = ({codeBranch,codeType,codeParam}) => {
-    codeParam = codeParam ?? '';
-    codeBranch = codeBranch ?? 'v1';
+    codeParam = codeParam === null || codeParam === undefined ? '' : codeParam;
+    codeBranch = codeBranch === null || codeBranch === undefined ? 'v1' : codeBranch;
 
     const splittedCodyType = codeType.split('-')[0];
 
