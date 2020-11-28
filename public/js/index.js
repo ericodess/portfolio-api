@@ -48,7 +48,7 @@ const setActiveButton = (targetButtonId) => {
 };
 
 const getAPI = () => {
-    fetch(`/api/${apiCode.codeBranch}/${apiCode.codeType}/${apiCode.codeParam}`,apiCode.codeOptions)
+    fetch(`/api/${apiCode.codeBranch}/${apiCode.codeType}${apiCode.codeParam}`,apiCode.codeOptions)
     .then(response => {
         return response.json();
     })
@@ -61,7 +61,7 @@ const getAPI = () => {
 };
 
 const setAPICode = ({codeBranch,codeType,codeParam}) => {
-    codeParam = codeParam === null || codeParam === undefined ? '' : codeParam;
+    codeParam = codeParam === null || codeParam === undefined ? '' : '?' + codeParam;
     codeBranch = codeBranch === null || codeBranch === undefined ? 'v1' : codeBranch;
 
     const splittedCodyType = codeType.split('-')[0];
@@ -88,7 +88,7 @@ const setAPICode = ({codeBranch,codeType,codeParam}) => {
     apiCode.codeParam = codeParam === '' ? codeParam : encodeURI(codeParam);
 
 exampleCode =`
-fetch('https://project-namah.herokuapp.com/api/${apiCode.codeBranch}/${apiCode.codeType}/${apiCode.codeParam}',${JSON.stringify(apiCode.codeOptions, null, '    ').replace(/[^\w\s:@.'-{}]/gi, '')})
+fetch('https://project-namah.herokuapp.com/api/${apiCode.codeBranch}/${apiCode.codeType}${apiCode.codeParam}',${JSON.stringify(apiCode.codeOptions, null, '    ').replace(/[^\w\s:@.'-{}]/gi, '')})
 .then(response => {
     return response.json();
 })
