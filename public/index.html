@@ -57,7 +57,7 @@
                                 <button
                                     class="api__button"
                                     id='auth' 
-                                    onclick="setAPICode('auth')"
+                                    onclick="setAPICode({codeType:'auth'})"
                                 >
                                     Auth
                                 </button>
@@ -66,7 +66,7 @@
                                 <button
                                     class="api__button"
                                     id='courses'
-                                    onclick="setAPICode('courses','12023154')"
+                                    onclick="setAPICode({codeType:'courses', codeParam:'12023154'})"
                                 >
                                     Courses by Id
                                 </button>
@@ -77,21 +77,21 @@
                                     <button
                                         class="api__button"
                                         id='courses-author'
-                                        onclick="setAPICode('courses-author','author/Fernanda Cunha')"
+                                        onclick="setAPICode({codeType:'courses-author', codeParam:'author/Fernanda Cunha'})"
                                     >
                                         Courses by Author
                                     </button>
                                     <button
                                         class="api__button"
                                         id='courses-all'
-                                        onclick="setAPICode('courses-all')"
+                                        onclick="setAPICode({codeType:'courses-all'})"
                                     >
                                         Courses List
                                     </button>
                                     <button
                                         class="api__button"
                                         id='courses-all-limited'
-                                        onclick="setAPICode('courses-all-limited','offset/2')"
+                                        onclick="setAPICode({codeType:'courses-all-limited', codeParam:'offset/2'})"
                                     >
                                     Courses List with offset
                                     </button>
@@ -101,7 +101,7 @@
                                 <button
                                     class="api__button"
                                     id='podcasts'
-                                    onclick="setAPICode('podcasts','121')"
+                                    onclick="setAPICode({codeType:'podcasts', codeParam:'121'})"
                                 >
                                     Podcast by Id
                                 </button>
@@ -112,21 +112,21 @@
                                     <button
                                         class="api__button"
                                         id='podcasts-author'
-                                        onclick="setAPICode('podcasts-author','author/Namahcast')"
+                                        onclick="setAPICode({codeType:'podcasts-author', codeParam:'author/Namahcast'})"
                                     >
                                         Podcasts by Author
                                     </button>
                                     <button
                                         class="api__button"
                                         id='podcasts-all'
-                                        onclick="setAPICode('podcasts-all')"
+                                        onclick="setAPICode({codeType:'podcasts-all'})"
                                     >
                                         Podcasts List
                                     </button>
                                     <button
                                         class="api__button"
                                         id='podcasts-all-limited'
-                                        onclick="setAPICode('podcasts-all-limited','offset/2')"
+                                        onclick="setAPICode({codeType:'podcasts-all-limited', codeParam:'offset/2'})"
                                     >
                                         Podcasts List with offset
                                     </button>
@@ -136,7 +136,7 @@
                                 <button
                                     class="api__button"
                                     id='posts'
-                                    onclick="setAPICode('posts','681')"
+                                    onclick="setAPICode({codeType:'posts', codeParam:'681'})"
                                 >
                                     Posts by Id
                                 </button>
@@ -147,14 +147,14 @@
                                     <button
                                         class="api__button"
                                         id='posts-author'
-                                        onclick="setAPICode('posts-author','author/Namahblogger')"
+                                        onclick="setAPICode({codeType:'posts-author', codeParam:'author/Namahblogger'})"
                                     >
                                         Posts by Author
                                     </button>
                                     <button
                                         class="api__button"
                                         id='posts-all'
-                                        onclick="setAPICode('posts-all')"
+                                        onclick="setAPICode({codeType:'posts-all'})"
                                     >
                                         Posts List
                                     </button>
@@ -164,7 +164,7 @@
                                 <button
                                     class="api__button"
                                     id='products'
-                                    onclick="setAPICode('products','39')"
+                                    onclick="setAPICode({codeType:'products', codeParam:'39'})"
                                 >
                                     Products by Id
                                 </button>
@@ -175,14 +175,14 @@
                                     <button
                                         class="api__button"
                                         id='products-all'
-                                        onclick="setAPICode('products-all')"
+                                        onclick="setAPICode({codeType:'products-all'})"
                                     >
                                         Products List
                                     </button>
                                     <button
                                         class="api__button"
                                         id='products-all-limited'
-                                        onclick="setAPICode('products-all-limited','offset/3')"
+                                        onclick="setAPICode({codeType:'products-all-limited', codeParam:'offset/3'})"
                                     >
                                         Products List with offset
                                     </button>
@@ -192,7 +192,7 @@
                                 <button
                                     class="api__button"
                                     id='users'
-                                    onclick="setAPICode('users','Namahcast')"
+                                    onclick="setAPICode({codeType:'users', codeParam:'Namahcast'})"
                                 >
                                     Users by Username
                                 </button>
@@ -203,7 +203,7 @@
                                     <button
                                         class="api__button"
                                         id='users-all'
-                                        onclick="setAPICode('users-all')"
+                                        onclick="setAPICode({codeType:'users-all'})"
                                     >
                                         Users List
                                     </button>
@@ -213,7 +213,7 @@
                                 <button
                                     class="api__button"
                                     id='banners'
-                                    onclick="setAPICode('banners','552')"
+                                    onclick="setAPICode({codeType:'banners', codeParam:'552'})"
                                 >
                                     Banners by Id
                                 </button>
@@ -224,7 +224,7 @@
                                     <button
                                         class="api__button"
                                         id='banners-all'
-                                        onclick="setAPICode('banners-all')"
+                                        onclick="setAPICode({codeType:'banners-all'})"
                                     >
                                         Banners List
                                     </button>
@@ -234,7 +234,7 @@
                                 <button
                                     class="api__button"
                                     id='concepts-all-limited'
-                                    onclick="setAPICode('concepts-all-limited','offset/3')"
+                                    onclick="setAPICode({codeType:'concepts-all-limited', codeParam:'offset/3'})"
                                 >
                                     Concepts List with offset
                                 </button>
@@ -264,47 +264,47 @@
                 <ul class="api__endpoints --transiotional">
                     <li class="api__endpoint">
                         <span class="api__endpoint-title">Auth</span>
-                        <span>POST <span class="api__endpoint-link --disabled">/api/auth</span></span>
+                        <span>POST <span class="api__endpoint-link --disabled">/api/v1/auth</span></span>
                     </li>
                     <li class="api__endpoint">
                         <span class="api__endpoint-title">Courses</span>
-                        <span>GET <a href="/api/courses">/api/courses</a></span> 
-                        <span>GET <a href="/api/courses/12023154">/api/courses/:courseId</a></span>
-                        <span>GET <a href="/api/courses/author/Fernanda Cunha">/api/courses/author/:courseAuthor</a></span>
-                        <span>GET <a href="/api/courses/offset/2">/api/courses/offset/:courseOffset</a></span>
+                        <span>GET <a href="/api/v1/courses">/api/v1/courses</a></span> 
+                        <span>GET <a href="/api/v1/courses/12023154">/api/v1/courses/:courseId</a></span>
+                        <span>GET <a href="/api/v1/courses/author/Fernanda Cunha">/api/v1/courses/author/:courseAuthor</a></span>
+                        <span>GET <a href="/api/v1/courses/offset/2">/api/v1/courses/offset/:courseOffset</a></span>
                     </li>
                     <li class="api__endpoint">
                         <span class="api__endpoint-title">Podcast</span>
-                        <span>GET <a href="/api/podcasts">/api/podcasts</a></span> 
-                        <span>GET <a href="/api/podcasts/121">/api/podcasts/:podcastId</a></span>
-                        <span>GET <a href="/api/podcasts/author/Namahcast">/api/podcasts/author/:podcastAuthor</a></span>
-                        <span>GET <a href="/api/podcasts/offset/2">/api/podcasts/offset/:podcastOffset</a></span>
+                        <span>GET <a href="/api/v1/podcasts">/api/v1/podcasts</a></span> 
+                        <span>GET <a href="/api/v1/podcasts/121">/api/v1/podcasts/:podcastId</a></span>
+                        <span>GET <a href="/api/v1/podcasts/author/Namahcast">/api/v1/podcasts/author/:podcastAuthor</a></span>
+                        <span>GET <a href="/api/v1/podcasts/offset/2">/api/v1/podcasts/offset/:podcastOffset</a></span>
                     </li>
                     <li class="api__endpoint">
                         <span class="api__endpoint-title">Posts</span>
-                        <span>GET <a href="/api/posts">/api/posts</a></span>
-                        <span>GET <a href="/api/posts/681">/api/posts/:postId</a></span>
-                        <span>GET <a href="/api/posts/author/Namahblogger">/api/posts/author/:postAuthor</a></span>
+                        <span>GET <a href="/api/v1/posts">/api/v1/posts</a></span>
+                        <span>GET <a href="/api/v1/posts/681">/api/v1/posts/:postId</a></span>
+                        <span>GET <a href="/api/v1/posts/author/Namahblogger">/api/v1/posts/author/:postAuthor</a></span>
                     </li>
                     <li class="api__endpoint">
                         <span class="api__endpoint-title">Products</span>
-                        <span>GET <a href="/api/products">/api/products</a></span>
-                        <span>GET <a href="/api/products/39">/api/products/:productId</a></span>
-                        <span>GET <a href="/api/products/offset/3">/api/products/offset/:productOffset</a></span>
+                        <span>GET <a href="/api/v1/products">/api/v1/products</a></span>
+                        <span>GET <a href="/api/v1/products/39">/api/v1/products/:productId</a></span>
+                        <span>GET <a href="/api/v1/products/offset/3">/api/v1/products/offset/:productOffset</a></span>
                     </li>
                     <li class="api__endpoint">
                         <span class="api__endpoint-title">Users</span>
-                        <span>GET <a href="/api/users">/api/users</a></span>
-                        <span>GET <a href="/api/users/Namahcast">/api/users/:userName</a></span>
+                        <span>GET <a href="/api/v1/users">/api/v1/users</a></span>
+                        <span>GET <a href="/api/v1/users/Namahcast">/api/v1/users/:userName</a></span>
                     </li>
                     <li class="api__endpoint">
                         <span class="api__endpoint-title">Banners</span>
-                        <span>GET <a href="/api/banners">/api/banners</a></span>
-                        <span>GET <a href="/api/banners/552">/api/banners/:bannerId</a></span>
+                        <span>GET <a href="/api/v1/banners">/api/v1/banners</a></span>
+                        <span>GET <a href="/api/v1/banners/552">/api/v1/banners/:bannerId</a></span>
                     </li>
                     <li class="api__endpoint">
                         <span class="api__endpoint-title">Concepts</span>
-                        <span>GET <a href="/api/concepts/offset/3">/api/concepts/:conceptOffset</a></span>
+                        <span>GET <a href="/api/v1/concepts/offset/3">/api/v1/concepts/:conceptOffset</a></span>
                     </li>
                 </ul>    
             </article>

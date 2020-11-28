@@ -2,8 +2,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 //Models
-const getConnection = require('../../models/createPool');
-const getQuery = require('../../models/createQuery');
+const getConnection = require('../../../models/createPool');
+const getQuery = require('../../../models/createQuery');
 
 const router = express.Router();
 
@@ -38,10 +38,15 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     getConnection(async (error,connection) => {
-        await getQuery(connection,"SELECT user_name FROM users WHERE user_email LIKE BINARY ? AND user_password LIKE BINARY ?", [
-            req.body.email,
-            req.body.password
-        ])
+        await getQuery(connection, {
+            queryRequest:{
+                email: req.body.email,
+                password: req.body.password
+            },
+            queryTargetItems: 'user_name',
+            queryTargetTable: 'users',
+            queryIsBinary: true  
+        })
         .then(result => {
             if(result.length === 0){
                 res.status(401).json({
