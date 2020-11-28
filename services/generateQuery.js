@@ -3,10 +3,10 @@ const generateQuery = ({requestQueries, targetItems, targetTable}) => {
     queryParameters = [];
 
     if(Object.keys(requestQueries).length !== 0 && requestQueries.constructor === Object){
-        const firstIndex = Object.keys(requestQueries).indexOf(Object.keys(requestQueries).find(element => element !== 'limit'));
+        const firstIndex = Object.keys(requestQueries).indexOf(Object.keys(requestQueries).find(element => element !== 'limit' && requestQueries[element] !== undefined));
 
         Object.keys(requestQueries).map((element, index) => {
-            if(element !== 'limit'){
+            if(element !== 'limit' && requestQueries[element] !== undefined){
                 if(index === firstIndex){
                     queryClauses = queryClauses + ` WHERE ${targetTable.slice(0, -1)}_${element} = ?`;
                 }else{
