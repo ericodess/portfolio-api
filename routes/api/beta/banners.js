@@ -1,23 +1,18 @@
 const express = require('express');
 
-//Service
-const generateQuery = require('../../../services/generateQuery');
-
 //Models
 const getConnection = require('../../../models/createPool');
-const getQuery = require('../../../models/createQuery');
+const getQuery = require('../../../models/createQueryBETA');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    const query = generateQuery({
-        requestQueries: req.query,
-        targetItems: 'banner_id,banner_title,banner_description',
-        targetTable: 'banners'
-    });
-
     getConnection(async (error,connection) => {
-        await getQuery(connection, query.queryClauses, query.queryParameters)
+        await getQuery(connection, {
+            queryRequest: req.query,
+            queryTargetItems: 'banner_id,banner_title,banner_description',
+            queryTargetTable: 'banner'
+        })
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
