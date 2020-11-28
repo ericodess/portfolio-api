@@ -5,6 +5,7 @@ let exampleCode, exampleResponse;
 let apiCode = {
     codeType: '',
     codeParam: '',
+    codeBranch: '',
     codeOptions: {}
 };
 
@@ -47,7 +48,7 @@ const setActiveButton = (targetButtonId) => {
 };
 
 const getAPI = () => {
-    fetch(`/api/${apiCode.codeType}/${apiCode.codeParam}`,apiCode.codeOptions)
+    fetch(`/api/${apiCode.codeBranch}/${apiCode.codeType}/${apiCode.codeParam}`,apiCode.codeOptions)
     .then(response => {
         return response.json();
     })
@@ -59,8 +60,9 @@ const getAPI = () => {
     });
 };
 
-const setAPICode = (codeType,codeParam) => {
+const setAPICode = ({codeBranch,codeType,codeParam}) => {
     codeParam = codeParam ?? '';
+    codeBranch = codeBranch ?? 'v1';
 
     const splittedCodyType = codeType.split('-')[0];
 
@@ -82,10 +84,11 @@ const setAPICode = (codeType,codeParam) => {
         apiCode.codeOptions = {method: "'GET'"};
     }
 
+    apiCode.codeBranch = codeBranch;
     apiCode.codeParam = codeParam === '' ? codeParam : encodeURI(codeParam);
 
 exampleCode =`
-fetch('https://project-namah.herokuapp.com/api/${apiCode.codeType}/${apiCode.codeParam}',${JSON.stringify(apiCode.codeOptions, null, '    ').replace(/[^\w\s:@.'-{}]/gi, '')})
+fetch('https://project-namah.herokuapp.com/api/${apiCode.codeBranch}/${apiCode.codeType}/${apiCode.codeParam}',${JSON.stringify(apiCode.codeOptions, null, '    ').replace(/[^\w\s:@.'-{}]/gi, '')})
 .then(response => {
     return response.json();
 })
@@ -103,4 +106,7 @@ fetch('https://project-namah.herokuapp.com/api/${apiCode.codeType}/${apiCode.cod
     Prism.highlightElement(apiExample);
 };
 
-setAPICode('auth');
+setAPICode({
+    codeBranch: 'v1',
+    codeType:'auth'
+});
