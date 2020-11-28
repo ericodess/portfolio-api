@@ -8,7 +8,14 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT user_id,user_name FROM users")
+        await getQuery(connection, {
+            queryRequest: {
+                name: req.query.name,
+                id: req.query.id
+            },
+            queryTargetItems: 'user_id,user_name',
+            queryTargetTable: 'users'
+        })
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
@@ -22,42 +29,20 @@ router.get('/', (req, res) => {
                 });
             }
         })
-        .catch(() => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        })
-        
-        connection.release();
-    });
-});
-
-router.get('/:clientName', (req, res) => {
-    getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT user_id,user_name FROM users WHERE user_name = ?", [
-            req.params.clientName
-        ])
-        .then(result => {
-            if(result.length === 0){
-                res.status(404).json({
+        .catch((error) => {
+            if(error.code === 'ER_BAD_FIELD_ERROR'){
+                res.status(500).json({
                     success: false,
-                    description: 'User not found'
+                    description: 'Invalid query parameter'
                 });
             }else{
-                res.status(200).json({
-                    success: true,
-                    users: result[0]
+                res.status(500).json({
+                    success: false,
+                    description: 'Server error, please try again'
                 });
-            }
+            } 
         })
-        .catch(() => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        })
-
+        
         connection.release();
     });
 });

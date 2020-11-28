@@ -6,11 +6,12 @@ const getQuery = require('../../../models/createQuery');
 
 const router = express.Router();
 
-router.get('/offset/:conceptOffset', (req, res) => {
+router.get('/', (req, res) => {
     getConnection(async (error, connection) => {
-        await getQuery(connection, "SELECT * FROM concepts LIMIT ?", [
-            parseInt(req.params.conceptOffset)
-        ])
+        await getQuery(connection, {
+            queryRequest: req.query,
+            queryTargetTable: 'concepts'
+        })
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
@@ -24,11 +25,18 @@ router.get('/offset/:conceptOffset', (req, res) => {
                 });
             }
         })
-        .catch(() => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
+        .catch((error) => {
+            if(error.code === 'ER_BAD_FIELD_ERROR'){
+                res.status(500).json({
+                    success: false,
+                    description: 'Invalid query parameter'
+                });
+            }else{
+                res.status(500).json({
+                    success: false,
+                    description: 'Server error, please try again'
+                });
+            } 
         })
 
         connection.release();

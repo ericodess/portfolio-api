@@ -8,7 +8,10 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT * FROM posts")
+        await getQuery(connection, {
+            queryRequest: req.query,
+            queryTargetTable: 'posts'
+        })
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
@@ -22,69 +25,18 @@ router.get('/', (req, res) => {
                 });
             }
         })
-        .catch(() => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        })
-
-        connection.release();
-    });
-});
-
-router.get('/:postId', (req, res) => {
-    getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT * FROM posts WHERE post_id = ?", [
-            req.params.postId
-        ])
-        .then(result => {
-            if(result.length === 0){
-                res.status(404).json({
+        .catch((error) => {
+            if(error.code === 'ER_BAD_FIELD_ERROR'){
+                res.status(500).json({
                     success: false,
-                    description: 'Post not found'
+                    description: 'Invalid query parameter'
                 });
             }else{
-                res.status(200).json({
-                    success: true,
-                    posts: result[0]
-                });
-            }
-        })
-        .catch(() => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        })
-
-        connection.release();
-    });
-});
-
-router.get('/author/:postAuthor', (req, res) => {
-    getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT * FROM posts WHERE post_author = ?", [
-            req.params.postAuthor
-        ])
-        .then(result => {
-            if(result.length === 0){
-                res.status(404).json({
+                res.status(500).json({
                     success: false,
-                    description: 'No posts found'
+                    description: 'Server error, please try again'
                 });
-            }else{
-                res.status(200).json({
-                    success: true,
-                    posts: result
-                });
-            }
-        })
-        .catch(() => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
+            } 
         })
 
         connection.release();

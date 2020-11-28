@@ -1,5 +1,4 @@
 const express = require('express');
-const querystring = require('querystring');
 
 //Models
 const getConnection = require('../../../models/createPool');
@@ -7,9 +6,12 @@ const getQuery = require('../../../models/createQuery');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (req, res) => { 
     getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT * FROM products")
+        await getQuery(connection, {
+            queryRequest: req.query,
+            queryTargetTable: 'products'
+        })
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
@@ -23,69 +25,18 @@ router.get('/', (req, res) => {
                 });
             }
         })
-        .catch(error => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        })
-
-        connection.release();
-    });
-});
-
-router.get('/offset/:productOffset', (req, res) => {
-    getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT * FROM products LIMIT ?", [
-            parseInt(req.params.productOffset)
-        ])
-        .then(result => {
-            if(result.length === 0){
-                res.status(404).json({
+        .catch((error) => {
+            if(error.code === 'ER_BAD_FIELD_ERROR'){
+                res.status(500).json({
                     success: false,
-                    description: 'No products found'
+                    description: 'Invalid query parameter'
                 });
             }else{
-                res.status(200).json({
-                    success: true,
-                    products: result
-                });
-            }
-        })
-        .catch(error => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
-        })
-
-        connection.release();
-    });
-});
-
-router.get('/:productId', (req, res) => {
-    getConnection(async (error,connection) => {
-        await getQuery(connection, "SELECT * FROM products WHERE product_id = ?", [
-            req.params.productId
-        ])
-        .then(result => {
-            if(result.length === 0){
-                res.status(404).json({
+                res.status(500).json({
                     success: false,
-                    description: 'Product not found'
+                    description: 'Server error, please try again'
                 });
-            }else{
-                res.status(200).json({
-                    success: true,
-                    products: result[0]
-                });
-            }
-        })
-        .catch(() => {
-            res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
-            });
+            } 
         })
 
         connection.release();
