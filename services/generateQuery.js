@@ -10,13 +10,13 @@ const generateQuery = ({requestQueries, targetItems, targetTable}) => {
                 if(index === firstIndex){
                     queryClauses = queryClauses + ` WHERE ${targetTable.slice(0, -1)}_${element} = ?`;
                 }else{
-                    queryClauses = queryClauses + ` AND course_${element} = ?`;
+                    queryClauses = queryClauses + ` AND ${targetTable.slice(0, -1)}_${element} = ?`;
                 }
 
-                if(element === 'author'){
-                    queryParameters.push(requestQueries[element]);
-                }else{
+                if(element === 'id'){
                     queryParameters.push(parseInt(requestQueries[element]));
+                }else{
+                    queryParameters.push(requestQueries[element]);
                 }
             }
         });
