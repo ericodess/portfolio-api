@@ -1,4 +1,6 @@
-const generateQuery = ({requestQueries, targetItems, targetTable}) => {
+const generateQuery = ({requestQueries, targetItems, targetTable, targetIsBinary}) => {
+    targetIsBinary = targetIsBinary ?? false;
+
     let queryClauses = `SELECT ${targetItems === '' || targetItems === null || targetItems === undefined ? '*' : targetItems} FROM ${targetTable}`,
     queryParameters = [];
 
@@ -8,9 +10,9 @@ const generateQuery = ({requestQueries, targetItems, targetTable}) => {
         Object.keys(requestQueries).map((element, index) => {
             if(element !== 'limit' && requestQueries[element] !== undefined){
                 if(index === firstIndex){
-                    queryClauses = queryClauses + ` WHERE ${targetTable.slice(0, -1)}_${element} = ?`;
+                    queryClauses = queryClauses + ` WHERE ${targetTable.slice(0, -1)}_${element} LIKE ${targetIsBinary ? 'BINARY ' : ''}?`;
                 }else{
-                    queryClauses = queryClauses + ` AND ${targetTable.slice(0, -1)}_${element} = ?`;
+                    queryClauses = queryClauses + ` AND ${targetTable.slice(0, -1)}_${element} LIKE ${targetIsBinary ? 'BINARY ' : ''}?`;
                 }
 
                 if(element === 'id'){
