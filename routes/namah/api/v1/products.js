@@ -1,48 +1,27 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../../models/createPool');
-const getQuery = require('../../../models/createQuery');
+const getConnection = require('../../../../models/createPool');
+const getQuery = require('../../../../models/createQuery');
 
 const router = express.Router();
 
-const generateCourseList = (course) => {
-    let coursesList = [course.length];
-
-    course.forEach((element,index) => {
-        coursesList[index] = { 
-            course_id: element.course_id,
-            course_author: element.course_author,
-            course_title: element.course_title,
-            course_description: element.course_description,
-            course_date: {
-                course_start_date: element.course_start_date,
-                course_end_date: element.course_end_date
-            }
-        }
-    });
-
-    return coursesList;
-};
-
-router.get('/', (req, res) => {
+router.get('/', (req, res) => { 
     getConnection(async (error,connection) => {
         await getQuery(connection, {
             queryRequest: req.query,
-            queryTargetTable: 'courses'
+            queryTargetTable: 'products'
         })
         .then(result => {
             if(result.length === 0){
-                res.status(200).json({
+                res.status(404).json({
                     success: false,
-                    description: 'No courses found'
+                    description: 'No products found'
                 });
             }else{
-                const coursesList = generateCourseList(result);
-
                 res.status(200).json({
                     success: true,
-                    courses: coursesList
+                    products: result
                 });
             }
         })

@@ -11,8 +11,7 @@ const cookieParser = require('cookie-parser');
 
 
 //Routes
-const root = require('./routes/root');
-const api = require('./routes/apis');
+const routes = require('./routes');
 
 app.use(morgan('dev'));
 app.use(cors({
@@ -23,9 +22,8 @@ app.use(cookieParser());
 app.use(bodyparser.urlencoded({extended : false}));
 app.use(bodyparser.json());
 
-app.use('/', root);
+app.use('/', routes);
 app.use('/static', express.static('public'))
-app.use('/api', api);
 
 const port = process.env.PORT||8080;
 app.listen(port);

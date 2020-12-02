@@ -1,27 +1,31 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../../models/createPool');
-const getQuery = require('../../../models/createQuery');
+const getConnection = require('../../../../models/createPool');
+const getQuery = require('../../../../models/createQuery');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    getConnection(async (error, connection) => {
+    getConnection(async (error,connection) => {
         await getQuery(connection, {
-            queryRequest: req.query,
-            queryTargetTable: 'concepts'
+            queryRequest: {
+                name: req.query.name,
+                id: req.query.id
+            },
+            queryTargetItems: 'user_id,user_name',
+            queryTargetTable: 'users'
         })
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
                     success: false,
-                    description: 'No concepts found'
+                    description: 'No users found'
                 });
             }else{
                 res.status(200).json({
                     success: true,
-                    concepts: result
+                    users: result
                 });
             }
         })
@@ -38,7 +42,7 @@ router.get('/', (req, res) => {
                 });
             } 
         })
-
+        
         connection.release();
     });
 });

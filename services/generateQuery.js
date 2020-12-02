@@ -15,7 +15,7 @@ const generateQuery = ({requestQueries, targetItems, targetTable, targetIsBinary
                     queryClauses = queryClauses + ` AND ${targetTable.slice(0, -1)}_${element} LIKE ${targetIsBinary ? 'BINARY ' : ''}?`;
                 }
 
-                if(element === 'id'){
+                if(element === 'id' && !isNaN(parseInt(requestQueries[element]))){
                     queryParameters.push(parseInt(requestQueries[element]));
                 }else{
                     queryParameters.push(requestQueries[element]);
