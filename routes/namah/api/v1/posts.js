@@ -1,31 +1,27 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../../models/createPool');
-const getQuery = require('../../../models/createQuery');
+const getConnection = require('../../../../models/createPool');
+const getQuery = require('../../../../models/createQuery');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
     getConnection(async (error,connection) => {
         await getQuery(connection, {
-            queryRequest: {
-                name: req.query.name,
-                id: req.query.id
-            },
-            queryTargetItems: 'user_id,user_name',
-            queryTargetTable: 'users'
+            queryRequest: req.query,
+            queryTargetTable: 'posts'
         })
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
                     success: false,
-                    description: 'No users found'
+                    description: 'No posts found'
                 });
             }else{
                 res.status(200).json({
                     success: true,
-                    users: result
+                    posts: result
                 });
             }
         })
@@ -42,7 +38,7 @@ router.get('/', (req, res) => {
                 });
             } 
         })
-        
+
         connection.release();
     });
 });

@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const options = {
-    root: __dirname + '/../public/',
+    root: __dirname + '/../../public/',
     dotfiles: 'deny'
 };
 

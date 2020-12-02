@@ -1,27 +1,27 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../../models/createPool');
-const getQuery = require('../../../models/createQuery');
+const getConnection = require('../../../../models/createPool');
+const getQuery = require('../../../../models/createQuery');
 
 const router = express.Router();
 
-router.get('/', (req, res) => { 
-    getConnection(async (error,connection) => {
+router.get('/', (req, res) => {
+    getConnection(async (error, connection) => {
         await getQuery(connection, {
             queryRequest: req.query,
-            queryTargetTable: 'products'
+            queryTargetTable: 'concepts'
         })
         .then(result => {
             if(result.length === 0){
                 res.status(404).json({
                     success: false,
-                    description: 'No products found'
+                    description: 'No concepts found'
                 });
             }else{
                 res.status(200).json({
                     success: true,
-                    products: result
+                    concepts: result
                 });
             }
         })
