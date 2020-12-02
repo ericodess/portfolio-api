@@ -88,7 +88,7 @@ const setAPICode = ({codeBranch,codeType,codeParam}) => {
     apiCode.codeParam = codeParam === '' ? codeParam : encodeURI(codeParam);
 
 exampleCode =`
-fetch('https://project-namah.herokuapp.com/api/${apiCode.codeBranch}/${apiCode.codeType}${apiCode.codeParam}',${JSON.stringify(apiCode.codeOptions, null, '    ').replace(/[^\w\s:@.'-{}]/gi, '')})
+fetch('https://project-back-end-portfolio.herokuapp.com/api/${apiCode.codeBranch}/${apiCode.codeType}${apiCode.codeParam}',${JSON.stringify(apiCode.codeOptions, null, '    ').replace(/[^\w\s:@.'-{}]/gi, '')})
 .then(response => {
     return response.json();
 })
