@@ -1,2 +1,2 @@
-# namah-back-end
-Back-end to the [namah-front-end](https://github.com/pepeyen/namah-front-end) app
+# portfolio-api
+Back-end to the [portfolio](https://github.com/pepeyen/efrederick) and portfolio based apps
