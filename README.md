@@ -36,13 +36,6 @@ Now you are ready to use the project, just issue a `docker-compose up --build` a
 
 Firstly, this project was to only provide [namah](https://github.com/pepeyen/namah) project, but as i worked on it, i deciced to be the back-end source for all my portfolio related projects.
 
-1. If you wish to know more about this coding interview:
-
-    [Desktop desired design](https://www.figma.com/file/2Ps9ytPtSfQIKynIDW1pqC/Teste-Big-Bang-Shop?node-id=0%3A1) 
-
-    [Mobile desired design](https://www.figma.com/file/K8HLlUcdJMqUQMXS2iQVLV/Teste-Big-Bang-Shop-Mobile?node-id=0%3A1)
-
-
 ## [Documentation](https://github.com/pepeyen/portfolio-api/wiki)
 
 https://github.com/pepeyen/portfolio-api/wiki
