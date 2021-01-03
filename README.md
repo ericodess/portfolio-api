@@ -1,4 +1,4 @@
-[![namah](https://repository-images.githubusercontent.com/307787791/e805ea00-327b-11eb-9a0c-e060b06e9c28)](https://api.efrederick.dev)
+[![portfolio-api](https://raw.githubusercontent.com/pepeyen/portfolio-api/master/.github/images/project-thumbnail.png)](https://api.efrederick.dev)
 
 # portfolio-api
 
