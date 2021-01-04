@@ -2,8 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
-const keys = require('./keys');
+const projects = require('./projects');
 
-router.use('/keys', keys);
+router.use('/projects', projects);
 
 module.exports = router;

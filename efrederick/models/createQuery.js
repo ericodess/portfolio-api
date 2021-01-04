@@ -1,5 +1,5 @@
 //Service
-const generateQuery = require('../services/generateQuery');
+const generateQuery = require('../services').generateQuery;
 
 const getQuery = async (connection, {queryRequest, queryTargetItems, queryTargetTable, queryIsBinary}) => {
     const query = generateQuery({
