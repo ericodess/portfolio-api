@@ -67,7 +67,7 @@ const setAPICode = ({codeBranch,codeType,codeParam}) => {
     
     const splittedCodeType = codeType.split('-')[0];
 
-    apiCode.codeService = 'namah';
+    apiCode.codeService = codeType === 'projects' ? 'efrederick' : 'namah';
 
     if(splittedCodeType === 'auth'){
         const myHeaders = new Headers(); 
