@@ -69,32 +69,19 @@ const setAPICode = ({codeBranch,codeType,codeParam}) => {
 
     apiCode.codeService = 'namah';
 
-    if(splittedCodeType === 'auth' || splittedCodeType === 'keys'){
+    if(splittedCodeType === 'auth'){
         const myHeaders = new Headers(); 
         myHeaders.append("Content-Type", "application/json"); 
 
-        if(splittedCodeType === 'keys'){
-            apiCode.codeService = 'efrederick';
-            apiCode.codeType = splittedCodeType;
-            apiCode.codeOptions = {
-                headers: myHeaders,
-                method: "'POST'",
-                body: {
-                    keyId: "'demo:1'",
-                    keyOrigin: "'demo'"
-                }
-            };
-        }else{
-            apiCode.codeType = splittedCodeType;
-            apiCode.codeOptions = {
-                headers: myHeaders,
-                method: "'POST'",
-                body: {
-                    email: "'namahcast@big-bang-web.br'",
-                    password: "'123456'"
-                }
-            };
-        }
+        apiCode.codeType = splittedCodeType;
+        apiCode.codeOptions = {
+            headers: myHeaders,
+            method: "'POST'",
+            body: {
+                email: "'namahcast@big-bang-web.br'",
+                password: "'123456'"
+            }
+        };
     }else{
         apiCode.codeType = splittedCodeType;
         apiCode.codeOptions = {method: "'GET'"};
@@ -151,7 +138,7 @@ const generateCodeBlock = (targetService) => {
         case 'efrederick':
             setAPICode({
                 codeBranch: 'v1',
-                codeType:'keys'
+                codeType:'projects'
             });
             break;
         case 'namah':
