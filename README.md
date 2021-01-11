@@ -36,8 +36,6 @@ Now you are ready to use the project, just issue a `docker-compose up --build` a
 
 Firstly, this project was to only provide [namah](https://github.com/pepeyen/namah) project, but as i worked on it, i deciced to be the back-end source for all my portfolio related projects.
 
-## [Documentation](https://github.com/pepeyen/portfolio-api/wiki)
-
-https://github.com/pepeyen/portfolio-api/wiki
+## Documentation
 
 You can also reach to the [Developer Portal](https://api.efrederick.dev) to a more hands-on driven info.
