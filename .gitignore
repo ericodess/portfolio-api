@@ -1,7 +1,5 @@
 # dependencies
-/namah/node_modules
-/efrederick/node_modules
-/universify/node_modules
+/services/*/node_modules
 /.pnp
 .pnp.js
 

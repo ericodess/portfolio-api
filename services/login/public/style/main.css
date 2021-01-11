@@ -1,0 +1,248 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+a{
+    color: black;
+    text-decoration: none;
+}
+.--flex--row{
+    display: flex;
+    flex-direction: row;
+}
+.--flex-column{
+    display: flex;
+    flex-direction: column;
+}
+.--flex-centered{
+    align-items: center;
+}
+.--grid-fill{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: 2rem 1rem;
+    width: 100%;
+}
+.--active{
+    border-color: black !important;
+    background-color: black !important;
+    color: white !important;
+}
+.--disabled{
+    color: #5b857e;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem 0;
+    width: 90%;
+    padding: 10rem 0 10rem 0;
+}
+.form__title{
+    font-family: 'Roboto', serif;
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 0 0 3rem 0;
+}
+.form__label{
+    font-family: 'Roboto Mono', serif;
+    position: absolute;
+    -webkit-transition: all ease-in-out .1s;
+    -moz-transition: all ease-in-out .1s;
+    -ms-transition: all ease-in-out .1s;
+    -o-transition: all ease-in-out .1s;
+    transition: all ease-in-out .1s;
+    pointer-events: none;
+    color: #3b3b3b;
+    opacity: 0.4;
+    font-size: 1rem;
+    left: 6.5%;
+}
+.form__group{
+    width: 100%;
+}
+.form div:nth-of-type(1) label{
+    top: 18rem;
+}
+.form div:nth-of-type(2) label{
+    top: 23.2rem;
+}
+.form__input:focus + .form__label,
+.form__input:not(:focus):valid + .form__label{
+    font-size: .75rem;
+    margin: -1rem 0 0 0;
+    opacity: 1;
+}
+.form__input{
+    font-family: 'Roboto Mono', serif;
+    -webkit-transition: all ease-in-out .2s;
+    -moz-transition: all ease-in-out .2s;
+    -ms-transition: all ease-in-out .2s;
+    -o-transition: all ease-in-out .2s;
+    transition: all ease-in-out .2s;
+    font-size: 1rem;
+    border: .1rem solid black;
+    height: 3.5rem;
+    padding: .5rem .5rem 0 .5rem;
+    width: 95%;
+}
+.form:invalid{
+    box-shadow: none;
+    outline: none;
+    border-color: black;
+}
+.form:focus{
+    box-shadow: none;
+    outline: none;
+    border-color: #829491;
+}
+.form__submit{
+    font-family: 'Roboto', serif;
+    -webkit-transition: all ease-in-out .2s;
+    -moz-transition: all ease-in-out .2s;
+    -ms-transition: all ease-in-out .2s;
+    -o-transition: all ease-in-out .2s;
+    transition: all ease-in-out .2s;
+    font-size: 1rem;
+    padding: 0;
+    background-color: transparent;
+    border: .1rem solid black;
+    height: 4rem;
+    width: 55%;
+}
+.form__submit:hover, .form__submit:active{
+    background-color: black;
+    color: white;
+}
+.form__submit[disabled=disabled], .form__submit:disabled{
+    border-color:#808080;
+    background-color: #808080;
+    color: white;
+}
+.form__submit[disabled=disabled]:hover, .form__submit:disabled:hover{
+    cursor: default;
+}
+.form__feedback{
+    margin: 0;
+    height: 2vh;
+    font-family: 'Roboto', serif;
+    color: #a11521;
+}
+@media (min-width: 801px){
+    .--transiotional{
+        -webkit-transition: background-color ease-in-out .2s;
+        -moz-transition: background-color ease-in-out .2s;
+        -ms-transition: background-color ease-in-out .2s;
+        -o-transition: background-color ease-in-out .2s;
+        transition: background-color ease-in-out .2s;
+    }
+    .--grid-fill{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(70vh, 1fr));
+        gap: 0 2vh;
+        width: 100%;
+    }
+    .--button{
+        min-height: 5vh;
+        padding: 1vh 0 1vh 0;
+    }
+    .container{
+        margin: 0 auto 5vh auto;
+        width: 80%;
+    }
+    .container__line{
+        border-top: .1vh solid black;
+        margin: 8vh 0 3vh 0;
+    }
+    .container__title{
+        font-size: 4vh;
+        margin: -2vh 0 5vh 0;
+        padding: 0 2vh;
+    }
+    .form{
+        gap: 4vh 0;
+        padding: 20vh 0 4vh;
+        width: 50%;
+    }
+    .form__title{
+        font-size: 5vh;
+        margin: 0 0 10vh 0;
+    }
+    .form__label{
+        font-size: 2.4vh;
+        margin: 3vh 0 0 .8vh;
+        left: 30%;
+    }
+    .form div:nth-of-type(1) label{
+        top: 38.8vh;
+    }
+    .form div:nth-of-type(2) label{
+        top: 51.5vh;
+    }
+    .form__input:focus + .form__label,
+    .form__input:not(:focus):valid + .form__label{
+        font-size: 1.8vh;
+        margin: 1vh 0 0 .8vh;
+    }
+    .form__input{
+        border: .1vh solid black;
+        font-size: 2.5vh;
+        height: 7vh;
+        padding: 1.2vh 1vh 0 1vh;
+    }
+    .form__submit{
+        font-size: 2vh;
+        border: .1vh solid black;
+        height: 8vh;
+    }
+    .form__submit:hover{
+        cursor: pointer;
+    }
+}
