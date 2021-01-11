@@ -38,4 +38,4 @@ Firstly, this project was to only provide [namah](https://github.com/pepeyen/nam
 
 ## Documentation
 
-You can also reach to the [Developer Portal](https://api.efrederick.dev) to a more hands-on driven info.
+You can reach to the [Developer Portal](https://api.efrederick.dev) to a more hands-on driven info.
