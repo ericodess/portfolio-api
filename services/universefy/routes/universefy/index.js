@@ -12,7 +12,7 @@ const router = express.Router();
 
 const client_id = `${process.env.CLIENT_ID}`;
 const client_secret = `${process.env.CLIENT_SECRET}`;
-const redirect_uri = `http://localhost:${process.env.PORT || 9004}/universify/callback`;
+const redirect_uri = `http://localhost:${process.env.PORT || 9004}/universefy/callback`;
 
 router.use(express.static('./public'));
 
