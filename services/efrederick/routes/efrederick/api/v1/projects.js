@@ -8,7 +8,7 @@ const router = express.Router();
 
 //Services
 const getRepoList = require('../../../../services').getRepoList;
-const getRepo = require('../../../../services').getRepo;
+const getRepoContributors = require('../../../../services').getRepoContributors;
 
 router.get('/', (req, res) => {
     getConnection(async (error,connection) => {
@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
                     getRepoList('pepeyen', myHeaders)
                     .then(projects => {
                         projects.forEach(repository => {
-                            if(repository.homepage && repository.name !== 'efrederick'){
+                            if(typeof repository.homepage !== 'undefined' && repository.homepage !== null && repository.homepage !== '' && repository.name !== 'efrederick'){
                                 projectsSorted.push({
                                     repositoryName: repository.name,
                                     reporitoryThumbnailURL: `https://raw.githubusercontent.com/${repository.owner.login}/${repository.name}/master/.github/images/project-thumbnail.png`,
@@ -51,10 +51,17 @@ router.get('/', (req, res) => {
                         return projects;
                     })
                     .then(data => {
-                        return data.map(currentRepo => getRepo('pepeyen', currentRepo.name, myHeaders)
+                        return data.map(currentRepo => getRepoContributors('pepeyen', currentRepo.name, myHeaders)
                         .then(contributors => contributors
                             .map(contributor => contributor.weeks
-                                .reduce((lineCount, week) => lineCount + week.a - week.d, 0)
+                                .reduce((lineCount, week) => {
+                                    if(week.a <= 5000){
+                                        return lineCount + week.a - week.d;
+                                    }else{
+                                        return lineCount + 0;
+                                    }
+                                    
+                                }, 0)
                             )
                         )
                         .then(lineCounts => {
@@ -71,16 +78,8 @@ router.get('/', (req, res) => {
                     })
                     .then(linesOfCodeList => {
                         let totalLinesOfCode = 0, totalNumberOfRepos = 0;
-    
-                        linesOfCodeList.map(currentRepoLinesOfCode => {
-                            if(currentRepoLinesOfCode >= 300){
-                                totalLinesOfCode = totalLinesOfCode + Math.round(currentRepoLinesOfCode * 0.01);
-                            }else{
-                                totalLinesOfCode = totalLinesOfCode + currentRepoLinesOfCode;
-                            }
-                            
-                            return null;
-                        })
+                        
+                        linesOfCodeList.map(currentRepoLinesOfCode => totalLinesOfCode = totalLinesOfCode + currentRepoLinesOfCode);
 
                         totalNumberOfRepos = linesOfCodeList.length;
 
