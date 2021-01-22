@@ -4,32 +4,54 @@ services:
     efrederick:
         container_name: portfolio_api_efrederick
         build:
-            context: ./efrederick
+            context: ./services/efrederick
             dockerfile: Dockerfile
         ports:
             - "9001:9001"           
         volumes:
-            - ./efrederick/node_modules:/app/node_modules
+            - ./services/efrederick/node_modules:/app/node_modules
         restart: unless-stopped            
 
     namah:
         container_name: portfolio_api_namah
         build:
-            context: ./namah
+            context: ./services/namah
             dockerfile: Dockerfile
         ports:
             - "9002:9002"                     
         volumes:
-            - ./namah/node_modules:/app/node_modules
+            - ./services/namah/node_modules:/app/node_modules
         restart: unless-stopped
 
     gifter:
         container_name: portfolio_api_gifter
         build:
-            context: ./gifter
+            context: ./services/gifter
             dockerfile: Dockerfile
         ports:
             - "9003:9003"                     
         volumes:
-            - ./gifter/node_modules:/app/node_modules
+            - ./services/gifter/node_modules:/app/node_modules
+        restart: unless-stopped
+
+    universify:
+        container_name: portfolio_api_universify
+        build:
+            context: ./services/universify
+            dockerfile: Dockerfile
+        ports:
+            - "9004:9004"                     
+        volumes:
+            - ./services/universify/node_modules:/app/node_modules
+        restart: unless-stopped
+
+    login:
+        container_name: portfolio_api_login
+        build:
+            context: ./services/login
+            dockerfile: Dockerfile
+        ports:
+            - "9005:9005"                     
+        volumes:
+            - ./services/login/node_modules:/app/node_modules
         restart: unless-stopped

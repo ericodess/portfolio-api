@@ -1,0 +1,49 @@
+body{
+    background-color: #1b1c1c;
+    color: #e9f2f2;
+    font-family: Nunito;
+    font-size: 1.6vh;
+    margin: 0;
+}
+main{
+    margin: 1vh;
+}
+li{
+    margin-top: 1vh;
+}
+h1{
+    margin: 0 0 5vh 0;
+    font-size: 6vh;
+}
+h2{
+    margin: 0 0 5vh 0;
+    margin: 0;
+    font-size: 3vh; 
+}
+h4{
+    font-size: 2vh;
+}
+a{
+    color: #1ED760;
+    text-decoration: none;
+    font-family: Nunito;
+    font-weight: bold;
+    opacity: 0.9;
+}
+a:hover{
+    opacity: 1;
+}
+code{
+    font-family: "Lucida Console", Monaco, monospace;
+    color: #36ffe3;;
+    background-color: #272929;
+    padding: .5vh;
+    border-radius: 5px;
+}
+footer{
+    display: block;
+    background-color: #272929;
+    text-align: center;
+    padding: 5vh 0 5vh 0;
+    margin: 23vh 0 0 0;
+}
