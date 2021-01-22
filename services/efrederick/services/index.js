@@ -55,7 +55,7 @@ const getRepoList = (userName, requestHeaders) => {
 
 exports.getRepoList = getRepoList;
 
-const getRepo = (userName, repoName, requestHeaders) => {
+const getRepoContributors = (userName, repoName, requestHeaders) => {
     const fetch = require('node-fetch');
     
 	return new Promise((resolve, reject) => {
@@ -71,4 +71,4 @@ const getRepo = (userName, repoName, requestHeaders) => {
 	})
 };
 
-exports.getRepo = getRepo;
+exports.getRepoContributors = getRepoContributors;
