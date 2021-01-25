@@ -55,7 +55,7 @@ router.get('/', (req, res) => {
                         .then(contributors => contributors
                             .map(contributor => contributor.weeks
                                 .reduce((lineCount, week) => {
-                                    if(week.a <= 5000){
+                                    if(week.a <= 10000){
                                         return lineCount + week.a - week.d;
                                     }else{
                                         return lineCount + 0;
