@@ -44,7 +44,7 @@ router.post('/', (req, res) => {
                     email: req.body.email,
                     password: req.body.password
                 },
-                queryTargetItems: 'user_name',
+                queryTargetItems: 'user_name,user_is_admin',
                 queryTargetTable: 'users',
                 queryIsBinary: true  
             })
@@ -55,21 +55,27 @@ router.post('/', (req, res) => {
                         description: 'Invalid username or password'
                     });
                 }else{
-                    const userName = result[0].user_name;
-        
-                    const access_token = jwt.sign({userName}, process.env.SECRET, {
-                        expiresIn: 600
-                    });
-        
-                    res.cookie('access_token', access_token, {
-                        httpOnly: true, 
-                        secure: true
-                    });
-                    res.status(200).json({
-                        success: true,
-                        loggedUser: userName
-                    });
-                }
+                    if(result[0].user_is_admin === 1){
+                        const userName = result[0].user_name;
+                    
+                        const access_token = jwt.sign({userName}, process.env.SECRET, {
+                            expiresIn: 600
+                        });
+            
+                        res.cookie('access_token', access_token, {
+                            httpOnly: true, 
+                            secure: true
+                        });
+                        res.status(200).json({
+                            success: true
+                        });
+                    }else{
+                        res.status(401).json({
+                            success: false,
+                            description: 'Invalid user role'
+                        });
+                    }   
+                };
             })
             .catch(() => {
                 res.status(500).json({

@@ -81,7 +81,7 @@ a{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem 0;
+    gap: 2rem 0;
     width: 90%;
     padding: 10rem 0 10rem 0;
 }
@@ -109,10 +109,10 @@ a{
     width: 100%;
 }
 .form div:nth-of-type(1) label{
-    top: 18rem;
+    top: 19rem;
 }
 .form div:nth-of-type(2) label{
-    top: 23.2rem;
+    top: 25rem;
 }
 .form__input:focus + .form__label,
 .form__input:not(:focus):valid + .form__label{
@@ -170,10 +170,84 @@ a{
     cursor: default;
 }
 .form__feedback{
-    margin: 0;
-    height: 2vh;
     font-family: 'Roboto', serif;
     color: #a11521;
+    -webkit-animation: shake .2s 2;
+    -moz-animation: shake .2s 2;
+    -o-animation: shake .2s 2;
+    animation: shake .2s 2;
+    font-size: 1.15rem;
+    margin: 1rem 0 0 0;
+}
+@-webkit-keyframes shake {
+    0% {
+        padding: 0;
+    }
+    25% {
+        padding: 0 0 0 1rem;
+    }
+    50% {
+        padding: 0 1rem 0 0;
+    }    
+    100% {
+        padding: 0;
+    }
+}
+@-moz-keyframes shake {
+    0% {
+        padding: 0;
+    }
+    25% {
+        padding: 0 0 0 1rem;
+    }
+    50% {
+        padding: 0 1rem 0 0;
+    }    
+    100% {
+        padding: 0;
+    }
+}
+@-ms-keyframes shake {
+    0% {
+        padding: 0;
+    }
+    25% {
+        padding: 0 0 0 1rem;
+    }
+    50% {
+        padding: 0 1rem 0 0;
+    }    
+    100% {
+        padding: 0;
+    }
+}
+@-o-keyframes shake {
+    0% {
+        padding: 0;
+    }
+    25% {
+        padding: 0 0 0 1rem;
+    }
+    50% {
+        padding: 0 1rem 0 0;
+    }    
+    100% {
+        padding: 0;
+    }
+}
+@keyframes shake {
+    0% {
+        padding: 0;
+    }
+    25% {
+        padding: 0 0 0 1rem;
+    }
+    50% {
+        padding: 0 1rem 0 0;
+    }    
+    100% {
+        padding: 0;
+    }
 }
 @media (min-width: 801px){
     .--transiotional{
@@ -244,5 +318,79 @@ a{
     }
     .form__submit:hover{
         cursor: pointer;
+    }
+    .form__feedback{
+        margin: 2vh 0 0 0;
+        font-size: 2.25vh;
+    }
+    @-webkit-keyframes shake {
+        0% {
+            padding: 0;
+        }
+        25% {
+            padding: 0 0 0 2vh;
+        }
+        50% {
+            padding: 0 2vh 0 0;
+        }    
+        100% {
+            padding: 0 ;
+        }
+    }
+    @-moz-keyframes shake {
+        0% {
+            padding: 0;
+        }
+        25% {
+            padding: 0 0 0 2vh;
+        }
+        50% {
+            padding: 0 2vh 0 0;
+        }    
+        100% {
+            padding: 0 ;
+        }
+    }
+    @-ms-keyframes shake {
+        0% {
+            padding: 0;
+        }
+        25% {
+            padding: 0 0 0 2vh;
+        }
+        50% {
+            padding: 0 2vh 0 0;
+        }    
+        100% {
+            padding: 0 ;
+        }
+    }
+    @-o-keyframes shake {
+        0% {
+            padding: 0;
+        }
+        25% {
+            padding: 0 0 0 2vh;
+        }
+        50% {
+            padding: 0 2vh 0 0;
+        }    
+        100% {
+            padding: 0 ;
+        }
+    }
+    @keyframes shake {
+        0% {
+            padding: 0;
+        }
+        25% {
+            padding: 0 0 0 2vh;
+        }
+        50% {
+            padding: 0 2vh 0 0;
+        }    
+        100% {
+            padding: 0 ;
+        }
     }
 }
