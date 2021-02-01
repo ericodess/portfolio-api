@@ -18,25 +18,31 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono"
         >
+        <script src="/js/index.js"></script>
         <title>Login</title>
     </head>
     <body>
         <main>
             <article class="container --flex-column --flex-centered">
-                <div
-                    id="login-form"
+                <form
+                    id="loginForm"
                     class="form"
+                    method="POST"
+                    action="/login/auth"
+                    onsubmit="login(event)"
                 >
                     <span class="form__title">Admin Page</span>
                     <div class="form__group">
                         <input
                             class="form__input"
-                            type="text" id="fname"
-                            name="fname"
+                            type="text"
+                            id="loginFormUsername"
+                            name="loginFormUsername"
+                            onfocus="formFocusHandler()"
                         required>
                         <label
                             class="form__label"
-                            for="fname"
+                            for="loginFormUsername"
                         >
                             Login
                         </label>
@@ -45,26 +51,25 @@
                         <input
                             class="form__input"
                             type="password"
-                            id="lname"
-                            name="lname"
+                            id="loginFormPassword"
+                            name="loginFormPassword"
+                            onfocus="formFocusHandler()"
                         required>
                         <label
                             class="form__label"
-                            for="lname"
+                            for="loginFormPassword"
                         >
                             Password
                         </label>
                     </div>
                     <button
                         class="form__submit"
-                        onclick="(login())"
+                        id="formSubmitButton"
                     >
                         Login
                     </button>
-                    <span class="form__feedback "></span>
-                </div>
-                </article>
+                </form>
+            </article>
         </main>
-        <script src="/js/index.js"></script>
     </body>
 </html>
