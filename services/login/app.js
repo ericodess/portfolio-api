@@ -15,7 +15,7 @@ const port = process.env.PORT || 9005;
 const routes = require('./routes');
 
 //Cors domains
-const allowedDomains = process.env.ORIGIN_ADDRESS ? process.env.ORIGIN_ADDRESS.split(' ') : [`http://localhost:8000`];
+const allowedDomains = [`http://localhost:${port}`];
 
 app.use(morgan('dev'));
 app.use(cors({
