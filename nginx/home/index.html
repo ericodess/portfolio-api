@@ -257,7 +257,7 @@
                                 <button
                                     class="api__button --button"
                                     id='search'
-                                    onclick="setAPICode({codeType:'search', codeParam:'search_query=Namahblogger'})"
+                                    onclick="setAPICode({codeType:'search', codeParam:'q=Namahblogger'})"
                                 >
                                     Search
                                 </button>
@@ -265,11 +265,23 @@
                             <li class="api__button-list --buttons-list">
                                 <button
                                     class="api__button --button"
-                                    id='concepts-all-limited'
-                                    onclick="setAPICode({codeType:'concepts-all-limited', codeParam:'limit=3'})"
+                                    id='concepts'
+                                    onclick="setAPICode({codeType:'concepts'})"
                                 >
-                                    Concepts List with limit
+                                    Concepts List
                                 </button>
+                                <div 
+                                    id="concepts-endpoints-list"
+                                    class="api__button-list-extra --buttons-list-extra"
+                                >
+                                    <button
+                                        class="api__button --button"
+                                        id='concepts-all-limited'
+                                        onclick="setAPICode({codeType:'concepts-all-limited', codeParam:'limit=3'})"
+                                    >
+                                        Concepts List with limit
+                                    </button>
+                                </div>
                             </li>
                         </ul>
                         <ul
@@ -357,7 +369,7 @@
                     </li>
                     <li class="api__endpoint">
                         <span class="api__endpoint-title">Search</span>
-                        <span>GET <a href="/namah/api/v1/search?search_query=Namahblogger">/namah/api/v1/search?search_query=:searchQuery</a></span>
+                        <span>GET <a href="/namah/api/v1/search?q=Namahblogger">/namah/api/v1/search?q=:searchQuery</a></span>
                     </li>
                 </ul>   
                 <ul
