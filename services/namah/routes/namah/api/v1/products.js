@@ -4,6 +4,9 @@ const express = require('express');
 const getConnection = require('../../../../models/createPool');
 const getQuery = require('../../../../models/createQuery');
 
+//Services
+const {translateObjectListKeys} = require('../../../../services');
+
 const router = express.Router();
 
 router.get('/', (req, res) => { 
@@ -22,7 +25,7 @@ router.get('/', (req, res) => {
                 }else{
                     res.status(200).json({
                         success: true,
-                        products: result
+                        products: translateObjectListKeys(result)
                     });
                 }
             })
