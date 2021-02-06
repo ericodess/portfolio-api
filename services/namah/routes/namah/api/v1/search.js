@@ -4,6 +4,12 @@ const express = require('express');
 const getConnection = require('../../../../models/createPool');
 const getQuery = require('../../../../models/createQuery');
 
+//Services
+const {
+    toCamelCase,
+    translateObjectListKeys
+} = require('../../../../services');
+
 const router = express.Router();
 
 const delay = () => {
@@ -14,7 +20,7 @@ router.get('/', async (req, res) => {
     const avaiableTables = ['courses', 'podcasts', 'posts', 'products', 'users'];
     let searchResult = {}, tableParams;
 
-    if(req.query.search_query){
+    if(req.query.q){
         for(const currentTable of avaiableTables) {
             getConnection(async (error,connection) => {
                 if(!error && connection){
@@ -50,14 +56,14 @@ router.get('/', async (req, res) => {
                 if(!error && connection){
                     await getQuery(connection, {
                         queryRequest: {
-                            search_query: req.query.search_query,
+                            q: req.query.q,
                             limit: req.query.limit
                         },
                         queryTargetItems: tableParams,
                         queryTargetTable: currentTable
                     })
                     .then(result => {
-                        searchResult = {...searchResult, [currentTable]: result};
+                        searchResult = {...searchResult, [toCamelCase(currentTable)]: translateObjectListKeys(result)};
     
                         if(Object.keys(searchResult).length === avaiableTables.length){
                             res.status(200).json({
@@ -73,6 +79,7 @@ router.get('/', async (req, res) => {
                                 description: 'Invalid query parameter'
                             });
                         }else{
+                            console.log(error)
                             res.status(500).json({
                                 success: false,
                                 description: 'Server error, please try again'
