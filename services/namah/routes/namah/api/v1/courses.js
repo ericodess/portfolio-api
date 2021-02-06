@@ -11,15 +11,15 @@ const generateCourseList = (course) => {
 
     course.forEach((element,index) => {
         coursesList[index] = { 
-            course_id: element.course_id,
-            course_author: element.course_author,
-            course_title: element.course_title,
-            course_description: element.course_description,
-            course_date: {
-                course_start_date: element.course_start_date,
-                course_end_date: element.course_end_date
+            courseId: element.course_id,
+            courseAuthor: element.course_author,
+            courseTitle: element.course_title,
+            courseDescription: element.course_description,
+            courseDate: {
+                courseStartDate: element.course_start_date,
+                courseEndDate: element.course_end_date
             }
-        }
+        };
     });
 
     return coursesList;
@@ -39,11 +39,9 @@ router.get('/', (req, res) => {
                         description: 'No courses found'
                     });
                 }else{
-                    const coursesList = generateCourseList(result);
-    
                     res.status(200).json({
                         success: true,
-                        courses: coursesList
+                        courses: generateCourseList(result)
                     });
                 }
             })
