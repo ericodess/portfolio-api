@@ -122,10 +122,13 @@ a{
     width: 100%;
 }
 .navbar__items{
+    display: flex;
+    flex-direction: column;
     margin: 0;
     padding: 0;
     list-style: none;
     margin: 1rem 0 0 0;
+    gap: 1rem 0;
 }
 .navbar__item{
     color: black;
@@ -212,6 +215,8 @@ a{
     gap: .6rem 0;
 }
 .--buttons-list-extra button{
+    margin: 0 auto 0 auto;
+    width: 90%;
     background-color: #f7f7f7;
 }
 @media (min-width: 768px){
@@ -235,8 +240,6 @@ a{
         transition: color ease-in-out .1s;
     }
     a:hover{
-        color: #415e59;
-        text-decoration: underline;
         cursor: pointer !important;
     }
     .--grid-fill{
@@ -264,10 +267,11 @@ a{
     }
     .navbar__logo{
         font-size: 3vh;
-        width: 21vh;
+        width: 20vh;
     }
     .navbar__logo h3{
-        width: 21vh;
+        width: 20vh;
+        padding: .2vh 0 .2vh 0;
     }
     .navbar__logo div{
         -webkit-transition: width ease-in-out .2s;
@@ -276,7 +280,6 @@ a{
         -o-transition: width ease-in-out .2s;
         transition: width ease-in-out .2s;
         background-color: #3d3d3d;
-        padding: .2vh 0 .2vh 0;
         width: 0%;
     }
     .navbar__logo:hover h3{
@@ -286,14 +289,29 @@ a{
     .navbar__logo:hover div{
         width: 100%;
         cursor: default;
-        color: white
+        color: white;
     }
     .navbar__items{
+        flex-direction: row;
         margin: 0 0 0 auto;
+        gap: 0 1vh;
     }
     .navbar__item{
+        -webkit-transition: background-color ease-in-out .2s;
+        -moz-transition: background-color ease-in-out .2s;
+        -ms-transition: background-color ease-in-out .2s;
+        -o-transition: background-color ease-in-out .2s;
+        transition: background-color ease-in-out .2s;
+
+        padding: .3vh;
         font-size: 2vh;
         text-decoration: none;
+    }
+    .navbar__item:hover{
+        background-color: #73A8A0;
+    }
+    .navbar__item:hover a{
+        color: white;
     }
     .api__block .api__block-title{
         font-size: 2.5vh;
@@ -344,6 +362,10 @@ a{
     }
     .api__endpoint a, .api__endpoint .api__endpoint-link{
         font-size: 1.4vh;
+    }
+    .api__endpoint a:hover{
+        color: #415e59;
+        text-decoration: underline;
     }
     .api__endpoint-title{
         font-size: 2vh;
