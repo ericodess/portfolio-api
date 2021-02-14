@@ -45,13 +45,13 @@ services:
             - ./services/universefy/node_modules:/app/node_modules
         restart: unless-stopped
 
-    login:
-        container_name: portfolio_api_login
+    admin:
+        container_name: portfolio_api_admin
         build:
-            context: ./services/login
+            context: ./services/admin
             dockerfile: Dockerfile
         ports:
             - "9005:9005"                     
         volumes:
-            - ./services/login/node_modules:/app/node_modules
+            - ./services/admin/node_modules:/app/node_modules
         restart: unless-stopped

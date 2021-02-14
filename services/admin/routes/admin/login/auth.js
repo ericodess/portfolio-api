@@ -2,32 +2,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 //Models
-const getConnection = require('../../models/createPool');
-const getQuery = require('../../models/createQuery');
+const getConnection = require('../../../models/createPool');
+const getQuery = require('../../../models/createQuery');
 
 const router = express.Router();
-
-const verifyJWT = (req, res, next) => {
-    const access_token = req.cookies.access_token;
-
-    if(!access_token){
-        return res.status(403).json({
-            success: false,
-            description: 'No access_token provided'
-        });
-    }
-
-    jwt.verify(access_token, process.env.SECRET, (err,decoded) => {
-        if(err){
-            return res.status(500).json({
-                success: false,
-                description: 'Failed to authenticate access_token'
-            });
-        }
-        req.user_id = decoded.user_id;
-        next();
-    });
-};
 
 router.get('/', (req, res) => {
     res.status(405).json({

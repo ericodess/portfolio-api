@@ -27,7 +27,7 @@ const renderFeedback = (feedbackText) => {
 
 const redirectToLocalService = (service) => {
     if(/\S/.test(service)){
-        window.location.replace(`${window.location.origin}/${service}`);  
+        window.location.replace(`${window.location.origin}/admin/${service}`);  
     };
 };
 
@@ -64,7 +64,7 @@ const login = (e) => {
                 renderFeedback(data.description);
             };
         })
-        .catch(() => crenderFeedback('Please try again'))
+        .catch(() => renderFeedback('Please try again'))
     }else{
         renderFeedback('Invalid input');
     };
