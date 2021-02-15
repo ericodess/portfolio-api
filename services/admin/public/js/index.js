@@ -82,3 +82,48 @@ const formFocusHandler = () => {
         };
     };
 };
+
+const getCookie = (name) => {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    };
+
+    return null;
+};
+
+const generateInitials = (fullName) => {
+    const splittedFullName = fullName.split(' ');
+    let initals;
+
+    if(splittedFullName.length > 0){
+        const firstName = splittedFullName[0];
+
+        if(splittedFullName.length > 1){
+            const middleName = splittedFullName[1];
+            
+            initals = `${firstName[0]} ${middleName[0]}`
+        }else{
+            initals = firstName[0];
+        };
+    }else{
+        initals = "null";
+    };
+
+    return initals;
+};
+
+const renderDashboard = () => {
+    const userName = getCookie("logged_user");
+          navbarLogoElement = document.getElementById("navbarLogo"),
+          navbarLogoInitialsElement = document.createElement("span");
+          navbarItems = document.getElementById("navbarItems");
+          
+    navbarLogoInitialsElement.textContent = generateInitials(userName);
+
+    navbarLogoElement.appendChild(navbarLogoInitialsElement);
+};
