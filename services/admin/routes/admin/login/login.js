@@ -5,11 +5,12 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     const access_token = req.cookies.access_token;
+          dashboardPageURL = '/admin/dashboard';
 
     if(access_token){
         jwt.verify(access_token, process.env.SECRET, (err) => {
             if(!err){
-                res.redirect('/admin/dashboard');
+                res.redirect(dashboardPageURL);
 
                 res.end();
             };

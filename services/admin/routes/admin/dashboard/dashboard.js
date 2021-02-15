@@ -7,27 +7,30 @@ const getQuery = require('../../../models/createQuery');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    const access_token = req.cookies.access_token,
-          dashboardURL = '/admin/login';
-    
-    if(!access_token){
-        res.redirect(dashboardURL);
+const authCredentials = (req, res, next) => {
+    const accessToken = req.cookies.access_token,
+          loginPageURL = '/admin/login',
+          logoutUrl = '/admin/logout';
+
+    if(!accessToken){
+        res.redirect(loginPageURL);
 
         res.end();
     }else{
-        jwt.verify(access_token, process.env.SECRET, (err) => {
+        jwt.verify(accessToken, process.env.SECRET, (err) => {
             if(err){
-                res.redirect(dashboardURL);
+                res.redirect(logoutUrl);
 
                 res.end();
+            }else{
+                next();
             };
         });
     };
+};
 
-    res.status(200).json({
-        success: true
-    });
+router.get('/', authCredentials, (req, res) => {
+    res.sendFile('./public/dashboard.html', {root: './'});
 });
 
 module.exports = router;
