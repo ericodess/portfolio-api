@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
                         const userName = result[0].user_name;
                     
                         const accessToken = jwt.sign({userName}, process.env.SECRET, {
-                            expiresIn: 600
+                            expiresIn: 1800
                         });
                         
                         res.cookie('logged_user', userName, {
