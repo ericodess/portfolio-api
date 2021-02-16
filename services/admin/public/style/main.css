@@ -107,6 +107,24 @@ a{
     width: 100%;
     gap: 0 1vh;
 }
+.--close-button{
+    color: white;
+    background-color: transparent;
+    border: .1vh solid #086972;
+    font-weight: bold;
+}
+.--confirmation-button{
+    border: none;
+    background-color: #a6ff83e3;
+    color: #071a52;
+    font-weight: bold;
+}
+.--squircle-borders{
+    border-radius: .7rem;
+}
+.--round-borders{
+    border-radius: 1.5rem;
+}
 @-webkit-keyframes shake {
     0% {
         padding: 0;
@@ -202,6 +220,24 @@ a{
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 8vh;
+    }
+    .--close-button{
+        color: white;
+        background-color: transparent;
+        border: .1vh solid #086972;
+    }
+    .--close-button:hover{
+        background-color: #086972;
+        color: #071a52;
+    }
+    .--confirmation-button:hover{
+        background-color: #a7ff83;
+    }
+    .--squircle-borders{
+        border-radius: 1.5vh;
+    }
+    .--round-borders{
+        border-radius: 3vh;
     }
     @-webkit-keyframes shake {
         0% {
