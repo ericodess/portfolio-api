@@ -19,9 +19,17 @@
             href="/style/dashboard.css"
         >
         <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+        >
+        <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono"
         >
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Nunito"
+        > 
         <script src="/js/index.js"></script>
         <title>Dashboard</title>
     </head>
@@ -42,7 +50,7 @@
                 <li class="navbar__table-listing --full-width --full-heigth">
                     <ul
                         id="navbarTableList"
-                        class="navbar__item-list --table-listing --flex-column --flex-centered"
+                        class="navbar__item-list --table-listing --flex-column"
                     >
                     </ul>
                 </li>
@@ -84,8 +92,17 @@
             </ul>
         </nav>
         <main>
-            <div class="container --flex-column --flex-centered">
-                
+            <div class="page --flex-column --flex-centered">
+                <header class="--full-width">
+                    <h1 class="page__title --text-color-cycle">Status</h1>
+                </header>
+                <div class="page__graphs --full-width --flex-column">
+                    <div class="--auto-grid-fill-two">
+                        <canvas></canvas>
+                        <canvas></canvas>
+                    </div>
+                    <canvas></canvas>
+                </div>
             </div>
         </main>
     </body>

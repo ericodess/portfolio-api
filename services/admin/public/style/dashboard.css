@@ -1,6 +1,15 @@
+body{
+    display: flex;
+    flex-direction: row;
+}
 body, html{
     height: 100%;
     min-height: 100%;
+}
+main{
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
 }
 .dashboard{
     display: flex;
@@ -11,7 +20,7 @@ body, html{
     flex-direction: column;
     align-items: center;
     height: 100%;
-    width: 10rem;
+    width: 15rem;
     background-color: #071a52;
 }
 .navbar__logo{
@@ -58,14 +67,8 @@ body, html{
     transition: fill ease-in-out .2s;
 
     fill: #086972;
-    height: 2.3vh;
-    width: 2.3vh;
-}
-.navbar__table-listing li:hover{
-    cursor: pointer;
-}
-.navbar__table-listing li:hover svg{
-    fill: #a7ff83;
+    height: 1.2rem;
+    width: 1.2rem;
 }
 .navbar__button-container{
     height: 100%;
@@ -122,9 +125,34 @@ body, html{
     min-height: 2.7rem;
     font-size: .8rem;
 }
+.page{
+    width: 90%;
+    margin: 4rem auto 0 auto;
+}
+.page__title{
+    display: inline-block;
+    font-family: 'Nunito', serif;
+    font-weight: 700;
+    color: #071a52;
+    font-size: 3rem;
+}
+.page__graphs{
+    margin: 4rem 0 0 0;
+    gap: 2rem 0;
+}
+.page__graphs div{
+    width: 100%;
+}
+.page__graphs canvas{
+    width: 100%;
+    height: 15rem;
+    box-shadow:  .1rem .1rem .3rem #d9d9d9, 
+        -.1rem -.1rem .3rem  #ffffff;
+    border-radius: .8rem;
+}
 @media (min-width: 801px){
     .navbar{
-        width: 28vh;
+        width: 30vh;
     }
     .navbar__logo{
         border-radius: 1.5vh;
@@ -163,6 +191,16 @@ body, html{
 
         height: 3.5vh;
     }
+    .navbar__table-listing li svg{
+        width: 2.3vh;
+        height: 2.3vh;
+    }
+    .navbar__table-listing li:hover{
+        cursor: pointer;
+    }
+    .navbar__table-listing li:hover svg{
+        fill: #a7ff83;
+    }
     .navbar__button-container:hover{
         background-color: rgba(20, 69, 217, .15);
     }
@@ -193,5 +231,21 @@ body, html{
     }
     .alert-box__button:hover{
         cursor: pointer;
+    }
+    .page{
+        margin: 8vh auto 0 auto;
+    }
+    .page__title{
+        font-size: 7vh;
+    }
+    .page__graphs{
+        margin: 8vh 0 0 0;
+        gap: 4vh 0;
+    }
+    .page__graphs canvas{
+        height: 35vh;
+        box-shadow:  .2vh .2vh .6vh #d9d9d9, 
+            -.2vh -.2vh .6vh #ffffff;
+        border-radius: 1.5vh;
     }
 }
