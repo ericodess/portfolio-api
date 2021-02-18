@@ -15,9 +15,9 @@ router.get('/', (req, res) => {
                 res.end();
             };
         });
-    };
-
-    res.sendFile('./public/login.html', {root: './'});
+    }else{
+        res.sendFile('./public/login.html', {root: './'});
+    };  
 });
 
 module.exports = router;
