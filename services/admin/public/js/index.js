@@ -176,7 +176,7 @@ const renderAlertBox = (alertText, isConfirmation, closeButtonText, confirmation
         pendingAlertBoxElementList.push(alertBoxTextElement);
         
         alertBoxButtonListElement.classList.add("alert-box__button-list");
-        alertBoxButtonListElement.classList.add("--flex--row");
+        alertBoxButtonListElement.classList.add("--flex-row");
 
         pendingAlertBoxButtonElementList.push(alertBoxCloseButtonElement);
 
@@ -277,6 +277,6 @@ const renderDashboard = () => {
             insertSVGPaths(navbarTableWrapperElement, tableSVGPath, "0 0 24 24");
             navbarTableWrapperElement.appendChild(navbarTableNameElement);
             navbarTableListElement.appendChild(navbarTableWrapperElement);
-        })
+        });
     })
 }; 
