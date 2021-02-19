@@ -227,6 +227,34 @@ const renderAlertBox = (alertText, isConfirmation, closeButtonText, confirmation
     };
 };
 
+const navbarOnClickHandler = () => {
+    const navbarElement = document.getElementById("navbar");
+
+    if(!navbarElement.classList.contains("--active-navbar")){
+        navbarElement.classList.add("--active-navbar");
+    }else{
+        navbarElement.classList.remove("--active-navbar");
+    };
+};
+
+const renderLoader = (targetElementId) => {
+    const loaderWrapperElement = document.createElement('div'),
+          loaderFirstBouncerElement = document.createElement('div'),
+          loaderSecondBouncerElement = document.createElement('div'),
+          loaderThirdBouncerElement = document.createElement('div');
+
+    const loaderBouncerList = [loaderFirstBouncerElement, loaderSecondBouncerElement, loaderThirdBouncerElement];
+
+    loaderWrapperElement.classList.add("loader");
+    loaderWrapperElement.id = "loader";
+
+    loaderBouncerList.forEach(pendingLoaderBouncerElement => {
+        loaderWrapperElement.appendChild(pendingLoaderBouncerElement);
+    });
+
+    document.getElementById(targetElementId).appendChild(loaderWrapperElement);
+};
+
 const renderDashboard = () => {
     const userName = getCookie("logged_user");
           navbarLogoElement = document.getElementById("navbarLogo"),
@@ -236,6 +264,8 @@ const renderDashboard = () => {
     navbarLogoInitialsElement.textContent = generateInitials(userName);
 
     navbarLogoElement.appendChild(navbarLogoInitialsElement);
+
+    renderLoader("navbarTableList");
 
     fetch('/admin/dashboard?q=all', {
         method: 'GET',
@@ -267,7 +297,9 @@ const renderDashboard = () => {
                   d: "m17.5 23c-.276 0-.5-.224-.5-.5v-15c0-.276.224-.5.5-.5s.5.224.5.5v15c0 .276-.224.5-.5.5z"
                 },  
             ];
-              
+            
+        document.getElementById("loader").remove();
+
         data.databaseStatus.tableList.forEach(currentTableName => {
             const navbarTableWrapperElement = document.createElement("li"),
                   navbarTableNameElement = document.createElement("span");
@@ -280,16 +312,6 @@ const renderDashboard = () => {
         });
     })
 }; 
-
-const renderNavbar = () => {
-    const navbarElement = document.getElementById("navbar");
-
-    if(!navbarElement.classList.contains("--active-navbar")){
-        navbarElement.classList.add("--active-navbar");
-    }else{
-        navbarElement.classList.remove("--active-navbar");
-    };
-};
 
 window.onload = () => {
     const currentPathname = window.location.pathname.split('/');
