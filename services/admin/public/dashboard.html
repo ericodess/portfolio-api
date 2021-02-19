@@ -40,7 +40,7 @@
         >
             <button
                 class="navbar__hamburguer"
-                onclick="renderNavbar()"
+                onclick="navbarOnClickHandler()"
             >
                 <svg 
                     viewBox="0 0 512 512"
@@ -61,10 +61,10 @@
                     class="navbar__logo"
                 >
                 </li>
-                <li class="navbar__table-listing --full-width --full-heigth">
+                <li class="navbar__table-listing --full-width --full-height">
                     <ul
                         id="navbarTableList"
-                        class="navbar__item-list --table-listing --flex-column"
+                        class="navbar__item-list --table-listing --flex-column --full-height"
                     >
                     </ul>
                 </li>
@@ -74,6 +74,7 @@
                             <button
                                 class="navbar__button"
                                 onclick="redirectToLocalService('dashboard')"
+                                title="Home"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -87,6 +88,7 @@
                             <button
                                 class="navbar__button"
                                 onclick="renderAlertBox('Are you sure you want to leave this realm ?', true, 'Never Mind', 'Yes', (() => {redirectToLocalService('logout')}))"
+                                title="Logout"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -113,9 +115,9 @@
                 <div class="page__graphs --full-width --flex-column">
                     <div class="--auto-grid-fit-two">
                         <div></div> 
-                        <canvas></canvas>
+                        <canvas class="--neumorphism-borders"></canvas>
                     </div>
-                    <canvas></canvas>
+                    <canvas class="--neumorphism-borders"></canvas>
                 </div>
             </div>
         </main>

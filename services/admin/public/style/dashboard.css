@@ -164,10 +164,63 @@ main{
     width: 100%;
     height: 15rem;
 }
-.page__graphs canvas{
-    box-shadow:  .1rem .1rem .3rem #d9d9d9, 
-        -.1rem -.1rem .3rem  #ffffff;
-    border-radius: .8rem;
+.loader{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    width: 100%;
+    height: 100%;
+}
+.loader div:nth-of-type(1), .loader div:nth-of-type(2), .loader div:nth-of-type(3){
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+    opacity: 0.6;
+
+    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+}
+.loader div:nth-of-type(1){
+    -webkit-animation-delay: -.8s;
+    animation-delay: -.8s;   
+}
+.loader div:nth-of-type(2){
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+.loader div:nth-of-type(3){
+    -webkit-animation-delay: -1.2s;
+    animation-delay: -1.2s;
+}
+@-webkit-keyframes sk-bounce {
+    0%, 100% {
+        -webkit-transform: scale(0.0);
+        background-color: #086972;
+    }
+    25% {
+        background-color: #96e675; 
+    }
+    50% {
+        -webkit-transform: scale(1.0);
+        background-color: #a7ff83;
+    }
+} 
+@keyframes sk-bounce {
+    0%, 100% { 
+      transform: scale(0.0);
+      -webkit-transform: scale(0.0);
+      background-color: #086972;
+    }
+    25% {
+        background-color: #96e675; 
+    }
+    50% { 
+      transform: scale(1.0);
+      -webkit-transform: scale(1.0);
+      background-color: #a7ff83;
+    }
 }
 @media (min-width: 801px){
     .navbar{
@@ -267,7 +320,7 @@ main{
     .page__title{
         text-align: left;
         display: inline-block;
-        font-size: 5.6vh;
+        font-size: 5.8vh;
     }
     .page__graphs{
         margin: 8vh 0 0 0;
@@ -276,9 +329,11 @@ main{
     .page__graphs div, .page__graphs canvas{
         height: 35vh;
     }
-    .page__graphs canvas{
-        box-shadow:  .2vh .2vh .6vh #d9d9d9, 
-            -.2vh -.2vh .6vh #ffffff;
-        border-radius: 1.5vh;
+    .loader{
+        gap: 1vh;
+    }
+    .loader div:nth-of-type(1), .loader div:nth-of-type(2), .loader div:nth-of-type(3){
+        width: 2vh;
+        height: 2vh;
     }
 }
