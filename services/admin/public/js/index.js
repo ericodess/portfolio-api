@@ -280,3 +280,21 @@ const renderDashboard = () => {
         });
     })
 }; 
+
+const renderNavbar = () => {
+    const navbarElement = document.getElementById("navbar");
+
+    if(!navbarElement.classList.contains("--active-navbar")){
+        navbarElement.classList.add("--active-navbar");
+    }else{
+        navbarElement.classList.remove("--active-navbar");
+    };
+};
+
+window.onload = () => {
+    const currentPathname = window.location.pathname.split('/');
+
+    if(currentPathname[currentPathname.length - 1] === "dashboard"){
+        renderDashboard();
+    };
+};
