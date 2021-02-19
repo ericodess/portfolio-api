@@ -33,11 +33,25 @@
         <script src="/js/index.js"></script>
         <title>Dashboard</title>
     </head>
-    <body onload="renderDashboard()">
+    <body>
         <nav
             id="navbar"
             class="navbar"
         >
+            <button
+                class="navbar__hamburguer"
+                onclick="renderNavbar()"
+            >
+                <svg 
+                    viewBox="0 0 512 512"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path d="M501.333 54H10.667C4.779 54 0 61.8403 0 71.5C0 81.1597 4.779 89 10.667 89H501.334C507.222 89 512.001 81.1597 512.001 71.5C512.001 61.8403 507.221 54 501.333 54Z"/>
+                    <path d="M501.333 245.333H10.667C4.779 245.333 0 253.173 0 262.833C0 272.493 4.779 280.333 10.667 280.333H501.334C507.222 280.333 512.001 272.493 512.001 262.833C512.001 253.173 507.221 245.333 501.333 245.333Z"/>
+                    <path d="M501.333 437H10.667C4.779 437 0 444.839 0 454.499C0 464.159 4.779 472 10.667 472H501.334C507.222 472 512.001 464.159 512.001 454.499C512 444.839 507.221 437 501.333 437Z"/>
+                </svg>
+            </button>
             <ul
                 id="navbarItems"
                 class="navbar__items"
@@ -97,8 +111,8 @@
                     <h1 class="page__title --text-color-cycle">Status</h1>
                 </header>
                 <div class="page__graphs --full-width --flex-column">
-                    <div class="--auto-grid-fill-two">
-                        <canvas></canvas>
+                    <div class="--auto-grid-fit-two">
+                        <div></div> 
                         <canvas></canvas>
                     </div>
                     <canvas></canvas>

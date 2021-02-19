@@ -79,9 +79,9 @@ a{
 .--align-end{
     margin: auto 0 0 0;
 }
-.--auto-grid-fill-two{
+.--auto-grid-fit-two{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     gap: 2rem;
 }
 .--auto-grid-two{
@@ -134,6 +134,26 @@ a{
     -moz-animation: text-color-cycle 5s linear infinite alternate;
     -o-animation: text-color-cycle 5s linear infinite alternate;
     animation: text-color-cycle 5s linear infinite alternate;
+}
+.--active-navbar{
+    background-color: #071a52 !important;
+}
+.--active-navbar .navbar__items{
+    display: flex;
+}
+.--active-navbar .navbar__hamburguer{
+    background-color: #091e5e !important;
+}
+.--active-navbar .navbar__hamburguer svg{
+    fill: white;
+}
+.--active-navbar .navbar__hamburguer svg path:nth-child(1){
+    -webkit-transform: translateX(10rem);
+    transform: translateX(10rem);
+}
+.--active-navbar .navbar__hamburguer svg path:nth-child(2){
+    -webkit-transform: translateX(5rem);
+    transform: translateX(5rem);
 }
 @-webkit-keyframes shake {
     0% {
@@ -296,9 +316,9 @@ a{
     .--align-end{
         margin: auto 0 0 0;
     }
-    .--auto-grid-fill-two{
+    .--auto-grid-fit-two{
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(55vh, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(55vh, 1fr));
         gap: 5vh;
     }
     .--auto-grid-two{

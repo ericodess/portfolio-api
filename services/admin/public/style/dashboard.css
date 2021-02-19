@@ -16,33 +16,48 @@ main{
     flex-direction: column;
 }
 .navbar{
+    position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
-    width: 15rem;
-    background-color: #071a52;
+    background-color: transparent;
+}
+.navbar__hamburguer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    padding: 1rem;
+}
+.navbar__hamburguer svg{
+    width: 2rem;
+    height: 2rem;
+    fill: #071a52;
 }
 .navbar__logo{
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   font-family: 'Roboto', serif;
-   background-color: #086972;
-   color: white;
-   pointer-events: none;
-   border-radius: .7rem;
-   width: 6rem;
-   height: 6rem;
-   font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto', serif;
+    background-color: #086972;
+    color: white;
+    pointer-events: none;
+    border-radius: .7rem;
+    width: 6rem;
+    height: 6rem;
+    font-size: 2rem;
+    margin: 0 3rem;
 }
 .navbar__items{
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     height: 100%;
     width: 85%;
-    padding: 1rem 0 1rem 0;
+    margin: 1rem 0 1rem 0;
     gap: 2rem 0;
 }
 .navbar__item-list{
@@ -79,6 +94,7 @@ main{
     border: none;
     fill: white;
     height: 1.7rem;
+    padding: 0;
 }
 .navbar__button svg{
     height: 100%;
@@ -95,7 +111,7 @@ main{
     position: absolute;
     justify-content: center;
     opacity: 0;
-    top: 20rem;
+    top: 18rem;
 }
 .alert-box__content{
     display: flex;
@@ -127,41 +143,57 @@ main{
 }
 .page{
     width: 90%;
-    margin: 4rem auto 0 auto;
+    margin: 4rem auto 2rem auto;
 }
 .page__title{
-    display: inline-block;
+    text-align: center;
     font-family: 'Nunito', serif;
     font-weight: 700;
     color: #071a52;
     font-size: 3rem;
+    margin: 0 auto 0 auto;
 }
 .page__graphs{
     margin: 4rem 0 0 0;
     gap: 2rem 0;
 }
-.page__graphs div{
+.page__graphs div, .page__graphs canvas{
     width: 100%;
 }
-.page__graphs canvas{
+.page__graphs div div, .page__graphs canvas{
     width: 100%;
     height: 15rem;
+}
+.page__graphs canvas{
     box-shadow:  .1rem .1rem .3rem #d9d9d9, 
         -.1rem -.1rem .3rem  #ffffff;
     border-radius: .8rem;
 }
 @media (min-width: 801px){
     .navbar{
-        width: 30vh;
+        position: relative;
+        background-color: #071a52;
+    }
+    .navbar__hamburguer{
+        display: none;
+    }
+    .navbar__hamburguer svg path{
+        -webkit-transition: transform ease-in-out .2s;
+        -moz-transition: transform ease-in-out .2s;
+        -ms-transition: transform ease-in-out .2s;
+        -o-transition: transform ease-in-out .2s;
+        transition: transform ease-in-out .2s;
     }
     .navbar__logo{
         border-radius: 1.5vh;
         width: 13vh;
         height: 13vh;
         font-size: 4.5vh;
+        margin: 0 6vh;
     }
     .navbar__items{
-        padding: 2vh 0 3vh 0;
+        display: flex;
+        margin: 3vh 0 3vh 0;
         gap: 5vh 0;
     }
     .navbar__item-list{
@@ -189,11 +221,8 @@ main{
         -o-transition: fill ease-in-out .2s;
         transition: fill ease-in-out .2s;
 
-        height: 3.5vh;
-    }
-    .navbar__table-listing li svg{
-        width: 2.3vh;
-        height: 2.3vh;
+        width: 3vh;
+        height: 3vh;
     }
     .navbar__table-listing li:hover{
         cursor: pointer;
@@ -236,14 +265,18 @@ main{
         margin: 8vh auto 0 auto;
     }
     .page__title{
-        font-size: 7vh;
+        text-align: left;
+        display: inline-block;
+        font-size: 5.6vh;
     }
     .page__graphs{
         margin: 8vh 0 0 0;
         gap: 4vh 0;
     }
-    .page__graphs canvas{
+    .page__graphs div, .page__graphs canvas{
         height: 35vh;
+    }
+    .page__graphs canvas{
         box-shadow:  .2vh .2vh .6vh #d9d9d9, 
             -.2vh -.2vh .6vh #ffffff;
         border-radius: 1.5vh;
