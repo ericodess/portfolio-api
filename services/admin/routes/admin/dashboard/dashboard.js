@@ -1,9 +1,16 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const os = require('os');
 
 //Models
 const getConnection = require('../../../models/createPool');
 const getQuery = require('../../../models/createQuery');
+
+//Service
+const {
+    getCpuUsage,
+    byteToGigabyte
+} = require('../../../services');
 
 const router = express.Router();
 
@@ -36,14 +43,25 @@ router.get('/', authCredentials, async (req, res) => {
                 if(!error && connection){
                     connection.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", [process.env.DATABASE_NAME], async (error, result) => {
                         if(!error && result){
-                            const tableList = [];
+                            const tableList = [],
+                                  freeMemory = os.freemem(),
+                                  totalMemory = os.totalmem();
                             
                             result.forEach(currentTable => {
                                 tableList.push(currentTable.table_name);
                             });
-    
+
                             res.status(200).json({
                                 success: true,
+                                systemStatus: {
+                                    cpu: {
+                                        usedPercentage: getCpuUsage(os.cpus())
+                                    },
+                                    memory: {
+                                        used: byteToGigabyte(totalMemory - freeMemory),
+                                        total: byteToGigabyte(totalMemory)
+                                    }
+                                },
                                 databaseStatus: {
                                     tableList: tableList
                                 } 

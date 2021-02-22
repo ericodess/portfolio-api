@@ -87,3 +87,32 @@ const translateObjectListKeys = (targetObjectList) => {
 };
 
 exports.translateObjectListKeys = translateObjectListKeys;
+
+const byteToGigabyte = (byteValue) => {
+    return parseFloat((byteValue * (9.31 * 10 ** -10)).toFixed(1));
+};
+
+exports.byteToGigabyte = byteToGigabyte;
+
+const getCpuUsage = (cpus) => {
+    let usagePercentage = 0;
+
+    for(let i = 0, len = cpus.length; i < len; i++) {
+        const cpu = cpus[i];
+        let total = 0;
+    
+        for(const type in cpu.times) {
+            total += cpu.times[type];
+        };
+    
+        for(type in cpu.times) {
+            if(type !== 'idle'){
+                usagePercentage += Math.round(100 * cpu.times[type] / total);
+            };
+        };
+    };
+    
+    return parseFloat((usagePercentage / cpus.length).toFixed(1));
+};
+
+exports.getCpuUsage = getCpuUsage;
