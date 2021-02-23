@@ -65,7 +65,7 @@ main{
 }
 .navbar__table-listing{
     overflow-y: auto;
-    max-height: 32rem;
+    max-height: 28rem;
     font-size: .8rem;
 }
 .navbar__table-listing li span{
