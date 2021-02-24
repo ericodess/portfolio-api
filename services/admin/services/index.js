@@ -94,25 +94,47 @@ const byteToGigabyte = (byteValue) => {
 
 exports.byteToGigabyte = byteToGigabyte;
 
-const getCpuUsage = (cpus) => {
-    let usagePercentage = 0;
+const getCpuUsage = async (cpus, cpuAverageUsageList, os) => {
+    if(cpuAverageUsageList[0] === 0){
+        let usagePercentage = 0,
+            initialTicks = 0,
+            initialCPU,
+            finalTicks = 0,
+            finalCPU;
 
-    for(let i = 0, len = cpus.length; i < len; i++) {
-        const cpu = cpus[i];
-        let total = 0;
-    
-        for(const type in cpu.times) {
-            total += cpu.times[type];
-        };
-    
-        for(type in cpu.times) {
-            if(type !== 'idle'){
-                usagePercentage += Math.round(100 * cpu.times[type] / total);
+        initialCPU = os.cpus();
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        finalCPU = os.cpus();
+
+        for(let i = 0; i < cpus.length; i++) {
+            const cpu = finalCPU[i],
+                  pastCPU = initialCPU[i];
+            
+            for(const type in cpu.times) {
+                initialTicks += pastCPU.times[type];
+                finalTicks += cpu.times[type];
             };
+
+            for(type in cpu.times) {
+                if(type === 'system' || type === "user"){
+                    usagePercentage += Math.round(1000 * (cpu.times[type] - pastCPU.times[type]) / (finalTicks - initialTicks));
+                };
+            }
         };
-    };
-    
-    return parseFloat((usagePercentage / cpus.length).toFixed(1));
+
+        return parseFloat((usagePercentage / cpus.length).toFixed(1));
+    }else{
+        const cpu = {
+            cpuAverage1: cpuAverageUsageList[0],
+            cpuAverage5: cpuAverageUsageList[1],
+            cpuAverage15: cpuAverageUsageList[2],
+            cores: Array.isArray(cpus) ? cpus.length : null,
+        };
+
+        return Math.min(Math.floor(cpuAverage[0] * 100 / cpu.cores), 100);
+    }
 };
 
 exports.getCpuUsage = getCpuUsage;
