@@ -13,6 +13,8 @@ router.get('/', (req, res) => {
                 res.redirect(dashboardPageURL);
 
                 res.end();
+            }else{
+                res.sendFile('./public/login.html', {root: './'});
             };
         });
     }else{

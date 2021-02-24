@@ -20,13 +20,27 @@ const authCredentials = (req, res, next) => {
           logoutURL = '/admin/logout';
 
     if(!accessToken){
-        res.redirect(loginPageURL);
+        if(req._parsedUrl.pathname !== "/" && req.query.q){
+            res.status(200).json({
+                success: false,
+                description: "Missing access_token please login again and try again"
+            });
+        }else{
+            res.redirect(loginPageURL);
+        };
 
         res.end();
     }else{
         jwt.verify(accessToken, process.env.SECRET, (err) => {
             if(err){
-                res.redirect(logoutURL);
+                if(req._parsedUrl.pathname !== "/" && req.query.q){
+                    res.status(200).json({
+                        success: false,
+                        description: `${err.name === "TokenExpiredError" ? "Expired" : "Invalid"} access_token please login again and try again`
+                    });
+                }else{
+                    res.redirect(logoutURL);
+                };
 
                 res.end();
             }else{
@@ -36,9 +50,13 @@ const authCredentials = (req, res, next) => {
     };
 };
 
-router.get('/', authCredentials, async (req, res) => {
+router.get('/', authCredentials, (req, res) => {
+    res.sendFile('./public/dashboard.html', {root: './'});
+});
+
+router.get('/info', authCredentials, async (req, res) => {
     if(req.query.q){
-        if(req.query.q === "all"){
+        if(req.query.q === "overall-status"){
             getConnection(async (error, connection) => {
                 if(!error && connection){
                     connection.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", [process.env.DATABASE_NAME], async (error, result) => {
@@ -50,12 +68,12 @@ router.get('/', authCredentials, async (req, res) => {
                             result.forEach(currentTable => {
                                 tableList.push(currentTable.table_name);
                             });
-
+                            
                             res.status(200).json({
                                 success: true,
                                 systemStatus: {
                                     cpu: {
-                                        usedPercentage: getCpuUsage(os.cpus())
+                                        used: await getCpuUsage(os.cpus(), os.loadavg(), os)
                                     },
                                     memory: {
                                         used: byteToGigabyte(totalMemory - freeMemory),
@@ -94,9 +112,7 @@ router.get('/', authCredentials, async (req, res) => {
                 success: false,
                 description: "Invalid query parameter"
             });
-        }else{
-            res.sendFile('./public/dashboard.html', {root: './'});
-        };
+        }
     };
 });
 
