@@ -267,7 +267,7 @@ const renderDashboard = () => {
 
     renderLoader("navbarTableList");
 
-    fetch('/admin/dashboard?q=all', {
+    fetch('/admin/dashboard/info?q=overall-status', {
         method: 'GET',
         credentials: 'include'
     })
