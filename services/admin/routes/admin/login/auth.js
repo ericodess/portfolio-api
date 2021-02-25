@@ -36,13 +36,18 @@ router.post('/', (req, res) => {
                     if(result[0].user_is_admin === 1){
                         const userName = result[0].user_name;
                     
-                        const access_token = jwt.sign({userName}, process.env.SECRET, {
-                            expiresIn: 600
+                        const accessToken = jwt.sign({userName}, process.env.SECRET, {
+                            expiresIn: 1800
                         });
-            
-                        res.cookie('access_token', access_token, {
+                        
+                        res.cookie('logged_user', userName, {
+                            secure: true,
+                            sameSite: "strict"
+                        });
+                        res.cookie('access_token', accessToken, {
                             httpOnly: true, 
-                            secure: true
+                            secure: true,
+                            sameSite: "strict"
                         });
                         res.status(200).json({
                             success: true
@@ -50,7 +55,7 @@ router.post('/', (req, res) => {
                     }else{
                         res.status(401).json({
                             success: false,
-                            description: 'Invalid user role'
+                            description: 'This user doesn`t have access to this realm'
                         });
                     }   
                 };

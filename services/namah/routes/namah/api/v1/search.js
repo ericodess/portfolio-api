@@ -79,7 +79,6 @@ router.get('/', async (req, res) => {
                                 description: 'Invalid query parameter'
                             });
                         }else{
-                            console.log(error)
                             res.status(500).json({
                                 success: false,
                                 description: 'Server error, please try again'
