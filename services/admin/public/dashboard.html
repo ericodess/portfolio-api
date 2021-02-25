@@ -87,7 +87,7 @@
                         <li class="navbar__button-container">
                             <button
                                 class="navbar__button"
-                                onclick="renderAlertBox('Are you sure you want to leave this realm ?', true, 'Never Mind', 'Yes', (() => {redirectToLocalService('logout')}))"
+                                onclick="renderAlertBox(document.body, 'Are you sure you want to leave this realm ?', true, 'Never Mind', 'Yes', (() => {redirectToLocalService('logout')}))"
                                 title="Logout"
                             >
                                 <svg

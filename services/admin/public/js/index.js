@@ -151,7 +151,7 @@ const unfade = (element) => {
     }, 10);
 };
 
-const renderAlertBox = (alertText, isConfirmation, closeButtonText, confirmationButtonText, confirmationButtonOnClick) => {
+const renderAlertBox = (targetElement, alertText, isConfirmation, closeButtonText, confirmationButtonText, confirmationButtonOnClick) => {
     if(!document.getElementById("alertBox")){
         const alertBoxWrapperELement = document.createElement('div'),
               alertBoxElement = document.createElement('div'), 
@@ -186,8 +186,8 @@ const renderAlertBox = (alertText, isConfirmation, closeButtonText, confirmation
         alertBoxCloseButtonElement.classList.add("--round-borders");
         alertBoxCloseButtonElement.textContent = closeButtonText;
         alertBoxCloseButtonElement.onclick = () => {
-            if(alertBoxWrapperELement && alertBoxWrapperELement.parentNode === document.body){
-                document.body.removeChild(alertBoxWrapperELement);
+            if(alertBoxWrapperELement && alertBoxWrapperELement.parentNode === targetElement){
+                targetElement.removeChild(alertBoxWrapperELement);
             };
         };
 
@@ -221,7 +221,7 @@ const renderAlertBox = (alertText, isConfirmation, closeButtonText, confirmation
         alertBoxElement.appendChild(alertBoxContentElement);
         alertBoxWrapperELement.appendChild(alertBoxElement);
 
-        document.body.appendChild(alertBoxWrapperELement);
+        targetElement.appendChild(alertBoxWrapperELement);
 
         unfade(alertBoxElement);
     };
@@ -237,7 +237,7 @@ const navbarOnClickHandler = () => {
     };
 };
 
-const renderLoader = (targetElementId) => {
+const generateLoader = () => {
     const loaderWrapperElement = document.createElement('div'),
           loaderFirstBouncerElement = document.createElement('div'),
           loaderSecondBouncerElement = document.createElement('div'),
@@ -252,57 +252,58 @@ const renderLoader = (targetElementId) => {
         loaderWrapperElement.appendChild(pendingLoaderBouncerElement);
     });
 
-    document.getElementById(targetElementId).appendChild(loaderWrapperElement);
+    return loaderWrapperElement;
 };
 
-const renderDashboard = () => {
+const renderNavbar = () => {
     const userName = getCookie("logged_user");
-          navbarLogoElement = document.getElementById("navbarLogo"),
-          navbarLogoInitialsElement = document.createElement("span");
-          navbarItems = document.getElementById("navbarItems");
-          
+    navbarLogoElement = document.getElementById("navbarLogo"),
+    navbarLogoInitialsElement = document.createElement("span");
+    navbarItems = document.getElementById("navbarItems"),
+    loaderElement = generateLoader();
+    
     navbarLogoInitialsElement.textContent = generateInitials(userName);
 
     navbarLogoElement.appendChild(navbarLogoInitialsElement);
 
-    renderLoader("navbarTableList");
+    document.getElementById("navbarTableList").appendChild(loaderElement);
 
-    fetch('/admin/dashboard/info?q=overall-status', {
+    fetch('/admin/dashboard/info?q=table-status', {
         method: 'GET',
         credentials: 'include'
     })
     .then(result => result.json())
     .then(data => {
         const navbarTableListElement = document.getElementById("navbarTableList"),
-              tableSVGPath = [
+                tableSVGPath = [
                 {
-                  d: "m21.5 23h-19c-1.378 0-2.5-1.122-2.5-2.5v-17c0-1.378 1.122-2.5 2.5-2.5h19c1.378 0 2.5 1.122 2.5 2.5v17c0 1.378-1.122 2.5-2.5 2.5zm-19-21c-.827 0-1.5.673-1.5 1.5v17c0 .827.673 1.5 1.5 1.5h19c.827 0 1.5-.673 1.5-1.5v-17c0-.827-.673-1.5-1.5-1.5z"
+                    d: "m21.5 23h-19c-1.378 0-2.5-1.122-2.5-2.5v-17c0-1.378 1.122-2.5 2.5-2.5h19c1.378 0 2.5 1.122 2.5 2.5v17c0 1.378-1.122 2.5-2.5 2.5zm-19-21c-.827 0-1.5.673-1.5 1.5v17c0 .827.673 1.5 1.5 1.5h19c.827 0 1.5-.673 1.5-1.5v-17c0-.827-.673-1.5-1.5-1.5z"
                 },
                 {
-                  d: "m23.5 8h-23c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h23c.276 0 .5.224.5.5s-.224.5-.5.5z"
+                    d: "m23.5 8h-23c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h23c.276 0 .5.224.5.5s-.224.5-.5.5z"
                 },
                 {
-                  d: "m23.5 13h-23c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h23c.276 0 .5.224.5.5s-.224.5-.5.5z"
+                    d: "m23.5 13h-23c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h23c.276 0 .5.224.5.5s-.224.5-.5.5z"
                 },
                 {
-                  d: "m23.5 18h-23c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h23c.276 0 .5.224.5.5s-.224.5-.5.5z"
+                    d: "m23.5 18h-23c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h23c.276 0 .5.224.5.5s-.224.5-.5.5z"
                 },
                 {
-                  d: "m6.5 23c-.276 0-.5-.224-.5-.5v-15c0-.276.224-.5.5-.5s.5.224.5.5v15c0 .276-.224.5-.5.5z"
+                    d: "m6.5 23c-.276 0-.5-.224-.5-.5v-15c0-.276.224-.5.5-.5s.5.224.5.5v15c0 .276-.224.5-.5.5z"
                 },
                 {
-                  d: "m12 23c-.276 0-.5-.224-.5-.5v-15c0-.276.224-.5.5-.5s.5.224.5.5v15c0 .276-.224.5-.5.5z"
+                    d: "m12 23c-.276 0-.5-.224-.5-.5v-15c0-.276.224-.5.5-.5s.5.224.5.5v15c0 .276-.224.5-.5.5z"
                 },
                 {
-                  d: "m17.5 23c-.276 0-.5-.224-.5-.5v-15c0-.276.224-.5.5-.5s.5.224.5.5v15c0 .276-.224.5-.5.5z"
+                    d: "m17.5 23c-.276 0-.5-.224-.5-.5v-15c0-.276.224-.5.5-.5s.5.224.5.5v15c0 .276-.224.5-.5.5z"
                 },  
             ];
-            
-        document.getElementById("loader").remove();
+        
+        loaderElement.remove();
 
         data.databaseStatus.tableList.forEach(currentTableName => {
             const navbarTableWrapperElement = document.createElement("li"),
-                  navbarTableNameElement = document.createElement("span");
+                    navbarTableNameElement = document.createElement("span");
 
             navbarTableNameElement.textContent = currentTableName;
 
@@ -311,6 +312,10 @@ const renderDashboard = () => {
             navbarTableListElement.appendChild(navbarTableWrapperElement);
         });
     })
+};
+
+const renderDashboard = () => {
+    renderNavbar();
 }; 
 
 window.onload = () => {
