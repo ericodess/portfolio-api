@@ -9,7 +9,7 @@ const getQuery = require('../../../models/createQuery');
 //Service
 const {
     getCpuUsage,
-    byteToGigabyte
+    getMemoryUsage
 } = require('../../../services');
 
 const router = express.Router();
@@ -90,20 +90,14 @@ router.get('/info', authCredentials, async (req, res) => {
                 };
             });
         }else{
-            if(req.query.q === "system-status"){
-                const freeMemory = os.freemem(),
-                      totalMemory = os.totalmem();
-          
+            if(req.query.q === "system-status"){         
                 res.status(200).json({
                     success: true,
                     systemStatus: {
                         cpu: {
-                            used: await getCpuUsage()
+                            usedPercentage: await getCpuUsage()
                         },
-                        memory: {
-                            used: byteToGigabyte(totalMemory - freeMemory),
-                            total: Math.round(byteToGigabyte(totalMemory))
-                        }
+                        memory: getMemoryUsage()
                     }
                 });
             }else{

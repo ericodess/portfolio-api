@@ -94,6 +94,23 @@ const byteToGigabyte = (byteValue) => {
 
 exports.byteToGigabyte = byteToGigabyte;
 
+const getMemoryUsage = () => {
+    const os = require('os');
+
+    const freeMemory = os.freemem(),
+          totalMemory = os.totalmem();
+
+    const usedMemoryInGB = byteToGigabyte(totalMemory - freeMemory),
+          freeMemoryInGB = Math.round(byteToGigabyte(totalMemory));
+
+    return {
+        usedGB: usedMemoryInGB,
+        usedPercentage: parseFloat((100 * (usedMemoryInGB / freeMemoryInGB)).toFixed(1))
+    };
+};
+
+exports.getMemoryUsage = getMemoryUsage;
+
 const getCpuUsage = async () => {
     const os = require('os');
 
@@ -128,7 +145,7 @@ const getCpuUsage = async () => {
             }
         };
 
-        return parseFloat((usagePercentage / finalCPU.length).toFixed(1));
+        return Math.round(parseFloat((usagePercentage / finalCPU.length).toFixed(1)));
     }else{
         const cpu = {
             cpuAverage1: cpuAverageUsageList[0],
