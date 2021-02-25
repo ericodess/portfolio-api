@@ -336,4 +336,58 @@ main{
         width: 2vh;
         height: 2vh;
     }
+    .page__graphs-system{
+        display: grid;
+        align-items: center;
+        grid-template-columns: repeat(auto-fit, minmax(35vh, 1fr));
+        gap: 5vh 0;
+    }
+    .page__semi-donut{
+        --percentage: 0;
+        --fill: #ff0;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        box-sizing : border-box;
+        width: 30vh;
+        height: 15vh;
+        position: relative;
+        color: #fff;
+        font-size: 3.3vh;
+        overflow: hidden;
+        margin: 0 auto;
+        color: var(--fill);
+        font-family: 'Nunito', serif;
+        font-weight: 800;
+    }
+    .page__semi-donut:after{
+        content: '';
+        width: 30vh;
+        height: 30vh;
+        border: 3vh solid;
+        border-color : rgba(0,0,0,0.15) rgba(0,0,0,0.15) var(--fill) var(--fill);
+        position: absolute;
+        border-radius: 50%;
+        left: 0;
+        top: 0;
+        box-sizing : border-box;
+        transform: rotate( calc( 1deg * ( -45 + var(--percentage) * 1.8 ) ) );
+        animation : fillAnimation 1s ease-in;
+    }
+    @keyframes fillAnimation{
+        0%{
+            transform : rotate(-45deg);
+        }
+        50%{
+            transform: rotate(135deg);
+        }
+    }
+    @keyframes fillGraphAnimation{
+        0%{
+            transform: rotate(0deg);
+        }
+        50%{
+            transform: rotate(180deg);
+        }
+    }
 }
