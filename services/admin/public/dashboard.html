@@ -114,19 +114,14 @@
                 </header>
                 <div class="page__graphs --full-width --flex-column">
                     <div class="--auto-grid-fit-two">
-                        <div class="page__graphs-system --full-width --space-between">
-                            <span
-                                class="page__semi-donut"
-                                style="--percentage : 90; --fill: #17b978 ;" 
-                            >CPU</span> 
-                            <span
-                                class="page__semi-donut"
-                                style="--percentage : 75; --fill: #086972 ;"
-                            >RAM</span> 
+                        <div
+                            id="systemCharts"
+                            class="page__graph --system-graphs --full-width --space-between"
+                        >
                         </div>
-                        <canvas class="--neumorphism-borders"></canvas>
+                        <canvas class="page__graph --neumorphism-borders"></canvas>
                     </div>
-                    <canvas class="--neumorphism-borders"></canvas>
+                    <canvas class="page__graph --extended-graph --neumorphism-borders"></canvas>
                 </div>
             </div>
         </main>
