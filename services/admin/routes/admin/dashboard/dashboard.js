@@ -56,14 +56,12 @@ router.get('/', authCredentials, (req, res) => {
 
 router.get('/info', authCredentials, async (req, res) => {
     if(req.query.q){
-        if(req.query.q === "overall-status"){
+        if(req.query.q === "table-status"){
             getConnection(async (error, connection) => {
                 if(!error && connection){
                     connection.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", [process.env.DATABASE_NAME], async (error, result) => {
                         if(!error && result){
-                            const tableList = [],
-                                  freeMemory = os.freemem(),
-                                  totalMemory = os.totalmem();
+                            const tableList = [];
                             
                             result.forEach(currentTable => {
                                 tableList.push(currentTable.table_name);
@@ -71,15 +69,6 @@ router.get('/info', authCredentials, async (req, res) => {
                             
                             res.status(200).json({
                                 success: true,
-                                systemStatus: {
-                                    cpu: {
-                                        used: await getCpuUsage(os.cpus(), os.loadavg(), os)
-                                    },
-                                    memory: {
-                                        used: byteToGigabyte(totalMemory - freeMemory),
-                                        total: byteToGigabyte(totalMemory)
-                                    }
-                                },
                                 databaseStatus: {
                                     tableList: tableList
                                 } 
@@ -101,10 +90,28 @@ router.get('/info', authCredentials, async (req, res) => {
                 };
             });
         }else{
-            res.status(200).json({
-                success: false,
-                description: "Invalid query value"
-            });
+            if(req.query.q === "system-status"){
+                const freeMemory = os.freemem(),
+                      totalMemory = os.totalmem();
+          
+                res.status(200).json({
+                    success: true,
+                    systemStatus: {
+                        cpu: {
+                            used: await getCpuUsage()
+                        },
+                        memory: {
+                            used: byteToGigabyte(totalMemory - freeMemory),
+                            total: Math.round(byteToGigabyte(totalMemory))
+                        }
+                    }
+                });
+            }else{
+                res.status(200).json({
+                    success: false,
+                    description: "Invalid query value"
+                });
+            };
         };
     }else{
         if(Object.entries(req.query).length > 0){

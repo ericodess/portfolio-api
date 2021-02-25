@@ -94,7 +94,11 @@ const byteToGigabyte = (byteValue) => {
 
 exports.byteToGigabyte = byteToGigabyte;
 
-const getCpuUsage = async (cpus, cpuAverageUsageList, os) => {
+const getCpuUsage = async () => {
+    const os = require('os');
+
+    const cpuAverageUsageList = os.loadavg();
+
     if(cpuAverageUsageList[0] === 0){
         let usagePercentage = 0,
             initialTicks = 0,
@@ -108,7 +112,7 @@ const getCpuUsage = async (cpus, cpuAverageUsageList, os) => {
 
         finalCPU = os.cpus();
 
-        for(let i = 0; i < cpus.length; i++) {
+        for(let i = 0; i < finalCPU.length; i++) {
             const cpu = finalCPU[i],
                   pastCPU = initialCPU[i];
             
@@ -119,21 +123,21 @@ const getCpuUsage = async (cpus, cpuAverageUsageList, os) => {
 
             for(type in cpu.times) {
                 if(type === 'system' || type === "user"){
-                    usagePercentage += Math.round(1000 * (cpu.times[type] - pastCPU.times[type]) / (finalTicks - initialTicks));
+                    usagePercentage += ((1000 * (cpu.times[type] - pastCPU.times[type]) / (finalTicks - initialTicks)) * 0.5);
                 };
             }
         };
 
-        return parseFloat((usagePercentage / cpus.length).toFixed(1));
+        return parseFloat((usagePercentage / finalCPU.length).toFixed(1));
     }else{
         const cpu = {
             cpuAverage1: cpuAverageUsageList[0],
             cpuAverage5: cpuAverageUsageList[1],
             cpuAverage15: cpuAverageUsageList[2],
-            cores: Array.isArray(cpus) ? cpus.length : null,
+            cores: Array.isArray(os.cpus()) ? os.cpus().length : null,
         };
 
-        return Math.min(Math.floor(cpuAverage[0] * 100 / cpu.cores), 100);
+        return Math.min(Math.floor(cpuAverage5 * 100 / cpu.cores), 100);
     }
 };
 
