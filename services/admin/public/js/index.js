@@ -349,6 +349,50 @@ const elementPeriodicUpdate = (dataFetchingProcedure, updateRate) => {
     setInterval(dataFetchingProcedure, updateRate);
 };
 
+const rotateStateHandler = (targetElement, isToActivate) => {
+    if(!targetElement.classList.contains("--rotating") === isToActivate){
+        if(isToActivate){
+            targetElement.classList.add("--rotating");
+        }else{
+            targetElement.classList.remove("--rotating");
+        };
+    };
+};
+
+const updateSystemCharts = () => {
+    const systemChartsElement = document.getElementById("systemCharts"),
+          refreshButtonElement = document.getElementById("refreshButton"),
+          refreshButtonSvgElement = refreshButtonElement.children[0];
+
+    rotateStateHandler(refreshButtonSvgElement, true);
+
+    fetch('/admin/dashboard/info?q=system-status', {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(result => result.json())
+    .then(data => {
+        const systemStauts = data.systemStatus;
+
+        const cpuUsagePercentage = systemStauts.cpu.usedPercentage,
+              ramUsagePercentage = systemStauts.memory.usedPercentage,
+              ramUsageGB = systemStauts.memory.usedGB,
+              cpuDonutChartWrapper = systemChartsElement.children[0],
+              memoryDonutChartWrapper = systemChartsElement.children[1];
+
+        const cpuDonutChartElement = cpuDonutChartWrapper.children[1],
+              memoryDonutChartElement = memoryDonutChartWrapper.children[1];
+              
+        rotateStateHandler(refreshButtonSvgElement, false);
+        
+        cpuDonutChartElement.style.setProperty("--percentage", cpuUsagePercentage);
+        cpuDonutChartElement.textContent = `${cpuUsagePercentage}%`;
+
+        memoryDonutChartElement.style.setProperty("--percentage", ramUsagePercentage);
+        memoryDonutChartElement.textContent = `${ramUsageGB} GB`;
+    })
+};
+
 const renderSystemStatus = async () => {
     const systemChartsElement = document.getElementById("systemCharts"),
           loaderElement = generateLoader();
@@ -377,31 +421,7 @@ const renderSystemStatus = async () => {
         appendPendingElements(pendingSystemCharts, systemChartsElement);
     })
 
-    elementPeriodicUpdate(() => {
-        fetch('/admin/dashboard/info?q=system-status', {
-            method: 'GET',
-            credentials: 'include'
-        })
-        .then(result => result.json())
-        .then(data => {
-            const systemStauts = data.systemStatus;
-
-            const cpuUsagePercentage = systemStauts.cpu.usedPercentage,
-                  ramUsagePercentage = systemStauts.memory.usedPercentage,
-                  ramUsageGB = systemStauts.memory.usedGB,
-                  cpuDonutChartWrapper = systemChartsElement.children[0],
-                  memoryDonutChartWrapper = systemChartsElement.children[1];
-
-            const cpuDonutChartElement = cpuDonutChartWrapper.children[1],
-                  memoryDonutChartElement = memoryDonutChartWrapper.children[1];
-
-            cpuDonutChartElement.style.setProperty("--percentage", cpuUsagePercentage);
-            cpuDonutChartElement.textContent = `${cpuUsagePercentage}%`;
-
-            memoryDonutChartElement.style.setProperty("--percentage", ramUsagePercentage);
-            memoryDonutChartElement.textContent = `${ramUsageGB} GB`;
-        })
-    }, 300000);
+    elementPeriodicUpdate(updateSystemCharts, 300000);
 };
 
 const renderDashboard = () => {
@@ -409,6 +429,10 @@ const renderDashboard = () => {
     
     renderSystemStatus();
 }; 
+
+const refreshHandler = () => {
+    updateSystemCharts();
+};
 
 window.onload = () => {
     const currentPathname = window.location.pathname.split('/');
