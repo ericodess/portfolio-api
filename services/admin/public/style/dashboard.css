@@ -375,7 +375,7 @@ main{
         cursor: pointer;
     }
     .page{
-        margin: 8vh auto;
+        margin: 5vh auto 2vh auto;
     }
     .page__title{
         text-align: left;
@@ -417,7 +417,7 @@ main{
     .page__semi-donut::after{
         width: 30vh;
         height: 30vh;
-        border: 3.5vh solid;
+        border: 3vh solid;
         border-color: #dbdbdb #dbdbdb var(--fill) var(--fill);
     }
 }
