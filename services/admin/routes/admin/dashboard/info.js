@@ -1,6 +1,5 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const os = require('os');
 
 //Models
 const getConnection = require('../../../models/createPool');

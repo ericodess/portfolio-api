@@ -154,7 +154,7 @@ const getCpuUsage = async () => {
             cores: Array.isArray(os.cpus()) ? os.cpus().length : null,
         };
 
-        return Math.min(Math.floor(cpuAverage5 * 100 / cpu.cores), 100);
+        return Math.min(Math.floor(cpu.cpuAverage5 * 100 / cpu.cores), 100);
     }
 };
 
