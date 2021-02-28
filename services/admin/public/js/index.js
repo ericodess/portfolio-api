@@ -355,12 +355,16 @@ const rotateStateHandler = (targetElement, isToActivate) => {
             targetElement.classList.add("--rotating");
         }else{
             targetElement.classList.remove("--rotating");
+            
+            if(targetElement.classList.length === 0){
+                targetElement.removeAttribute("class");
+            };
         };
     };
 };
 
-const updateSystemCharts = () => {
-    const systemChartsElement = document.getElementById("systemCharts"),
+const updatesystemMinifiedCharts = () => {
+    const systemMinifiedChartsElement = document.getElementById("systemMinifiedCharts"),
           refreshButtonElement = document.getElementById("refreshButton"),
           refreshButtonSvgElement = refreshButtonElement.children[0];
 
@@ -377,8 +381,8 @@ const updateSystemCharts = () => {
         const cpuUsagePercentage = systemStauts.cpu.usedPercentage,
               ramUsagePercentage = systemStauts.memory.usedPercentage,
               ramUsageGB = systemStauts.memory.usedGB,
-              cpuDonutChartWrapper = systemChartsElement.children[0],
-              memoryDonutChartWrapper = systemChartsElement.children[1];
+              cpuDonutChartWrapper = systemMinifiedChartsElement.children[0],
+              memoryDonutChartWrapper = systemMinifiedChartsElement.children[1];
 
         const cpuDonutChartElement = cpuDonutChartWrapper.children[1],
               memoryDonutChartElement = memoryDonutChartWrapper.children[1];
@@ -393,11 +397,11 @@ const updateSystemCharts = () => {
     })
 };
 
-const renderSystemStatus = async () => {
-    const systemChartsElement = document.getElementById("systemCharts"),
+const renderSystemStatus = () => {
+    const systemMinifiedChartsElement = document.getElementById("systemMinifiedCharts"),
           loaderElement = generateLoader();
 
-    systemChartsElement.appendChild(loaderElement);
+    systemMinifiedChartsElement.appendChild(loaderElement);
 
     fetch('/admin/dashboard/info?q=system-status', {
         method: 'GET',
@@ -414,14 +418,14 @@ const renderSystemStatus = async () => {
         const cpuChartElement = generateSemiDonutChart(cpuUsagePercentage, "CPU", `${cpuUsagePercentage}%`, "#17b978"),
               ramChartElement = generateSemiDonutChart(ramUsagePercentage, "RAM", `${ramUsageGB} GB`, "#086972");
   
-        const pendingSystemCharts = [cpuChartElement, ramChartElement];
+        const pendingsystemMinifiedCharts = [cpuChartElement, ramChartElement];
 
         loaderElement.remove();
 
-        appendPendingElements(pendingSystemCharts, systemChartsElement);
+        appendPendingElements(pendingsystemMinifiedCharts, systemMinifiedChartsElement);
     })
 
-    elementPeriodicUpdate(updateSystemCharts, 300000);
+    elementPeriodicUpdate(updatesystemMinifiedCharts, 300000);
 };
 
 const renderDashboard = () => {
@@ -431,7 +435,7 @@ const renderDashboard = () => {
 }; 
 
 const refreshHandler = () => {
-    updateSystemCharts();
+    updatesystemMinifiedCharts();
 };
 
 window.onload = () => {
