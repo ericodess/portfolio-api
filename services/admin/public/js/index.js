@@ -117,6 +117,12 @@ const generateInitials = (fullName) => {
     return initals;
 };
 
+const appendPendingElements = (pendingElementList, targetElement) => {
+    pendingElementList.forEach(pendingElement => {
+        targetElement.appendChild(pendingElement);
+    });
+};
+
 const insertSVGPaths = (targetSVG, pathList, viewBox) => {
     const targetSVGContainer = document.createElementNS('http://www.w3.org/2000/svg','svg');
     targetSVGContainer.setAttribute('viewBox', viewBox);
@@ -214,9 +220,7 @@ const renderAlertBox = (targetElement, alertText, isConfirmation, closeButtonTex
 
         pendingAlertBoxElementList.push(alertBoxButtonListElement);
 
-        pendingAlertBoxElementList.forEach(pendingAlertBoxElement => {
-            alertBoxContentElement.appendChild(pendingAlertBoxElement);
-        });
+        appendPendingElements(pendingAlertBoxElementList, alertBoxContentElement);
 
         alertBoxElement.appendChild(alertBoxContentElement);
         alertBoxWrapperELement.appendChild(alertBoxElement);
@@ -248,11 +252,38 @@ const generateLoader = () => {
     loaderWrapperElement.classList.add("loader");
     loaderWrapperElement.id = "loader";
 
-    loaderBouncerList.forEach(pendingLoaderBouncerElement => {
-        loaderWrapperElement.appendChild(pendingLoaderBouncerElement);
-    });
+    appendPendingElements(loaderBouncerList, loaderWrapperElement);
 
     return loaderWrapperElement;
+};
+
+const generateSemiDonutChart = (chartPercentage, chartTitle, chartText, chartColor) => {
+    const semiDonutChartElementWrapper = document.createElement('div'),
+          semiDonutchartTitle = document.createElement('span'),
+          semiDonutChartElement = document.createElement('div');
+
+    let isColorWithoutHashTag = false;
+
+    if(chartColor.split("#").length === 1){
+        isColorWithoutHashTag = true;
+    };
+
+    semiDonutChartElementWrapper.classList.add("page__semi-donut-wrapper");
+
+    semiDonutchartTitle.classList.add("page__semi-donut-title");
+    semiDonutchartTitle.style.color = isColorWithoutHashTag ? `#${chartColor}` : chartColor;
+    semiDonutchartTitle.textContent = chartTitle;
+
+    semiDonutChartElement.classList.add("page__semi-donut");
+    semiDonutChartElement.style.setProperty("--percentage", chartPercentage);
+    semiDonutChartElement.style.setProperty("--fill", isColorWithoutHashTag ? `#${chartColor}` : chartColor);
+    semiDonutChartElement.textContent = chartText;
+
+    const semiDonutCharPendingElementsList = [semiDonutchartTitle, semiDonutChartElement];
+    
+    appendPendingElements(semiDonutCharPendingElementsList, semiDonutChartElementWrapper);
+
+    return semiDonutChartElementWrapper;
 };
 
 const renderNavbar = () => {
@@ -314,9 +345,98 @@ const renderNavbar = () => {
     })
 };
 
+const elementPeriodicUpdate = (dataFetchingProcedure, updateRate) => {
+    setInterval(dataFetchingProcedure, updateRate);
+};
+
+const rotateStateHandler = (targetElement, isToActivate) => {
+    if(!targetElement.classList.contains("--rotating") === isToActivate){
+        if(isToActivate){
+            targetElement.classList.add("--rotating");
+        }else{
+            targetElement.classList.remove("--rotating");
+            
+            if(targetElement.classList.length === 0){
+                targetElement.removeAttribute("class");
+            };
+        };
+    };
+};
+
+const updatesystemMinifiedCharts = () => {
+    const systemMinifiedChartsElement = document.getElementById("systemMinifiedCharts"),
+          refreshButtonElement = document.getElementById("refreshButton"),
+          refreshButtonSvgElement = refreshButtonElement.children[0];
+
+    rotateStateHandler(refreshButtonSvgElement, true);
+
+    fetch('/admin/dashboard/info?q=system-status', {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(result => result.json())
+    .then(data => {
+        const systemStauts = data.systemStatus;
+
+        const cpuUsagePercentage = systemStauts.cpu.usedPercentage,
+              ramUsagePercentage = systemStauts.memory.usedPercentage,
+              ramUsageGB = systemStauts.memory.usedGB,
+              cpuDonutChartWrapper = systemMinifiedChartsElement.children[0],
+              memoryDonutChartWrapper = systemMinifiedChartsElement.children[1];
+
+        const cpuDonutChartElement = cpuDonutChartWrapper.children[1],
+              memoryDonutChartElement = memoryDonutChartWrapper.children[1];
+              
+        rotateStateHandler(refreshButtonSvgElement, false);
+        
+        cpuDonutChartElement.style.setProperty("--percentage", cpuUsagePercentage);
+        cpuDonutChartElement.textContent = `${cpuUsagePercentage}%`;
+
+        memoryDonutChartElement.style.setProperty("--percentage", ramUsagePercentage);
+        memoryDonutChartElement.textContent = `${ramUsageGB} GB`;
+    })
+};
+
+const renderSystemStatus = () => {
+    const systemMinifiedChartsElement = document.getElementById("systemMinifiedCharts"),
+          loaderElement = generateLoader();
+
+    systemMinifiedChartsElement.appendChild(loaderElement);
+
+    fetch('/admin/dashboard/info?q=system-status', {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then(result => result.json())
+    .then(data => {
+        const systemStauts = data.systemStatus;
+
+        const cpuUsagePercentage = systemStauts.cpu.usedPercentage,
+              ramUsagePercentage = systemStauts.memory.usedPercentage,
+              ramUsageGB = systemStauts.memory.usedGB;
+
+        const cpuChartElement = generateSemiDonutChart(cpuUsagePercentage, "CPU", `${cpuUsagePercentage}%`, "#17b978"),
+              ramChartElement = generateSemiDonutChart(ramUsagePercentage, "RAM", `${ramUsageGB} GB`, "#086972");
+  
+        const pendingsystemMinifiedCharts = [cpuChartElement, ramChartElement];
+
+        loaderElement.remove();
+
+        appendPendingElements(pendingsystemMinifiedCharts, systemMinifiedChartsElement);
+    })
+
+    elementPeriodicUpdate(updatesystemMinifiedCharts, 300000);
+};
+
 const renderDashboard = () => {
     renderNavbar();
+    
+    renderSystemStatus();
 }; 
+
+const refreshHandler = () => {
+    updatesystemMinifiedCharts();
+};
 
 window.onload = () => {
     const currentPathname = window.location.pathname.split('/');

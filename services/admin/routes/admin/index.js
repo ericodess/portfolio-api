@@ -2,9 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 
-const loginEndpoint = require('./login');
-const logoutEndpoint = require('./logout');
-const dashboardEndpoint = require('./dashboard');
+const loginEndpoint = require('./login'),
+      logoutEndpoint = require('./logout'),
+      dashboardEndpoint = require('./dashboard');
 
 router.get('/', (req, res) => {
     const  loginPageURL = '/admin/login';
