@@ -7,7 +7,8 @@ const getQuery = require('../../../../models/createQuery');
 //Services
 const {
     toCamelCase,
-    translateObjectListKeys
+    translateObjectListKeys,
+    orderObjectByKey
 } = require('../../../../services');
 
 const router = express.Router();
@@ -66,7 +67,7 @@ router.get('/', async (req, res) => {
                             if(Object.keys(searchResult).length === avaiableTables.length){
                                 res.status(200).json({
                                     success: true,
-                                    searchResult: searchResult
+                                    searchResult: orderObjectByKey(searchResult)
                                 });
                             }
                         })
