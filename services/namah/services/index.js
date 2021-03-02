@@ -4,3 +4,4 @@ exports.generateQuery = require('./generateQuery');
 exports.toCamelCase = require('./toCamelCase');
 exports.translateObjectKeys = require('./translateObjectKeys');
 exports.translateObjectListKeys = require('./translateObjectListKeys');
+exports.orderObjectByKey = require('./orderObjectByKey');
