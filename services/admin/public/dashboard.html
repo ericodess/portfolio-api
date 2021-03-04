@@ -73,7 +73,7 @@
                         <li class="navbar__button-container">
                             <button
                                 class="navbar__button"
-                                onclick="redirectToLocalService('dashboard')"
+                                onclick="renderDashboard('dashboard')"
                                 title="Home"
                             >
                                 <svg
@@ -108,7 +108,10 @@
             </ul>
         </nav>
         <main>
-            <div class="page --flex-column --flex-centered">
+            <div
+                id="pageContent"
+                class="page --flex-column --flex-centered"
+            >
                 <header class="page__header --full-width">
                     <h1 class="page__title --color-cycle">Status</h1>
                     <div class="page__controller-list --flex-row --neumorphism-borders">
