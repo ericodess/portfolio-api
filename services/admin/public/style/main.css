@@ -166,6 +166,10 @@ svg{
     -webkit-animation: rotation 2s infinite ease-in-out;
     animation: rotation 2s infinite ease-in-out;
 }
+.--flex-centered-items{
+    align-items: center;
+    justify-content: center;
+}
 @-webkit-keyframes shake {
     0% {
         padding: 0;

@@ -9,6 +9,7 @@ body, html{
 main{
     height: 100%;
     width: 100%;
+    overflow: hidden;
     overflow-y: auto;
 }
 .dashboard{
@@ -73,7 +74,7 @@ main{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 18vh;
+    max-width: 9rem;
 }
 .navbar__table-listing li svg{
     -webkit-transition: fill ease-in-out .2s;
@@ -373,6 +374,9 @@ main{
         width: 3vh;
         height: 3vh;
     }
+    .navbar__table-listing li span{
+        max-width: 18vh;
+    }
     .navbar__table-listing li:hover{
         cursor: pointer;
     }
@@ -438,7 +442,7 @@ main{
         fill: #17b978;
     }
     .page__graphs{
-        margin: 8vh 0 0 0;
+        margin: 7vh 0 0 0;
         gap: 4vh 0;
     }
     .page__semi-donut-wrapper{
