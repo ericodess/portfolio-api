@@ -37,6 +37,8 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+    const testValidOriginList = ["https://api.efrederick.dev"];
+
     getConnection(async (error,connection) => {
         if(!error && connection){
             await getQuery(connection, {
@@ -57,14 +59,17 @@ router.post('/', (req, res) => {
                 }else{
                     const userName = result[0].user_name;
         
-                    const access_token = jwt.sign({userName}, process.env.SECRET, {
-                        expiresIn: 600
-                    });
-        
-                    res.cookie('access_token', access_token, {
-                        httpOnly: true, 
-                        secure: true
-                    });
+                    if(!testValidOriginList.find(currentOrigin => currentOrigin === req.headers.origin)){
+                        const access_token = jwt.sign({userName}, process.env.SECRET, {
+                            expiresIn: 600
+                        });
+            
+                        res.cookie('access_token', access_token, {
+                            httpOnly: true, 
+                            secure: true
+                        });
+                    };
+
                     res.status(200).json({
                         success: true,
                         loggedUser: userName
