@@ -2,7 +2,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 //Models
-const getConnection = require('../../../models/createPool');
+const {
+    getConnection,
+    getQuery
+} = require('../../../models');
 
 //Service
 const {
@@ -43,27 +46,36 @@ router.get('/', authCredentials, async (req, res) => {
         if(req.query.q === "table-status"){
             getConnection(async (error, connection) => {
                 if(!error && connection){
-                    connection.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", [process.env.DATABASE_NAME], async (error, result) => {
-                        if(!error && result){
-                            const tableList = [];
+                    getQuery(connection, {
+                        queryRequest:{
+                            schema: process.env.DATABASE_NAME
+                        },
+                        queryTargetItems: 'table_name',
+                        queryTargetItemsPrefix: 'table',
+                        queryTargetTable: 'information_schema.tables',
+                        queryIsBinary: false,
+                        queryIsLimitless: true
+                    })
+                    .then(result => {
+                        const tableList = [];
                             
-                            result.forEach(currentTable => {
-                                tableList.push(currentTable.table_name);
-                            });
-                            
-                            res.status(200).json({
-                                success: true,
-                                databaseStatus: {
-                                    tableList: tableList
-                                } 
-                            });
-                        }else{
-                            res.status(500).json({
-                                success: false,
-                                description: 'Server error, please try again'
-                            });
-                        };
-                    });
+                        result.forEach(currentTable => {
+                            tableList.push(currentTable.table_name);
+                        });
+                        
+                        res.status(200).json({
+                            success: true,
+                            databaseStatus: {
+                                tableList: tableList
+                            } 
+                        });
+                    })
+                    .catch(error => {
+                        res.status(500).json({
+                            success: false,
+                            description: 'Server error, please try again'
+                        });
+                    })
     
                     connection.release();
                 }else{

@@ -2,8 +2,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 //Models
-const getConnection = require('../../../models/createPool');
-const getQuery = require('../../../models/createQuery');
+const {
+    getConnection,
+    getQuery
+} = require('../../../models');
 
 const router = express.Router();
 
@@ -23,8 +25,10 @@ router.post('/', (req, res) => {
                     password: req.body.password
                 },
                 queryTargetItems: 'user_name,user_is_admin',
+                queryTargetItemsPrefix: 'user',
                 queryTargetTable: 'users',
-                queryIsBinary: true  
+                queryIsBinary: true,
+                queryIsLimitless: true
             })
             .then(result => {
                 if(result.length === 0){
