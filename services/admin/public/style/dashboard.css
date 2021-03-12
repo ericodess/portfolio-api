@@ -408,7 +408,7 @@ main{
         cursor: pointer;
     }
     .page{
-        margin: 5vh auto 2vh auto;
+        margin: 5vh auto 0 auto;
     }
     .page__header{
         display: flex;
