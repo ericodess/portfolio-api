@@ -54,7 +54,8 @@ router.get('/', authCredentials, async (req, res) => {
                         queryTargetItemsPrefix: 'table',
                         queryTargetTable: 'information_schema.tables',
                         queryIsBinary: false,
-                        queryIsLimitless: true
+                        queryIsLimitless: true,
+                        queryIsPreciseComparison: false
                     })
                     .then(result => {
                         const tableList = [];
