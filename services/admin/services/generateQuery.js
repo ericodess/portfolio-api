@@ -1,7 +1,8 @@
-const generateQuery = ({requestQueries, targetItems, targetItemsPrefix, targetTable, isBinary, isLimitless}) => {
+const generateQuery = ({requestQueries, targetItems, targetItemsPrefix, targetTable, isBinary, isLimitless, isPreciseComparison}) => {
     targetItemsPrefix = targetItemsPrefix ?? targetTable.slice(0, -1);
     isBinary = isBinary ?? false;
     isLimitless = isLimitless ?? false;
+    isPreciseComparison = isPreciseComparison ?? true;
 
     let queryClauses = `SELECT ${targetItems === '' || targetItems === null || targetItems === undefined ? '*' : targetItems} FROM ${targetTable}`,
         queryParameters = [];
@@ -11,16 +12,12 @@ const generateQuery = ({requestQueries, targetItems, targetItemsPrefix, targetTa
 
         Object.keys(requestQueries).map((element, index) => {
             if(element !== 'limit' && requestQueries[element] !== undefined){
-                /*
-                / TO-FIX
-                / The usage of LIKE & variable bindage in some situations, 
-                / leading to a BIG performance drop (from ~ 450 ms to ~ 6 s).
-                */
-                if(index === firstIndex){
-                    queryClauses += ` WHERE ${targetItemsPrefix}_${element} LIKE ${isBinary ? 'BINARY ' : ''}?`;
-                }else{
-                    queryClauses += ` AND ${targetItemsPrefix}_${element} LIKE ${isBinary ? 'BINARY ' : ''}?`;
-                };
+               const clausePrefix = `${index === firstIndex ? 'WHERE' : 'AND'}`,
+                     tableCurrentVariable = `${targetItemsPrefix}_${element}`,
+                     comparasionPrefix = `${isPreciseComparison ? 'LIKE' : '='}`,
+                     converterPrefix = `${isBinary ? 'BINARY ' : ''}`;
+
+                queryClauses += ` ${clausePrefix} ${tableCurrentVariable} ${comparasionPrefix} ${converterPrefix}?`;
 
                 if(element === 'id' && !isNaN(parseInt(requestQueries[element]))){
                     queryParameters.push(parseInt(requestQueries[element]));
