@@ -1,8 +1,10 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../../../models/createPool');
-const getQuery = require('../../../../models/createQuery');
+const {
+    getConnection,
+    getQuery
+} = require('../../../../models');
 
 const router = express.Router();
 
@@ -15,12 +17,14 @@ router.get('/', (req, res) => {
         if(!error && connection){
             await getQuery(connection, {
                 queryRequest:{
-                    id: 'ghub:1',
-                    origin: 'github'
+                    id: process.env.GITHUB_API_SCHEMA_NAME,
+                    origin: process.env.GITHUB_API_ORIGIN
                 },
                 queryTargetItems: 'api_key_value',
+                queryTargetItemsPrefix: 'api_key',
                 queryTargetTable: 'api_keys',
-                queryIsBinary: true
+                queryIsBinary: true,
+                queryIsLimitless: true
             })
             .then(result => {
                 if(result.length === 0){

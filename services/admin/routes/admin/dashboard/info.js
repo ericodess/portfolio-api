@@ -72,6 +72,7 @@ router.get('/', authCredentials, async (req, res) => {
                         });
                     })
                     .catch(error => {
+                        console.log(error)
                         res.status(500).json({
                             success: false,
                             description: 'Server error, please try again'

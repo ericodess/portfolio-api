@@ -6,10 +6,9 @@ const app = express();
 //Add-ons
 const morgan = require('morgan');
 const cors = require('cors');
-const bodyparser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-const port = process.env.PORT||9002;
+const port = process.env.PORT || 9002;
 
 //Routes
 const routes = require('./routes');
@@ -31,8 +30,8 @@ app.use(cors({
 		credentials: true
 }));
 app.use(cookieParser());
-app.use(bodyparser.urlencoded({extended : false}));
-app.use(bodyparser.json());
+app.use(express.urlencoded({extended : false}));
+app.use(express.json());
 
 app.use('/', routes);
 

@@ -1,12 +1,15 @@
 //Service
-const generateQuery = require('../services').generateQuery;
+const { generateQuery } = require('../services');
 
-const getQuery = async (connection, {queryRequest, queryTargetItems, queryTargetTable, queryIsBinary}) => {
+const getQuery = async (connection, {queryRequest, queryTargetItems, queryTargetItemsPrefix, queryTargetTable, queryIsBinary, queryIsLimitless, queryIsPreciseComparison}) => {
     const query = generateQuery({
         requestQueries: queryRequest,
         targetItems: queryTargetItems,
+        targetItemsPrefix: queryTargetItemsPrefix,
         targetTable: queryTargetTable,
-        targetIsBinary: queryIsBinary
+        isBinary: queryIsBinary,
+        isLimitless: queryIsLimitless,
+        isPreciseComparison: queryIsPreciseComparison
     });
 
     return new Promise((resolve, reject) => {

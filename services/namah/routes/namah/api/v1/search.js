@@ -1,8 +1,10 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../../../models/createPool');
-const getQuery = require('../../../../models/createQuery');
+const {
+    getConnection,
+    getQuery
+} = require('../../../../models');
 
 //Services
 const {
@@ -53,13 +55,17 @@ router.get('/', async (req, res) => {
             .then(tableParams => {
                 getConnection(async (error,connection) => {
                     if(!error && connection){
+                        const tablePreFix = tableParams[0].split('_')[0];
+
                         await getQuery(connection, {
                             queryRequest: {
                                 q: req.query.q,
                                 limit: req.query.limit
                             },
                             queryTargetItems: tableParams,
-                            queryTargetTable: currentTable
+                            queryTargetItemsPrefix: tablePreFix,
+                            queryTargetTable: currentTable,
+                            queryIsLimitless: true
                         })
                         .then(result => {
                             searchResult = {...searchResult, [toCamelCase(currentTable)]: translateObjectListKeys(result)};

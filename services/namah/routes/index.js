@@ -4,6 +4,6 @@ const router = express.Router();
 
 const namahEndpoint = require('./namah');
 
-router.use('/namah/api', namahEndpoint);
+router.use('/namah', namahEndpoint);
 
 module.exports = router;
