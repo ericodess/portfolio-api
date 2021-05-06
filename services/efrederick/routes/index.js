@@ -4,6 +4,6 @@ const router = express.Router();
 
 const eFrederickEndpoint = require('./efrederick');
 
-router.use('/eFrederick/api', eFrederickEndpoint);
+router.use('/eFrederick', eFrederickEndpoint);
 
 module.exports = router;

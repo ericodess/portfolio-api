@@ -1,8 +1,10 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../../../models/createPool');
-const getQuery = require('../../../../models/createQuery');
+const {
+    getConnection,
+    getQuery
+} = require('../../../../models');
 
 //Services
 const {translateObjectListKeys} = require('../../../../services');
@@ -15,7 +17,9 @@ router.get('/', (req, res) => {
             await getQuery(connection, {
                 queryRequest: req.query,
                 queryTargetItems: 'banner_id,banner_title,banner_description',
-                queryTargetTable: 'banners'
+                queryTargetItemsPrefix: 'banner',
+                queryTargetTable: 'banners',
+                queryIsLimitless: true
             })
             .then(result => {
                 if(result.length === 0){

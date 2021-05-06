@@ -2,20 +2,15 @@ const express = require('express');
 
 const router = express.Router();
 
-const loginEndpoint = require('./login'),
+const dashboardEndpoint = require('./dashboard'),
+      loginEndpoint = require('./login'),
       logoutEndpoint = require('./logout'),
-      dashboardEndpoint = require('./dashboard');
+      rootEndpoint = require('./root');
 
-router.get('/', (req, res) => {
-    const  loginPageURL = '/admin/login';
+router.use('/', rootEndpoint);
 
-    res.redirect(loginPageURL);
-
-    res.end();
-});
-
-router.use('/login', loginEndpoint);
-router.use('/logout', logoutEndpoint );
 router.use('/dashboard', dashboardEndpoint);
+router.use('/login', loginEndpoint);
+router.use('/logout', logoutEndpoint);
 
 module.exports = router;

@@ -1,8 +1,10 @@
 const express = require('express');
 
 //Models
-const getConnection = require('../../../../models/createPool');
-const getQuery = require('../../../../models/createQuery');
+const {
+    getConnection,
+    getQuery
+} = require('../../../../models');
 
 const router = express.Router();
 
@@ -30,7 +32,8 @@ router.get('/', (req, res) => {
         if(!error && connection){
             await getQuery(connection, {
                 queryRequest: req.query,
-                queryTargetTable: 'courses'
+                queryTargetTable: 'courses',
+                queryIsLimitless: true
             })
             .then(result => {
                 if(result.length === 0){

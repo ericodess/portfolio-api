@@ -1,0 +1,1 @@
+exports.generateQuery = require('./generateQuery');
