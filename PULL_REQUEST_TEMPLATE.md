@@ -13,4 +13,4 @@ Code from `PR_ID` made the `index.html` looks bad
 
 **Required** - Describe which problem(s) you fixed and need to be fixed and refeer to all commits you did related to this problem. **Example:**
 - [x] 1. Improved `index.html` code at `COMMIT_ID`;
-- [ ] 1.1. Inforce good code practices.
+- [ ] 1.1. Enforced good code practices.
