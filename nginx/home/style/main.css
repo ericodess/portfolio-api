@@ -189,6 +189,16 @@ a{
     padding: 0 .6rem;
     margin: -.6rem 0 0 0;
 }
+.api__button-list{
+    width: 6.4rem;
+}
+.api__button-list-extra{
+    position: absolute;
+    background-color: white;
+    border: .1rem solid #73A8A0;
+    border-top: none;
+    width: 6.4rem;
+}
 .--button{
     min-height: 4rem;
     padding: .6rem 0 .6rem;
@@ -211,13 +221,11 @@ a{
 }
 .--buttons-list-extra{
     flex-direction: column;
-    margin: .6rem 0 0 0;
-    gap: .6rem 0;
 }
 .--buttons-list-extra button{
-    margin: 0 auto 0 auto;
-    width: 90%;
-    background-color: #f7f7f7;
+    width: 100%;
+    background-color: transparent;
+    border: none !important;
 }
 @media (min-width: 768px){
     .--modded pre{
@@ -372,6 +380,14 @@ a{
         padding: 0 1vh;
         margin: -1vh 0 0 0;
     }
+    .api__button-list{
+        width: 10.5vh;
+    }
+    .api__button-list-extra{
+        width: 10.3vh;
+        border: .1vh solid #73A8A0;
+        border-top: none;
+    }
     .--button{
         min-height: 5vh;
         padding: 1vh 0 1vh 0;
@@ -396,10 +412,6 @@ a{
         border: .1vh solid black;
         color: white;
         background-color: black;
-    }
-    .--buttons-list-extra{
-        margin: 1vh 0 1vh 0;
-        gap: 1vh 0;
     }
     .--modded pre{
         margin: 9.2vh 0 0 0 !important;

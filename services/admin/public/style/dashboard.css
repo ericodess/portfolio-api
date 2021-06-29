@@ -33,6 +33,13 @@ main{
     border: none;
     width: 100%;
     padding: 1rem;
+    margin: auto 0 0 0;
+    background-color: #f5f5f5;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow:  .1rem .1rem .3rem #d0d0d0, 
+        -.1rem -.1rem .3rem  #ffffff;
 }
 .navbar__hamburguer svg{
     width: 2rem;
@@ -106,6 +113,9 @@ main{
 }
 #alertBox{
     position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     top: 0;
     width: 100%;
     height: 100%;
@@ -113,10 +123,8 @@ main{
 }
 .alert-box{
     width: 100%;
-    position: absolute;
     justify-content: center;
     opacity: 0;
-    top: 18rem;
 }
 .alert-box__content{
     display: flex;
@@ -166,9 +174,16 @@ main{
     font-size: 3rem;
 }
 .page__controller-list{
+    position: absolute;
+    background-color: #f5f5f5;
+    bottom: 0;
+    right: 0;
+    margin: 0 1.7vh 0 0;
     align-items: center;
-    padding: .6rem 2rem;
+    padding: .7rem .9rem;
     gap: 0 2rem;
+    box-shadow:  -.1rem 0 .3rem #d0d0d0, 
+                0 -.1rem .3rem  #ffffff;
 }
 .page__controller{
     display: flex;
@@ -311,6 +326,13 @@ main{
       background-color: #a7ff83;
     }
 }
+@media (max-width: 801px){
+    .page__controller-list{
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+}
 @media (min-width: 801px){
     .navbar{
         position: relative;
@@ -383,9 +405,6 @@ main{
     .navbar__table-listing li:hover svg{
         fill: #a7ff83;
     }
-    .alert-box{
-        top: 35vh;
-    }
     .alert-box__content{
         padding: 4vh 2vh;
         min-width: 55vh;
@@ -421,9 +440,12 @@ main{
         font-size: 6vh;
     }
     .page__controller-list{
-        margin: 0 0 0 auto;
+        position: relative;
         gap: 0 3vh;
-        padding: 1vh 3vh;
+        padding: 1vh 2vh;
+        margin: 0 0 0 auto;
+        box-shadow:  -.1rem .1rem .3rem #d0d0d0, 
+                .1rem -.1rem .3rem  #ffffff;
     }
     .page__controller:hover{
         cursor: pointer;

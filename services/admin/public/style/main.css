@@ -147,13 +147,15 @@ svg{
 }
 .--active-navbar .navbar__hamburguer{
     background-color: #091e5e !important;
+    border: 0;
+    box-shadow: none;
 }
 .--active-navbar .navbar__hamburguer svg{
     fill: white;
 }
 .--neumorphism-borders{
     box-shadow:  .1rem .1rem .3rem #d9d9d9, 
-    -.1rem -.1rem .3rem  #ffffff;
+        -.1rem -.1rem .3rem  #ffffff;
     border-radius: .8rem;
 }
 .--rotating{
