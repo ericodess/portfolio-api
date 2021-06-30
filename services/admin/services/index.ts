@@ -1,0 +1,1 @@
+export { default as authCredentials } from "./auth-credentials";
