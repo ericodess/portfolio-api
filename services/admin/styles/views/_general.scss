@@ -1,0 +1,16 @@
+@media (min-width: 801px){
+    .container{
+        margin: 0 auto 5vh auto;
+        width: 80%;
+    
+        &__line{
+            border-top: .1vh solid black;
+            margin: 8vh 0 3vh 0;
+        }
+        &__title{
+            font-size: 4vh;
+            margin: -2vh 0 5vh 0;
+            padding: 0 2vh;
+        }
+    }
+}
