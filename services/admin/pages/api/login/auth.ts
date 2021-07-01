@@ -1,30 +1,30 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-//Models
-import IGeneralEndpoint from "../../../models/general-endpoint";
+//Services
+import { authCredentials } from "../../../services";
+
+//Interfaces
+import { IAuthResponse } from "../../../interfaces/endpoint";
 
 const authEndpoint = (
     req: NextApiRequest,
-    res: NextApiResponse<IGeneralEndpoint>
+    res: NextApiResponse<IAuthResponse>
 ) => {
-    switch (req.method) {
-        case "POST":
-            res.status(200).json({
-                success: true
-            });
+    const accessToken: string = req.cookies?.access_token;
 
-            break;
+    if(accessToken){
+        const isUserAuthenticated: boolean = authCredentials(accessToken);
 
-        default:
-            res.status(405).json({
-                success: true,
-                description: 'Invalid method, please use POST'
-            });
-
-            res.end();
-
-            break;
-    }
+        res.status(200).json({
+            success: true,
+            isUserAuthenticated: isUserAuthenticated
+        });
+    }else{
+        res.status(401).json({
+            success: false,
+            isUserAuthenticated: false
+        });
+    };
 };
 
 export default authEndpoint;
