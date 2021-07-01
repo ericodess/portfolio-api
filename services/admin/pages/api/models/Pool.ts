@@ -1,7 +1,7 @@
 import { createPool, PoolConnection } from "mysql2/promise";
 
-//Interfaces
-import { ConnectionCallback } from "../interfaces/database";
+//Types
+import type { ConnectionCallback } from "../interfaces/database";
 
 const pool = createPool({
     connectionLimit: 10,

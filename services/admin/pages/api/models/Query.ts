@@ -1,10 +1,10 @@
 import { Connection } from "mysql2/promise";
 
-//Services
-import { generateQuery } from "../services";
+//Types
+import type { IQuery } from "../interfaces/database";
 
-//Interfaces
-import { IQuery } from "../interfaces/database";
+//Services
+import { generateQuery } from "../utils";
 
 export const getQuery = async (
     connection: Connection,
