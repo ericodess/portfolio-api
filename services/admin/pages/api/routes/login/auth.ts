@@ -1,10 +1,9 @@
+//Types
 import type { NextApiRequest, NextApiResponse } from "next";
+import type { IAuthResponse } from "../../../../interfaces/endpoint";
 
 //Services
-import { authCredentials } from "../../../services";
-
-//Interfaces
-import { IAuthResponse } from "../../../interfaces/endpoint";
+import { authCredentials } from "../../utils";
 
 const authEndpoint = (
     req: NextApiRequest,

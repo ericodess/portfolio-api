@@ -1,15 +1,15 @@
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
 
-//Interfaces
+//Types
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { IGeneralResponse } from "../../../interfaces/endpoint";
+import type { IGeneralResponse } from "../../../../interfaces/endpoint";
 
 //Models
-import { getConnection } from "../../../models/Pool";
+import { getConnection } from "../../models/Pool";
 
 //Service
-import { getQuery } from "../../../models/Query";
+import { getQuery } from "../../models/Query";
 
 const loginEndpoint = async (
     req: NextApiRequest,

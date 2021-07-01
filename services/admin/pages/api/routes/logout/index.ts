@@ -1,5 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { serialize } from "cookie";
+
+//Types
+import type { NextApiRequest, NextApiResponse } from "next";
 
 const logoutEndpoint = (
     req: NextApiRequest,
