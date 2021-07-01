@@ -1,3 +1,4 @@
+//Types
 import type { AppProps } from "next/app";
 
 //Styles
