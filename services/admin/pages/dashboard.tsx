@@ -1,27 +1,31 @@
-import { useEffect } from "react";
-import { useRouter } from "next/dist/client/router";
+import Router from "next/dist/client/router";
+import { useEffect, useState } from 'react';
 
 //Service
 import { authenticateLogin } from "../services";
 
 const DashboardPage = () => {
-    const router = useRouter();
-
-    const homepageURL: string = `http://localhost:${process.env.PORT || 9005}/admin`;
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        (async () => {
-            const isUserAuthenticated = await authenticateLogin({isReverse: true});
+        authenticateLogin()
+        .then(isUserAuthenticated => {
+            if(isUserAuthenticated === false){
+                const homepageURL: string = "/admin";
 
-            if(isUserAuthenticated){
-                router.push(homepageURL);
+                Router.push(homepageURL);
+            }else{
+                setIsLoading(false);
             };
-        })();
-    });
+        });
+    }, []);
 
-    return(
-        <div>Dashboard</div>
-    );
+    if(isLoading){
+        return <p>Loading</p>
+    }else{
+        return(
+            <p>Dashboard</p>
+        );
+    };
 };
-
 export default DashboardPage;

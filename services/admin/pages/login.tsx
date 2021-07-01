@@ -1,12 +1,12 @@
 import { FormEvent, useState, useEffect } from "react";
-import { useRouter } from "next/dist/client/router";
+import Router from "next/dist/client/router";
+
+//Types
+import { IGeneralResponse } from "../interfaces/endpoint";
+import { ILoginForm } from "../interfaces/page";
 
 //Components
 import Head from "next/head";
-
-//Interfaces
-import { IGeneralResponse } from "../interfaces/endpoint";
-import { ILoginForm } from "../interfaces/page";
 
 //Service
 import {
@@ -16,20 +16,26 @@ import {
 } from "../services";
 
 const LoginPage = () => {
-    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
     const [isErrorRun, setIsErrorRun] = useState(false);
 
-    const dashboardURL: string = `http://localhost:${process.env.PORT || 9005}/admin/dashboard`;
+    const dashboardURL: string = "/admin/dashboard";
 
     useEffect(() => {
-        (async () => {
-            const isUserAuthenticated = await authenticateLogin({});
-
+        authenticateLogin()
+        .then(isUserAuthenticated => {
             if(isUserAuthenticated){
-                router.push(dashboardURL);
+                Router.push(dashboardURL);
+            }else{
+                setIsLoading(false);
             };
-        })();
-    }, [router]);
+        })
+        .catch(() => {
+            setIsLoading(false);
+
+            setIsErrorRun(true);
+        })
+    }, [dashboardURL]);
 
     const onSubmitHandler = async (event: FormEvent) => {
         event.preventDefault();
@@ -62,7 +68,7 @@ const LoginPage = () => {
                 if(data.success){
                     setIsErrorRun(false);
 
-                    router.push(dashboardURL);
+                    Router.push(dashboardURL);
                 }else{
                     setIsErrorRun(true);
 
@@ -97,73 +103,77 @@ const LoginPage = () => {
         };
     };
 
-    return(
-        <>
-            <Head>
-                <meta charSet="UTF-8" />
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1"
-                />
-                <title>Login</title>
-                <meta
-                    name="description"
-                    content="Login page for the back-end"
-                />
-            </Head>
-            <main>
-                <div className="container --flex-column --flex-centered">
-                    <form
-                        id="loginForm"
-                        className="form"
-                        method="POST"
-                        action="/admin/service/login"
-                        onSubmit={onSubmitHandler}
-                    >
-                        <span className="form__title">Admin Page</span>
-                        <div className="form__group">
-                            <input
-                                className="form__input"
-                                type="text"
-                                id="loginFormUsername"
-                                name="loginFormUsername"
-                                onFocus={onFocusHandler}
-                            required />
-                            <label
-                                className="form__label"
-                                htmlFor="loginFormUsername"
+    if(isLoading){
+        return <p>Loading</p>;
+    }else{
+        return(
+            <>
+                <Head>
+                    <meta charSet="UTF-8" />
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1"
+                    />
+                    <title>Login</title>
+                    <meta
+                        name="description"
+                        content="Login page for the back-end"
+                    />
+                </Head>
+                <main>
+                    <div className="container --flex-column --flex-centered">
+                        <form
+                            id="loginForm"
+                            className="form"
+                            method="POST"
+                            action="/admin/service/login"
+                            onSubmit={onSubmitHandler}
+                        >
+                            <span className="form__title">Admin Page</span>
+                            <div className="form__group">
+                                <input
+                                    className="form__input"
+                                    type="text"
+                                    id="loginFormUsername"
+                                    name="loginFormUsername"
+                                    onFocus={onFocusHandler}
+                                required />
+                                <label
+                                    className="form__label"
+                                    htmlFor="loginFormUsername"
+                                >
+                                    Login
+                                </label>
+                            </div>
+                            <div className="form__group">
+                                <input
+                                    className="form__input"
+                                    type="password"
+                                    id="loginFormPassword"
+                                    name="loginFormPassword"
+                                    onFocus={onFocusHandler}
+                                required />
+                                <label
+                                    className="form__label"
+                                    htmlFor="loginFormPassword"
+                                >
+                                    Password
+                                </label>
+                            </div>
+                            <button
+                                className="form__submit"
+                                id="formSubmitButton"
+                                title="Login"
+                                disabled={isErrorRun ? true : undefined}
                             >
                                 Login
-                            </label>
-                        </div>
-                        <div className="form__group">
-                            <input
-                                className="form__input"
-                                type="password"
-                                id="loginFormPassword"
-                                name="loginFormPassword"
-                                onFocus={onFocusHandler}
-                            required />
-                            <label
-                                className="form__label"
-                                htmlFor="loginFormPassword"
-                            >
-                                Password
-                            </label>
-                        </div>
-                        <button
-                            className="form__submit"
-                            id="formSubmitButton"
-                            title="Login"
-                            disabled={isErrorRun ? true : undefined}
-                        >
-                            Login
-                        </button>
-                    </form>
-                </div>
-            </main>
-        </>
-    );
+                            </button>
+                        </form>
+                    </div>
+                </main>
+            </>
+        );
+    };
 };
 
 export default LoginPage;
