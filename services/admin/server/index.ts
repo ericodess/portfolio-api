@@ -1,25 +1,26 @@
-require('dotenv').config();
-
-import express, { Request, Response } from 'express';
+import dotenv from "dotenv";
+import express, { Request, Response, Express } from "express";
 import next from "next";
 import morgan from  "morgan";
 import cors from "cors";
 import cookierParser from "cookie-parser";
 
+//Environment config
+dotenv.config();
+
+//Environment variables
+const port = process.env.PORT || 9005,
+	  isDevEnvironment: boolean = process.env.NODE_ENV !== "production",
+	  allowedDomains: string[] = [`http://localhost:${port}`];
+
 //Add-ons
-const isDevEnvironment: boolean = process.env.NODE_ENV !== "production";
-const app = next({ dev: isDevEnvironment });
-const handle = app.getRequestHandler();
-
-const port = process.env.PORT || 9005;
-
-//Cors domains
-const allowedDomains: string[] = [`http://localhost:${port}`];
+const app = next({ dev: isDevEnvironment }),
+	  handle = app.getRequestHandler();
 
 app.prepare()
 	.then(() => {
 		try{
-			const server = express();
+			const server: Express = express();
 
 			server.use(morgan("dev"));
 			server.use(cors({
