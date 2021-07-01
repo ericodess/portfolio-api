@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+	basePath: '/admin',
   	reactStrictMode: true,
   	useFileSystemPublicRoutes: false,
   	sassOptions: {
@@ -9,16 +10,12 @@ module.exports = {
   	async rewrites() {
   		return [
 			{
-				source: '/pages/:path*',
-				destination: '/_error',
+				source: '/:path*',
+				destination: '/:path*',
 			},
 			{
 				source: '/api/:path*',
 				destination: '/_error',
-			},
-			{
-				source: '/dashboard/:path*',
-				destination: '/pages/:path*',
 			},
 			{
 				source: '/service/:path*',
