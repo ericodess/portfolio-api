@@ -1,11 +1,4 @@
-//Interfaces
-import { IAuthenticateLogin } from "../interfaces/service";
-
-const authenticateLogin = async (params: IAuthenticateLogin): Promise<boolean> => {
-    const {
-        isReverse = false
-    } = params;
-
+const authenticateLogin = async (): Promise<boolean> => {
     const result = await fetch("http://localhost:9005/admin/service/login/auth", {
               credentials: 'include'
           })
@@ -13,17 +6,9 @@ const authenticateLogin = async (params: IAuthenticateLogin): Promise<boolean> =
           .catch(error => console.log(error));
 
     if(result && result.isUserAuthenticated){
-        if(isReverse){
-            return !result.isUserAuthenticated;
-        }else{
-            return result.isUserAuthenticated;
-        };
+        return result.isUserAuthenticated;
     }else{
-        if(isReverse){
-            return true;
-        }else{
-            return false;
-        };
+        return false;
     };
 };
 
