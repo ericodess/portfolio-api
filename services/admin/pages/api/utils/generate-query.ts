@@ -1,5 +1,5 @@
-//Intefaces
-import { IQuery } from "../interfaces/database";
+//Types
+import type { IQuery } from "../interfaces/database";
 
 const generateQuery = (
     {
