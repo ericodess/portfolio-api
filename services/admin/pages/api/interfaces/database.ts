@@ -1,4 +1,5 @@
-import { Connection } from "mysql2/promise";
+//Types
+import type { Connection } from "mysql2/promise";
 
 //Private Types
 type QueryRequest = {
