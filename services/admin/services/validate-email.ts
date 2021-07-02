@@ -1,6 +1,6 @@
-const isEmailValid = (emailInput: string): boolean => {
-    if(/\S/.test(emailInput)){
-        const splicedEmail: string[] = emailInput.split('@');
+const validateEmail = (email: string): boolean => {
+    if(/\S/.test(email)){
+        const splicedEmail: string[] = email.split('@');
 
         if(
             splicedEmail.length > 1 &&
@@ -13,4 +13,4 @@ const isEmailValid = (emailInput: string): boolean => {
     return false;
 };
 
-export default isEmailValid;
+export default validateEmail;
