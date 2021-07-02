@@ -1,4 +1,4 @@
-import { FormEvent, useState, useEffect } from "react";
+import { FormEvent, useState, useEffect, Fragment } from "react";
 import Router from "next/dist/client/router";
 
 //Types
@@ -11,31 +11,18 @@ import Head from "next/head";
 //Service
 import {
     authenticateLogin,
-    isEmailValid,
+    validateEmail,
     renderFeedback
 } from "../services";
 
 const LoginPage = () => {
-    const [isLoading, setIsLoading] = useState(true);
     const [isErrorRun, setIsErrorRun] = useState(false);
 
     const dashboardURL: string = "/admin/dashboard";
 
     useEffect(() => {
-        authenticateLogin()
-        .then(isUserAuthenticated => {
-            if(isUserAuthenticated){
-                Router.push(dashboardURL);
-            }else{
-                setIsLoading(false);
-            };
-        })
-        .catch(() => {
-            setIsLoading(false);
-
-            setIsErrorRun(true);
-        })
-    }, [dashboardURL]);
+		authenticateLogin("dashboard");
+	}, []);
 
     const onSubmitHandler = async (event: FormEvent) => {
         event.preventDefault();
@@ -47,7 +34,7 @@ const LoginPage = () => {
         const formUserNameInput: string = formData.get('loginFormUsername') as string,
               formPaasswordInput: string = formData.get('loginFormPassword') as string;
 
-        if(isEmailValid(formUserNameInput)){
+        if(validateEmail(formUserNameInput)){
             const formCredentials: ILoginForm = {
                 email: formUserNameInput,
                 password: formPaasswordInput
@@ -103,77 +90,73 @@ const LoginPage = () => {
         };
     };
 
-    if(isLoading){
-        return <p>Loading</p>;
-    }else{
-        return(
-            <>
-                <Head>
-                    <meta charSet="UTF-8" />
-                    <meta
-                        name="viewport"
-                        content="width=device-width, initial-scale=1"
-                    />
-                    <title>Login</title>
-                    <meta
-                        name="description"
-                        content="Login page for the back-end"
-                    />
-                </Head>
-                <main>
-                    <div className="container --flex-column --flex-centered">
-                        <form
-                            id="loginForm"
-                            className="form"
-                            method="POST"
-                            action="/admin/service/login"
-                            onSubmit={onSubmitHandler}
-                        >
-                            <span className="form__title">Admin Page</span>
-                            <div className="form__group">
-                                <input
-                                    className="form__input"
-                                    type="text"
-                                    id="loginFormUsername"
-                                    name="loginFormUsername"
-                                    onFocus={onFocusHandler}
-                                required />
-                                <label
-                                    className="form__label"
-                                    htmlFor="loginFormUsername"
-                                >
-                                    Login
-                                </label>
-                            </div>
-                            <div className="form__group">
-                                <input
-                                    className="form__input"
-                                    type="password"
-                                    id="loginFormPassword"
-                                    name="loginFormPassword"
-                                    onFocus={onFocusHandler}
-                                required />
-                                <label
-                                    className="form__label"
-                                    htmlFor="loginFormPassword"
-                                >
-                                    Password
-                                </label>
-                            </div>
-                            <button
-                                className="form__submit"
-                                id="formSubmitButton"
-                                title="Login"
-                                disabled={isErrorRun ? true : undefined}
-                            >
-                                Login
-                            </button>
-                        </form>
-                    </div>
-                </main>
-            </>
-        );
-    };
+    return(
+		<Fragment>
+			<Head>
+				<meta charSet="UTF-8" />
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1"
+				/>
+				<title>Login</title>
+				<meta
+					name="description"
+					content="Login page for the back-end"
+				/>
+			</Head>
+			<main>
+				<div className="container --flex-column --flex-centered">
+					<form
+						id="loginForm"
+						className="form"
+						method="POST"
+						action="/admin/service/login"
+						onSubmit={onSubmitHandler}
+					>
+						<span className="form__title">Admin Page</span>
+						<div className="form__group">
+							<input
+								className="form__input"
+								type="text"
+								id="loginFormUsername"
+								name="loginFormUsername"
+								onFocus={onFocusHandler}
+							required />
+							<label
+								className="form__label"
+								htmlFor="loginFormUsername"
+							>
+								Login
+							</label>
+						</div>
+						<div className="form__group">
+							<input
+								className="form__input"
+								type="password"
+								id="loginFormPassword"
+								name="loginFormPassword"
+								onFocus={onFocusHandler}
+							required />
+							<label
+								className="form__label"
+								htmlFor="loginFormPassword"
+							>
+								Password
+							</label>
+						</div>
+						<button
+							className="form__submit"
+							id="formSubmitButton"
+							title="Login"
+							disabled={isErrorRun ? true : undefined}
+						>
+							Login
+						</button>
+					</form>
+				</div>
+			</main>
+		</Fragment>
+	);
 };
 
 export default LoginPage;

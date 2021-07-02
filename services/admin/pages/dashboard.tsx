@@ -1,31 +1,32 @@
-import Router from "next/dist/client/router";
-import { useEffect, useState } from 'react';
+import { useEffect, Fragment } from 'react';
 
 //Service
 import { authenticateLogin } from "../services";
 
+//Components
+import Head from "next/head";
+
 const DashboardPage = () => {
-    const [isLoading, setIsLoading] = useState(true);
-
     useEffect(() => {
-        authenticateLogin()
-        .then(isUserAuthenticated => {
-            if(isUserAuthenticated === false){
-                const homepageURL: string = "/admin";
+		authenticateLogin("service/logout", true);
+	}, []);
 
-                Router.push(homepageURL);
-            }else{
-                setIsLoading(false);
-            };
-        });
-    }, []);
-
-    if(isLoading){
-        return <p>Loading</p>
-    }else{
-        return(
-            <p>Dashboard</p>
-        );
-    };
+    return(
+		<Fragment>
+			<Head>
+				<meta charSet="UTF-8" />
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1"
+				/>
+				<title>Dashboard</title>
+				<meta
+					name="description"
+					content="Dashboard page for the back-end"
+				/>
+			</Head>
+			<p>Dashboard</p>
+		</Fragment>
+	);
 };
 export default DashboardPage;
