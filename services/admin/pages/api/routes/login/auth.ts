@@ -3,27 +3,23 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type { IAuthResponse } from "../../../../interfaces/endpoint";
 
 //Services
-import { authCredentials } from "../../utils";
+import { validateCredentials } from "../../utils";
 
 const authEndpoint = (
     req: NextApiRequest,
     res: NextApiResponse<IAuthResponse>
 ) => {
-    const accessToken: string = req.cookies?.access_token;
+    const isUserAuthenticated: boolean = validateCredentials(req, res),
+		  redirectPage: string = req.query?.redirect as string;
 
-    if(accessToken){
-        const isUserAuthenticated: boolean = authCredentials(accessToken);
+	if(!redirectPage){
+		res.status(200).json({
+			success: true,
+			isUserAuthenticated: isUserAuthenticated
+		});
+	};
 
-        res.status(200).json({
-            success: true,
-            isUserAuthenticated: isUserAuthenticated
-        });
-    }else{
-        res.status(401).json({
-            success: false,
-            isUserAuthenticated: false
-        });
-    };
+	res.end();
 };
 
 export default authEndpoint;

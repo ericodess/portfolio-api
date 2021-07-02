@@ -7,6 +7,8 @@ const logoutEndpoint = (
     req: NextApiRequest,
     res: NextApiResponse
 ) => {
+	const fallbackPagePath: string = "/admin";
+
     res.setHeader("Set-Cookie", [
         serialize("access_token", "", {
             maxAge: -1
@@ -16,7 +18,7 @@ const logoutEndpoint = (
         })
     ]);
 
-    res.redirect("/admin");
+	res.redirect(fallbackPagePath);
 
     res.end();
 };
