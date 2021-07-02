@@ -1,6 +1,6 @@
 const authenticateLogin = async (redirectPath?: string, isAuthenticatedOnly: boolean = false) => {
 	const pageRootPath: string = "http://localhost:9005/admin",
-		  authEndpoint: string = "service/login/auth",
+		  authEndpoint: string = "service/auth",
 		  fetchURL: string = `${pageRootPath}/${authEndpoint}`
 
     await fetch(fetchURL, {

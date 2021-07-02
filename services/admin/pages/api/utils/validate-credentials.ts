@@ -15,7 +15,7 @@ const validateCredentials = (
 ): boolean => {
 	const accessToken: string = req.cookies.access_token,
 		  pageRootPath: string = "/admin",
-		  logoutEndpointPath: string = "/admin/service/logout",
+		  logoutEndpointPath: string = "/service/auth/logout",
 		  redirectPagePath: string = req.query?.redirect as string;
 
     let isAuthenticatedUser: boolean = false;
@@ -44,7 +44,7 @@ const validateCredentials = (
 		if(isAuthenticatedUser){
 			res.redirect(`${pageRootPath}/${redirectPagePath}`);
 		}else{
-			res.redirect(logoutEndpointPath);
+			res.redirect(`${pageRootPath}/${logoutEndpointPath}`);
 		};
 	};
 

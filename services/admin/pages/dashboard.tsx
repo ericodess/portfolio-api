@@ -8,7 +8,7 @@ import Head from "next/head";
 
 const DashboardPage = () => {
     useEffect(() => {
-		authenticateLogin("service/logout", true);
+		authenticateLogin("service/auth/logout", true);
 	}, []);
 
     return(

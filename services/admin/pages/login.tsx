@@ -110,7 +110,7 @@ const LoginPage = () => {
 						id="loginForm"
 						className="form"
 						method="POST"
-						action="/admin/service/login"
+						action="/admin/service/auth/login"
 						onSubmit={onSubmitHandler}
 					>
 						<span className="form__title">Admin Page</span>
