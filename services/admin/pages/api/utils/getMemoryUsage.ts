@@ -4,7 +4,7 @@ import os from "os";
 import { IMemoryUsage } from "../../../interfaces/endpoint";
 
 //Services
-import byteToGigabyte from "./byte-to-gigabyte";
+import byteToGigabyte from "./byteToGigabyte";
 
 const getMemoryUsage = (): IMemoryUsage => {
 	const freeMemory: number = os.freemem(),
