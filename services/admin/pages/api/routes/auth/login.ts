@@ -58,7 +58,8 @@ const loginEndpoint = async (
                                             {
                                                 httpOnly: true, 
                                                 secure: true,
-                                                sameSite: "strict"
+                                                sameSite: "strict",
+												path: "/admin/service"
                                             }
                                         ),
                                         serialize(
@@ -66,7 +67,8 @@ const loginEndpoint = async (
                                             userName,
                                             {
                                                 secure: true,
-                                                sameSite: "strict"
+                                                sameSite: "strict",
+												path: "/admin/service"
                                             }
                                         )
                                     ]
@@ -76,7 +78,7 @@ const loginEndpoint = async (
                                     success: true
                                 });
                             }else{
-                                res.status(401).json({
+                                res.status(403).json({
                                     success: false,
                                     description: 'This user doesn`t have access to this realm'
                                 });
