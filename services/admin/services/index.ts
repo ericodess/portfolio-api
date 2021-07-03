@@ -1,4 +1,3 @@
-export { default as authenticateLogin } from "./authenticate-login";
-export { default as validateEmail } from "./validate-email";
-export { default as validateText } from  "./validate-text";
-export { default as renderFeedback } from "./render-feedback";
+export { default as authenticateLogin } from "./authenticateLogin";
+export { default as validateEmail } from "./validateEmail";
+export { default as validateText } from  "./validateText";
