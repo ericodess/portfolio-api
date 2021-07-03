@@ -1,7 +1,7 @@
 import { useEffect, Fragment } from 'react';
 
 //Service
-import { authenticateLogin } from "../services";
+import { authenticateLogin } from "../../services";
 
 //Components
 import Head from "next/head";
