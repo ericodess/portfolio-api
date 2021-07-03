@@ -10,13 +10,15 @@ const logoutEndpoint = (
 	const fallbackPagePath: string = "/admin";
 
     res.setHeader("Set-Cookie", [
-        serialize("access_token", "", {
-            maxAge: -1
-        }),
-        serialize("logged_user", "", {
-            maxAge: -1
-        })
-    ]);
+		serialize("access_token", "", {
+			path: "/admin/service",
+			maxAge: -1
+		}),
+		serialize("logged_user", "", {
+			path: "/admin/service",
+			maxAge: -1
+		})
+	]);
 
 	res.redirect(fallbackPagePath);
 
