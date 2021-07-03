@@ -5,7 +5,7 @@ import type {
 } from "next";
 import type {
 	IGeneralResponse,
-	IDashboardInfoResponse
+	ISystemStatusResponse
 } from "../../../../interfaces/endpoint";
 
 //Models
@@ -19,17 +19,17 @@ import {
 	getMemoryUsage
 } from "../../utils";
 
-const dashboardInfoEndpoint = async (
+const systemStatusEndpoint = async (
     req: NextApiRequest,
-    res: NextApiResponse<IGeneralResponse | IDashboardInfoResponse>
+    res: NextApiResponse<IGeneralResponse | ISystemStatusResponse>
 ): Promise<void>  => {
-	const isUserAuthenticated: boolean = validateCredentials(req, res);
+	const isUserAuthenticated: boolean = validateCredentials(req, res, false);
 
 	if(isUserAuthenticated){
-		if(req.query.q){
-			const dashboardInfoQuery: string | string[] = req.query.q;
-			
-			if(dashboardInfoQuery === "table-status"){
+		if(req.query.realm){
+			const statusRealm: string | string[] = req.query.realm;
+
+			if(statusRealm === "database"){
 				await getConnection(async (error, connection) => {
 					if(!error && connection){
 						await getQuery(connection, {
@@ -53,8 +53,10 @@ const dashboardInfoEndpoint = async (
 
 							res.status(200).json({
 								success: true,
-								databaseStatus: {
-									tableList: tableList
+								status: {
+									database: {
+										tableList: tableList
+									}
 								}
 							});
 						})
@@ -72,14 +74,14 @@ const dashboardInfoEndpoint = async (
 					};
 				})
 			}else{
-				if(dashboardInfoQuery === "system-status"){
+				if(statusRealm === "hardware"){
 					res.status(200).json({
 						success: true,
-						systemStatus: {
-							cpu: {
-								usedPercentage: await getCPUUsage()
-							},
-							memory: getMemoryUsage()
+						status: {
+							hardware: {
+								cpu: await getCPUUsage(),
+								memory: getMemoryUsage()
+							}
 						}
 					});
 				}else{
@@ -105,4 +107,4 @@ const dashboardInfoEndpoint = async (
 	res.end();
 };
 
-export default dashboardInfoEndpoint;
+export default systemStatusEndpoint;

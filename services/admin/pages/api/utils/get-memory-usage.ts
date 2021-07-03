@@ -13,8 +13,8 @@ const getMemoryUsage = (): IMemoryUsage => {
 		  freeMemoryInGB: number =  Math.round(byteToGigabyte(totalMemory));
 
 	return {
-		usedMemory: usedMemoryInGB,
-		usedMemoryPercentage: parseFloat((100 * (usedMemoryInGB / freeMemoryInGB)).toFixed(1))
+		usedGB: usedMemoryInGB,
+		usedPercentage: parseFloat((100 * (usedMemoryInGB / freeMemoryInGB)).toFixed(1))
 	};
 };
 

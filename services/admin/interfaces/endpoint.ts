@@ -1,15 +1,16 @@
 //Private Types
-interface ICPUStatus {
-	usedPercentage: number
-};
-
-interface ISystemStatus {
-	cpu: ICPUStatus,
+interface IHardwareStatus {
+	cpu: ICPUUsage,
 	memory: IMemoryUsage
 };
 
 interface IDatabaseStatus {
 	tableList: string[]
+};
+
+interface ISystemStatus {
+	hardware?: IHardwareStatus,
+	database?: IDatabaseStatus
 };
 
 //Public Types
@@ -23,13 +24,16 @@ export interface IAuthResponse {
     isUserAuthenticated: boolean
 };
 
-export interface IMemoryUsage {
-	usedMemory: number,
-	usedMemoryPercentage: number
+export interface ICPUUsage {
+	usedPercentage: number
 };
 
-export interface IDashboardInfoResponse {
+export interface IMemoryUsage {
+	usedGB: number,
+	usedPercentage: number
+};
+
+export interface ISystemStatusResponse {
 	sucess: boolean,
-	systemStatus?: ISystemStatus,
-	databaseStatus?: IDatabaseStatus
+	status: ISystemStatus
 };
