@@ -2,7 +2,7 @@
 import type { AppProps } from "next/app";
 
 //Styles
-import "./styles/main.css";
+import "./styles/main.scss";
 
 const AdminApp = ({ Component, pageProps }: AppProps) => {
 	return(

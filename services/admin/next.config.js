@@ -3,6 +3,9 @@ const path = require('path');
 module.exports = {
   	reactStrictMode: true,
   	useFileSystemPublicRoutes: false,
+	sassOptions: {
+		includePaths: [path.join(__dirname, 'pages/_app/styles')],
+	},
 	async redirects() {
 		return [
 		  	{

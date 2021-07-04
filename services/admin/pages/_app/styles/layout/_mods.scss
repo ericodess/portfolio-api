@@ -82,21 +82,6 @@
     -o-animation: color-cycle 10s linear infinite alternate;
     animation: color-cycle 10s linear infinite alternate;
 }
-.--active-navbar{
-    background-color: #071a52 !important;
-    width: 13rem;
-}
-.--active-navbar .navbar__items{
-    display: flex;
-}
-.--active-navbar .navbar__hamburguer{
-    background-color: #091e5e !important;
-    border: 0;
-    box-shadow: none;
-}
-.--active-navbar .navbar__hamburguer svg{
-    fill: white;
-}
 .--neumorphism-borders{
     box-shadow:  .1rem .1rem .3rem #d9d9d9, 
         -.1rem -.1rem .3rem  #ffffff;
@@ -134,7 +119,7 @@
 }
 .--error-cycle{
 	background-color: #a83232;
-	color: red;
+	color: #a83232;
 }
 .--align-bottom{
 	margin: auto 0 0 0;
