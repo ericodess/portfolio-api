@@ -68,7 +68,7 @@ const loginEndpoint = async (
                                             {
                                                 secure: true,
                                                 sameSite: "strict",
-												path: "/admin/service"
+												path: "/admin"
                                             }
                                         )
                                     ]

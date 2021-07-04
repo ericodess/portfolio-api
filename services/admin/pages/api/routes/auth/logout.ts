@@ -15,7 +15,7 @@ const logoutEndpoint = (
 			maxAge: -1
 		}),
 		serialize("logged_user", "", {
-			path: "/admin/service",
+			path: "/admin",
 			maxAge: -1
 		})
 	]);
