@@ -5,7 +5,7 @@ import {
 import { useRouter } from "next/dist/client/router";
 
 //Services
-import { getCookie } from "../../services";
+import { getCookie, renderConfirmBox } from "../../services";
 
 //Styles
 import {
@@ -45,6 +45,17 @@ const Navbar = () => {
 		return navbarLogo;
 	};
 
+	const logoutButtonHandler = () => {
+		renderConfirmBox(
+			document.body,
+			"Are you sure you want to leave this realm ?",
+			"Yes",
+			(() => router.push("http://localhost:9005/admin/service/auth/logout")),
+			true,
+			"Never Mind"
+		);
+	};
+
 	useEffect(() => {
 		setUserName(getCookie("logged_user"));
 	}, []);
@@ -54,7 +65,7 @@ const Navbar = () => {
 
         return () => {
             window.removeEventListener('resize', handleWindowSizeChange);
-        }
+        };
     });
 
 	return(
@@ -77,7 +88,7 @@ const Navbar = () => {
             		</NavigationButton>
 					<NavigationButton
 						title="Logout"
-						onClick={(() => router.push("http://localhost:9005/admin/service/auth/logout"))}
+						onClick={logoutButtonHandler}
 					>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
