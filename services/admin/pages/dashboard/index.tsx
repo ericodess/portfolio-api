@@ -5,6 +5,7 @@ import { authenticateLogin } from "../../services";
 
 //Components
 import Head from "next/head";
+import { Navbar } from '../../components';
 
 const DashboardPage = () => {
     useEffect(() => {
@@ -25,7 +26,10 @@ const DashboardPage = () => {
 					content="Dashboard page for the back-end"
 				/>
 			</Head>
-			<p>Dashboard</p>
+			<Navbar />
+			<main>
+				<p>Dashboard</p>
+			</main>
 		</Fragment>
 	);
 };
