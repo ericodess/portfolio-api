@@ -14,11 +14,11 @@ export const NavbarWrapper = styled.nav`
 	-o-transition: width ease-in-out .2s;
 	transition: width ease-in-out .2s;
 
-	& > ul > div button:not(:first-of-type) {
+	& > ul > li > div button:not(:first-of-type) {
 		border-left: .1rem solid #152e7a;
 	}
 
-	& > button, & > ul > div > button {
+	& > button, & > ul > li > div > button {
 		width: 100%;
 		outline: none;
 		border: none;
@@ -75,6 +75,7 @@ export const NavbarItems = styled.ul`
 	width: 100%;
 	height: 100%;
 	box-shadow: 0 0.4rem 0.5rem 0.15rem rgba(0, 0, 0, 0.2);
+	gap: 1rem 0;
 
 	-webkit-transition:
 		margin ease-in-out .16s,
@@ -94,6 +95,44 @@ export const NavbarItems = styled.ul`
 
 	@media (min-width: 801px) {
 		box-shadow: 0 0.8vh 1vh 0.3vh rgba(0, 0, 0, 0.2);
+		gap: 2vh 0;
+		max-height: 100%;
+	}
+`;
+
+export const NavbarItem = styled.li`
+	width: 100%;
+	overflow: hidden;
+`
+
+export const NavbarRedirectors = styled.ul`
+	width: 90%;
+	height: 100%;
+	overflow-y: auto;
+	background-color: #152e7a;
+	margin: 0 auto 0 auto;
+`;
+
+export const NavbarRedirector = styled.li`
+	width: 90%;
+	color: white;
+	padding: 1rem 0;
+	font-family: 'Roboto', serif;
+	gap: 0 0.5rem;
+
+	& svg {
+		width: 1.15rem;
+		height: 1.15rem;
+	}
+
+	@media (min-width: 801px) {
+		padding: 2vh 0;
+		gap: 0 0.8vh;
+
+		& svg {
+			width: 2vh;
+			height: 2vh;
+		}
 	}
 `;
 

@@ -1,4 +1,7 @@
-import { useEffect, Fragment } from 'react';
+import {
+	useEffect,
+	Fragment
+} from 'react';
 
 //Service
 import { authenticateLogin } from "../../services";

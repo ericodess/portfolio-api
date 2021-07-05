@@ -37,3 +37,7 @@ export interface IFeedback {
 	text: string
 	disabled?: boolean
 };
+
+export interface ILoaderCircle {
+	delay?: number
+};
