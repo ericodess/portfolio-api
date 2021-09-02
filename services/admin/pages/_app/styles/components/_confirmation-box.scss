@@ -1,0 +1,112 @@
+#confimationBox{
+	width: 100%;
+	height: 100vh;
+	z-index: 3;
+	top: 0;
+	position: absolute;
+	text-align: center;
+
+	background-color: rgba(0, 0, 0, .85);
+
+	& > div {
+		opacity: 0;
+		background-color: #071a52;
+		min-height: 9rem;
+		width: 100%;
+		margin: auto 0 0 0;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+		padding: 1rem 0 0 0;
+
+		& > span {
+			font-family: 'Roboto', serif;
+			color: white;
+			font-size: 1.15rem;
+			margin: auto 0 auto 0;
+		}
+
+		& > ul {
+			margin: auto 0 0 0;
+			width: 100%;
+
+			& li {
+				width: 100%;
+
+				& button {
+					font-family: 'Roboto Mono', serif;
+					font-weight: bold;
+					color: white;
+					background-color: transparent;
+					font-size: 1.1rem;
+					border: none;
+					outline: none;
+					min-height: 3.5rem;
+					width: 100%;
+
+					&:focus, &:active{
+						background-color: #0f225c;
+					}
+				}
+
+				&:not(:first-child) button {
+					border-left: .1rem solid #152e7a;
+				}
+
+				&:first-child button {
+					color: #086972;
+				}
+
+				&:nth-child(2) button {
+					color: #a83232;
+				}
+			}
+		}
+	}
+
+	@media (min-width: 801px) {
+		& > div {
+			min-height: 20vh;
+			width: 45%;
+			min-width: 55vh;
+			margin: auto 0 auto 0;
+			padding: 2vh 0 0 0;
+			border-radius: 1.5vh;
+	
+			& > span {
+				font-size: 2.4vh;
+			}
+	
+			& > ul {
+				& li {
+					& button {
+						font-size: 2vh;
+						min-height: 7vh;
+
+						&:hover {
+							cursor: pointer;
+							background-color: #0f225c;
+						}
+					}
+
+					&:first-child button {
+						border-bottom-left-radius: 1.5vh;
+						color: rgba(8, 105, 114, 0.6);
+	
+						&:hover{
+							color: rgba(8, 105, 114, 1);
+						}
+					}
+	
+					&:last-child button {
+						border-bottom-right-radius: 1.5vh;
+						color: rgba(168, 50, 50, 0.6);
+	
+						&:hover{
+							color: rgba(168, 50, 50, 1);
+						}
+					}
+				}
+			}
+		}
+	}
+}
