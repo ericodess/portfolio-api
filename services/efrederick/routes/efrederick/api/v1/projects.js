@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
 
 				    myHeaders.append('authorization', `token ${result[0].api_key_value}`);
 
-                    getRepoList('pepeyen', myHeaders)
+                    getRepoList('ericodess', myHeaders)
                     .then(projects => {
                         projects.forEach(repository => {
                             if(typeof repository.homepage !== 'undefined' && repository.homepage !== null && repository.homepage !== '' && repository.name !== 'efrederick'){
@@ -55,7 +55,7 @@ router.get('/', (req, res) => {
                         return projects;
                     })
                     .then(data => {
-                        return data.map(currentRepo => getRepoContributors('pepeyen', currentRepo.name, myHeaders)
+                        return data.map(currentRepo => getRepoContributors('ericodess', currentRepo.name, myHeaders)
                         .then(contributors => contributors
                             .map(contributor => contributor.weeks
                                 .reduce((lineCount, week) => {

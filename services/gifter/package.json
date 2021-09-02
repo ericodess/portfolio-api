@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pepeyen/portfolio-api.git"
+    "url": "git+https://github.com/ericodess/portfolio-api.git"
   },
   "keywords": [
     "blog",
@@ -18,9 +18,9 @@
   "author": "Erick Frederick",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pepeyen/portfolio-api/issues"
+    "url": "https://github.com/ericodess/portfolio-api/issues"
   },
-  "homepage": "https://github.com/pepeyen/portfolio-api#readme",
+  "homepage": "https://github.com/ericodess/portfolio-api#readme",
   "dependencies": {
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
