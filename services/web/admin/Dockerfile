@@ -1,10 +1,10 @@
-FROM node:latest
+FROM node:lts-gallium
 
 WORKDIR /usr/src/app
 
 COPY package*.json /usr/src/app/
 
-RUN npm install
+RUN npm install --force
 
 COPY . /usr/src/app
 

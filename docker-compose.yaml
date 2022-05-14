@@ -4,65 +4,54 @@ services:
     efrederick:
         container_name: portfolio_api_efrederick
         build:
-            context: ./services/efrederick
+            context: ./services/web/efrederick
             dockerfile: Dockerfile
         ports:
             - "9001:9001"           
         volumes:
-            - ./services/efrederick/node_modules:/app/node_modules
+            - ./services/web/efrederick/node_modules:/app/node_modules
         restart: unless-stopped            
 
     namah:
         container_name: portfolio_api_namah
         build:
-            context: ./services/namah
+            context: ./services/web/namah
             dockerfile: Dockerfile
         ports:
             - "9002:9002"                     
         volumes:
-            - ./services/namah/node_modules:/app/node_modules
+            - ./services/web/namah/node_modules:/app/node_modules
         restart: unless-stopped
 
     gifter:
         container_name: portfolio_api_gifter
         build:
-            context: ./services/gifter
+            context: ./services/web/gifter
             dockerfile: Dockerfile
         ports:
             - "9003:9003"                     
         volumes:
-            - ./services/gifter/node_modules:/app/node_modules
-        restart: unless-stopped
-
-    universefy:
-        container_name: portfolio_api_universefy
-        build:
-            context: ./services/universefy
-            dockerfile: Dockerfile
-        ports:
-            - "9004:9004"                     
-        volumes:
-            - ./services/universefy/node_modules:/app/node_modules
+            - ./services/web/gifter/node_modules:/app/node_modules
         restart: unless-stopped
 
     admin:
         container_name: portfolio_api_admin
         build:
-            context: ./services/admin
+            context: ./services/web/admin
             dockerfile: Dockerfile
         ports:
             - "9005:9005"                     
         volumes:
-            - ./services/admin/node_modules:/app/node_modules
+            - ./services/web/admin/node_modules:/app/node_modules
         restart: unless-stopped
 
     cors-anywhere:
         container_name: portfolio_api_cors-anywhere
         build:
-            context: ./services/cors-anywhere
+            context: ./services/web/cors-anywhere
             dockerfile: Dockerfile
         ports:
             - "9006:9006"
         volumes:
-            - ./services/cors-anywhere/node_modules:/app/node_modules
+            - ./services/web/cors-anywhere/node_modules:/app/node_modules
         restart: unless-stopped
