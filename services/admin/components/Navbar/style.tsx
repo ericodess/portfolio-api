@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const NavbarWrapper = styled.nav`
 	position: absolute;
@@ -8,17 +8,18 @@ export const NavbarWrapper = styled.nav`
 	width: 15rem;
 	z-index: 2;
 
-	-webkit-transition: width ease-in-out .2s;
-	-moz-transition: width ease-in-out .2s;
-	-ms-transition: width ease-in-out .2s;
-	-o-transition: width ease-in-out .2s;
-	transition: width ease-in-out .2s;
+	-webkit-transition: width ease-in-out 0.2s;
+	-moz-transition: width ease-in-out 0.2s;
+	-ms-transition: width ease-in-out 0.2s;
+	-o-transition: width ease-in-out 0.2s;
+	transition: width ease-in-out 0.2s;
 
 	& > ul > li > div button:not(:first-of-type) {
-		border-left: .1rem solid #152e7a;
+		border-left: 0.1rem solid #152e7a;
 	}
 
-	& > button, & > ul > li > div > button {
+	& > button,
+	& > ul > li > div > button {
 		width: 100%;
 		outline: none;
 		border: none;
@@ -34,17 +35,17 @@ export const NavbarWrapper = styled.nav`
 		fill: white;
 	}
 
-	&[data-is-nav-hidden="true"] {
+	&[data-is-nav-hidden='true'] {
 		width: 5.5rem;
 	}
 
-	&[data-is-nav-hidden="true"] > ul{
+	&[data-is-nav-hidden='true'] > ul {
 		margin: 0 0 0 -10rem;
 		box-shadow: none;
 	}
 
-	&[data-is-nav-hidden="true"] > button{
-		border-radius: .7rem;
+	&[data-is-nav-hidden='true'] > button {
+		border-radius: 0.7rem;
 		border-top-left-radius: 0;
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
@@ -62,7 +63,7 @@ export const NavbarLogo = styled.div`
 	font-family: 'Roboto', serif;
 	font-size: 2.5rem;
 	background-color: #086972;
-    height: 8rem;
+	height: 8rem;
 
 	@media (min-width: 801px) {
 		margin-top: 2.5vh;
@@ -77,21 +78,11 @@ export const NavbarItems = styled.ul`
 	box-shadow: 0 0.4rem 0.5rem 0.15rem rgba(0, 0, 0, 0.2);
 	gap: 1rem 0;
 
-	-webkit-transition:
-		margin ease-in-out .16s,
-		box-shadow ease-in-out .16s;
-    -moz-transition:
-		margin ease-in-out .16s,
-		box-shadow ease-in-out .16s;
-    -ms-transition:
-		margin ease-in-out .16s,
-		box-shadow ease-in-out .16s;
-    -o-transition:
-		margin ease-in-out .16s,
-		box-shadow ease-in-out .16s;
-    transition:
-		margin ease-in-out .16s,
-		box-shadow ease-in-out .16s;
+	-webkit-transition: margin ease-in-out 0.16s, box-shadow ease-in-out 0.16s;
+	-moz-transition: margin ease-in-out 0.16s, box-shadow ease-in-out 0.16s;
+	-ms-transition: margin ease-in-out 0.16s, box-shadow ease-in-out 0.16s;
+	-o-transition: margin ease-in-out 0.16s, box-shadow ease-in-out 0.16s;
+	transition: margin ease-in-out 0.16s, box-shadow ease-in-out 0.16s;
 
 	@media (min-width: 801px) {
 		box-shadow: 0 0.8vh 1vh 0.3vh rgba(0, 0, 0, 0.2);
@@ -103,7 +94,7 @@ export const NavbarItems = styled.ul`
 export const NavbarItem = styled.li`
 	width: 100%;
 	overflow: hidden;
-`
+`;
 
 export const NavbarRedirectors = styled.ul`
 	width: 90%;
@@ -116,22 +107,20 @@ export const NavbarRedirectors = styled.ul`
 export const NavbarRedirector = styled.li`
 	width: 90%;
 	color: white;
-	padding: 1rem 0;
 	font-family: 'Roboto', serif;
 	gap: 0 0.5rem;
 
 	& svg {
-		width: 1.15rem;
-		height: 1.15rem;
+		width: 1.3rem;
+		height: 1.3rem;
 	}
 
 	@media (min-width: 801px) {
-		padding: 2vh 0;
 		gap: 0 0.8vh;
 
 		& svg {
-			width: 2vh;
-			height: 2vh;
+			width: 2.2vh;
+			height: 2.2vh;
 		}
 	}
 `;
@@ -143,34 +132,35 @@ export const NavbarNavigationItems = styled.div`
 `;
 
 export const NavigationButton = styled.button`
-	&:focus, &:active{
+	&:focus,
+	&:active {
 		background-color: #0f225c;
 
-		& svg{
+		& svg {
 			fill: #a7ff83;
 		}
 	}
 
 	@media (min-width: 801px) {
-		-webkit-transition: background-color ease-in-out .16s;
-    	-moz-transition: background-color ease-in-out .16s;
-    	-ms-transition: background-color ease-in-out .16s;
-    	-o-transition: background-color ease-in-out .16s;
-    	transition: background-color ease-in-out .16s;
+		-webkit-transition: background-color ease-in-out 0.16s;
+		-moz-transition: background-color ease-in-out 0.16s;
+		-ms-transition: background-color ease-in-out 0.16s;
+		-o-transition: background-color ease-in-out 0.16s;
+		transition: background-color ease-in-out 0.16s;
 
 		& svg {
-			-webkit-transition: fill ease-in-out .16s;
-			-moz-transition: fill ease-in-out .16s;
-			-ms-transition: fill ease-in-out .16s;
-			-o-transition: fill ease-in-out .16s;
-			transition: fill ease-in-out .16s;
+			-webkit-transition: fill ease-in-out 0.16s;
+			-moz-transition: fill ease-in-out 0.16s;
+			-ms-transition: fill ease-in-out 0.16s;
+			-o-transition: fill ease-in-out 0.16s;
+			transition: fill ease-in-out 0.16s;
 		}
 
-		&:hover{
+		&:hover {
 			cursor: pointer;
 			background-color: #0f225c;
 
-			& svg{
+			& svg {
 				fill: #a7ff83;
 			}
 		}
@@ -182,11 +172,11 @@ export const NavbarHambuerguerButton = styled.button`
 	box-shadow: 0 0.4rem 0.5rem 0.15rem rgba(0, 0, 0, 0.2);
 	color: white;
 
-	-webkit-transition: border-radius ease-in-out .2s;
-    -moz-transition: border-radius ease-in-out .2s;
-    -ms-transition: border-radius ease-in-out .2s;
-    -o-transition: border-radius ease-in-out .2s;
-    transition: border-radius ease-in-out .2s;
+	-webkit-transition: border-radius ease-in-out 0.2s;
+	-moz-transition: border-radius ease-in-out 0.2s;
+	-ms-transition: border-radius ease-in-out 0.2s;
+	-o-transition: border-radius ease-in-out 0.2s;
+	transition: border-radius ease-in-out 0.2s;
 
 	@media (min-width: 801px) {
 		display: none;

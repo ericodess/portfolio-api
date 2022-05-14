@@ -1,32 +1,32 @@
-import { Connection } from "mysql2/promise";
+import { Connection } from 'mysql2/promise';
 
 //Types
-import type { IQuery } from "../interfaces/database";
+import type { IQuery } from '../interfaces/database';
 
 //Services
-import { generateQuery } from "../utils";
+import { generateQuery } from '../utils';
 
 export const getQuery = async (
-    connection: Connection,
-    {
-        queryParameters,
-        queryItems,
-        queryTable,
-        queryItemsPrefix,
-        isBinary,
-        isLimitless,
-        isPreciseComparison
-    }: IQuery
+	connection: Connection,
+	{
+		queryParameters,
+		queryItems,
+		queryTable,
+		queryItemsPrefix,
+		isBinary,
+		isLimitless,
+		isPreciseComparison,
+	}: IQuery,
 ) => {
-    const query = generateQuery({
-        queryParameters,
-        queryItems,
-        queryItemsPrefix,
-        queryTable,
-        isBinary,
-        isLimitless,
-        isPreciseComparison
-    });
+	const query = generateQuery({
+		queryParameters,
+		queryItems,
+		queryItemsPrefix,
+		queryTable,
+		isBinary,
+		isLimitless,
+		isPreciseComparison,
+	});
 
-    return await connection.query(query.queryClauses, query.resultQueryParameters);
+	return await connection.query(query.queryClauses, query.resultQueryParameters);
 };

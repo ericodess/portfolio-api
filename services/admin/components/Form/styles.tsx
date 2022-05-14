@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const FormWrapper = styled.form`
 	width: 100%;
@@ -21,8 +21,8 @@ export const FormTitle = styled.span`
 	justify-content: center;
 	align-items: center;
 
-	font-family: "Roboto", serif;
-  	font-size: 2.7rem;
+	font-family: 'Roboto', serif;
+	font-size: 2.7rem;
 
 	@media (min-width: 801px) {
 		font-size: 5.5vh;

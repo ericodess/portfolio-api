@@ -1,22 +1,11 @@
 //Types
-import { IForm } from "../../interfaces/component";
+import { IForm } from '../../interfaces/component';
 
 //Styles
-import {
-	FormWrapper,
-	FormTitle
-} from "./styles";
+import { FormWrapper, FormTitle } from './styles';
 
-const Form = ({
-	title,
-	className,
-	id,
-	method,
-	action,
-	onSubmit,
-	children
-}: IForm ) => {
-	return(
+const Form = ({ title, className, id, method, action, onSubmit, children }: IForm) => {
+	return (
 		<FormWrapper
 			className={className}
 			id={id}

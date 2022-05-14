@@ -1,108 +1,98 @@
 //Types
-import type {
-	NextApiRequest,
-	NextApiResponse
-} from "next";
-import type {
-	IGeneralResponse,
-	ISystemStatusResponse
-} from "../../../../interfaces/endpoint";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type { IGeneralResponse, ISystemStatusResponse } from '../../../../interfaces/endpoint';
 
 //Models
-import { getConnection } from "../../models/Pool";
-import { getQuery } from "../../models/Query";
+import { getConnection } from '../../models/Pool';
+import { getQuery } from '../../models/Query';
 
 //Services
-import {
-	validateCredentials,
-	getCPUUsage,
-	getMemoryUsage
-} from "../../utils";
+import { validateCredentials, getCPUUsage, getMemoryUsage } from '../../utils';
 
 const systemStatusEndpoint = async (
-    req: NextApiRequest,
-    res: NextApiResponse<IGeneralResponse | ISystemStatusResponse>
-): Promise<void>  => {
+	req: NextApiRequest,
+	res: NextApiResponse<IGeneralResponse | ISystemStatusResponse>,
+): Promise<void> => {
 	const isUserAuthenticated: boolean = validateCredentials(req, res, false);
 
-	if(isUserAuthenticated){
-		if(req.query.realm){
+	if (isUserAuthenticated) {
+		if (req.query.realm) {
 			const statusRealm: string | string[] = req.query.realm;
 
-			if(statusRealm === "database"){
+			if (statusRealm === 'database') {
 				await getConnection(async (error, connection) => {
-					if(!error && connection){
+					if (!error && connection) {
 						await getQuery(connection, {
 							queryParameters: {
-								schema: process.env.DATABASE_NAME!
+								schema: process.env.DATABASE_NAME!,
 							},
-							queryItems: "table_name",
-							queryItemsPrefix: "table",
-							queryTable: "information_schema.tables",
+							queryItems: 'table_name',
+							queryItemsPrefix: 'table',
+							queryTable: 'information_schema.tables',
 							isBinary: false,
 							isLimitless: true,
-							isPreciseComparison: false
+							isPreciseComparison: false,
 						})
-						.then(([rows, ]) => Object.values(rows))
-						.then(result => {
-							const tableList: string[] = [];
+							.then(([rows]) => Object.values(rows))
+							.then((result) => {
+								const tableList: string[] = [];
 
-							result.forEach(currentTable => {
-								tableList.push(currentTable.table_name);
-							});
+								result.forEach((currentTable) => {
+									tableList.push(currentTable.table_name);
+								});
 
-							res.status(200).json({
-								success: true,
-								status: {
-									database: {
-										tableList: tableList
-									}
-								}
+								res.status(200).json({
+									success: true,
+									status: {
+										database: {
+											tableList: tableList,
+										},
+									},
+								});
+							})
+							.catch(() => {
+								res.status(500).json({
+									success: false,
+									description: 'Server error, please try again',
+								});
 							});
-						})
-						.catch(() => {
-							res.status(500).json({
-								success: false,
-								description: 'Server error, please try again'
-							});
-						})
-					}else{
+					} else {
 						res.status(500).json({
 							success: false,
-							description: "Database error, please try again"
+							description: 'Database error, please try again',
 						});
-					};
-				})
-			}else{
-				if(statusRealm === "hardware"){
+					}
+				});
+			} else {
+				if (statusRealm === 'hardware') {
 					res.status(200).json({
 						success: true,
 						status: {
 							hardware: {
 								cpu: await getCPUUsage(),
-								memory: getMemoryUsage()
-							}
-						}
+								memory: getMemoryUsage(),
+							},
+						},
 					});
-				}else{
+				} else {
 					res.status(200).json({
 						success: false,
-						description: "Invalid query value"
+						description: 'Invalid query value',
 					});
-				};
-			};
-		}else if(Object.entries(req.query).length > 0){
+				}
+			}
+		} else if (Object.entries(req.query).length > 0) {
 			res.status(200).json({
 				success: false,
-				description: "Invalid query parameter"
+				description: 'Invalid query parameter',
 			});
-		}else{
+		} else {
 			res.status(200).json({
 				success: false,
-				description: "Missing query parameter"
+				description: 'Missing query parameter',
 			});
-		};
-	};
+		}
+	}
 
 	res.end();
 };

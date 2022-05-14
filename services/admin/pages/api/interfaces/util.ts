@@ -2,5 +2,5 @@
 
 //Public Types
 export interface ISpecialCaracter {
-	[key: string]: string
-};
+	[key: string]: string;
+}

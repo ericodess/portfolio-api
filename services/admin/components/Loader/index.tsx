@@ -1,8 +1,8 @@
 //Styled
-import { LoaderWrapper, LoaderCircle } from "./styles";
+import { LoaderWrapper, LoaderCircle } from './styles';
 
 const Loader = () => {
-	return(
+	return (
 		<LoaderWrapper className="--flex-row --flex-centered-items">
 			<LoaderCircle delay={-1.2} />
 			<LoaderCircle delay={-1} />

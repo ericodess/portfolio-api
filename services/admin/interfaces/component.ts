@@ -8,36 +8,36 @@ type TextInputOnFocusHandler = () => void | Promise<void>;
 
 //Public Types
 export interface IForm {
-	title: string
-	id?: string
-	className?: string
-	method: string
-	action: string
-	onSubmit: FormOnSubmitHandler
-	children: ReactElement[]
-};
+    title: string;
+    id?: string;
+    className?: string;
+    method: string;
+    action: string;
+    onSubmit: FormOnSubmitHandler;
+    children: ReactElement[];
+}
 
 export interface ITextInput {
-	label: string
-	type: string
-	id?: string
-	className?: string
-	name?: string
-	onFocus: TextInputOnFocusHandler
-};
+    label: string;
+    type: string;
+    id?: string;
+    className?: string;
+    name?: string;
+    onFocus: TextInputOnFocusHandler;
+}
 
 export interface IButton {
-	text: string
-	id?: string
-	className?: string
-	disabled?: boolean
-};
+    text: string;
+    id?: string;
+    className?: string;
+    disabled?: boolean;
+}
 
 export interface IFeedback {
-	text: string
-	disabled?: boolean
-};
+    text: string;
+    disabled?: boolean;
+}
 
 export interface ILoaderCircle {
-	delay?: number
-};
+    delay?: number;
+}

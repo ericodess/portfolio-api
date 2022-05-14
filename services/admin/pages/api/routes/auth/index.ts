@@ -1,23 +1,20 @@
 //Types
-import type { NextApiRequest, NextApiResponse } from "next";
-import type { IAuthResponse } from "../../../../interfaces/endpoint";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type { IAuthResponse } from '../../../../interfaces/endpoint';
 
 //Services
-import { validateCredentials } from "../../utils";
+import { validateCredentials } from '../../utils';
 
-const authEndpoint = (
-    req: NextApiRequest,
-    res: NextApiResponse<IAuthResponse>
-) => {
-    const isUserAuthenticated: boolean = validateCredentials(req, res),
-		  redirectPage: string = req.query?.redirect as string;
+const authEndpoint = (req: NextApiRequest, res: NextApiResponse<IAuthResponse>) => {
+	const isUserAuthenticated: boolean = validateCredentials(req, res),
+		redirectPage: string = req.query?.redirect as string;
 
-	if(!redirectPage){
+	if (!redirectPage) {
 		res.status(200).json({
 			success: true,
-			isUserAuthenticated: isUserAuthenticated
+			isUserAuthenticated: isUserAuthenticated,
 		});
-	};
+	}
 
 	res.end();
 };

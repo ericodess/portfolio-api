@@ -1,20 +1,20 @@
-import os from "os";
+import os from 'os';
 
 //Types
-import { IMemoryUsage } from "../../../interfaces/endpoint";
+import { IMemoryUsage } from '../../../interfaces/endpoint';
 
 //Services
-import byteToGigabyte from "./byteToGigabyte";
+import byteToGigabyte from './byteToGigabyte';
 
 const getMemoryUsage = (): IMemoryUsage => {
 	const freeMemory: number = os.freemem(),
-		  totalMemory: number = os.totalmem(),
-		  usedMemoryInGB: number = byteToGigabyte((totalMemory - freeMemory)),
-		  freeMemoryInGB: number =  Math.round(byteToGigabyte(totalMemory));
+		totalMemory: number = os.totalmem(),
+		usedMemoryInGB: number = byteToGigabyte(totalMemory - freeMemory),
+		freeMemoryInGB: number = Math.round(byteToGigabyte(totalMemory));
 
 	return {
 		usedGB: usedMemoryInGB,
-		usedPercentage: parseFloat((100 * (usedMemoryInGB / freeMemoryInGB)).toFixed(1))
+		usedPercentage: parseFloat((100 * (usedMemoryInGB / freeMemoryInGB)).toFixed(1)),
 	};
 };
 

@@ -1,108 +1,96 @@
-import { FormEvent, useState, useEffect, Fragment } from "react";
-import Router from "next/dist/client/router";
+import { FormEvent, useState, useEffect, Fragment } from 'react';
+import Router from 'next/dist/client/router';
 
 //Types
-import { IGeneralResponse } from "../../interfaces/endpoint";
-import { ILoginForm } from "../../interfaces/page";
+import { IGeneralResponse } from '../../interfaces/endpoint';
+import { ILoginForm } from '../../interfaces/page';
 
 //Components
-import Head from "next/head";
-import {
-	Button,
-	Feedback,
-	Form,
-	TextInput
-} from "../../components";
+import Head from 'next/head';
+import { Button, Feedback, Form, TextInput } from '../../components';
 
 //Service
-import {
-    authenticateLogin,
-    validateEmail
-} from "../../services";
+import { authenticateLogin, validateEmail } from '../../services';
 
 //Styles
-import { LoginPageWrapper } from "./styles";
+import { LoginPageWrapper } from './styles';
 
 const LoginPage = () => {
-    const [isErrorRun, setIsErrorRun] = useState(false),
-		  [feedbackText, setFeedbackText] = useState("");
+	const [isErrorRun, setIsErrorRun] = useState(false),
+		[feedbackText, setFeedbackText] = useState('');
 
-    const dashboardURL: string = "/admin/dashboard";
+	const dashboardURL = '/admin/dashboard';
 
-    useEffect(() => {
-		authenticateLogin("dashboard");
+	useEffect(() => {
+		authenticateLogin('dashboard');
 	}, []);
 
-    const onSubmitHandler = async (event: FormEvent) => {
-        event.preventDefault();
+	const onSubmitHandler = async (event: FormEvent) => {
+		event.preventDefault();
 
-        const loginFormElement: HTMLFormElement = event.target as HTMLFormElement;
-        
-        const formData: FormData = new FormData(loginFormElement);
+		const loginFormElement: HTMLFormElement = event.target as HTMLFormElement;
 
-        const formUserNameInput: string = formData.get('loginFormUsername') as string,
-              formPaasswordInput: string = formData.get('loginFormPassword') as string;
+		const formData: FormData = new FormData(loginFormElement);
 
-        if(validateEmail(formUserNameInput)){
-            const formCredentials: ILoginForm = {
-                email: formUserNameInput,
-                password: formPaasswordInput
-            };
+		const formUserNameInput: string = formData.get('loginFormUsername') as string,
+			formPaasswordInput: string = formData.get('loginFormPassword') as string;
 
-            const myHeaders: Headers = new Headers();
+		if (validateEmail(formUserNameInput)) {
+			const formCredentials: ILoginForm = {
+				email: formUserNameInput,
+				password: formPaasswordInput,
+			};
 
-            myHeaders.append("Content-Type", "application/json");
+			const myHeaders: Headers = new Headers();
 
-            await fetch(loginFormElement.action, {
-                headers: myHeaders,
-                method: loginFormElement.method,
-                credentials: 'include',
-                body: JSON.stringify(formCredentials)
-            })
-            .then(response => response.json())
-            .then((data: IGeneralResponse) => {
-                if(data.success){
-                    setIsErrorRun(false);
+			myHeaders.append('Content-Type', 'application/json');
 
-                    Router.push(dashboardURL);
-                }else{
-                    setIsErrorRun(true);
-					setFeedbackText(data.description || "Please try again");
-                };
-            })
-            .catch(() => {
-                setIsErrorRun(true);
-				setFeedbackText("Please try again");
-            })
-        }else{
-            setIsErrorRun(true);
-			setFeedbackText("Invalid input");
-        };
-    };
+			await fetch(loginFormElement.action, {
+				headers: myHeaders,
+				method: loginFormElement.method,
+				credentials: 'include',
+				body: JSON.stringify(formCredentials),
+			})
+				.then((response) => response.json())
+				.then((data: IGeneralResponse) => {
+					if (data.success) {
+						setIsErrorRun(false);
 
-    const onFocusHandler = () => {
-        if(isErrorRun){
-            setIsErrorRun(false);
-        };
-    };
+						Router.push(dashboardURL);
+					} else {
+						setIsErrorRun(true);
+						setFeedbackText(data.description || 'Please try again');
+					}
+				})
+				.catch(() => {
+					setIsErrorRun(true);
+					setFeedbackText('Please try again');
+				});
+		} else {
+			setIsErrorRun(true);
+			setFeedbackText('Invalid input');
+		}
+	};
 
-    return(
+	const onFocusHandler = () => {
+		if (isErrorRun) {
+			setIsErrorRun(false);
+		}
+	};
+
+	return (
 		<Fragment>
 			<Head>
 				<meta charSet="UTF-8" />
-				<meta
-					name="viewport"
-					content="width=device-width, initial-scale=1"
-				/>
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<title>Login</title>
-				<meta
-					name="description"
-					content="Login page for the back-end"
-				/>
+				<meta name="description" content="Login page for the back-end" />
 			</Head>
 			<main>
 				<LoginPageWrapper
-					className={`--full-height --full-width --flex-column --flex-centered-items --reactive-background ${isErrorRun ? "--error-cycle" : "--color-cycle"}`}
+					className={`--full-height --full-width --flex-column --flex-centered-items --reactive-background ${
+						isErrorRun ? '--error-cycle' : '--color-cycle'
+					}`}
 				>
 					<Form
 						title="Admin Page"
@@ -134,10 +122,7 @@ const LoginPage = () => {
 							className="--squircle-borders"
 							disabled={isErrorRun}
 						/>
-						<Feedback
-							text={feedbackText}
-							disabled={!isErrorRun}
-						/>
+						<Feedback text={feedbackText} disabled={!isErrorRun} />
 					</Form>
 				</LoginPageWrapper>
 			</main>

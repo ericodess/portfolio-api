@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const FeedbackWrapper = styled.span`
-	font-family: "Roboto", serif;
+	font-family: 'Roboto', serif;
 	color: #a11521;
 	font-size: 1.15rem;
 	margin: 1rem 0 0 0;
