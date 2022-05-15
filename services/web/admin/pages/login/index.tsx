@@ -1,16 +1,12 @@
 import { FormEvent, useState, useEffect, Fragment } from 'react';
+import Head from 'next/head';
 import Router from 'next/dist/client/router';
 
-//Types
-import { IGeneralResponse } from '../../interfaces/endpoint';
-import { ILoginForm } from '../../interfaces/page';
-
 //Components
-import Head from 'next/head';
-import { Button, Feedback, Form, TextInput } from '../../components';
+import { Button, Feedback, Form, TextInput } from '@components';
 
 //Service
-import { authenticateLogin, validateEmail } from '../../services';
+import { authenticateLogin, validateEmail } from '@services';
 
 //Styles
 import { LoginPageWrapper } from './styles';

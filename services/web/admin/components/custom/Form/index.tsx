@@ -1,6 +1,3 @@
-//Types
-import { IForm } from '../../interfaces/component';
-
 //Styles
 import { FormWrapper, FormTitle } from './styles';
 

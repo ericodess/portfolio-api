@@ -1,5 +1,5 @@
 //Types
-import { ITextInput } from '../../interfaces/component';
+import { ITextInput } from './types';
 
 //Styles
 import { InputWrapper, InputBox, InputLabel } from './styles';

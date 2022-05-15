@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 //Styles
-import { ILoaderCircle } from '../../interfaces/component';
 
 export const LoaderWrapper = styled.div`
 	width: 100%;

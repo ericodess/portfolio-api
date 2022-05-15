@@ -1,6 +1,3 @@
-//Types
-import { IButton } from '../../interfaces/component';
-
 //Styles
 import { ButtonWrapper } from './styles';
 

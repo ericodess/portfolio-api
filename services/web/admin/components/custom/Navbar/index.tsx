@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/dist/client/router';
 
-//Types
-import { ISystemStatusResponse } from '../../interfaces/endpoint';
-
 //Services
-import { getCookie, renderConfirmBox, fetchFromAPI } from '../../services';
+import { getCookie, renderConfirmBox, fetchFromAPI } from '@services';
 
 //Components
 import { Loader } from '..';

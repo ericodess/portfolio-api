@@ -1,6 +1,3 @@
-//Types
-import { IFeedback } from '../../interfaces/component';
-
 //Styles
 import { FeedbackWrapper } from './styles';
 

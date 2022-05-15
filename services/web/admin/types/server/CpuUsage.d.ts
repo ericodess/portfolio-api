@@ -1,0 +1,3 @@
+interface ICpuUsage {
+	usedPercentage: number;
+}
