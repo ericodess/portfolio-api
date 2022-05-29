@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
 
 				    myHeaders.append('authorization', `token ${result[0].api_key_value}`);
 
-                    getRepoList('ericodess', myHeaders)
+                    getRepoList('ericodesu', myHeaders)
                     .then(projects => {
                         projects.forEach(repository => {
                             if(typeof repository.homepage !== 'undefined' && repository.homepage !== null && repository.homepage !== '' && repository.name !== 'efrederick'){
