@@ -1,4 +1,4 @@
-[![portfolio-api](https://raw.githubusercontent.com/ericodess/portfolio-api/master/.github/images/project-thumbnail.png)](https://api.efrederick.dev)
+[![portfolio-api](https://raw.githubusercontent.com/ericodesu/portfolio-api/master/.github/images/project-thumbnail.png)](https://api.efrederick.dev)
 
 # portfolio-api
 
