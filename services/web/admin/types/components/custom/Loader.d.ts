@@ -1,3 +1,0 @@
-interface ILoaderCircle {
-	delay?: number;
-}
