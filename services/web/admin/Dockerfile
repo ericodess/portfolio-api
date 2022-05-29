@@ -6,7 +6,7 @@ COPY package*.json /usr/src/app/
 
 RUN npm install --force
 
-COPY . /usr/src/app
+COPY . .
 
 EXPOSE 9005
 
