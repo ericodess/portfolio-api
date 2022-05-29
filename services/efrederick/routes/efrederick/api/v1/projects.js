@@ -55,7 +55,7 @@ router.get('/', (req, res) => {
                         return projects;
                     })
                     .then(data => {
-                        return data.map(currentRepo => getRepoContributors('ericodess', currentRepo.name, myHeaders)
+                        return data.map(currentRepo => getRepoContributors('ericodesu', currentRepo.name, myHeaders)
                         .then(contributors => contributors
                             .map(contributor => contributor.weeks
                                 .reduce((lineCount, week) => {
