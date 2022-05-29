@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"ericodesu.dev/portfolio/api/utils"
+	"ericodesu.com/portfolio/api/utils"
 	"github.com/gorilla/mux"
 )
 

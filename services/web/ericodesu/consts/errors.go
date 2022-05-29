@@ -1,7 +1,7 @@
 package consts
 
 import (
-	"ericodesu.dev/portfolio/api/types"
+	"ericodesu.com/portfolio/api/types"
 )
 
 func GetGenericErrorStatus(errorCode int) types.ErrorStatus {

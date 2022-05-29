@@ -1,4 +1,4 @@
-module ericodesu.dev/portfolio/api
+module ericodesu.com/portfolio/api
 
 go 1.18
 

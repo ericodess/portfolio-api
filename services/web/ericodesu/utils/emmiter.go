@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"ericodesu.dev/portfolio/api/consts"
-	"ericodesu.dev/portfolio/api/types"
+	"ericodesu.com/portfolio/api/consts"
+	"ericodesu.com/portfolio/api/types"
 )
 
 func EmitSucessfulResponseArray[T comparable](response http.ResponseWriter, payload *[]T) {
