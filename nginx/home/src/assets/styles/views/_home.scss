@@ -1,0 +1,233 @@
+.header {
+	margin: 1rem auto 2.5rem auto;
+	width: 80vw;
+
+	&__logo {
+		width: 10rem;
+
+		&:hover {
+			& h3 {
+				color: white;
+			}
+		}
+
+		& button {
+			& h3 {
+				padding-bottom: 0.2rem;
+				font-family: 'Roboto-Medium';
+				font-size: 1.5rem;
+
+				-webkit-transition: color ease-in-out .2s;
+				-moz-transition: 	color ease-in-out .2s;
+				-ms-transition: 	color ease-in-out .2s;
+				-o-transition: 		color ease-in-out .2s;
+				transition: 		color ease-in-out .2s;
+			}
+		}
+	}
+
+	&__login {
+		width: 3rem;
+		margin: 0 0 0 auto;
+
+		&:hover {
+			& span {
+				color: white;
+			}
+		}
+
+		& button {
+			& span {
+				font-family: 'Roboto-Regular';
+				font-size: 0.7rem;
+
+				-webkit-transition: color ease-in-out .2s;
+				-moz-transition: 	color ease-in-out .2s;
+				-ms-transition: 	color ease-in-out .2s;
+				-o-transition: 		color ease-in-out .2s;
+				transition: 		color ease-in-out .2s;
+			}
+		}
+	}
+}
+
+.content {
+	width: 100%;
+	height: 100%;
+
+	&__api {
+		margin: 0 auto 2.5rem auto;
+		width: 90%;
+
+		&-example {
+			width: 100%;
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+			gap: 2rem 1rem;
+		}
+
+		&__options {
+			height: 4rem;
+			width: 100%;
+			gap: 0 1rem;
+			margin-top: 1rem;
+		}
+
+		&__option {
+			flex-basis: 100%;
+		}
+
+		&__sub-options {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+			margin: 1rem 0 .6rem 0;
+			justify-content: center;
+			gap: 1rem .6rem;
+		}
+
+		& .code__block {
+			margin-bottom: auto;
+			font-size: .8rem !important;
+			padding: 0 1rem 0 1rem !important;
+			margin: 1rem 0 0 0 !important;
+			height: 14rem;
+		}
+	}
+}
+
+.--hoverable-button {
+	font-family: 'Roboto-Regular';
+	font-size: 0.7rem;
+	min-height: 2.5rem;
+	border: .1vh solid #73A8A0;
+	color: black;
+	background-color: transparent;
+
+	-webkit-transition: background-color ease-in-out .2s, border-color ease-in-out .2s, color ease-in-out .2s;
+	-moz-transition: 	background-color ease-in-out .2s, border-color ease-in-out .2s, color ease-in-out .2s;
+	-ms-transition: 	background-color ease-in-out .2s, border-color ease-in-out .2s, color ease-in-out .2s;
+	-o-transition: 		background-color ease-in-out .2s, border-color ease-in-out .2s, color ease-in-out .2s;
+	transition: 		background-color ease-in-out .2s, border-color ease-in-out .2s, color ease-in-out .2s;
+
+	&[active-api="true"] {
+		background-color: black;
+		border-color: black;
+		color: white;
+	}
+}
+
+.--button-text {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+@media (min-width: 801px) {
+	.header {
+		margin: 2vh auto 5vh auto;
+	
+		&__logo {
+			width: 20vh;
+	
+			&:hover {
+				& h3 {
+					color: white;
+				}
+			}
+	
+			& button {
+				& h3 {
+					padding-bottom: 0.3vh;
+					font-size: 3vh;
+				}
+			}
+		}
+	
+		&__login {
+			width: 6vh;
+	
+			&:hover {
+				& span {
+					color: white;
+				}
+			}
+	
+			& button {
+				& span {
+					font-size: 2vh;
+				}
+			}
+		}
+	}
+	
+	.content {
+		position: relative;
+
+		&__api {
+			margin: 0;
+			width: 80vw;
+	
+			&-example {
+				margin: 3.8vh 0 0 0;
+				grid-template-columns: repeat(auto-fill, minmax(70vh, 1fr));
+				gap: 0 2vh;
+			}
+
+			&__options {
+				height: 5vh;
+				gap: 0 2vh;
+				margin-top: 2vh;
+			}
+
+			&__sub-options {
+				grid-template-columns: repeat(auto-fit, minmax(10vh, 1fr));
+				margin: 2vh 0 1vh 0;
+				gap: 1vh 1vh;
+
+				& .content__api__sub-option {
+					position: relative;
+
+					& > div {
+						height: 100%;
+					}
+
+					&__variants {
+						position: absolute;
+						z-index: 2;
+						background-color: white;
+						border: .1vh solid #73A8A0;
+						border-top: none;
+	
+						& li {
+							border: none;
+						}
+					}
+				}
+			}
+
+			& .code__block {
+				font-size: 1.6vh !important;
+				padding: 0 2vh 0 2vh !important;
+				margin: 2vh 0 0 0 !important;
+				height: 28vh;
+			}
+		}
+	}
+
+	.--hoverable-button {
+		min-height: 5vh;
+		width: 10.5vh;
+		font-size: 1.5vh;
+		text-align: center;
+
+		&:hover {
+			cursor: pointer;
+			background-color: black;
+			border-color: black;
+			color: white;
+		}
+	}
+}

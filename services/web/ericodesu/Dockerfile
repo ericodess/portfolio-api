@@ -1,8 +1,5 @@
 FROM golang:1.18.2-buster
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
-
 WORKDIR /usr/src/app
 
 COPY go.mod go.sum ./

@@ -1,4 +1,4 @@
-[![portfolio-api](https://raw.githubusercontent.com/ericodesu/portfolio-api/master/.github/images/project-thumbnail.png)](https://api.efrederick.dev)
+[![portfolio-api](https://raw.githubusercontent.com/ericodesu/portfolio-api/master/.github/images/project-thumbnail.png)](https://api.ericodesu.com)
 
 # portfolio-api
 
@@ -38,4 +38,4 @@ Firstly, this project was to only provide [namah](https://github.com/ericodesu/n
 
 ## Documentation
 
-You can reach to the [Developer Portal](https://api.efrederick.dev) to a more hands-on driven info.
+You can reach to the [Developer Portal](https://api.ericodesu.com) to a more hands-on driven info.
