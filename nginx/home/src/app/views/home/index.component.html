@@ -1,5 +1,5 @@
 <header class="header">
-	<nav class="--flex --flex-row --flex-horizontal-centralized">
+	<nav class="--flex --flex-row --flex-full-centralized">
 		<app-button class="header__logo --flex --flex-row" [onClick]="logoOnClick">
 			<h3>ericodesu API</h3>
 		</app-button>
@@ -55,7 +55,7 @@
 							"
 						>
 							<li
-								class="--flex --flex-horizontal-centralized --hoverable-button --hoverable-button"
+								class="--flex --flex-horizontal-centralized --hoverable-button"
 								*ngFor="let apiEndpointSourceVariant of apiEndpointSource.variants"
 								[attr.active-api]="apiEndpointSourceVariant.name === activeEndpointSourceVariant?.name"
 								(click)="onApiEndpointSourceVariantClick(apiEndpointSourceVariant)"
@@ -75,10 +75,47 @@
 				[isHoverReactive]="true"
 			>
 				<ul class="content__api__options"></ul>
-				<app-code-block [code]="generateCodeResponse()" language="javascript"></app-code-block>
+				<app-code-block [code]="this.responseCode" language="javascript"></app-code-block>
 				<ul class="content__api__sub-options"></ul>
 			</app-separator-block>
 		</div>
-		<div style="height: 100vh;"></div>
+		<button
+			class="content__api__fetch --hoverable-button --flex --flex-full-centralized"
+			(click)="onFetchClick()"
+		>
+			Fetch API
+		</button>
+	</app-separator-block>
+	<app-separator-block
+		class="content__endpoints"
+		title="Endpoints"
+		[hasBorders]="false"
+		[isHoverReactive]="false"
+	>
+		<app-separator-block
+			class="content__endpoint-wrapper --flex --flex-column"
+			titleType="secondary"
+			[title]="activeEndpoint.name"
+			[hasBorders]="true"
+			[hasTitleBorders]="false"
+			[isHoverReactive]="true"
+			*ngFor="let activeEndpoint of activeApiSource.endpoints"
+		>
+			<div class="content__endpoint --flex --flex-column">
+				<div [attr.disabled]="activeEndpoint.method.toUpperCase() === 'POST'">
+					{{ activeEndpoint.method.toUpperCase() }}
+					<a href="/{{ activeApiSource.rootPath }}/api/v{{ activeEndpoint.version }}/{{ activeEndpoint.path }}">
+						/{{ activeApiSource.rootPath }}/api/v{{ activeEndpoint.version }}/{{ activeEndpoint.path }}
+					</a>
+				</div>
+				<div *ngFor="let activeEndpointVariant of activeEndpoint.variants" [attr.disabled]="activeEndpointVariant.method.toUpperCase() === 'POST'">
+					<div>{{ activeEndpointVariant.method.toUpperCase() }}
+						<a href="/{{ activeApiSource.rootPath }}/api/v{{ activeEndpointVariant.version }}/{{ activeEndpointVariant.path }">
+							/{{ activeApiSource.rootPath }}/api/v{{ activeEndpointVariant.version }}/{{ activeEndpointVariant.path }}
+						</a>
+					</div>
+				</div>
+			</div>
+		</app-separator-block>	
 	</app-separator-block>
 </main>

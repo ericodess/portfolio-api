@@ -16,6 +16,9 @@ export class HomeViewComponent {
 	public activeApiSource = ValidApiSources[0];
 	public activeEndpointSource = ValidApiSources[0].endpoints[0];
 	public activeEndpointSourceVariant: EndpointSource | null = null;
+	public responseCode: string = `
+{}
+`;
 
 	private _emptyCodeTemplate = `
 {}
@@ -30,6 +33,8 @@ export class HomeViewComponent {
 		this.activeApiSource = target;
 		this.activeEndpointSource = this.activeApiSource.endpoints[0];
 		this.activeEndpointSourceVariant = null;
+
+		this.responseCode = this._emptyCodeTemplate;
 	}
 
 	public onApiEndpointSourceClick(target: EndpointSource): void {
@@ -43,6 +48,8 @@ export class HomeViewComponent {
 
 		this.activeEndpointSource = target;
 		this.activeEndpointSourceVariant = null;
+
+		this.responseCode = this._emptyCodeTemplate;
 	}
 
 	public onApiEndpointSourceVariantClick(target: EndpointSource): void {
@@ -57,8 +64,11 @@ export class HomeViewComponent {
 		}
 
 		this.activeEndpointSourceVariant = target;
+
+		this.responseCode = this._emptyCodeTemplate;
 	}
 
+	//TO-DO USE THE searchParam
 	public generateCodeExample(): string {
 		if (!this.activeApiSource || !this.activeEndpointSource) {
 			return this._emptyCodeTemplate;
@@ -91,12 +101,55 @@ ${fetchTemplate}
 `;
 	}
 
-	public generateCodeResponse(): string {
-		if (!this.activeApiSource) {
-			return this._emptyCodeTemplate;
+	//TO-DO USE THE searchParam
+	public onFetchClick(): void {
+		this.responseCode = this._emptyCodeTemplate;
+
+		if (!this.activeApiSource || !this.activeEndpointSource) {
+			return;
 		}
 
-		return this._emptyCodeTemplate;
+		if (this.activeEndpointSourceVariant) {
+			fetch(
+				`http://localhost/${this.activeApiSource.rootPath}/api/v${this.activeEndpointSourceVariant.version}/${this.activeEndpointSource.path}${this.activeEndpointSourceVariant.path}`,
+				{
+					method: this.activeEndpointSourceVariant.method,
+					body: this.activeEndpointSourceVariant.requestParams?.body,
+					headers: this.activeEndpointSourceVariant.requestParams?.headers,
+				},
+			)
+				.then((response) => {
+					return response.json();
+				})
+				.then((data) => {
+					this.responseCode = '\n' + JSON.stringify(data, null, '   ');
+				})
+				.catch((error) => {
+					this.responseCode =
+						'\n' +
+						JSON.stringify({ wasSuccess: false, error: error.message }, null, '   ');
+				});
+		} else {
+			fetch(
+				`http://localhost/${this.activeApiSource.rootPath}/api/v${this.activeEndpointSource.version}/${this.activeEndpointSource.path}`,
+				{
+					method: this.activeEndpointSource.method,
+					body: this.activeEndpointSource.requestParams?.body,
+					headers: this.activeEndpointSource.requestParams?.headers,
+				},
+			)
+				.then((response) => {
+					return response.json();
+				})
+				.then((data) => {
+					this.responseCode = '\n' + JSON.stringify(data, null, '   ');
+				})
+				.catch((error) => {
+					this.responseCode =
+						'\n' +
+						JSON.stringify({ wasSuccess: false, error: error.message }, null, '   ');
+				});
+		}
 	}
 
 	public logoOnClick(): void {
