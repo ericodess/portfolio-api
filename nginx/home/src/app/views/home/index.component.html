@@ -104,14 +104,14 @@
 			<div class="content__endpoint --flex --flex-column">
 				<div [attr.disabled]="activeEndpoint.method.toUpperCase() === 'POST'">
 					{{ activeEndpoint.method.toUpperCase() }}
-					<a href="/{{ activeApiSource.rootPath }}/api/v{{ activeEndpoint.version }}/{{ activeEndpoint.path }}">
-						/{{ activeApiSource.rootPath }}/api/v{{ activeEndpoint.version }}/{{ activeEndpoint.path }}
+					<a href="{{ getUrl(activeEndpoint).href }}">
+						{{ getUrl(activeEndpoint).pathname }}{{ getUrl(activeEndpoint).search }}
 					</a>
 				</div>
 				<div *ngFor="let activeEndpointVariant of activeEndpoint.variants" [attr.disabled]="activeEndpointVariant.method.toUpperCase() === 'POST'">
 					<div>{{ activeEndpointVariant.method.toUpperCase() }}
-						<a href="/{{ activeApiSource.rootPath }}/api/v{{ activeEndpointVariant.version }}/{{ activeEndpointVariant.path }">
-							/{{ activeApiSource.rootPath }}/api/v{{ activeEndpointVariant.version }}/{{ activeEndpointVariant.path }}
+						<a href="{{ getUrl(activeEndpointVariant, activeEndpoint).href }}">
+							{{ getUrl(activeEndpointVariant, activeEndpoint).pathname }}{{ getUrl(activeEndpointVariant, activeEndpoint).search }}
 						</a>
 					</div>
 				</div>

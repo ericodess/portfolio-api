@@ -68,26 +68,20 @@ export class HomeViewComponent {
 		this.responseCode = this._emptyCodeTemplate;
 	}
 
-	//TO-DO USE THE searchParam
 	public generateCodeExample(): string {
 		if (!this.activeApiSource || !this.activeEndpointSource) {
 			return this._emptyCodeTemplate;
 		}
 
-		let fetchTemplate = `fetch('${this.activeApiSource.isSecure ? 'https' : 'http'}://${
-			this.activeApiSource.rootUrl
-		}/${this.activeApiSource.rootPath}/api/v${this.activeEndpointSource.version}/${
-			this.activeEndpointSource.path
-		}', {${this.getRequestParams(this.activeEndpointSource)}})`;
+		let fetchTemplate = `fetch('${this.getUrl(
+			this.activeEndpointSource,
+		)}', {${this.getRequestParams(this.activeEndpointSource)}})`;
 
 		if (this.activeEndpointSourceVariant) {
-			fetchTemplate = `fetch('${this.activeApiSource.isSecure ? 'https' : 'http'}://${
-				this.activeApiSource.rootUrl
-			}/${this.activeApiSource.rootPath}/api/v${this.activeEndpointSourceVariant.version}/${
-				this.activeEndpointSource.path
-			}${this.activeEndpointSourceVariant.path}', {${this.getRequestParams(
+			fetchTemplate = `fetch('${this.getUrl(
 				this.activeEndpointSourceVariant,
-			)}})`;
+				this.activeEndpointSourceVariant,
+			)}', {${this.getRequestParams(this.activeEndpointSourceVariant)}})`;
 		}
 
 		return `
@@ -101,7 +95,6 @@ ${fetchTemplate}
 `;
 	}
 
-	//TO-DO USE THE searchParam
 	public onFetchClick(): void {
 		this.responseCode = this._emptyCodeTemplate;
 
@@ -110,14 +103,11 @@ ${fetchTemplate}
 		}
 
 		if (this.activeEndpointSourceVariant) {
-			fetch(
-				`http://localhost/${this.activeApiSource.rootPath}/api/v${this.activeEndpointSourceVariant.version}/${this.activeEndpointSource.path}${this.activeEndpointSourceVariant.path}`,
-				{
-					method: this.activeEndpointSourceVariant.method,
-					body: this.activeEndpointSourceVariant.requestParams?.body,
-					headers: this.activeEndpointSourceVariant.requestParams?.headers,
-				},
-			)
+			fetch(this.getUrl(this.activeEndpointSourceVariant, this.activeEndpointSourceVariant), {
+				method: this.activeEndpointSourceVariant.method,
+				body: this.activeEndpointSourceVariant.requestParams?.body,
+				headers: this.activeEndpointSourceVariant.requestParams?.headers,
+			})
 				.then((response) => {
 					return response.json();
 				})
@@ -130,14 +120,11 @@ ${fetchTemplate}
 						JSON.stringify({ wasSuccess: false, error: error.message }, null, '   ');
 				});
 		} else {
-			fetch(
-				`http://localhost/${this.activeApiSource.rootPath}/api/v${this.activeEndpointSource.version}/${this.activeEndpointSource.path}`,
-				{
-					method: this.activeEndpointSource.method,
-					body: this.activeEndpointSource.requestParams?.body,
-					headers: this.activeEndpointSource.requestParams?.headers,
-				},
-			)
+			fetch(this.getUrl(this.activeEndpointSource), {
+				method: this.activeEndpointSource.method,
+				body: this.activeEndpointSource.requestParams?.body,
+				headers: this.activeEndpointSource.requestParams?.headers,
+			})
 				.then((response) => {
 					return response.json();
 				})
@@ -158,6 +145,34 @@ ${fetchTemplate}
 
 	public loginOnClick(): void {
 		this.router.navigateTo('dashboard');
+	}
+
+	public getUrl(target: EndpointSource, parentTarget?: EndpointSource): URL {
+		let url = new URL(
+			`${this.activeApiSource.isSecure ? 'https' : 'http'}://${
+				this.activeApiSource.rootUrl
+			}/${this.activeApiSource.rootPath}/api/v${target.version}${
+				target.path ? `/${target.path}` : ''
+			}`,
+		);
+
+		if (parentTarget) {
+			url = new URL(
+				`${this.activeApiSource.isSecure ? 'https' : 'http'}://${
+					this.activeApiSource.rootUrl
+				}/${this.activeApiSource.rootPath}/api/v${target.version}${
+					parentTarget.path ? `/${parentTarget.path}` : ''
+				}${target.path ? `/${target.path}` : ''}`,
+			);
+		}
+
+		if (target.requestParams?.searchParams) {
+			for (const [key, value] of Object.entries(target.requestParams.searchParams)) {
+				url.searchParams.append(key, value);
+			}
+		}
+
+		return url;
 	}
 
 	private getRequestParams(target: EndpointSource): string {

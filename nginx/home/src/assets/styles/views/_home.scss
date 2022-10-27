@@ -349,11 +349,12 @@
 				gap: 2vh 0;
 				font-size: 1.4vh;
 	
-				& [disable="false"] {
+				
+				& [disabled="false"] {
 					& a {
 						&:hover {
 							cursor: pointer;
-							color: #73A8A0;
+							color: #73A8A0 !important;
 							text-decoration: underline;
 						}
 					}

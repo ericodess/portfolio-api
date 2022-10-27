@@ -1,11 +1,16 @@
 import { ApiSource } from './api-source';
 
+//const rootUrl = 'api.ericodesu.com';
+//const isSecure = true;
+const rootUrl = 'localhost';
+const isSecure = false;
+
 export default [
 	{
 		name: 'Portfolio',
-		rootUrl: 'api.ericodesu.com',
+		rootUrl: rootUrl,
 		rootPath: 'portfolio',
-		isSecure: true,
+		isSecure: isSecure,
 		endpoints: [
 			{
 				name: 'Projects',
@@ -17,9 +22,9 @@ export default [
 	},
 	{
 		name: 'Namah',
-		rootUrl: 'api.ericodesu.com',
+		rootUrl: rootUrl,
 		rootPath: 'namah',
-		isSecure: true,
+		isSecure: isSecure,
 		endpoints: [
 			{
 				name: 'Auth',
@@ -42,20 +47,32 @@ export default [
 					{
 						name: 'Courses by Id',
 						method: 'GET',
-						path: '?id=12023154',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								id: 12023154,
+							},
+						},
 					},
 					{
 						name: 'Courses by Author',
 						method: 'GET',
-						path: '?author=Fernanda%20Cunha',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								author: 'Fernanda%20Cunha',
+							},
+						},
 					},
 					{
 						name: 'Courses with limit',
 						method: 'GET',
-						path: '?limit=2',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								limit: 2,
+							},
+						},
 					},
 				],
 			},
@@ -68,20 +85,32 @@ export default [
 					{
 						name: 'Podcasts by Id',
 						method: 'GET',
-						path: '?id=121',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								id: 121,
+							},
+						},
 					},
 					{
 						name: 'Podcasts by Author',
 						method: 'GET',
-						path: '?author=Namahcast',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								author: 'Namahcast',
+							},
+						},
 					},
 					{
 						name: 'Podcasts with limit',
 						method: 'GET',
-						path: '?limit=2',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								limit: 2,
+							},
+						},
 					},
 				],
 			},
@@ -94,14 +123,22 @@ export default [
 					{
 						name: 'Posts by Id',
 						method: 'GET',
-						path: '?id=681',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								id: 681,
+							},
+						},
 					},
 					{
 						name: 'Posts by Author',
 						method: 'GET',
-						path: '?author=Namahblogger',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								author: 'Namahblogger',
+							},
+						},
 					},
 				],
 			},
@@ -114,14 +151,22 @@ export default [
 					{
 						name: 'Projects by Id',
 						method: 'GET',
-						path: '?id=39',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								id: 39,
+							},
+						},
 					},
 					{
 						name: 'Projects with limit',
 						method: 'GET',
-						path: '?limit=3',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								limit: 3,
+							},
+						},
 					},
 				],
 			},
@@ -134,8 +179,12 @@ export default [
 					{
 						name: 'Users by Name',
 						method: 'GET',
-						path: '?name=Namahcast',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								name: 'Namahcast',
+							},
+						},
 					},
 				],
 			},
@@ -148,16 +197,25 @@ export default [
 					{
 						name: 'Banner by Id',
 						method: 'GET',
-						path: '?id=552',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								id: 552,
+							},
+						},
 					},
 				],
 			},
 			{
 				name: 'Search',
 				method: 'GET',
-				path: 'search?q=Namahblogger',
+				path: 'search',
 				version: 1,
+				requestParams: {
+					searchParams: {
+						q: 'Namahblogger',
+					},
+				},
 			},
 			{
 				name: 'Concepts',
@@ -168,8 +226,12 @@ export default [
 					{
 						name: 'Concepts with limit',
 						method: 'GET',
-						path: '?limit=3',
 						version: 1,
+						requestParams: {
+							searchParams: {
+								limit: 3,
+							},
+						},
 					},
 				],
 			},
