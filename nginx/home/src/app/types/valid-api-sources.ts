@@ -1,9 +1,10 @@
 import { ApiSource } from './api-source';
 
-//const rootUrl = 'api.ericodesu.com';
-//const isSecure = true;
-const rootUrl = 'localhost';
-const isSecure = false;
+// Environment Variables
+import { environment } from 'src/environments/environment';
+
+const rootUrl = 'api.ericodesu.com';
+const isSecure = environment.production;
 
 export default [
 	{
@@ -60,7 +61,7 @@ export default [
 						version: 1,
 						requestParams: {
 							searchParams: {
-								author: 'Fernanda%20Cunha',
+								author: 'Fernanda Cunha',
 							},
 						},
 					},
