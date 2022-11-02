@@ -1,61 +1,58 @@
-const express = require('express');
+const express = require("express");
 
 //Models
-const {
-    getConnection,
-    getQuery
-} = require('../../../../models');
+const { getConnection, getQuery } = require("../../../../models");
 
 //Services
-const {translateObjectListKeys} = require('../../../../services');
+const { translateObjectListKeys } = require("../../../../services");
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    getConnection(async (error,connection) => {
-        if(!error && connection){
+router.get("/", (req, res) => {
+    getConnection(async (error, connection) => {
+        if (!error && connection) {
             await getQuery(connection, {
                 queryRequest: {
                     name: req.query.name,
-                    id: req.query.id
+                    id: req.query.id,
                 },
-                queryTargetItems: 'user_id,user_name',
-                queryTargetItemsPrefix: 'user',
-                queryTargetTable: 'users',
-                queryIsLimitless: true
+                queryTargetItems: "user_id,user_name",
+                queryTargetItemsPrefix: "user",
+                queryTargetTable: "users",
+                queryIsLimitless: true,
             })
-            .then(result => {
-                if(result.length === 0){
-                    res.status(404).json({
-                        success: false,
-                        description: 'No users found'
-                    });
-                }else{
-                    res.status(200).json({
-                        success: true,
-                        users: translateObjectListKeys(result)
-                    });
-                }
-            })
-            .catch((error) => {
-                if(error.code === 'ER_BAD_FIELD_ERROR'){
-                    res.status(500).json({
-                        success: false,
-                        description: 'Invalid query parameter'
-                    });
-                }else{
-                    res.status(500).json({
-                        success: false,
-                        description: 'Server error, please try again'
-                    });
-                } 
-            })
-            
+                .then((result) => {
+                    if (result.length === 0) {
+                        res.status(404).json({
+                            wasSuccessful: false,
+                            description: "No users found",
+                        });
+                    } else {
+                        res.status(200).json({
+                            wasSuccessful: true,
+                            users: translateObjectListKeys(result),
+                        });
+                    }
+                })
+                .catch((error) => {
+                    if (error.code === "ER_BAD_FIELD_ERROR") {
+                        res.status(500).json({
+                            wasSuccessful: false,
+                            description: "Invalid query parameter",
+                        });
+                    } else {
+                        res.status(500).json({
+                            wasSuccessful: false,
+                            description: "Server error, please try again",
+                        });
+                    }
+                });
+
             connection.release();
-        }else{
+        } else {
             res.status(500).json({
-                success: false,
-                description: 'Server error, please try again'
+                wasSuccessful: false,
+                description: "Server error, please try again",
             });
         }
     });

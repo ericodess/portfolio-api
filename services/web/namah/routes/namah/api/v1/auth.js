@@ -11,7 +11,7 @@ const verifyJWT = (req, res, next) => {
 
     if (!access_token) {
         return res.status(403).json({
-            success: false,
+            wasSuccessful: false,
             description: "No access_token provided",
         });
     }
@@ -19,7 +19,7 @@ const verifyJWT = (req, res, next) => {
     jwt.verify(access_token, process.env.SECRET, (err, decoded) => {
         if (err) {
             return res.status(500).json({
-                success: false,
+                wasSuccessful: false,
                 description: "Failed to authenticate access_token",
             });
         }
@@ -30,7 +30,7 @@ const verifyJWT = (req, res, next) => {
 
 router.get("/", (req, res) => {
     res.status(405).json({
-        success: false,
+        wasSuccessful: false,
         description: "Invalid method, please use POST",
     });
 });
@@ -54,7 +54,7 @@ router.post("/", (req, res) => {
                 .then((result) => {
                     if (result.length === 0) {
                         res.status(401).json({
-                            success: false,
+                            wasSuccessful: false,
                             description: "Invalid username or password",
                         });
                     } else {
@@ -81,14 +81,14 @@ router.post("/", (req, res) => {
                         }
 
                         res.status(200).json({
-                            success: true,
+                            wasSuccessful: true,
                             loggedUser: userName,
                         });
                     }
                 })
                 .catch(() => {
                     res.status(500).json({
-                        success: false,
+                        wasSuccessful: false,
                         description: "Server error, please try again",
                     });
                 });
@@ -96,7 +96,7 @@ router.post("/", (req, res) => {
             connection.release();
         } else {
             res.status(500).json({
-                success: false,
+                wasSuccessful: false,
                 description: "Server error, please try again",
             });
         }
