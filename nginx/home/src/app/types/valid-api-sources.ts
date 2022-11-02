@@ -8,15 +8,15 @@ const isSecure = environment.production;
 
 export default [
 	{
-		name: 'Portfolio',
+		name: 'Projects',
 		rootUrl: rootUrl,
-		rootPath: 'portfolio',
+		rootPath: 'projects',
 		isSecure: isSecure,
 		endpoints: [
 			{
-				name: 'Projects',
+				name: 'List',
 				method: 'GET',
-				path: 'projects',
+				path: '',
 				version: 1,
 			},
 		],

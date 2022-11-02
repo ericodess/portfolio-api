@@ -6,10 +6,10 @@ import (
 
 var routes = mux.NewRouter()
 
-var mainRoute = routes.PathPrefix("/portfolio/api/v1").Subrouter()
+var mainRoute = routes.PathPrefix("/projects/api/v1").Subrouter()
 
 func init() {
-	mainRoute.Path("/projects").HandlerFunc(GetUserProjects).Methods("GET")
+	mainRoute.Path("").HandlerFunc(GetUserProjects).Methods("GET")
 }
 
 func GetRoutes() *mux.Router {
