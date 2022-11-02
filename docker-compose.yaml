@@ -1,10 +1,10 @@
 version: "3.3"
 
 services:
-    ericodesu:
-        container_name: portfolio_api_ericodesu
+    portfolio:
+        container_name: portfolio_api_portfolio
         build:
-            context: ./services/web/ericodesu
+            context: ./services/web/portfolio
             dockerfile: Dockerfile
         ports:
             - "9001:9001"

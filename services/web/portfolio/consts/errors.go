@@ -53,7 +53,7 @@ func GetGenericErrorStatus(errorCode int) types.ErrorStatus {
 	case 417:
 		responseError.Description = "Expectation failed"
 	case 418:
-		responseError.Description = "私のティーポット"
+		responseError.Description = "私はティーポットです～"
 	case 421:
 		responseError.Description = "Misdirected request"
 	case 422:

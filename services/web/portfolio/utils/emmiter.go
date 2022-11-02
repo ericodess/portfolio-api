@@ -8,7 +8,7 @@ import (
 	"ericodesu.com/portfolio/api/types"
 )
 
-func EmitSucessfulResponseArray[T comparable](response http.ResponseWriter, payload *[]T) {
+func EmitSucessfulResponseArray[T any](response http.ResponseWriter, payload *[]T) {
 	convertedPayload := types.GenericResponse{
 		WasSuccessful: true,
 		Result:        payload,
@@ -23,32 +23,32 @@ func EmitSucessfulResponseArray[T comparable](response http.ResponseWriter, payl
 	}
 }
 
-func EmitSucessfulResponse[T comparable](response http.ResponseWriter, payload *T) {
+func EmitSucessfulResponse[T any](response http.ResponseWriter, payload *T) {
 	emitCustomResponse(response, true, payload)
 }
 
-func EmitUnsuccessfulResponse(response http.ResponseWriter, code int, description ...string) {
-	var errorStauts types.ErrorStatus
+func EmitUnsuccessfulResponse(response http.ResponseWriter, code int, description string) {
+	var errorStatus types.ErrorStatus
 
 	if len(description) > 0 {
-		errorStauts = types.ErrorStatus{
+		errorStatus = types.ErrorStatus{
 			Code:        code,
-			Description: description[0],
+			Description: description,
 		}
 	} else {
-		errorStauts = consts.GetGenericErrorStatus(code)
+		errorStatus = consts.GetGenericErrorStatus(code)
 	}
 
-	emitCustomResponse(response, false, &errorStauts)
+	emitCustomResponse(response, false, &errorStatus)
 }
 
 func setJsonResponse(response http.ResponseWriter) {
 	response.Header().Set("Content-Type", "application/json")
 
-	response.WriteHeader(http.StatusCreated)
+	response.WriteHeader(http.StatusOK)
 }
 
-func emitCustomResponse[T comparable](response http.ResponseWriter, wasSuccessful bool, payload *T) {
+func emitCustomResponse[T any](response http.ResponseWriter, wasSuccessful bool, payload *T) {
 	convertedPayload := types.GenericResponse{
 		WasSuccessful: wasSuccessful,
 		Result:        payload,

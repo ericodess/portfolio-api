@@ -2,7 +2,8 @@ FROM golang:1.18.2-buster
 
 WORKDIR /usr/src/app
 
-COPY go.mod go.sum ./
+COPY go.mod ./
+COPY go.sum ./
 
 RUN go mod download
 
