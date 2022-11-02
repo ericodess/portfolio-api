@@ -1,10 +1,10 @@
-version: "3.3"
+version: "3.8"
 
 services:
-    portfolio:
-        container_name: portfolio_api_portfolio
+    projects:
+        container_name: portfolio_web_api_projects
         build:
-            context: ./services/web/portfolio
+            context: ./services/web/projects
             dockerfile: Dockerfile
         ports:
             - "9001:9001"
@@ -12,7 +12,7 @@ services:
         restart: unless-stopped
 
     namah:
-        container_name: portfolio_api_namah
+        container_name: portfoli_web_api_namah
         build:
             context: ./services/web/namah
             dockerfile: Dockerfile
@@ -24,7 +24,7 @@ services:
         restart: unless-stopped
 
     gifter:
-        container_name: portfolio_api_gifter
+        container_name: portfolio_web_api_gifter
         build:
             context: ./services/web/gifter
             dockerfile: Dockerfile
@@ -36,7 +36,7 @@ services:
         restart: unless-stopped
 
     #dashboard:
-    #    container_name: portfolio_api_dashboard
+    #    container_name: portfolio_web_api_dashboard
     #    build:
     #        context: ./services/web/dashboard
     #        dockerfile: Dockerfile
@@ -48,7 +48,7 @@ services:
     #    restart: unless-stopped
 
     cors-anywhere:
-        container_name: portfolio_api_cors-anywhere
+        container_name: portfolio_web_api_cors-anywhere
         build:
            context: ./services/web/cors-anywhere
            dockerfile: Dockerfile

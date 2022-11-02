@@ -1,6 +1,6 @@
 module ericodesu.com/portfolio/api
 
-go 1.18
+go 1.193
 
 require github.com/gorilla/mux v1.8.0 // direct
 
@@ -16,4 +16,7 @@ require (
 	google.golang.org/protobuf v1.28.0 // indirect
 )
 
-require github.com/google/go-querystring v1.1.0 // indirect
+require (
+	github.com/google/go-querystring v1.1.0 // indirect
+	github.com/nbari/violetear v0.0.0-20210524103009-ce83b52538c9 // indirect
+)
