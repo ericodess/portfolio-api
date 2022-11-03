@@ -3,9 +3,11 @@
 		<app-button class="header__logo --flex --flex-row" [onClick]="logoOnClick">
 			<h3>ericodesu API</h3>
 		</app-button>
-		<app-button class="header__login --flex" [onClick]="loginOnClick">
-			<span>Login</span>
-		</app-button>
+		<a class="header__login --flex" href="/dashboard">
+			<app-button>
+				<span>Login</span>
+			</app-button>
+		</a>
 	</nav>
 </header>
 <main class="content --flex --flex-column --flex-horizontal-centralized">

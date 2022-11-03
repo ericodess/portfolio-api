@@ -232,18 +232,23 @@
 		}
 
 		&__logo {
-			width: 20vh;
-	
-			&:hover {
-				& h3 {
-					color: white;
-				}
-			}
-	
+			pointer-events: none;
+			width: 22vh;
+
 			& button {
 				& h3 {
+					color: white;
 					padding-bottom: 0.3vh;
 					font-size: 3vh;
+				}
+
+				& .app-button__background {
+					background-color: black;
+					transform: translateX(0);
+				}
+	
+				& .app-button__container {
+					background-color: #73A8A0;
 				}
 			}
 		}
@@ -251,7 +256,6 @@
 		&__login {
 			margin: 0 0 0 auto;
 			gap: 0;
-			width: 6vh;
 	
 			&:hover {
 				& span {
@@ -260,6 +264,9 @@
 			}
 	
 			& button {
+				gap: 0;
+				width: 6vh;
+
 				& span {
 					text-decoration: none;
 					font-size: 2vh;

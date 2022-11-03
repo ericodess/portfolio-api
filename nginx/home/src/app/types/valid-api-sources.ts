@@ -144,13 +144,13 @@ export default [
 				],
 			},
 			{
-				name: 'Projects',
+				name: 'Products',
 				method: 'GET',
-				path: 'projects',
+				path: 'products',
 				version: 1,
 				variants: [
 					{
-						name: 'Projects by Id',
+						name: 'Products by Id',
 						method: 'GET',
 						version: 1,
 						requestParams: {
@@ -160,7 +160,7 @@ export default [
 						},
 					},
 					{
-						name: 'Projects with limit',
+						name: 'Products with limit',
 						method: 'GET',
 						version: 1,
 						requestParams: {
