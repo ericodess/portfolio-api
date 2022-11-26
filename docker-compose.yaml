@@ -41,7 +41,7 @@ services:
             context: ./services/web/dashboard
             dockerfile: Dockerfile
         ports:
-            - "9005:9005"
+            - "9004:9004"
         network_mode: "host"
         volumes:
             - ./node_modules:/app/node_modules
@@ -53,7 +53,7 @@ services:
            context: ./services/web/cors-anywhere
            dockerfile: Dockerfile
         ports:
-            - "9006:9006"
+            - "9005:9005"
         network_mode: "host"
         volumes:
              - ./node_modules:/app/node_modules

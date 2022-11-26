@@ -8,10 +8,6 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
-
-ENV NODE_ENV production
-
-EXPOSE 9005
+EXPOSE 9004
 
 CMD ["npm", "start"]
