@@ -1,0 +1,35 @@
+{
+  "name": "portfolio-api",
+  "version": "1.0.0",
+  "description": "Blog app by Erick Frederick.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericodesu/portfolio-api.git"
+  },
+  "keywords": [
+    "blog",
+    "posts"
+  ],
+  "author": "Erick Frederick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericodesu/portfolio-api/issues"
+  },
+  "homepage": "https://github.com/ericodesu/portfolio-api#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv-safe": "^8.2.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.2.5",
+    "node-fetch": "^2.6.1",
+    "nodemon": "^2.0.6"
+  }
+}
