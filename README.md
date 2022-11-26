@@ -34,7 +34,7 @@ Now you are ready to use the project, just issue a `docker-compose up --build` a
 
 ## About the Project
 
-Firstly, this project was to only provide [namah](https://github.com/ericodesu/namah) project, but as i worked on it, i deciced to be the back-end source for all my portfolio related projects.
+Firstly, this project was to only provide [namah](https://github.com/ericodess/namah) project, but as i worked on it, i deciced to be the back-end source for all my portfolio related projects.
 
 ## Documentation
 
