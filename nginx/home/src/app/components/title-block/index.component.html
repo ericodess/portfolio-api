@@ -1,0 +1,20 @@
+<div
+	class="block__separator --flex --flex-column --flex-vertical-centralized"
+	[attr.is-hover-reactive]="isHoverReactive"
+	[attr.contains-title-borders]="hasTitleBorders"
+	[attr.contains-borders]="hasBorders"
+>
+	<div class="block__separator__title --flex --flex-column --flex-horizontal-centralized">
+		<div *ngIf="hasTitleBorders"></div>
+		<span
+			class="--noselect"
+			[ngStyle]="{backgroundColor: titleBackgroundColor}"
+			[attr.title-type]="titleType"
+		>
+			{{ title }}
+		</span>
+	</div>
+	<div class="block__separator__content">
+		<ng-content></ng-content>
+	</div>
+</div>

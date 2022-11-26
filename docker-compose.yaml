@@ -1,68 +1,60 @@
-version: "3.3"
+version: "3.8"
 
 services:
-    efrederick:
-        container_name: portfolio_api_efrederick
+    projects:
+        container_name: portfolio_web_api_projects
         build:
-            context: ./services/efrederick
+            context: ./services/web/projects
             dockerfile: Dockerfile
         ports:
-            - "9001:9001"           
-        volumes:
-            - ./services/efrederick/node_modules:/app/node_modules
-        restart: unless-stopped            
+            - "9001:9001"
+        network_mode: "host"
+        restart: unless-stopped
 
     namah:
-        container_name: portfolio_api_namah
+        container_name: portfoli_web_api_namah
         build:
-            context: ./services/namah
+            context: ./services/web/namah
             dockerfile: Dockerfile
         ports:
-            - "9002:9002"                     
+            - "9002:9002"   
+        network_mode: "host"           
         volumes:
-            - ./services/namah/node_modules:/app/node_modules
+            - /node_modules:/app/node_modules
         restart: unless-stopped
 
     gifter:
-        container_name: portfolio_api_gifter
+        container_name: portfolio_web_api_gifter
         build:
-            context: ./services/gifter
+            context: ./services/web/gifter
             dockerfile: Dockerfile
         ports:
-            - "9003:9003"                     
+            - "9003:9003"
+        network_mode: "host"
         volumes:
-            - ./services/gifter/node_modules:/app/node_modules
+            - ./node_modules:/app/node_modules
         restart: unless-stopped
 
-    universefy:
-        container_name: portfolio_api_universefy
+    dashboard:
+        container_name: portfolio_web_api_dashboard
         build:
-            context: ./services/universefy
+            context: ./services/web/dashboard
             dockerfile: Dockerfile
         ports:
-            - "9004:9004"                     
+            - "9004:9004"
+        network_mode: "host"
         volumes:
-            - ./services/universefy/node_modules:/app/node_modules
-        restart: unless-stopped
-
-    admin:
-        container_name: portfolio_api_admin
-        build:
-            context: ./services/admin
-            dockerfile: Dockerfile
-        ports:
-            - "9005:9005"                     
-        volumes:
-            - ./services/admin/node_modules:/app/node_modules
+            - ./node_modules:/app/node_modules
         restart: unless-stopped
 
     cors-anywhere:
-        container_name: portfolio_api_cors-anywhere
+        container_name: portfolio_web_api_cors-anywhere
         build:
-            context: ./services/cors-anywhere
-            dockerfile: Dockerfile
+           context: ./services/web/cors-anywhere
+           dockerfile: Dockerfile
         ports:
-            - "9006:9006"
+            - "9005:9005"
+        network_mode: "host"
         volumes:
-            - ./services/cors-anywhere/node_modules:/app/node_modules
+             - ./node_modules:/app/node_modules
         restart: unless-stopped

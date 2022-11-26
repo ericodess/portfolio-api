@@ -1,4 +1,4 @@
-[![portfolio-api](https://raw.githubusercontent.com/ericodesu/portfolio-api/master/.github/images/project-thumbnail.png)](https://api.efrederick.dev)
+[![portfolio-api](https://raw.githubusercontent.com/ericodesu/portfolio-api/master/.github/images/project-thumbnail.png)](https://api.ericodesu.com)
 
 # portfolio-api
 
@@ -34,8 +34,8 @@ Now you are ready to use the project, just issue a `docker-compose up --build` a
 
 ## About the Project
 
-Firstly, this project was to only provide [namah](https://github.com/ericodesu/namah) project, but as i worked on it, i deciced to be the back-end source for all my portfolio related projects.
+Firstly, this project was to only provide [namah](https://github.com/ericodess/namah) project, but as i worked on it, i deciced to be the back-end source for all my portfolio related projects.
 
 ## Documentation
 
-You can reach to the [Developer Portal](https://api.efrederick.dev) to a more hands-on driven info.
+You can reach to the [Developer Portal](https://api.ericodesu.com) to a more hands-on driven info.
