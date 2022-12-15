@@ -103,7 +103,7 @@ ${fetchTemplate}
 		}
 
 		if (this.activeEndpointSourceVariant) {
-			fetch(this.getUrl(this.activeEndpointSourceVariant, this.activeEndpointSource, false), {
+			fetch(this.getUrl(this.activeEndpointSourceVariant, this.activeEndpointSource), {
 				method: this.activeEndpointSourceVariant.method,
 				body: this.activeEndpointSourceVariant.requestParams?.body,
 				headers: this.activeEndpointSourceVariant.requestParams?.headers,
@@ -120,7 +120,7 @@ ${fetchTemplate}
 						JSON.stringify({ wasSuccess: false, error: error.message }, null, '   ');
 				});
 		} else {
-			fetch(this.getUrl(this.activeEndpointSource, undefined, false), {
+			fetch(this.getUrl(this.activeEndpointSource, undefined), {
 				method: this.activeEndpointSource.method,
 				body: this.activeEndpointSource.requestParams?.body,
 				headers: this.activeEndpointSource.requestParams?.headers,
@@ -159,14 +159,10 @@ ${fetchTemplate}
 		this.router.navigateTo('dashboard');
 	}
 
-	public getUrl(
-		target: EndpointSource,
-		parentTarget?: EndpointSource,
-		isDisplayOnly = true,
-	): URL {
+	public getUrl(target: EndpointSource, parentTarget?: EndpointSource): URL {
 		let url = new URL(
-			`${this.activeApiSource.isSecure && isDisplayOnly ? 'https' : 'http'}://${
-				isDisplayOnly ? this.activeApiSource.rootUrl : 'localhost'
+			`${this.activeApiSource.isSecure ? 'https' : 'http'}://${
+				this.activeApiSource.rootUrl
 			}/${this.activeApiSource.rootPath}/api/v${target.version}${
 				target.path ? `/${target.path}` : ''
 			}`,
@@ -174,8 +170,8 @@ ${fetchTemplate}
 
 		if (parentTarget) {
 			url = new URL(
-				`${this.activeApiSource.isSecure && isDisplayOnly ? 'https' : 'http'}://${
-					isDisplayOnly ? this.activeApiSource.rootUrl : 'localhost'
+				`${this.activeApiSource.isSecure ? 'https' : 'http'}://${
+					this.activeApiSource.rootUrl
 				}/${this.activeApiSource.rootPath}/api/v${target.version}${
 					parentTarget.path ? `/${parentTarget.path}` : ''
 				}${target.path ? `/${target.path}` : ''}`,
