@@ -76,7 +76,7 @@ func GetUserProjects(w http.ResponseWriter, rq *http.Request) {
 	for _, currentRepo := range repos {
 		baseProjectInfo := types.Project{
 			Name:    *currentRepo.Name,
-			RepoURL: *currentRepo.URL,
+			RepoURL: *currentRepo.HTMLURL,
 		}
 
 		if *currentRepo.HasPages {

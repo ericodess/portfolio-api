@@ -12,7 +12,7 @@ services:
         restart: unless-stopped
 
     namah:
-        container_name: portfoli_web_api_namah
+        container_name: portfolio_web_api_namah
         build:
             context: ./services/web/namah
             dockerfile: Dockerfile
