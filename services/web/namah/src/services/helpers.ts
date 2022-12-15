@@ -41,7 +41,9 @@ export const translateObjectKeys = <T>(targetObject: T): T => {
         ) {
             newObject = {
                 ...newObject,
-                [toCamelCase(key)]: translateObjectKeys(value),
+                [toCamelCase(key)]: Buffer.isBuffer(value)
+                    ? value.toString("base64")
+                    : translateObjectKeys(value),
             };
         } else {
             newObject = { ...newObject, [toCamelCase(key)]: value };

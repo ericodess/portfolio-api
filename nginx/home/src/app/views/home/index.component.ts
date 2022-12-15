@@ -129,7 +129,19 @@ ${fetchTemplate}
 					return response.json();
 				})
 				.then((data) => {
-					this.responseCode = '\n' + JSON.stringify(data, null, '   ');
+					this.responseCode =
+						'\n' +
+						JSON.stringify(
+							data,
+							(key, value) => {
+								if (key.toLocaleLowerCase().includes('image')) {
+									return value.substring(0, 25) + '...';
+								}
+
+								return value;
+							},
+							'   ',
+						);
 				})
 				.catch((error) => {
 					this.responseCode =

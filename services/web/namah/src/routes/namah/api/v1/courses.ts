@@ -17,6 +17,7 @@ const generateCourseList = (course: RawCourse[]): Course[] => {
             courseAuthor: element.course_author,
             courseTitle: element.course_title,
             courseDescription: element.course_description,
+            courseImage: element.course_image.toString("base64"),
             courseDate: {
                 startDate: new Date(element.course_start_date),
                 endDate: new Date(element.course_end_date),

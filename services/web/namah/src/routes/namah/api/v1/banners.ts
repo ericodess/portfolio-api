@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
         if (!error && connection) {
             await execQuery(connection, {
                 request: req.query,
-                items: "banner_id,banner_title,banner_description",
+                items: "banner_id,banner_title,banner_description,banner_image",
                 table: "banners",
             })
                 .then((result) => {
