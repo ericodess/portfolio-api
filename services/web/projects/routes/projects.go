@@ -79,7 +79,7 @@ func GetUserProjects(w http.ResponseWriter, rq *http.Request) {
 			RepoURL: *currentRepo.HTMLURL,
 		}
 
-		if *currentRepo.HasPages {
+		if *currentRepo.HasPages || len(currentRepo.GetHomepage()) > 0 {
 			baseTestableInfo := types.TestableProject{
 				Project: &baseProjectInfo,
 				TestURL: *currentRepo.Homepage,
