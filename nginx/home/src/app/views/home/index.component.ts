@@ -112,7 +112,8 @@ ${fetchTemplate}
 					return response.json();
 				})
 				.then((data) => {
-					this.responseCode = '\n' + JSON.stringify(data, null, '   ');
+					this.responseCode =
+						'\n' + JSON.stringify(data, this.truncateBase64Strings, '   ');
 				})
 				.catch((error) => {
 					this.responseCode =
@@ -130,18 +131,7 @@ ${fetchTemplate}
 				})
 				.then((data) => {
 					this.responseCode =
-						'\n' +
-						JSON.stringify(
-							data,
-							(key, value) => {
-								if (key.toLocaleLowerCase().includes('image')) {
-									return value.substring(0, 25) + '...';
-								}
-
-								return value;
-							},
-							'   ',
-						);
+						'\n' + JSON.stringify(data, this.truncateBase64Strings, '   ');
 				})
 				.catch((error) => {
 					this.responseCode =
@@ -237,5 +227,16 @@ ${fetchTemplate}
 		result += `
 `;
 		return result;
+	}
+
+	private truncateBase64Strings(key: string, value: any) {
+		if (
+			key.toLocaleLowerCase().includes('image') ||
+			key.toLocaleLowerCase().includes('markdown')
+		) {
+			return value.substring(0, 25) + '...';
+		}
+
+		return value;
 	}
 }
