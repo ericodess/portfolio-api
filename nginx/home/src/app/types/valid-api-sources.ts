@@ -3,7 +3,7 @@ import { ApiSource } from './api-source';
 // Environment Variables
 import { environment } from 'src/environments/environment';
 
-const rootUrl = 'api.ericodesu.com';
+const rootUrl = environment.rootUrl;
 const isSecure = environment.production;
 
 export default [
@@ -18,6 +18,20 @@ export default [
 				method: 'GET',
 				path: '',
 				version: 1,
+				variants: [
+					{
+						name: 'Regular',
+						method: 'GET',
+						path: 'regular',
+						version: 1,
+					},
+					{
+						name: 'Testable',
+						method: 'GET',
+						path: 'testable',
+						version: 1,
+					},
+				],
 			},
 		],
 	},

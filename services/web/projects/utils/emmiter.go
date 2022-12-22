@@ -43,6 +43,8 @@ func EmitUnsuccessfulResponse(response http.ResponseWriter, code int, descriptio
 }
 
 func setJsonResponse(response http.ResponseWriter) {
+	response.Header().Set("Access-Control-Allow-Origin", "*")
+
 	response.Header().Set("Content-Type", "application/json")
 
 	response.WriteHeader(http.StatusOK)

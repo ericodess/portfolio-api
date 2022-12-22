@@ -24,7 +24,11 @@ func init() {
 
 	mainRoute.Use(loggingMiddleware)
 
-	mainRoute.Path("").HandlerFunc(GetUserProjects).Methods("GET")
+	mainRoute.Path("").HandlerFunc(GetAllProjects).Methods("GET")
+
+	mainRoute.Path("/regular").HandlerFunc(GetRegularProjects).Methods("GET")
+
+	mainRoute.Path("/testable").HandlerFunc(GetTestableProjects).Methods("GET")
 }
 
 func GetRoutes() *mux.Router {

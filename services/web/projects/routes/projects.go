@@ -38,7 +38,7 @@ func getApiKey(w http.ResponseWriter) string {
 	return apiValue
 }
 
-func GetUserProjects(w http.ResponseWriter, rq *http.Request) {
+func GetAllProjects(w http.ResponseWriter, rq *http.Request) {
 	apiKey := getApiKey(w)
 
 	if len(apiKey) == 0 {
@@ -97,4 +97,105 @@ func GetUserProjects(w http.ResponseWriter, rq *http.Request) {
 	}
 
 	utils.EmitSucessfulResponse(w, &userPortfolio)
+}
+
+func GetRegularProjects(w http.ResponseWriter, rq *http.Request) {
+	apiKey := getApiKey(w)
+
+	if len(apiKey) == 0 {
+		utils.EmitUnsuccessfulResponse(w, 404, "Error, API key wasn't found")
+
+		return
+	}
+
+	ctx := context.Background()
+
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: apiKey},
+	)
+
+	tc := oauth2.NewClient(ctx, ts)
+
+	clientGhub := github.NewClient(tc)
+
+	repoListingOptions := github.RepositoryListOptions{
+		Visibility:  "public",
+		Affiliation: "owner",
+	}
+
+	repos, _, reposErr := clientGhub.Repositories.List(ctx, "", &repoListingOptions)
+
+	if reposErr != nil {
+		utils.EmitUnsuccessfulResponse(w, 500, "Error while trying to fetch the user repos")
+
+		return
+	}
+
+	regularProjects := []types.Project{}
+
+	for _, currentRepo := range repos {
+		baseProjectInfo := types.Project{
+			Name:    *currentRepo.Name,
+			RepoURL: *currentRepo.HTMLURL,
+		}
+
+		if *currentRepo.HasPages == false || len(currentRepo.GetHomepage()) == 0 {
+			regularProjects = append(regularProjects, baseProjectInfo)
+		}
+	}
+
+	utils.EmitSucessfulResponse(w, &regularProjects)
+}
+
+func GetTestableProjects(w http.ResponseWriter, rq *http.Request) {
+	apiKey := getApiKey(w)
+
+	if len(apiKey) == 0 {
+		utils.EmitUnsuccessfulResponse(w, 404, "Error, API key wasn't found")
+
+		return
+	}
+
+	ctx := context.Background()
+
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: apiKey},
+	)
+
+	tc := oauth2.NewClient(ctx, ts)
+
+	clientGhub := github.NewClient(tc)
+
+	repoListingOptions := github.RepositoryListOptions{
+		Visibility:  "public",
+		Affiliation: "owner",
+	}
+
+	repos, _, reposErr := clientGhub.Repositories.List(ctx, "", &repoListingOptions)
+
+	if reposErr != nil {
+		utils.EmitUnsuccessfulResponse(w, 500, "Error while trying to fetch the user repos")
+
+		return
+	}
+
+	testableProjects := []types.TestableProject{}
+
+	for _, currentRepo := range repos {
+		baseProjectInfo := types.Project{
+			Name:    *currentRepo.Name,
+			RepoURL: *currentRepo.HTMLURL,
+		}
+
+		if *currentRepo.HasPages || len(currentRepo.GetHomepage()) > 0 {
+			baseTestableInfo := types.TestableProject{
+				Project: &baseProjectInfo,
+				TestURL: *currentRepo.Homepage,
+			}
+
+			testableProjects = append(testableProjects, baseTestableInfo)
+		}
+	}
+
+	utils.EmitSucessfulResponse(w, &testableProjects)
 }
