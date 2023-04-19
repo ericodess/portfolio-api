@@ -15,9 +15,14 @@ namespace Projects.Controllers
         }
 
         [HttpGet("")]
-        public ProjectResponse GetAll()
+        public ResponseWrapper<ProjectResponse> GetAll()
         {
-            return new ProjectResponse();
+            ResponseWrapper<ProjectResponse> ProjectsResponse = new()
+            {
+                Result = new ProjectResponse()
+            };
+
+            return ProjectsResponse;
         }
     }
 }

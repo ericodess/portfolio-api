@@ -6,5 +6,9 @@ namespace Projects.Types.DTO
     {
         public List<Project> RegularProjects { get; set; } = new();
         public List<TestableProject> TeststableProjects { get; set; } = new();
+
+        public void ProcessGithubUser() {
+
+        }
     }
 }
