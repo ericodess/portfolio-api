@@ -25,7 +25,8 @@
       "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
-      }
+      },
+      "applicationUrl": "http://localhost:9001"
     }
   }
 }
