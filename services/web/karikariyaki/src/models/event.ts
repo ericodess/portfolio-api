@@ -1,7 +1,12 @@
 import { Schema, model } from "mongoose";
 
+// Services
+import { EventService } from "@services";
+
 const validateEventDate = async (date: Date) => {
-    const entry = await EventModel.findOne({ date });
+    const entry = await EventModel.findOne({
+        date: EventService.standarizeCurrentDate(date),
+    });
 
     if (entry) {
         throw Error("Event date is duplicated");
