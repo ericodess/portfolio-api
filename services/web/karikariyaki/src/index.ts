@@ -1,20 +1,21 @@
 require("module-alias/register");
 
 import express from "express";
-
-import { app, server } from "./setup";
-
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-// Setup
 dotenv.config();
+
+// Setup
+import { app, server } from "./setup";
 
 // Routes
 import routes from "@routes";
-import { AdminNamespace, ClientNamespace } from "./sockets";
+
+// Sockets
+import { AdminNamespace, ClientNamespace } from "@sockets";
 
 const allowedDomains = process.env.ORIGIN_ADDRESS
     ? process.env.ORIGIN_ADDRESS.split(" ")
