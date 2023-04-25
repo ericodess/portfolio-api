@@ -3,10 +3,16 @@ import { Schema, model } from "mongoose";
 // Types
 import { Statics } from "@types";
 
+// Services
+import { DatabaseService, StringService } from "@services";
+
 const validateOperatorOperatorName = async (name: string) => {
     if (
-        name.trim().length < Statics.USER_NAME_MIN_LENGTH ||
-        name.trim().length > Statics.USER_NAME_MAX_LENGTH
+        StringService.isStringInsideBoundaries(
+            name,
+            Statics.USER_NAME_MIN_LENGTH,
+            Statics.USER_NAME_MAX_LENGTH
+        )
     ) {
         if (name.trim().length < Statics.USER_NAME_MIN_LENGTH) {
             throw Error("Operator user name is shorter than 5 characters");
@@ -15,19 +21,24 @@ const validateOperatorOperatorName = async (name: string) => {
         throw Error("Operator user name is longer than 25 characters");
     }
 
-    const entry = await OperatorModel.findOne({ userName: name });
+    const entry = await OperatorModel.findOne({
+        userName: DatabaseService.generateCaseInsensivitySettings(name),
+    });
 
     if (entry) {
         throw Error("Operator user name is duplicated");
     }
 };
 
-const validateOperatorDisplayName = async (name: string) => {
+const validateOperatorDisplayName = async (displayName: string) => {
     if (
-        name.trim().length < Statics.DISPLAY_NAME_MIN_LENGTH ||
-        name.trim().length > Statics.DISPLAY_NAME_MAX_LENGTH
+        StringService.isStringInsideBoundaries(
+            displayName,
+            Statics.DISPLAY_NAME_MIN_LENGTH,
+            Statics.DISPLAY_NAME_MAX_LENGTH
+        )
     ) {
-        if (name.trim().length < Statics.DISPLAY_NAME_MIN_LENGTH) {
+        if (displayName.trim().length < Statics.DISPLAY_NAME_MIN_LENGTH) {
             throw Error("Operator display name is shorter than 5 characters");
         }
 
