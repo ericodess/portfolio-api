@@ -15,4 +15,11 @@ export class DatabaseService {
             maxPoolSize: Number(process.env.DATABASE_MAX_POOL_SIZE) ?? 15,
         });
     }
+
+    public static generateCaseInsensivitySettings(value: string) {
+        return {
+            $regex: `^${value.trim().toLowerCase()}$`,
+            $options: "i",
+        };
+    }
 }
