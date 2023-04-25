@@ -56,11 +56,9 @@ router.post("/sign-up", (req, res) => {
                         })
                     );
                 })
-                .catch(() => {
-                    res.status(500).json(
-                        ResponseService.generateFailedResponse(
-                            "Error whilst trying to create user"
-                        )
+                .catch((error) => {
+                    res.status(400).json(
+                        ResponseService.generateFailedResponse(error.message)
                     );
                 });
         })
@@ -111,11 +109,9 @@ router.post("/sign-in", (req, res) => {
                         })
                     );
                 })
-                .catch(() => {
-                    res.status(500).json(
-                        ResponseService.generateFailedResponse(
-                            "Error trying to fetch user data"
-                        )
+                .catch((error) => {
+                    res.status(400).json(
+                        ResponseService.generateFailedResponse(error.message)
                     );
                 });
         })
