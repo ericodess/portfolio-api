@@ -1,22 +1,30 @@
 import { Schema, model } from "mongoose";
 
+// Enums
+import { OrderStatus } from "@enum";
+
 const OrderSchema = new Schema({
     eventId: {
         type: String,
-        required: [true, "EventId is required"],
+        required: [true, "Event ID is required"],
     },
     orderId: {
         type: Number,
-        required: [true, "OrderId is required"],
+        required: [true, "Order ID is required"],
     },
     date: {
         type: Date,
-        required: [true, "Date is required"],
+        required: [true, "Order date is required"],
     },
-    isComplete: Boolean,
+    status: {
+        type: String,
+        enum: OrderStatus,
+        default: OrderStatus.COOKING,
+        required: [true, "Order status is required"],
+    },
     operatorId: {
         type: String,
-        required: [true, "OperatorId is required"],
+        required: [true, "Operator ID is required"],
     },
     clientName: {
         type: String,
