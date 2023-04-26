@@ -1,5 +1,8 @@
 import { Schema, model } from "mongoose";
 
+// Types
+import { Statics } from "@types";
+
 // Services
 import { EventService } from "@services";
 
@@ -25,6 +28,6 @@ const EventSchema = new Schema({
     },
 });
 
-const EventModel = model("events", EventSchema);
+const EventModel = model(Statics.EVENT_COLLECTION_NAME, EventSchema);
 
 export default EventModel;

@@ -1,5 +1,8 @@
 import { Schema, model } from "mongoose";
 
+// Types
+import { Statics } from "@types";
+
 // Enums
 import { OrderStatus } from "@enum";
 
@@ -33,6 +36,6 @@ const OrderSchema = new Schema({
     itemIds: [String],
 });
 
-const OrderModel = model("orders", OrderSchema);
+const OrderModel = model(Statics.ORDER_COLLECTION_NAME, OrderSchema);
 
 export default OrderModel;

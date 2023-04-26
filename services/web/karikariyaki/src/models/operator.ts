@@ -63,6 +63,6 @@ const OperatorSchema = new Schema(
     }
 );
 
-const OperatorModel = model("operators", OperatorSchema);
+const OperatorModel = model(Statics.OPERATOR_COLLECTION_NAME, OperatorSchema);
 
 export default OperatorModel;

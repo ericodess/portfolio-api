@@ -60,12 +60,17 @@ const ProductSchema = new Schema({
         validate: validateProductName,
     },
     variants: {
-        type: [{ type: Schema.Types.ObjectId, ref: "variants" }],
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: Statics.VARIANT_COLLECTION_NAME,
+            },
+        ],
         default: [],
         validate: validateProductVariants,
     },
 });
 
-const ProductModel = model("products", ProductSchema);
+const ProductModel = model(Statics.PRODUCT_COLLECTION_NAME, ProductSchema);
 
 export default ProductModel;

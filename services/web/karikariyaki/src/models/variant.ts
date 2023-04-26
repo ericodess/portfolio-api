@@ -62,12 +62,12 @@ const VariantSchema = new Schema({
     },
     product: {
         type: Schema.Types.ObjectId,
-        ref: "products",
+        ref: Statics.PRODUCT_COLLECTION_NAME,
         required: [true, "Variant product is required"],
         validate: validateVariantProduct,
     },
 });
 
-const VariantModel = model("variants", VariantSchema);
+const VariantModel = model(Statics.VARIANT_COLLECTION_NAME, VariantSchema);
 
 export default VariantModel;
