@@ -15,6 +15,14 @@ export class StringService {
         return trimmedValue.length > minSize && trimmedValue.length < maxSize;
     }
 
+    public static toBoolean(value: string) {
+        return value.trim() === "true"
+            ? true
+            : value.trim() === "false"
+            ? false
+            : null;
+    }
+
     public static toCamelCase(value: string) {
         const map = {
             a: "á|à|ã|â|À|Á|Ã|Â",
@@ -45,6 +53,14 @@ export class StringService {
         return new Types.ObjectId(value);
     }
 
+    public static toString(value: Types.ObjectId) {
+        if (!value) {
+            return null;
+        }
+
+        return value.toString();
+    }
+
     public static toObjectIds(values: string[]) {
         if (!values) {
             return null;
@@ -54,6 +70,20 @@ export class StringService {
 
         values.forEach((currentValue) => {
             convertedValues.push(new Types.ObjectId(currentValue));
+        });
+
+        return convertedValues;
+    }
+
+    public static toStrings(values: Types.ObjectId[]) {
+        if (!values) {
+            return null;
+        }
+
+        const convertedValues: string[] = [];
+
+        values.forEach((currentValue) => {
+            convertedValues.push(currentValue.toString());
         });
 
         return convertedValues;

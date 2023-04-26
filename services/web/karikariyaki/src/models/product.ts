@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 // Types
 import { Statics } from "@types";
@@ -37,24 +37,17 @@ const validateProductName = async (name: string) => {
     }
 };
 
-const validateProductVariants = async (variantIds: Schema.Types.ObjectId[]) => {
+const validateProductVariants = async (variantIds: Types.ObjectId[]) => {
     for (const variantId of variantIds) {
-        const convertedVariantId = variantId.toString().trim();
-        const foundVariant = await VariantModel.findById(convertedVariantId);
+        const foundVariant = await VariantModel.findById(
+            StringService.toString(variantId)
+        );
 
         if (!foundVariant) {
             throw Error("Product variant ID is invalid");
         }
 
-        const foundVariantIds = [
-            variantIds.find(
-                (_) =>
-                    _.toString().trim().toLowerCase().replace(" ", "") ===
-                    convertedVariantId.toLowerCase().replace(" ", "")
-            ),
-        ];
-
-        if (foundVariantIds.length >= 1) {
+        if (variantIds.filter((_) => _ !== variantId).length >= 1) {
             throw Error("Product variant is duplicated");
         }
     }
@@ -67,7 +60,7 @@ const ProductSchema = new Schema({
         validate: validateProductName,
     },
     variants: {
-        type: [{ type: Schema.Types.ObjectId, ref: VariantModel }],
+        type: [{ type: Schema.Types.ObjectId, ref: "variants" }],
         default: [],
         validate: validateProductVariants,
     },
