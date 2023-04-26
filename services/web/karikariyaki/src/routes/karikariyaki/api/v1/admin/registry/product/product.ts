@@ -63,6 +63,7 @@ router.patch("/:id", (req, res) => {
     const id = req.params.id;
     const name = req.body.name;
     const variantIds = req.body.variantIds;
+    const willAppendVariantIds = req.query.willAppendVariantIds;
 
     if (!id) {
         res.status(400).json(
@@ -72,7 +73,13 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    ProductService.update(id, { name: name, variants: variantIds })
+    ProductService.update(
+        id,
+        { name: name, variants: variantIds },
+        RequestService.isValidQueryParam(willAppendVariantIds)
+            ? StringService.toBoolean(willAppendVariantIds as string)
+            : null
+    )
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)

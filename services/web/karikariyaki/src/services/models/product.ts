@@ -77,10 +77,22 @@ export class ProductService {
         return newEntry.save();
     }
 
-    public static async update(id: string, values: EditableParams) {
+    public static async update(
+        id: string,
+        values: EditableParams,
+        willAppendVariantIds = false
+    ) {
         await DatabaseService.getConnection();
 
         values.name = values.name?.trim();
+
+        if (values.variants && willAppendVariantIds) {
+            const productToBeUpdated = await ProductModel.findById(id);
+
+            values.variants = productToBeUpdated.variants.concat(
+                values.variants
+            );
+        }
 
         return ProductModel.findByIdAndUpdate(
             id.trim(),
