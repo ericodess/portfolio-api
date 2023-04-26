@@ -6,10 +6,10 @@ export class Statics {
     public static DISPLAY_NAME_MAX_LENGTH = 25;
 
     public static PRODUCT_NAME_MIN_LENGTH = 1;
-    public static PRODUCT_NAME_MAX_LENGTH = 25;
+    public static PRODUCT_NAME_MAX_LENGTH = 50;
 
     public static VARIANT_NAME_MIN_LENGTH = 1;
-    public static VARIANT_NAME_MAX_LENGTH = 25;
+    public static VARIANT_NAME_MAX_LENGTH = 50;
 
     public static EVENT_COLLECTION_NAME = "events";
     public static OPERATOR_COLLECTION_NAME = "operators";
