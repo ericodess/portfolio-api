@@ -12,17 +12,21 @@ const validateOperatorOperatorName = async (name: string) => {
             name,
             Statics.USER_NAME_MIN_LENGTH,
             Statics.USER_NAME_MAX_LENGTH
-        )
+        ) === false
     ) {
         if (name.trim().length < Statics.USER_NAME_MIN_LENGTH) {
-            throw Error("Operator user name is shorter than 5 characters");
+            throw Error(
+                `Operator user name is shorter than ${Statics.USER_NAME_MIN_LENGTH} characters`
+            );
         }
 
-        throw Error("Operator user name is longer than 25 characters");
+        throw Error(
+            `Operator user name is longer than ${Statics.USER_NAME_MAX_LENGTH} characters`
+        );
     }
 
     const entry = await OperatorModel.findOne({
-        userName: DatabaseService.generateCaseInsensivitySettings(name),
+        userName: DatabaseService.generateBroadQuery(name),
     });
 
     if (entry) {
@@ -51,10 +55,12 @@ const OperatorSchema = new Schema(
         userName: {
             type: String,
             validate: validateOperatorOperatorName,
+            required: [true, "User name is required"],
         },
         displayName: {
             type: String,
             validate: validateOperatorDisplayName,
+            required: [true, "Display name is required"],
         },
         photo: Buffer,
     },

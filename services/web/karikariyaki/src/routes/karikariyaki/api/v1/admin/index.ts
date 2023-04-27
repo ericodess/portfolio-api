@@ -1,11 +1,11 @@
 import { Router } from "express";
 
 import registryRouter from "./registry";
-import userRouter from "./user";
+import operatorRouter from "./operator";
 
 const router = Router();
 
 router.use("/registry", registryRouter);
-router.use("/user", userRouter);
+router.use("/operator", operatorRouter);
 
 export default router;
