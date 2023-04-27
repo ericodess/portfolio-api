@@ -1,4 +1,5 @@
 export { DatabaseService } from "./database";
+export { DateService } from "./date";
 export { HashService } from "./hash";
 export { JWTService } from "./jwt";
 export { ResponseService } from "./response";
@@ -8,4 +9,5 @@ export { StringService } from "./string";
 // Models
 export { EventService } from "./models/event";
 export { ProductService } from "./models/product";
+export { OrderService } from "./models/order";
 export { VariantService } from "./models/variant";
