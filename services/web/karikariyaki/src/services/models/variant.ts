@@ -1,10 +1,10 @@
-import { Types } from "mongoose";
+import { PopulateOptions, Types } from "mongoose";
 
 // Models
 import { VariantModel } from "@models";
 
 // Services
-import { DatabaseService } from "@services";
+import { DatabaseService, RequestService } from "@services";
 
 interface Params {
     id?: string;
@@ -12,15 +12,15 @@ interface Params {
     product?: string;
 }
 
-interface EditableParams extends Omit<Params, "id"> {}
+type EditableParams = Omit<Params, "id">;
 
 export class VariantService {
     public static visibleParameters = ["name", "product"];
 
     private static _populateOptions = {
-        paths: "product",
-        map: "name",
-    };
+        path: "product",
+        select: "name",
+    } as PopulateOptions;
 
     public static async queryAll() {
         await DatabaseService.getConnection();
@@ -36,17 +36,12 @@ export class VariantService {
         if (values.id) {
             return VariantModel.findById(values.id.trim())
                 .select(VariantService.visibleParameters)
-                .populate(
-                    VariantService._populateOptions.paths,
-                    VariantService._populateOptions.map
-                );
+                .populate(VariantService._populateOptions);
         }
 
         if (values.name) {
             query.push({
-                name: DatabaseService.generateCaseInsensivitySettings(
-                    values.name
-                ),
+                name: DatabaseService.generateBroadQuery(values.name),
             });
         }
 
@@ -56,10 +51,7 @@ export class VariantService {
 
         return VariantModel.find(query.length === 0 ? null : { $or: query })
             .select(VariantService.visibleParameters)
-            .populate(
-                VariantService._populateOptions.paths,
-                VariantService._populateOptions.map
-            );
+            .populate(VariantService._populateOptions);
     }
 
     public static async save(values: EditableParams) {
@@ -83,18 +75,13 @@ export class VariantService {
             id.trim(),
             { $set: values },
             { new: true, runValidators: true }
-        ).populate(
-            VariantService._populateOptions.paths,
-            VariantService._populateOptions.map
-        );
+        ).populate(VariantService._populateOptions);
     }
 
+    //TODO Fix backwards deletion => Deletion of the entry at ref entry
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        return VariantModel.findByIdAndDelete(id.trim()).populate(
-            VariantService._populateOptions.paths,
-            VariantService._populateOptions.map
-        );
+        return VariantModel.findByIdAndDelete(id.trim());
     }
 }

@@ -1,10 +1,10 @@
-import { Types } from "mongoose";
+import { PopulateOptions, Types } from "mongoose";
 
 // Models
 import { ProductModel } from "@models";
 
 // Services
-import { DatabaseService } from "@services";
+import { DatabaseService, RequestService } from "@services";
 
 interface Params {
     id?: string;
@@ -12,15 +12,15 @@ interface Params {
     variants?: Types.ObjectId[];
 }
 
-interface EditableParams extends Omit<Params, "id"> {}
+type EditableParams = Omit<Params, "id">;
 
 export class ProductService {
     public static visibleParameters = ["name", "variants"];
 
     private static _populateOptions = {
-        paths: "variants",
-        map: "name",
-    };
+        path: "variants",
+        select: "name",
+    } as PopulateOptions;
 
     public static async queryAll() {
         await DatabaseService.getConnection();
@@ -38,17 +38,12 @@ export class ProductService {
                 await ProductModel.findById(values.id.trim()).select(
                     ProductService.visibleParameters
                 )
-            ).populate(
-                ProductService._populateOptions.paths,
-                ProductService._populateOptions.map
-            );
+            ).populate(ProductService._populateOptions);
         }
 
         if (values.name) {
             query.push({
-                name: DatabaseService.generateCaseInsensivitySettings(
-                    values.name
-                ),
+                name: DatabaseService.generateBroadQuery(values.name),
             });
         }
 
@@ -60,10 +55,7 @@ export class ProductService {
             query.length === 0 ? null : { $or: query }
         )
             .select(ProductService.visibleParameters)
-            .populate(
-                ProductService._populateOptions.paths,
-                ProductService._populateOptions.map
-            );
+            .populate(ProductService._populateOptions);
     }
 
     public static async save(values: EditableParams) {
@@ -100,18 +92,13 @@ export class ProductService {
             { new: true, runValidators: true }
         )
             .select(ProductService.visibleParameters)
-            .populate(
-                ProductService._populateOptions.paths,
-                ProductService._populateOptions.map
-            );
+            .populate(ProductService._populateOptions);
     }
 
+    //TODO Fix backwards deletion => Deletion of the entry at ref entry
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        return ProductModel.findByIdAndDelete(id.trim()).populate(
-            ProductService._populateOptions.paths,
-            ProductService._populateOptions.map
-        );
+        return ProductModel.findByIdAndDelete(id.trim());
     }
 }
