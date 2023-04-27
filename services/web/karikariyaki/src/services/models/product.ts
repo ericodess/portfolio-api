@@ -58,6 +58,7 @@ export class ProductService {
             .populate(ProductService._populateOptions);
     }
 
+    //TODO Fix backwards saving => Saving of the entry at ref entry
     public static async save(values: EditableParams) {
         await DatabaseService.getConnection();
 
@@ -69,6 +70,7 @@ export class ProductService {
         return newEntry.save();
     }
 
+    //TODO Fix backwards update => Update of the entry at ref entry
     public static async update(
         id: string,
         values: EditableParams,

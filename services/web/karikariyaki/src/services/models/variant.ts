@@ -54,6 +54,7 @@ export class VariantService {
             .populate(VariantService._populateOptions);
     }
 
+    //TODO Fix backwards saving => Saving of the entry at ref entry
     public static async save(values: EditableParams) {
         await DatabaseService.getConnection();
 
@@ -65,6 +66,7 @@ export class VariantService {
         return newProductVariant.save();
     }
 
+    //TODO Fix backwards update => Update of the entry at ref entry
     public static async update(id: string, values: EditableParams) {
         await DatabaseService.getConnection();
 
