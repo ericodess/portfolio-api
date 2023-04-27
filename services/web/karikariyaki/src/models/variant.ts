@@ -29,14 +29,12 @@ const validateVariantName = async (name: string) => {
     }
 
     const foundNameDuplicates = await VariantModel.find({
-        name: DatabaseService.generateCaseInsensivitySettings(name),
+        name: DatabaseService.generateBroadQuery(name),
     });
 
     for (const foundNameDuplicate of foundNameDuplicates) {
         const foundIdDuplicates = await VariantModel.find({
-            name: DatabaseService.generateCaseInsensivitySettings(
-                foundNameDuplicate.name
-            ),
+            name: DatabaseService.generateBroadQuery(foundNameDuplicate.name),
             product: foundNameDuplicate.product,
         });
 

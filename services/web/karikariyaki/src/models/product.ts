@@ -29,7 +29,7 @@ const validateProductName = async (name: string) => {
     }
 
     const entry = await ProductModel.findOne({
-        name: DatabaseService.generateCaseInsensivitySettings(name),
+        name: DatabaseService.generateBroadQuery(name),
     });
 
     if (entry) {
@@ -39,9 +39,7 @@ const validateProductName = async (name: string) => {
 
 const validateProductVariants = async (variantIds: Types.ObjectId[]) => {
     for (const variantId of variantIds) {
-        const foundVariant = await VariantModel.findById(
-            StringService.toString(variantId)
-        );
+        const foundVariant = await VariantModel.findById(variantId);
 
         if (!foundVariant) {
             throw Error("Product variant ID is invalid");
