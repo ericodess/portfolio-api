@@ -1,10 +1,10 @@
 import { PopulateOptions, Types } from "mongoose";
 
 // Models
-import { ProductModel } from "@models";
+import { ProductModel, VariantModel } from "@models";
 
 // Services
-import { DatabaseService, RequestService } from "@services";
+import { DatabaseService } from "@services";
 
 interface Params {
     id?: string;
@@ -12,7 +12,7 @@ interface Params {
     variants?: Types.ObjectId[];
 }
 
-type EditableParams = Omit<Params, "id">;
+type EditableParams = Omit<Params, "id" | "variants">;
 
 export class ProductService {
     public static visibleParameters = ["name", "variants"];
@@ -58,35 +58,20 @@ export class ProductService {
             .populate(ProductService._populateOptions);
     }
 
-    //TODO Fix backwards saving => Saving of the entry at ref entry
     public static async save(values: EditableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new ProductModel();
 
         newEntry.name = values.name.trim();
-        newEntry.variants = values.variants;
 
         return newEntry.save();
     }
 
-    //TODO Fix backwards update => Update of the entry at ref entry
-    public static async update(
-        id: string,
-        values: EditableParams,
-        willAppendVariantIds = false
-    ) {
+    public static async update(id: string, values: EditableParams) {
         await DatabaseService.getConnection();
 
         values.name = values.name?.trim();
-
-        if (values.variants && willAppendVariantIds) {
-            const productToBeUpdated = await ProductModel.findById(id);
-
-            values.variants = productToBeUpdated.variants.concat(
-                values.variants
-            );
-        }
 
         return ProductModel.findByIdAndUpdate(
             id.trim(),
@@ -97,10 +82,19 @@ export class ProductService {
             .populate(ProductService._populateOptions);
     }
 
-    //TODO Fix backwards deletion => Deletion of the entry at ref entry
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        return ProductModel.findByIdAndDelete(id.trim());
+        const productId = new Types.ObjectId(id);
+
+        const foundVariants = await VariantModel.find({
+            product: productId,
+        });
+
+        for (const foundVariant of foundVariants) {
+            await VariantModel.findByIdAndDelete(foundVariant._id);
+        }
+
+        return ProductModel.findByIdAndDelete(productId);
     }
 }

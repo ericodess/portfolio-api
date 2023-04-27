@@ -1,12 +1,7 @@
 import { Router } from "express";
 
 // Services
-import {
-    RequestService,
-    ResponseService,
-    ProductService,
-    StringService,
-} from "@services";
+import { RequestService, ResponseService, ProductService } from "@services";
 
 const router = Router();
 
@@ -31,7 +26,6 @@ router.get("/", (req, res) => {
 //TODO Implement JWT middleware
 router.post("/", (req, res) => {
     const name = req.body.name;
-    const variantIds = req.body.variantIds;
 
     if (!name) {
         res.status(400).json(
@@ -43,9 +37,6 @@ router.post("/", (req, res) => {
 
     ProductService.save({
         name: name,
-        variants: variantIds
-            ? StringService.toObjectIds(variantIds as string[]) ?? []
-            : [],
     })
         .then(() => {
             res.status(200).json(ResponseService.generateSucessfulResponse());
@@ -61,8 +52,6 @@ router.post("/", (req, res) => {
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
     const name = req.body.name;
-    const variantIds = req.body.variantIds;
-    const willAppendVariantIds = req.query.willAppendVariantIds;
 
     if (!id) {
         res.status(400).json(
@@ -72,11 +61,7 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    ProductService.update(
-        id,
-        { name: name, variants: variantIds },
-        RequestService.queryParamToBoolean(willAppendVariantIds)
-    )
+    ProductService.update(id, { name: name })
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)
