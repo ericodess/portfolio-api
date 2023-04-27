@@ -3,21 +3,18 @@ import { Router } from "express";
 // Services
 import { OrderService, RequestService, ResponseService } from "@services";
 
-// Enum
-import { OrderStatus } from "@enum";
-
 const router = Router();
 
 //TODO Implement JWT middleware
 router.get("/", (req, res) => {
     OrderService.query({
         id: RequestService.queryParamToString(req.query.id),
-        event: RequestService.queryParamToString(req.query.event),
+        event: RequestService.queryParamToString(req.query.eventId),
         status: RequestService.queryParamToString(req.query.status),
-        operator: RequestService.queryParamToString(req.query.operator),
-        client: RequestService.queryParamToString(req.query.client),
-        item: RequestService.queryParamToString(req.query.item),
-        variant: RequestService.queryParamToString(req.query.variant),
+        operator: RequestService.queryParamToString(req.query.operatorId),
+        client: RequestService.queryParamToString(req.query.clientName),
+        item: RequestService.queryParamToString(req.query.itemId),
+        variant: RequestService.queryParamToString(req.query.variantId),
     })
         .then((response) => {
             res.status(200).json(
@@ -33,14 +30,14 @@ router.get("/", (req, res) => {
 
 //TODO Implement JWT middleware
 router.post("/", (req, res) => {
-    const event = req.body.event;
-    const operator = req.body.operator;
-    const client = req.body.client;
-    const item = req.body.item;
+    const event = req.body.eventId;
+    const operator = req.body.operatorId;
+    const client = req.body.clientName;
+    const item = req.body.itemId;
 
     // Non obligatory params
     const status = req.body.status;
-    const variant = req.body.variant;
+    const variant = req.body.variantId;
 
     if (!event || !operator || !client || !item) {
         res.status(400).json(
@@ -72,8 +69,6 @@ router.post("/", (req, res) => {
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
     const status = req.body.status;
-    const item = req.body.item;
-    const variant = req.body.variant;
 
     if (!id) {
         res.status(400).json(
@@ -85,8 +80,6 @@ router.patch("/:id", (req, res) => {
 
     OrderService.update(id, {
         status: RequestService.queryParamToString(status),
-        item: RequestService.queryParamToString(item),
-        variant: RequestService.queryParamToString(variant),
     })
         .then((response) => {
             res.status(200).json(

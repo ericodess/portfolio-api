@@ -1,7 +1,7 @@
 import { PopulateOptions, Types } from "mongoose";
 
 // Models
-import { OrderModel } from "@models";
+import { EventModel, OrderModel } from "@models";
 
 // Services
 import { DatabaseService, RequestService, StringService } from "@services";
@@ -19,12 +19,16 @@ interface Params {
     variant?: string;
 }
 
-type EditableParams = Omit<Params, "id">;
+type EditableParams = Pick<Params, "status">;
 
 export class OrderService {
     public static visibleParameters = ["status", "client"];
 
     private static _populateOptions = [
+        {
+            path: "event",
+            select: "name date",
+        },
         {
             path: "operator",
             select: "displayName",
@@ -87,8 +91,7 @@ export class OrderService {
             .populate(OrderService._populateOptions);
     }
 
-    //TODO Fix backwards saving => Saving of the entry at ref entry
-    public static async save(values: EditableParams) {
+    public static async save(values: Params) {
         await DatabaseService.getConnection();
 
         const newEntry = new OrderModel();
@@ -100,15 +103,24 @@ export class OrderService {
         newEntry.item = StringService.toObjectId(values.item);
         newEntry.variant = StringService.toObjectId(values.variant);
 
+        await EventModel.findByIdAndUpdate(
+            newEntry.event,
+            {
+                $push: {
+                    orders: newEntry._id,
+                },
+            },
+            { runValidators: true }
+        );
+
         return newEntry.save();
     }
 
-    //TODO Fix backwards update => Update of the entry at ref entry
     public static async update(id: string, values: EditableParams) {
         await DatabaseService.getConnection();
 
         return OrderModel.findByIdAndUpdate(
-            id.trim(),
+            StringService.toObjectId(id),
             { $set: values },
             { new: true, runValidators: true }
         )
@@ -116,10 +128,22 @@ export class OrderService {
             .populate(OrderService._populateOptions);
     }
 
-    //TODO Fix backwards deletion => Deletion of the entry at ref entry
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        return OrderModel.findByIdAndDelete(id.trim());
+        const orderId = StringService.toObjectId(id);
+
+        await EventModel.findOneAndUpdate(
+            {
+                orders: orderId,
+            },
+            {
+                $pull: {
+                    orders: orderId,
+                },
+            }
+        );
+
+        return OrderModel.findByIdAndDelete(orderId);
     }
 }
