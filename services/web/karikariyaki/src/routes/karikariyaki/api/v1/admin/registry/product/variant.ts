@@ -52,7 +52,6 @@ router.post("/", (req, res) => {
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
     const name = req.body.name;
-    const productId = req.body.productId;
 
     if (!id) {
         res.status(400).json(
@@ -62,7 +61,7 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    VariantService.update(id, { name: name, product: productId })
+    VariantService.update(id, { name: name })
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)

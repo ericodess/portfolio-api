@@ -1,10 +1,10 @@
-import { PopulateOptions, Types } from "mongoose";
+import { PopulateOptions } from "mongoose";
 
 // Models
-import { VariantModel } from "@models";
+import { ProductModel, VariantModel } from "@models";
 
 // Services
-import { DatabaseService, RequestService } from "@services";
+import { DatabaseService, StringService } from "@services";
 
 interface Params {
     id?: string;
@@ -34,7 +34,7 @@ export class VariantService {
         await DatabaseService.getConnection();
 
         if (values.id) {
-            return VariantModel.findById(values.id.trim())
+            return VariantModel.findById(StringService.toObjectId(values.id))
                 .select(VariantService.visibleParameters)
                 .populate(VariantService._populateOptions);
         }
@@ -46,7 +46,7 @@ export class VariantService {
         }
 
         if (values.product) {
-            query.push({ product: values.product.trim() });
+            query.push({ product: StringService.toObjectId(values.product) });
         }
 
         return VariantModel.find(query.length === 0 ? null : { $or: query })
@@ -54,36 +54,57 @@ export class VariantService {
             .populate(VariantService._populateOptions);
     }
 
-    //TODO Fix backwards saving => Saving of the entry at ref entry
     public static async save(values: EditableParams) {
         await DatabaseService.getConnection();
 
         const newProductVariant = new VariantModel();
 
         newProductVariant.name = values.name.trim();
-        newProductVariant.product = new Types.ObjectId(values.product.trim());
+        newProductVariant.product = StringService.toObjectId(values.product);
+
+        await ProductModel.findByIdAndUpdate(
+            newProductVariant.product,
+            {
+                $push: {
+                    variants: newProductVariant._id,
+                },
+            },
+            { runValidators: true }
+        );
 
         return newProductVariant.save();
     }
 
-    //TODO Fix backwards update => Update of the entry at ref entry
     public static async update(id: string, values: EditableParams) {
         await DatabaseService.getConnection();
 
-        values.name = values.name?.trim();
-        values.product = values.product?.trim();
-
         return VariantModel.findByIdAndUpdate(
-            id.trim(),
-            { $set: values },
+            StringService.toObjectId(id),
+            {
+                $set: {
+                    name: values.name?.trim(),
+                },
+            },
             { new: true, runValidators: true }
         ).populate(VariantService._populateOptions);
     }
 
-    //TODO Fix backwards deletion => Deletion of the entry at ref entry
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        return VariantModel.findByIdAndDelete(id.trim());
+        const variantObjectId = StringService.toObjectId(id);
+
+        await ProductModel.findOneAndUpdate(
+            {
+                variants: variantObjectId,
+            },
+            {
+                $pull: {
+                    variants: variantObjectId,
+                },
+            }
+        );
+
+        return VariantModel.findByIdAndDelete(variantObjectId);
     }
 }
