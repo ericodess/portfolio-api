@@ -12,12 +12,8 @@ const router = Router();
 
 router.get("/", (req, res) => {
     ProductService.query({
-        id: RequestService.isValidQueryParam(req.query.id)
-            ? (req.query.id as string)?.trim()
-            : null,
-        name: RequestService.isValidQueryParam(req.query.name)
-            ? (req.query.name as string)?.trim()
-            : null,
+        id: RequestService.queryParamToString(req.query.id),
+        name: RequestService.queryParamToString(req.query.name),
     })
         .then((response) => {
             res.status(200).json(
@@ -76,9 +72,7 @@ router.patch("/:id", (req, res) => {
     ProductService.update(
         id,
         { name: name, variants: variantIds },
-        RequestService.isValidQueryParam(willAppendVariantIds)
-            ? StringService.toBoolean(willAppendVariantIds as string)
-            : null
+        RequestService.queryParamToBoolean(willAppendVariantIds)
     )
         .then((response) => {
             res.status(200).json(

@@ -7,15 +7,9 @@ const router = Router();
 
 router.get("/", (req, res) => {
     VariantService.query({
-        id: RequestService.isValidQueryParam(req.query.id)
-            ? (req.query.id as string)?.trim()
-            : null,
-        name: RequestService.isValidQueryParam(req.query.name)
-            ? (req.query.name as string)?.trim()
-            : null,
-        product: RequestService.isValidQueryParam(req.query.productId)
-            ? (req.query.productId as string)?.trim()
-            : null,
+        id: RequestService.queryParamToString(req.query.id),
+        name: RequestService.queryParamToString(req.query.name),
+        product: RequestService.queryParamToString(req.query.productId),
     })
         .then((response) => {
             res.status(200).json(
