@@ -8,8 +8,7 @@ import { OrderStatus } from "@enum";
 
 const router = Router();
 
-//TODO Implement operator fetching with JWT
-
+//TODO Implement JWT middleware
 router.get("/", (req, res) => {
     OrderService.query({
         id: RequestService.queryParamToString(req.query.id),
@@ -32,13 +31,14 @@ router.get("/", (req, res) => {
         });
 });
 
+//TODO Implement JWT middleware
 router.post("/", (req, res) => {
     const event = req.body.event;
     const operator = req.body.operator;
     const client = req.body.client;
     const item = req.body.item;
 
-    // Non obrigatory params
+    // Non obligatory params
     const status = req.body.status;
     const variant = req.body.variant;
 
@@ -68,6 +68,7 @@ router.post("/", (req, res) => {
         });
 });
 
+//TODO Implement JWT middleware
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
     const status = req.body.status;
@@ -99,6 +100,7 @@ router.patch("/:id", (req, res) => {
         });
 });
 
+//TODO Implement JWT middleware
 router.delete("/:id", (req, res) => {
     const id = req.params.id;
 

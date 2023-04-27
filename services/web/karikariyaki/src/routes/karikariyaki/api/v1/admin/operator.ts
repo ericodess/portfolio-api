@@ -11,6 +11,8 @@ import { ResponseService, JWTService, DatabaseService } from "@services";
 
 const router = Router();
 
+//TODO Implement OperatorService
+
 router.post("/sign-up", (req, res) => {
     const userName: string = req.body.userName;
     const displayName: string = req.body.displayName;
