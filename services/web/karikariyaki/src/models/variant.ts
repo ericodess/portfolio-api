@@ -7,7 +7,7 @@ import { Statics } from "@types";
 import { ProductModel } from "@models";
 
 // Services
-import { DatabaseService, StringService } from "@services";
+import { StringService } from "@services";
 
 const validateVariantName = async (name: string) => {
     if (
@@ -26,21 +26,6 @@ const validateVariantName = async (name: string) => {
         throw Error(
             `Variant name is longer than ${Statics.VARIANT_NAME_MAX_LENGTH} characters`
         );
-    }
-
-    const foundNameDuplicates = await VariantModel.find({
-        name: DatabaseService.generateBroadQuery(name),
-    });
-
-    for (const foundNameDuplicate of foundNameDuplicates) {
-        const foundIdDuplicates = await VariantModel.find({
-            name: DatabaseService.generateBroadQuery(foundNameDuplicate.name),
-            product: foundNameDuplicate.product,
-        });
-
-        if (foundIdDuplicates.length >= 1) {
-            throw Error("Variant is a duplicate");
-        }
     }
 };
 
