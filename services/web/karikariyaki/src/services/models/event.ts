@@ -1,10 +1,16 @@
 import { PopulateOptions, Types } from "mongoose";
 
 // Models
-import { EventModel } from "@models";
+import { EventModel, OrderModel } from "@models";
 
 // Services
-import { DatabaseService, DateService, RequestService } from "@services";
+import {
+    DatabaseService,
+    DateService,
+    OrderService,
+    RequestService,
+    StringService,
+} from "@services";
 
 interface DefaultParams {
     id?: string;
@@ -13,7 +19,7 @@ interface DefaultParams {
     orders?: Types.ObjectId[];
 }
 
-type EditableParams = Omit<DefaultParams, "id" | "date">;
+type EditableParams = Pick<DefaultParams, "name">;
 
 export class EventService {
     public static visibleParameters = ["name", "date", "orders"];
@@ -77,7 +83,6 @@ export class EventService {
             .populate(EventService._populateOptions);
     }
 
-    //TODO Fix backwards saving => Saving of the entry at ref entry
     public static async save(values: EditableParams) {
         await DatabaseService.getConnection();
 
@@ -85,29 +90,17 @@ export class EventService {
 
         newEntry.name = values.name.trim();
         newEntry.date = DateService.standarizeCurrentDate(new Date());
-        newEntry.orders = values.orders;
 
         return newEntry.save();
     }
 
-    //TODO Fix backwards update => Update of the entry at ref entry
-    public static async update(
-        id: string,
-        values: EditableParams,
-        willAppendOrderIds = false
-    ) {
+    public static async update(id: string, values: EditableParams) {
         await DatabaseService.getConnection();
 
         values.name = values.name?.trim();
 
-        if (values.orders && willAppendOrderIds) {
-            const productToBeUpdated = await EventModel.findById(id);
-
-            values.orders = productToBeUpdated.orders.concat(values.orders);
-        }
-
         return EventModel.findByIdAndUpdate(
-            id.trim(),
+            StringService.toObjectId(id),
             { $set: values },
             { new: true, runValidators: true }
         )
@@ -115,10 +108,19 @@ export class EventService {
             .populate(EventService._populateOptions);
     }
 
-    //TODO Fix backwards deletion => Deletion of the entry at ref entry
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        return EventModel.findByIdAndDelete(id.trim());
+        const eventId = StringService.toObjectId(id);
+
+        const foundOrders = await OrderModel.find({
+            event: eventId,
+        });
+
+        for (const foundOrder of foundOrders) {
+            await OrderModel.findByIdAndDelete(foundOrder._id);
+        }
+
+        return EventModel.findByIdAndDelete(eventId);
     }
 }
