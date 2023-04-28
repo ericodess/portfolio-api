@@ -50,9 +50,9 @@ export class OrderService {
     }
 
     public static async query(values: Params) {
-        const query = [];
-
         await DatabaseService.getConnection();
+
+        const query = [];
 
         if (values.id) {
             return (

@@ -30,14 +30,14 @@ router.get("/", (req, res) => {
 
 //TODO Implement JWT middleware
 router.post("/", (req, res) => {
-    const event = req.body.eventId;
-    const operator = req.body.operatorId;
-    const client = req.body.clientName;
-    const item = req.body.itemId;
+    const event = RequestService.queryParamToString(req.body.eventId);
+    const operator = RequestService.queryParamToString(req.body.operatorId);
+    const client = RequestService.queryParamToString(req.body.clientName);
+    const item = RequestService.queryParamToString(req.body.itemId);
 
     // Non obligatory params
-    const status = req.body.status;
-    const variant = req.body.variantId;
+    const status = RequestService.queryParamToString(req.body.status);
+    const variant = RequestService.queryParamToString(req.body.variantId);
 
     if (!event || !operator || !client || !item) {
         res.status(400).json(
@@ -48,12 +48,12 @@ router.post("/", (req, res) => {
     }
 
     OrderService.save({
-        event: RequestService.queryParamToString(event),
-        status: RequestService.queryParamToString(status),
-        operator: RequestService.queryParamToString(operator),
-        client: RequestService.queryParamToString(client),
-        item: RequestService.queryParamToString(item),
-        variant: RequestService.queryParamToString(variant),
+        event: event,
+        status: status,
+        operator: operator,
+        client: client,
+        item: item,
+        variant: variant,
     })
         .then(() => {
             res.status(200).json(ResponseService.generateSucessfulResponse());
@@ -68,7 +68,7 @@ router.post("/", (req, res) => {
 //TODO Implement JWT middleware
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
-    const status = req.body.status;
+    const status = RequestService.queryParamToString(req.body.status);
 
     if (!id) {
         res.status(400).json(
@@ -79,7 +79,7 @@ router.patch("/:id", (req, res) => {
     }
 
     OrderService.update(id, {
-        status: RequestService.queryParamToString(status),
+        status: status,
     })
         .then((response) => {
             res.status(200).json(

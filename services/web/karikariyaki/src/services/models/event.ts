@@ -50,9 +50,9 @@ export class EventService {
     }
 
     public static async query(values: DefaultParams) {
-        const query = [];
-
         await DatabaseService.getConnection();
+
+        const query = [];
 
         if (values.id) {
             return (

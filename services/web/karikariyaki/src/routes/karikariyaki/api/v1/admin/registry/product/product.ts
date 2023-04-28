@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
 
 //TODO Implement JWT middleware
 router.post("/", (req, res) => {
-    const name = req.body.name;
+    const name = RequestService.queryParamToString(req.body.name);
 
     if (!name) {
         res.status(400).json(
@@ -51,7 +51,7 @@ router.post("/", (req, res) => {
 //TODO Implement JWT middleware
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
-    const name = req.body.name;
+    const name = RequestService.queryParamToString(req.body.name);
 
     if (!id) {
         res.status(400).json(

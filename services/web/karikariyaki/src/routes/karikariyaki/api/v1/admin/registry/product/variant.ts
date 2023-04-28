@@ -26,8 +26,8 @@ router.get("/", (req, res) => {
 
 //TODO Implement JWT middleware
 router.post("/", (req, res) => {
-    const name = req.body.name;
-    const productId = req.body.productId;
+    const name = RequestService.queryParamToString(req.body.name);
+    const productId = RequestService.queryParamToString(req.body.productId);
 
     if (!name || !productId) {
         res.status(400).json(
@@ -37,7 +37,10 @@ router.post("/", (req, res) => {
         return;
     }
 
-    VariantService.save({ name: name, product: productId })
+    VariantService.save({
+        name: name,
+        product: productId,
+    })
         .then(() => {
             res.status(200).json(ResponseService.generateSucessfulResponse());
         })
@@ -51,7 +54,7 @@ router.post("/", (req, res) => {
 //TODO Implement JWT middleware
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
-    const name = req.body.name;
+    const name = RequestService.queryParamToString(req.body.name);
 
     if (!id) {
         res.status(400).json(
