@@ -1,4 +1,4 @@
-FROM node:18.11.0
+FROM node:18.16.0
 
 WORKDIR /usr/src/app
 
@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 9002
+EXPOSE 9006
 
 CMD ["npm", "start"]
