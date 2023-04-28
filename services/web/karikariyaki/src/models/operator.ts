@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import isBase64 from "is-base64";
 
 // Types
 import { Statics } from "@types";
@@ -6,7 +7,7 @@ import { Statics } from "@types";
 // Services
 import { DatabaseService, StringService } from "@services";
 
-const validateOperatorOperatorName = async (name: string) => {
+const validateOperatorUserName = async (name: string) => {
     if (
         StringService.isStringInsideBoundaries(
             name,
@@ -43,10 +44,24 @@ const validateOperatorDisplayName = async (displayName: string) => {
         ) === false
     ) {
         if (displayName.trim().length < Statics.DISPLAY_NAME_MIN_LENGTH) {
-            throw Error("Operator display name is shorter than 5 characters");
+            throw Error(
+                `Operator display name is shorter than ${Statics.DISPLAY_NAME_MIN_LENGTH} characters`
+            );
         }
 
-        throw Error("Operator display name is longer than 25 characters");
+        throw Error(
+            `Operator display name is longer than ${Statics.DISPLAY_NAME_MAX_LENGTH} characters`
+        );
+    }
+};
+
+const validateOperatorPhoto = async (photoInBase64: string) => {
+    if (!photoInBase64 || photoInBase64.trim().length === 0) {
+        return;
+    }
+
+    if (isBase64(photoInBase64, { allowEmpty: false }) === false) {
+        throw Error("Operator photo is invalid");
     }
 };
 
@@ -54,15 +69,19 @@ const OperatorSchema = new Schema(
     {
         userName: {
             type: String,
-            required: [true, "User name is required"],
-            validate: validateOperatorOperatorName,
+            required: [true, "Operator user name is required"],
+            validate: validateOperatorUserName,
         },
         displayName: {
             type: String,
-            required: [true, "Display name is required"],
+            required: [true, "Operator display name is required"],
             validate: validateOperatorDisplayName,
         },
-        photo: String,
+        photo: {
+            type: String,
+            validate: validateOperatorPhoto,
+            default: Statics.DEFAULT_USER_PHOTO_BASE64,
+        },
     },
     {
         timestamps: true,

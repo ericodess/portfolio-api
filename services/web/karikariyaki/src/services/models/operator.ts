@@ -1,7 +1,5 @@
-import { PopulateOptions, Types } from "mongoose";
-
 // Models
-import { EventModel, OperatorModel } from "@models";
+import { OperatorModel } from "@models";
 
 // Services
 import { DatabaseService, StringService } from "@services";
@@ -34,20 +32,24 @@ export class OperatorService {
         const query = [];
 
         if (values.id) {
-            return await EventModel.findById(values.id.trim()).select(
-                OperatorService.visibleParameters
-            );
+            return await OperatorModel.findById(
+                StringService.toObjectId(values.id)
+            ).select(OperatorService.visibleParameters);
         }
 
         if (values.userName) {
             query.push({
-                name: values.userName.trim(),
+                userNname: DatabaseService.generateBroadQuery(
+                    values.userName.trim()
+                ),
             });
         }
 
         if (values.displayName) {
             query.push({
-                date: values.displayName.trim(),
+                displayName: DatabaseService.generateBroadQuery(
+                    values.displayName.trim()
+                ),
             });
         }
 
@@ -72,8 +74,9 @@ export class OperatorService {
         await DatabaseService.getConnection();
 
         values.displayName = values.displayName.trim();
+        values.photo = values.photo ?? undefined;
 
-        return EventModel.findByIdAndUpdate(
+        return OperatorModel.findByIdAndUpdate(
             StringService.toObjectId(id),
             { $set: values },
             { new: true, runValidators: true }
@@ -83,6 +86,6 @@ export class OperatorService {
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        return EventModel.findByIdAndDelete(StringService.toObjectId(id));
+        return OperatorModel.findByIdAndDelete(StringService.toObjectId(id));
     }
 }
