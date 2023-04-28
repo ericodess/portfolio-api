@@ -57,7 +57,7 @@ router.post("/", (req, res) => {
         photo: photo,
     })
         .then((response) => {
-            res.cookie("kk_yaki_token", JWTService.onSignUp(userName), {
+            res.cookie("kk_yaki_token", JWTService.onSignIn(userName), {
                 httpOnly: true,
                 secure: true,
             });

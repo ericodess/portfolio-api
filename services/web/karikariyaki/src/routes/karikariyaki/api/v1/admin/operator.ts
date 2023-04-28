@@ -21,9 +21,7 @@ router.post("/sign-in", (req, res) => {
         return;
     }
 
-    OperatorService.query({
-        userName: userName,
-    })
+    OperatorService.queryByUserName(userName)
         .then((response) => {
             if (!response) {
                 res.status(404).json(
@@ -33,9 +31,14 @@ router.post("/sign-in", (req, res) => {
                 return;
             }
 
-            res.cookie("kk_yaki_token", JWTService.onSignUp(userName), {
+            res.cookie("kk_yaki_token", JWTService.onSignIn(userName), {
                 httpOnly: true,
+                sameSite: "lax",
                 secure: true,
+                expires: new Date(
+                    Date.now() +
+                        JWTService.getExpirationTimeInMs() * 24 * 60 * 60 * 1000
+                ),
             });
 
             res.status(200).json(
@@ -47,6 +50,24 @@ router.post("/sign-in", (req, res) => {
                 ResponseService.generateFailedResponse(error.message)
             );
         });
+});
+
+router.post("/refresh", (req, res) => {
+    const accessToken = RequestService.queryParamToString(
+        req.cookies.kk_yaki_token
+    );
+
+    if (!accessToken) {
+        res.status(400).json(
+            ResponseService.generateFailedResponse("Invalid access token")
+        );
+
+        return;
+    }
+
+    res.status(200).json(
+        ResponseService.generateSucessfulResponse(accessToken)
+    );
 });
 
 export default router;

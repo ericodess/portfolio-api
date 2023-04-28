@@ -58,6 +58,14 @@ export class OperatorService {
         ).select(OperatorService.visibleParameters);
     }
 
+    public static async queryByUserName(userName: string) {
+        await DatabaseService.getConnection();
+
+        return await OperatorModel.findOne({ userName: userName }).select(
+            OperatorService.visibleParameters
+        );
+    }
+
     public static async save(values: CreatableParams) {
         await DatabaseService.getConnection();
 
