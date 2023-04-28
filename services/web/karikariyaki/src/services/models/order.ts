@@ -1,15 +1,12 @@
-import { PopulateOptions, Types } from "mongoose";
+import { PopulateOptions } from "mongoose";
 
 // Models
 import { EventModel, OrderModel } from "@models";
 
 // Services
-import { DatabaseService, RequestService, StringService } from "@services";
+import { DatabaseService, StringService } from "@services";
 
-// Enum
-import { OrderStatus } from "@enum";
-
-interface Params {
+interface DefaultParams {
     id?: string;
     event?: string;
     status?: string;
@@ -19,7 +16,11 @@ interface Params {
     variant?: string;
 }
 
-type EditableParams = Pick<Params, "status">;
+type QueryableParams = DefaultParams;
+
+type CreatableParams = Omit<DefaultParams, "id">;
+
+type EditableParams = Pick<DefaultParams, "status">;
 
 export class OrderService {
     public static visibleParameters = ["status", "client"];
@@ -49,7 +50,7 @@ export class OrderService {
         return OrderModel.find().select(OrderService.visibleParameters);
     }
 
-    public static async query(values: Params) {
+    public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -91,7 +92,7 @@ export class OrderService {
             .populate(OrderService._populateOptions);
     }
 
-    public static async save(values: Params) {
+    public static async save(values: CreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new OrderModel();

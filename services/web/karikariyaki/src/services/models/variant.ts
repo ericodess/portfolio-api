@@ -6,13 +6,17 @@ import { ProductModel, VariantModel } from "@models";
 // Services
 import { DatabaseService, StringService } from "@services";
 
-interface Params {
+interface DefaultParams {
     id?: string;
     name?: string;
     product?: string;
 }
 
-type EditableParams = Omit<Params, "id">;
+type QueryableParams = DefaultParams;
+
+type CreatableParams = Omit<DefaultParams, "id">;
+
+type EditableParams = Pick<DefaultParams, "name">;
 
 export class VariantService {
     public static visibleParameters = ["name", "product"];
@@ -28,7 +32,7 @@ export class VariantService {
         return VariantModel.find().select(VariantService.visibleParameters);
     }
 
-    public static async query(values: Params) {
+    public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -54,7 +58,7 @@ export class VariantService {
             .populate(VariantService._populateOptions);
     }
 
-    public static async save(values: EditableParams) {
+    public static async save(values: CreatableParams) {
         await DatabaseService.getConnection();
 
         const newProductVariant = new VariantModel();

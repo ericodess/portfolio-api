@@ -4,15 +4,19 @@ import { PopulateOptions, Types } from "mongoose";
 import { ProductModel, VariantModel } from "@models";
 
 // Services
-import { DatabaseService } from "@services";
+import { DatabaseService, StringService } from "@services";
 
-interface Params {
+interface DefaultParams {
     id?: string;
     name?: string;
     variants?: Types.ObjectId[];
 }
 
-type EditableParams = Omit<Params, "id" | "variants">;
+type QueryableParams = DefaultParams;
+
+type CreatableParams = Pick<DefaultParams, "name">;
+
+type EditableParams = Pick<DefaultParams, "name">;
 
 export class ProductService {
     public static visibleParameters = ["name", "variants"];
@@ -28,16 +32,16 @@ export class ProductService {
         return ProductModel.find().select(ProductService.visibleParameters);
     }
 
-    public static async query(values: Params) {
+    public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
 
         if (values.id) {
             return (
-                await ProductModel.findById(values.id.trim()).select(
-                    ProductService.visibleParameters
-                )
+                await ProductModel.findById(
+                    StringService.toObjectId(values.id)
+                ).select(ProductService.visibleParameters)
             ).populate(ProductService._populateOptions);
         }
 
@@ -58,7 +62,7 @@ export class ProductService {
             .populate(ProductService._populateOptions);
     }
 
-    public static async save(values: EditableParams) {
+    public static async save(values: CreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new ProductModel();
@@ -74,7 +78,7 @@ export class ProductService {
         values.name = values.name?.trim();
 
         return ProductModel.findByIdAndUpdate(
-            id.trim(),
+            StringService.toObjectId(id),
             { $set: values },
             { new: true, runValidators: true }
         )
@@ -85,7 +89,7 @@ export class ProductService {
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        const productId = new Types.ObjectId(id);
+        const productId = StringService.toObjectId(id);
 
         const foundVariants = await VariantModel.find({
             product: productId,

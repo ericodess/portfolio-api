@@ -4,13 +4,7 @@ import { PopulateOptions, Types } from "mongoose";
 import { EventModel, OrderModel } from "@models";
 
 // Services
-import {
-    DatabaseService,
-    DateService,
-    OrderService,
-    RequestService,
-    StringService,
-} from "@services";
+import { DatabaseService, DateService, StringService } from "@services";
 
 interface DefaultParams {
     id?: string;
@@ -18,6 +12,10 @@ interface DefaultParams {
     date?: Date;
     orders?: Types.ObjectId[];
 }
+
+type QueryableParams = DefaultParams;
+
+type CreatableParams = Pick<DefaultParams, "name">;
 
 type EditableParams = Pick<DefaultParams, "name">;
 
@@ -49,16 +47,16 @@ export class EventService {
         return EventModel.find().select(EventService.visibleParameters);
     }
 
-    public static async query(values: DefaultParams) {
+    public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
 
         if (values.id) {
             return (
-                await EventModel.findById(values.id.trim()).select(
-                    EventService.visibleParameters
-                )
+                await EventModel.findById(
+                    StringService.toObjectId(values.id)
+                ).select(EventService.visibleParameters)
             ).populate(EventService._populateOptions);
         }
 
@@ -83,7 +81,7 @@ export class EventService {
             .populate(EventService._populateOptions);
     }
 
-    public static async save(values: EditableParams) {
+    public static async save(values: CreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new EventModel();
