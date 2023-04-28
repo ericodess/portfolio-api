@@ -24,5 +24,5 @@ export class Statics {
     public static DEFAULT_USER_PHOTO_BASE64 =
         "UklGRkwTAQBXRUJQVlA4IEATAQDw8gWdASplBO4CPrVSoksnJScqKnJcIUAWiWVuu8/N0m0/9XYKxj9s/+90/bt9fXVnX93e2Yj//+Y7//b/xtD/kB+ef1/gP+he+Z/R+zzgbtd/r/8h/4etv";
 
-    public static DEFAULT_COOKIE_EXPIRATION_TIME_IN_MS = 600;
+    public static DEFAULT_COOKIE_EXPIRATION_TIME_IN_DAYS = 7;
 }
