@@ -81,7 +81,7 @@ export class OperatorService {
     public static async update(id: string, values: EditableParams) {
         await DatabaseService.getConnection();
 
-        values.displayName = values.displayName.trim();
+        values.displayName = values.displayName?.trim();
         values.photo = values.photo ?? undefined;
 
         return OperatorModel.findByIdAndUpdate(

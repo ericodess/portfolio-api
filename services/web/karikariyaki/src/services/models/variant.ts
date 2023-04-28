@@ -82,6 +82,8 @@ export class VariantService {
     public static async update(id: string, values: EditableParams) {
         await DatabaseService.getConnection();
 
+        values.name = values.name?.trim();
+
         return VariantModel.findByIdAndUpdate(
             StringService.toObjectId(id),
             {

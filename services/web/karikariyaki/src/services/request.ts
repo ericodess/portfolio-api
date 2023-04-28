@@ -25,10 +25,4 @@ export class RequestService {
             ? new Date((value as string).trim())
             : null;
     }
-
-    public static queryParamToBuffer(value: any, encondig: BufferEncoding) {
-        return RequestService.isValidQueryParam(value)
-            ? Buffer.from((value as string).trim(), encondig)
-            : null;
-    }
 }
