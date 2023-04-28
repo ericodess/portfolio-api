@@ -1,12 +1,12 @@
-import { sign, verify, VerifyErrors } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 
 // Types
-import { InHouseResponse, Statics } from "@types";
+import { InHouseError, Statics } from "@types";
 
 export class JWTService {
     public static onSignIn(userName: string): string {
-        if (!process.env.SECRET) {
-            return "SECRECTNOTFOUND";
+        if (!process.env.SECRET || !process.env.COOKIE_NAME) {
+            return null;
         }
 
         return sign({ userName }, process.env.SECRET, {
@@ -14,33 +14,39 @@ export class JWTService {
         });
     }
 
-    public static onRefresh(
-        accessToken: string,
-        callback: (err: VerifyErrors | null, decoded: any) => void
-    ): InHouseResponse {
-        if (!process.env.SECRET) {
-            return {
-                code: 503,
-                wasSuccessful: false,
-                description: "No secret provided",
-            };
+    public static onVerification(accessToken: string): string {
+        if (!process.env.SECRET || !process.env.COOKIE_NAME) {
+            throw new InHouseError(
+                "Invalid cookie settings, pelace contact the adminstrator",
+                503
+            );
         }
 
         if (!accessToken) {
-            return {
-                code: 403,
-                wasSuccessful: false,
-                description: "No access token provided",
-            };
+            throw new InHouseError("No access token provided", 403);
         }
 
-        verify(accessToken, process.env.SECRET, callback);
+        const result = verify(accessToken, process.env.SECRET);
+
+        if (typeof result !== "string") {
+            return result.userName;
+        }
+
+        return result;
     }
 
     public static getExpirationTimeInMs() {
         return (
-            parseInt(process.env.COOKIE_EXPIRATION_TIME_IN_MS) ??
-            Statics.DEFAULT_COOKIE_EXPIRATION_TIME_IN_MS
+            (parseInt(process.env.COOKIE_EXPIRATION_TIME_IN_DAYS) ??
+                Statics.DEFAULT_COOKIE_EXPIRATION_TIME_IN_DAYS) *
+            24 *
+            60 *
+            60 *
+            1000
         );
+    }
+
+    public static getExpirationTimeInDate() {
+        return new Date(Date.now() + JWTService.getExpirationTimeInMs());
     }
 }
