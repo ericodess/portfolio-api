@@ -40,7 +40,7 @@ const validateOperatorDisplayName = async (displayName: string) => {
             displayName,
             Statics.DISPLAY_NAME_MIN_LENGTH,
             Statics.DISPLAY_NAME_MAX_LENGTH
-        )
+        ) === false
     ) {
         if (displayName.trim().length < Statics.DISPLAY_NAME_MIN_LENGTH) {
             throw Error("Operator display name is shorter than 5 characters");
@@ -54,15 +54,15 @@ const OperatorSchema = new Schema(
     {
         userName: {
             type: String,
-            validate: validateOperatorOperatorName,
             required: [true, "User name is required"],
+            validate: validateOperatorOperatorName,
         },
         displayName: {
             type: String,
-            validate: validateOperatorDisplayName,
             required: [true, "Display name is required"],
+            validate: validateOperatorDisplayName,
         },
-        photo: Buffer,
+        photo: String,
     },
     {
         timestamps: true,

@@ -1,5 +1,5 @@
 // Services
-import { StringService } from "./string";
+import { StringService } from "@services";
 
 export class RequestService {
     public static isValidQueryParam(value: any) {
@@ -23,6 +23,12 @@ export class RequestService {
     public static queryParamToDate(value: any) {
         return RequestService.isValidQueryParam(value)
             ? new Date((value as string).trim())
+            : null;
+    }
+
+    public static queryParamToBuffer(value: any, encondig: BufferEncoding) {
+        return RequestService.isValidQueryParam(value)
+            ? Buffer.from((value as string).trim(), encondig)
             : null;
     }
 }

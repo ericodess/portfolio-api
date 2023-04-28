@@ -1,127 +1,85 @@
 import { Router } from "express";
 
-// Types
-import { Statics } from "@types";
-
-// Models
-import { OperatorModel } from "@models";
-
 // Services
-import { ResponseService, JWTService, DatabaseService } from "@services";
+import {
+    ResponseService,
+    JWTService,
+    RequestService,
+    OperatorService,
+} from "@services";
 
 const router = Router();
 
-//TODO Implement OperatorService
-
 router.post("/sign-up", (req, res) => {
-    const userName: string = req.body.userName;
-    const displayName: string = req.body.displayName;
-    const photo: string = req.body.photo;
+    const userName = RequestService.queryParamToString(req.body.userName);
+    const displayName = RequestService.queryParamToString(req.body.displayName);
+    const photo = RequestService.queryParamToString(req.body.photo);
 
-    if (
-        !userName ||
-        userName.trim().length < 1 ||
-        !displayName ||
-        displayName.trim().length < 1
-    ) {
+    if (!userName || !displayName) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid user data")
+            ResponseService.generateFailedResponse("Invalid operator data")
         );
 
         return;
     }
 
-    DatabaseService.getConnection()
-        .then(() => {
-            const newUser = new OperatorModel();
+    OperatorService.save({
+        userName: userName,
+        displayName: displayName,
+        photo: photo,
+    })
+        .then((response) => {
+            res.cookie("kk_yaki_token", JWTService.onSignUp(userName), {
+                httpOnly: true,
+                secure: true,
+            });
 
-            newUser.userName = userName;
-            newUser.displayName = displayName;
-            newUser.photo = Buffer.from(
-                photo.trim().length > 1
-                    ? photo
-                    : Statics.DEFAULT_USER_PHOTO_BASE64,
-                "base64"
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
             );
-
-            newUser
-                .save()
-                .then(() => {
-                    res.cookie("kk_yaki_token", JWTService.onSignUp(userName), {
-                        httpOnly: true,
-                        secure: true,
-                    });
-
-                    res.status(200).json(
-                        ResponseService.generateSucessfulResponse({
-                            loggedUser: userName,
-                        })
-                    );
-                })
-                .catch((error) => {
-                    res.status(400).json(
-                        ResponseService.generateFailedResponse(error.message)
-                    );
-                });
         })
-        .catch(() => {
+        .catch((error) => {
             res.status(500).json(
-                ResponseService.generateFailedResponse(
-                    "Error whilst trying to connect to the database"
-                )
+                ResponseService.generateFailedResponse(error.message)
             );
         });
 });
 
 router.post("/sign-in", (req, res) => {
-    const userName: string = req.body.userName;
+    const userName = RequestService.queryParamToString(req.body.userName);
 
-    if (!userName || userName.trim().length < 1) {
+    if (!userName) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid user data")
+            ResponseService.generateFailedResponse("Invalid operator data")
         );
 
         return;
     }
 
-    DatabaseService.getConnection()
-        .then(() => {
-            OperatorModel.findOne({
-                userName: userName,
-            })
-                .then((entry) => {
-                    if (!entry) {
-                        res.status(404).json(
-                            ResponseService.generateFailedResponse(
-                                "User not found"
-                            )
-                        );
+    OperatorService.query({
+        userName: userName,
+    })
+        .then((response) => {
+            if (!response) {
+                res.status(404).json(
+                    ResponseService.generateFailedResponse("Operator not found")
+                );
 
-                        return;
-                    }
+                return;
+            }
 
-                    res.cookie("kk_yaki_token", JWTService.onSignUp(userName), {
-                        httpOnly: true,
-                        secure: true,
-                    });
+            res.cookie("kk_yaki_token", JWTService.onSignUp(userName), {
+                httpOnly: true,
+                secure: true,
+            });
 
-                    res.status(200).json(
-                        ResponseService.generateSucessfulResponse({
-                            loggedUser: userName,
-                        })
-                    );
-                })
-                .catch((error) => {
-                    res.status(400).json(
-                        ResponseService.generateFailedResponse(error.message)
-                    );
-                });
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
-        .catch(() => {
+        .catch((error) => {
             res.status(500).json(
-                ResponseService.generateFailedResponse(
-                    "Error whilst trying to connect to the database"
-                )
+                ResponseService.generateFailedResponse(error.message)
             );
         });
 });

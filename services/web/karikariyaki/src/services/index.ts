@@ -10,4 +10,5 @@ export { StringService } from "./string";
 export { EventService } from "./models/event";
 export { ProductService } from "./models/product";
 export { OrderService } from "./models/order";
+export { OperatorService } from "./models/operator";
 export { VariantService } from "./models/variant";
