@@ -12,7 +12,7 @@ import { EventModel, OperatorModel, ProductModel, VariantModel } from "@models";
 // Services
 import { StringService } from "@services";
 
-const validateEvent = async (eventId: Types.ObjectId) => {
+const validateOrderEvent = async (eventId: Types.ObjectId) => {
     const foundEvent = await EventModel.findById(eventId);
 
     if (!foundEvent) {
@@ -20,7 +20,7 @@ const validateEvent = async (eventId: Types.ObjectId) => {
     }
 };
 
-const validateOperator = async (operatorId: Types.ObjectId) => {
+const validateOrderOperator = async (operatorId: Types.ObjectId) => {
     const foundOperator = await OperatorModel.findById(operatorId);
 
     if (!foundOperator) {
@@ -28,7 +28,7 @@ const validateOperator = async (operatorId: Types.ObjectId) => {
     }
 };
 
-const validateClient = async (client: string) => {
+const validateOrderClient = async (client: string) => {
     if (
         StringService.isStringInsideBoundaries(
             client,
@@ -48,7 +48,7 @@ const validateClient = async (client: string) => {
     }
 };
 
-const validateItem = async (itemId: Types.ObjectId) => {
+const validateOrderItem = async (itemId: Types.ObjectId) => {
     const foundItem = await ProductModel.findById(itemId);
 
     if (!foundItem) {
@@ -56,7 +56,7 @@ const validateItem = async (itemId: Types.ObjectId) => {
     }
 };
 
-const validateVariant = async (variantId: Types.ObjectId) => {
+const validateOrderItemVariant = async (variantId: Types.ObjectId) => {
     if (!variantId) {
         return;
     }
@@ -73,7 +73,7 @@ const OrderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: Statics.EVENT_COLLECTION_NAME,
         required: [true, "Event data is required"],
-        validate: validateEvent,
+        validate: validateOrderEvent,
     },
     status: {
         type: String,
@@ -84,23 +84,23 @@ const OrderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: Statics.OPERATOR_COLLECTION_NAME,
         required: [true, "Operator data is required"],
-        validate: validateOperator,
+        validate: validateOrderOperator,
     },
     client: {
         type: String,
         required: [true, "Client data is required"],
-        validate: validateClient,
+        validate: validateOrderClient,
     },
     item: {
         type: Schema.Types.ObjectId,
         ref: Statics.PRODUCT_COLLECTION_NAME,
         required: [true, "Item data is required"],
-        validate: validateItem,
+        validate: validateOrderItem,
     },
     variant: {
         type: Schema.Types.ObjectId,
         ref: Statics.VARIANT_COLLECTION_NAME,
-        validate: validateVariant,
+        validate: validateOrderItemVariant,
     },
 });
 

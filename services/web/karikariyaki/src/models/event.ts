@@ -6,7 +6,7 @@ import { Statics } from "@types";
 import { OrderModel } from "@models";
 
 // Services
-import { DatabaseService, DateService, StringService } from "@services";
+import { DatabaseService, StringService } from "@services";
 
 const validateEventDate = async (date: Date) => {
     const entry = await EventModel.findOne({
@@ -18,7 +18,7 @@ const validateEventDate = async (date: Date) => {
     }
 };
 
-const validateOrders = async (orderIds: Types.ObjectId[]) => {
+const validateEventOrders = async (orderIds: Types.ObjectId[]) => {
     for (const orderId of orderIds) {
         const foundOrder = await OrderModel.findById(
             StringService.toString(orderId)
@@ -49,7 +49,7 @@ const EventSchema = new Schema({
             { type: Schema.Types.ObjectId, ref: Statics.ORDER_COLLECTION_NAME },
         ],
         default: [],
-        validate: validateOrders,
+        validate: validateEventOrders,
     },
 });
 
