@@ -5,7 +5,6 @@ import { OrderService, RequestService, ResponseService } from "@services";
 
 const router = Router();
 
-//TODO Implement JWT middleware
 router.get("/", (req, res) => {
     OrderService.query({
         id: RequestService.queryParamToString(req.query.id),
@@ -28,7 +27,6 @@ router.get("/", (req, res) => {
         });
 });
 
-//TODO Implement JWT middleware
 router.post("/", (req, res) => {
     const event = RequestService.queryParamToString(req.body.eventId);
     const operator = RequestService.queryParamToString(req.body.operatorId);
@@ -65,7 +63,6 @@ router.post("/", (req, res) => {
         });
 });
 
-//TODO Implement JWT middleware
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
     const status = RequestService.queryParamToString(req.body.status);
@@ -93,7 +90,6 @@ router.patch("/:id", (req, res) => {
         });
 });
 
-//TODO Implement JWT middleware
 router.delete("/:id", (req, res) => {
     const id = req.params.id;
 

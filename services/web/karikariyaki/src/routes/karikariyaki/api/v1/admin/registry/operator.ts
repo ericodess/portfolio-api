@@ -10,7 +10,6 @@ import {
 
 const router = Router();
 
-//TODO Implement JWT middleware
 router.get("/", (req, res) => {
     OperatorService.query({
         id: RequestService.queryParamToString(req.query.id),
@@ -37,7 +36,6 @@ router.get("/", (req, res) => {
         });
 });
 
-//TODO Implement JWT middleware
 router.patch("/:id", (req, res) => {
     const id = RequestService.queryParamToString(req.params.id);
     const displayName = RequestService.queryParamToString(req.body.displayName);
@@ -67,7 +65,6 @@ router.patch("/:id", (req, res) => {
         });
 });
 
-//TODO Implement JWT middleware
 router.delete("/:id", (req, res) => {
     const id = RequestService.queryParamToString(req.params.id);
 
