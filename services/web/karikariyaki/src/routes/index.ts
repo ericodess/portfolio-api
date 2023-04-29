@@ -6,11 +6,15 @@ import apiRouter from "./api";
 
 const router = Router();
 
-router.use(express.static(path.join(__dirname + "/admin/dist/admin")));
+const adminRouter = Router();
 
-router.get("/admin", (req, res) =>
+adminRouter.use(express.static(path.join(__dirname + "/admin/dist/admin")));
+
+adminRouter.get("/", (req, res) =>
     res.sendFile(path.join(__dirname + "/admin/dist/admin/index.html"))
 );
+
+router.use("/admin", adminRouter);
 router.use("/api", apiRouter);
 
 export default router;
