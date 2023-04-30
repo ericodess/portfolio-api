@@ -1,10 +1,10 @@
 export class InHouseError extends Error {
     public code: number;
 
-    constructor(message: string, code: number) {
+    constructor(code: number, message: string) {
         super(message);
 
-        this.name = "InHouseError";
         this.code = code;
+        this.name = "InHouseError";
     }
 }

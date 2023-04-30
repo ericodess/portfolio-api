@@ -29,17 +29,14 @@ router.post("/sign-up", (req, res) => {
         photo: photo,
     })
         .then((response) => {
-            res.cookie(process.env.COOKIE_NAME, JWTService.onSignIn(userName), {
-                httpOnly: true,
-                secure: true,
-            });
+            JWTService.saveCookies(res, userName);
 
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -66,58 +63,23 @@ router.post("/sign-in", (req, res) => {
                 return;
             }
 
-            res.cookie(process.env.COOKIE_NAME, JWTService.onSignIn(userName), {
-                httpOnly: true,
-                sameSite: "strict",
-                secure: true,
-                expires: JWTService.getExpirationTimeInDate(),
-            });
+            JWTService.saveCookies(res, userName);
 
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
 });
 
 router.get("/sign-out", (req, res) => {
-    const accessToken = RequestService.queryParamToString(
-        req.cookies[process.env.COOKIE_NAME]
-    );
-
-    if (!accessToken) {
-        res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid access token")
-        );
-
-        return;
-    }
-
-    res.clearCookie(process.env.COOKIE_NAME);
+    JWTService.clearCookies(res);
 
     res.status(200).json(ResponseService.generateSucessfulResponse());
-});
-
-router.get("/refresh", (req, res) => {
-    const accessToken = RequestService.queryParamToString(
-        req.cookies[process.env.COOKIE_NAME]
-    );
-
-    if (!accessToken) {
-        res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid access token")
-        );
-
-        return;
-    }
-
-    res.status(200).json(
-        ResponseService.generateSucessfulResponse(accessToken)
-    );
 });
 
 export default router;

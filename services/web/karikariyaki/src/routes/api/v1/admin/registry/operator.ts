@@ -1,12 +1,7 @@
 import { Router } from "express";
 
 // Services
-import {
-    JWTService,
-    OperatorService,
-    RequestService,
-    ResponseService,
-} from "@services";
+import { OperatorService, RequestService, ResponseService } from "@services";
 
 const router = Router();
 
