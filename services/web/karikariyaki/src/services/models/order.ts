@@ -114,7 +114,11 @@ export class OrderService {
             { runValidators: true }
         );
 
-        return newEntry.save();
+        await newEntry.save();
+
+        return OrderModel.findById(newEntry._id)
+            .select(OrderService.visibleParameters)
+            .populate(OrderService._populateOptions);
     }
 
     public static async update(id: string, values: EditableParams) {
@@ -145,6 +149,8 @@ export class OrderService {
             }
         );
 
-        return OrderModel.findByIdAndDelete(orderId);
+        return OrderModel.findByIdAndDelete(orderId)
+            .select(OrderService.visibleParameters)
+            .populate(OrderService._populateOptions);
     }
 }

@@ -86,8 +86,18 @@ router.delete("/:id", (req, res) => {
     }
 
     VariantService.delete(id)
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            if (!response) {
+                res.status(404).json(
+                    ResponseService.generateFailedResponse("Variant not found")
+                );
+
+                return;
+            }
+
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(

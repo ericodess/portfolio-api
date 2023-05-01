@@ -12,7 +12,7 @@ interface DefaultParams {
     variants?: Types.ObjectId[];
 }
 
-type QueryableParams = DefaultParams;
+type QueryableParams = Omit<DefaultParams, "variants">;
 
 type CreatableParams = Pick<DefaultParams, "name">;
 
@@ -38,21 +38,15 @@ export class ProductService {
         const query = [];
 
         if (values.id) {
-            return (
-                await ProductModel.findById(
-                    StringService.toObjectId(values.id)
-                ).select(ProductService.visibleParameters)
-            ).populate(ProductService._populateOptions);
+            query.push({
+                _id: StringService.toObjectId(values.id),
+            });
         }
 
         if (values.name) {
             query.push({
                 name: DatabaseService.generateBroadQuery(values.name),
             });
-        }
-
-        if (values.variants) {
-            query.push({ variants: values.variants });
         }
 
         return await ProductModel.find(
@@ -69,7 +63,11 @@ export class ProductService {
 
         newEntry.name = values.name.trim();
 
-        return newEntry.save();
+        await newEntry.save();
+
+        return ProductModel.findById(newEntry._id)
+            .select(ProductService.visibleParameters)
+            .populate(ProductService._populateOptions);
     }
 
     public static async update(id: string, values: EditableParams) {
@@ -99,6 +97,8 @@ export class ProductService {
             await VariantModel.findByIdAndDelete(foundVariant._id);
         }
 
-        return ProductModel.findByIdAndDelete(productId);
+        return ProductModel.findByIdAndDelete(productId)
+            .select(ProductService.visibleParameters)
+            .populate(ProductService._populateOptions);
     }
 }

@@ -83,8 +83,18 @@ router.delete("/:id", (req, res) => {
     }
 
     ProductService.delete(id)
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            if (!response) {
+                res.status(404).json(
+                    ResponseService.generateFailedResponse("Product not found")
+                );
+
+                return;
+            }
+
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(

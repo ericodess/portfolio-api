@@ -89,7 +89,11 @@ export class EventService {
         newEntry.name = values.name.trim();
         newEntry.date = DateService.standarizeCurrentDate(new Date());
 
-        return newEntry.save();
+        await newEntry.save();
+
+        return EventModel.findById(newEntry._id)
+            .select(EventService.visibleParameters)
+            .populate(EventService._populateOptions);
     }
 
     public static async update(id: string, values: EditableParams) {
@@ -119,6 +123,8 @@ export class EventService {
             await OrderModel.findByIdAndDelete(foundOrder._id);
         }
 
-        return EventModel.findByIdAndDelete(eventId);
+        return EventModel.findByIdAndDelete(eventId)
+            .select(EventService.visibleParameters)
+            .populate(EventService._populateOptions);
     }
 }

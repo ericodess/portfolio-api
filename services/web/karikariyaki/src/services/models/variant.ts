@@ -61,22 +61,26 @@ export class VariantService {
     public static async save(values: CreatableParams) {
         await DatabaseService.getConnection();
 
-        const newProductVariant = new VariantModel();
+        const newEntry = new VariantModel();
 
-        newProductVariant.name = values.name.trim();
-        newProductVariant.product = StringService.toObjectId(values.product);
+        newEntry.name = values.name.trim();
+        newEntry.product = StringService.toObjectId(values.product);
 
         await ProductModel.findByIdAndUpdate(
-            newProductVariant.product,
+            newEntry.product,
             {
                 $push: {
-                    variants: newProductVariant._id,
+                    variants: newEntry._id,
                 },
             },
             { runValidators: true }
         );
 
-        return newProductVariant.save();
+        await newEntry.save();
+
+        return VariantModel.findById(newEntry._id)
+            .select(VariantService.visibleParameters)
+            .populate(VariantService._populateOptions);
     }
 
     public static async update(id: string, values: EditableParams) {
@@ -111,6 +115,8 @@ export class VariantService {
             }
         );
 
-        return VariantModel.findByIdAndDelete(variantObjectId);
+        return VariantModel.findByIdAndDelete(variantObjectId)
+            .select(VariantService.visibleParameters)
+            .populate(VariantService._populateOptions);
     }
 }
