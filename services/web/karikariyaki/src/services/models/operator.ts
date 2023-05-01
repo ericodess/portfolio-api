@@ -75,7 +75,11 @@ export class OperatorService {
         newEntry.displayName = values.displayName;
         newEntry.photo = values.photo;
 
-        return newEntry.save();
+        await newEntry.save();
+
+        return OperatorModel.findById(newEntry._id).select(
+            OperatorService.visibleParameters
+        );
     }
 
     public static async update(id: string, values: EditableParams) {
@@ -94,6 +98,8 @@ export class OperatorService {
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        return OperatorModel.findByIdAndDelete(StringService.toObjectId(id));
+        return OperatorModel.findByIdAndDelete(
+            StringService.toObjectId(id)
+        ).select(OperatorService.visibleParameters);
     }
 }
