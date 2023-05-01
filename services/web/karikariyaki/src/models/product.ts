@@ -29,7 +29,7 @@ const validateProductName = async (name: string) => {
     }
 
     const entry = await ProductModel.findOne({
-        name: DatabaseService.generateBroadQuery(name),
+        name: name.trim(),
     });
 
     if (entry) {

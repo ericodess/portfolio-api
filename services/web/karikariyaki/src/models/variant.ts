@@ -27,6 +27,12 @@ const validateVariantName = async (name: string) => {
             `Variant name is longer than ${Statics.VARIANT_NAME_MAX_LENGTH} characters`
         );
     }
+
+    const entry = await VariantModel.findOne({ name: name.trim() });
+
+    if (entry) {
+        throw Error("Product variant name is duplicated");
+    }
 };
 
 const validateVariantProduct = async (productId: Schema.Types.ObjectId) => {
