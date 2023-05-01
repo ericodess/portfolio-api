@@ -22,7 +22,13 @@
 		"lib": [
 			"ES2022",
 			"dom"
-		]
+		],
+		"paths": {
+			"@services": ["src/app/services/index.ts"],
+			"@enums": ["src/app/enums/index.ts"],
+			"@interfaces": ["src/app/interfaces/index.ts"],
+			"@types": ["src/app/types/index.ts"]
+		}
 	},
 	"angularCompilerOptions": {
 		"enableI18nLegacyMessageIdFormat": false,
