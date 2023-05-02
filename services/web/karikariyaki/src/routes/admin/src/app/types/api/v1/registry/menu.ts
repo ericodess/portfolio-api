@@ -8,16 +8,16 @@ import { BaseApi } from '@types';
 
 interface DefaultParams {
 	_id?: string;
+	title?: string;
 	route?: string;
 	parentId?: string;
-	childrenIds?: string[];
 }
 
-type QueryableParams = Omit<DefaultParams, 'childrenIds'>;
+type QueryableParams = DefaultParams;
 
-type CreatableParams = Pick<DefaultParams, 'route' | 'parentId'>;
+type CreatableParams = Omit<DefaultParams, '_id'>;
 
-type EditableParams = Pick<DefaultParams, 'route'>;
+type EditableParams = Pick<DefaultParams, 'title' | 'route'>;
 
 export class MenuRegistryApiV1 extends BaseApi {
 	private _endpoint = `${this.root}/v1/admin/registry/menu`;
@@ -27,6 +27,10 @@ export class MenuRegistryApiV1 extends BaseApi {
 
 		if (params?._id) {
 			endpoint.searchParams.append('id', params._id.trim());
+		}
+
+		if (params?.title) {
+			endpoint.searchParams.append('title', params.title.trim());
 		}
 
 		if (params?.route) {
@@ -48,6 +52,7 @@ export class MenuRegistryApiV1 extends BaseApi {
 		return this.client.post<ApiResponseWrapper<Menu>>(
 			endpoint.href,
 			{
+				title: params.title,
 				route: params.route,
 				parentId: params.parentId,
 			},
@@ -63,6 +68,7 @@ export class MenuRegistryApiV1 extends BaseApi {
 		return this.client.patch<ApiResponseWrapper<Menu>>(
 			endpoint.href,
 			{
+				title: params.title,
 				route: params.route,
 			},
 			{

@@ -8,6 +8,7 @@ const router = Router();
 router.get("/", (req, res) => {
     MenuService.query({
         id: RequestService.queryParamToString(req.query.id),
+        title: RequestService.queryParamToString(req.query.title),
         route: RequestService.queryParamToString(req.query.route),
         parentId: RequestService.queryParamToString(req.query.parentId),
     })
@@ -24,10 +25,11 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
+    const title = RequestService.queryParamToString(req.body.title);
     const route = RequestService.queryParamToString(req.body.route);
     const parentId = RequestService.queryParamToString(req.body.parentId);
 
-    if (!route) {
+    if (!title || !route) {
         res.status(400).json(
             ResponseService.generateFailedResponse("Invalid menu data")
         );
@@ -36,6 +38,7 @@ router.post("/", (req, res) => {
     }
 
     MenuService.save({
+        title: title,
         route: route,
         parentId: parentId,
     })
@@ -53,9 +56,10 @@ router.post("/", (req, res) => {
 
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
+    const title = RequestService.queryParamToString(req.body.title);
     const route = RequestService.queryParamToString(req.body.route);
 
-    if (!id || !route) {
+    if (!id) {
         res.status(400).json(
             ResponseService.generateFailedResponse("Invalid menu data")
         );
@@ -63,7 +67,7 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    MenuService.update(id, { route: route })
+    MenuService.update(id, { title: title, route: route })
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)

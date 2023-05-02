@@ -8,18 +8,19 @@ import { DatabaseService, StringService } from "@services";
 
 interface DefaultParams {
     id?: string;
+    title?: string;
     route?: string;
     parentId?: string;
 }
 
 type QueryableParams = DefaultParams;
 
-type CreatableParams = Pick<DefaultParams, "route" | "parentId">;
+type CreatableParams = Omit<DefaultParams, "id">;
 
-type EditableParams = Pick<DefaultParams, "route">;
+type EditableParams = Pick<DefaultParams, "title" | "route">;
 
 export class MenuService {
-    public static visibleParameters = ["route", "parent", "children"];
+    public static visibleParameters = ["title", "route", "parent", "children"];
 
     private static _populateOptions = [
         {
@@ -40,6 +41,12 @@ export class MenuService {
         if (values.id) {
             query.push({
                 _id: StringService.toObjectId(values.id),
+            });
+        }
+
+        if (values.title) {
+            query.push({
+                title: DatabaseService.generateBroadQuery(values.title),
             });
         }
 
@@ -65,6 +72,7 @@ export class MenuService {
 
         const newEntry = new MenuModel();
 
+        newEntry.title = values.title?.trim();
         newEntry.route = StringService.removeLeadingAndTrailingSlashes(
             values.route
         );
@@ -92,6 +100,7 @@ export class MenuService {
     public static async update(id: string, values: EditableParams) {
         await DatabaseService.getConnection();
 
+        values.title = values.title?.trim();
         values.route = StringService.removeLeadingAndTrailingSlashes(
             values.route
         );
@@ -102,7 +111,8 @@ export class MenuService {
             menuId,
             {
                 $set: {
-                    route: values.route,
+                    title: values.title ?? undefined,
+                    route: values.route ?? undefined,
                 },
             },
             { new: true, runValidators: true }

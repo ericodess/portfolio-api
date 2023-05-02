@@ -2,11 +2,25 @@ import { Schema, model } from "mongoose";
 
 // Types
 import { Statics } from "@types";
-import { StringService } from "@services";
+
+// Service
+import { DatabaseService, StringService } from "@services";
+
+const validateMenuTitle = async (title: string) => {
+    const foundMenu = await MenuModel.findOne({
+        title: DatabaseService.generateExactInsensitiveQuery(title),
+    });
+
+    if (foundMenu) {
+        throw Error("Menu title is duplicated");
+    }
+};
 
 const validateMenuRoute = async (route: string) => {
-    const foundMenu = await MenuModel.find({
-        route: StringService.removeLeadingAndTrailingSlashes(route),
+    const foundMenu = await MenuModel.findOne({
+        route: DatabaseService.generateExactInsensitiveQuery(
+            StringService.removeLeadingAndTrailingSlashes(route)
+        ),
     });
 
     if (foundMenu) {
@@ -15,6 +29,11 @@ const validateMenuRoute = async (route: string) => {
 };
 
 const MenuSchema = new Schema({
+    title: {
+        type: String,
+        required: [true, "Menu title is required"],
+        validate: validateMenuTitle,
+    },
     route: {
         type: String,
         required: [true, "Menu route is required"],
