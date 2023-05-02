@@ -10,7 +10,6 @@ interface DefaultParams {
     id?: string;
     name?: string;
     date?: Date;
-    orders?: Types.ObjectId[];
 }
 
 type QueryableParams = DefaultParams;
@@ -41,12 +40,6 @@ export class EventService {
         ],
     } as PopulateOptions;
 
-    public static async queryAll() {
-        await DatabaseService.getConnection();
-
-        return EventModel.find().select(EventService.visibleParameters);
-    }
-
     public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
 
@@ -70,10 +63,6 @@ export class EventService {
             query.push({
                 date: DatabaseService.generateStandarizedDateQuery(values.date),
             });
-        }
-
-        if (values.orders) {
-            query.push({ orders: values.orders });
         }
 
         return await EventModel.find(query.length === 0 ? null : { $or: query })
@@ -103,7 +92,11 @@ export class EventService {
 
         return EventModel.findByIdAndUpdate(
             StringService.toObjectId(id),
-            { $set: values },
+            {
+                $set: {
+                    name: values.name,
+                },
+            },
             { new: true, runValidators: true }
         )
             .select(EventService.visibleParameters)
@@ -115,13 +108,9 @@ export class EventService {
 
         const eventId = StringService.toObjectId(id);
 
-        const foundOrders = await OrderModel.find({
+        await OrderModel.deleteMany({
             event: eventId,
         });
-
-        for (const foundOrder of foundOrders) {
-            await OrderModel.findByIdAndDelete(foundOrder._id);
-        }
 
         return EventModel.findByIdAndDelete(eventId)
             .select(EventService.visibleParameters)

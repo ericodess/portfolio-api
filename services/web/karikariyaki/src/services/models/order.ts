@@ -44,12 +44,6 @@ export class OrderService {
         },
     ] as PopulateOptions[];
 
-    public static async queryAll() {
-        await DatabaseService.getConnection();
-
-        return OrderModel.find().select(OrderService.visibleParameters);
-    }
-
     public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
 
@@ -126,7 +120,11 @@ export class OrderService {
 
         return OrderModel.findByIdAndUpdate(
             StringService.toObjectId(id),
-            { $set: values },
+            {
+                $set: {
+                    status: values.status,
+                },
+            },
             { new: true, runValidators: true }
         )
             .select(OrderService.visibleParameters)

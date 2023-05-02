@@ -1,4 +1,4 @@
-import { PopulateOptions, Types } from "mongoose";
+import { PopulateOptions } from "mongoose";
 
 // Models
 import { ProductModel, VariantModel } from "@models";
@@ -9,7 +9,6 @@ import { DatabaseService, StringService } from "@services";
 interface DefaultParams {
     id?: string;
     name?: string;
-    variants?: Types.ObjectId[];
 }
 
 type QueryableParams = Omit<DefaultParams, "variants">;
@@ -25,12 +24,6 @@ export class ProductService {
         path: "variants",
         select: "name",
     } as PopulateOptions;
-
-    public static async queryAll() {
-        await DatabaseService.getConnection();
-
-        return ProductModel.find().select(ProductService.visibleParameters);
-    }
 
     public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
@@ -77,7 +70,11 @@ export class ProductService {
 
         return ProductModel.findByIdAndUpdate(
             StringService.toObjectId(id),
-            { $set: values },
+            {
+                $set: {
+                    name: values.name,
+                },
+            },
             { new: true, runValidators: true }
         )
             .select(ProductService.visibleParameters)
@@ -89,13 +86,9 @@ export class ProductService {
 
         const productId = StringService.toObjectId(id);
 
-        const foundVariants = await VariantModel.find({
+        await VariantModel.deleteMany({
             product: productId,
         });
-
-        for (const foundVariant of foundVariants) {
-            await VariantModel.findByIdAndDelete(foundVariant._id);
-        }
 
         return ProductModel.findByIdAndDelete(productId)
             .select(ProductService.visibleParameters)

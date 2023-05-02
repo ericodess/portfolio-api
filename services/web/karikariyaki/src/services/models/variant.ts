@@ -9,7 +9,7 @@ import { DatabaseService, StringService } from "@services";
 interface DefaultParams {
     id?: string;
     name?: string;
-    product?: string;
+    productId?: string;
 }
 
 type QueryableParams = DefaultParams;
@@ -25,12 +25,6 @@ export class VariantService {
         path: "product",
         select: "name",
     } as PopulateOptions;
-
-    public static async queryAll() {
-        await DatabaseService.getConnection();
-
-        return VariantModel.find().select(VariantService.visibleParameters);
-    }
 
     public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
@@ -49,8 +43,8 @@ export class VariantService {
             });
         }
 
-        if (values.product) {
-            query.push({ product: StringService.toObjectId(values.product) });
+        if (values.productId) {
+            query.push({ product: StringService.toObjectId(values.productId) });
         }
 
         return VariantModel.find(query.length === 0 ? null : { $or: query })
@@ -64,7 +58,7 @@ export class VariantService {
         const newEntry = new VariantModel();
 
         newEntry.name = values.name.trim();
-        newEntry.product = StringService.toObjectId(values.product);
+        newEntry.product = StringService.toObjectId(values.productId);
 
         await ProductModel.findByIdAndUpdate(
             newEntry.product,

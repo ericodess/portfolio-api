@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
     VariantService.query({
         id: RequestService.queryParamToString(req.query.id),
         name: RequestService.queryParamToString(req.query.name),
-        product: RequestService.queryParamToString(req.query.productId),
+        productId: RequestService.queryParamToString(req.query.productId),
     })
         .then((response) => {
             res.status(200).json(
@@ -37,10 +37,12 @@ router.post("/", (req, res) => {
 
     VariantService.save({
         name: name,
-        product: productId,
+        productId: productId,
     })
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(

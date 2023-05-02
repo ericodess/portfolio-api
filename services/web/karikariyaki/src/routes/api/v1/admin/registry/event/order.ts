@@ -53,8 +53,10 @@ router.post("/", (req, res) => {
         item: item,
         variant: variant,
     })
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(

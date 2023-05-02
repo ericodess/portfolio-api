@@ -37,8 +37,10 @@ router.post("/", (req, res) => {
     EventService.save({
         name: name,
     })
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(
