@@ -8,7 +8,6 @@ const router = Router();
 router.get("/", (req, res) => {
     OperatorService.query({
         id: RequestService.queryParamToString(req.query.id),
-        userName: RequestService.queryParamToString(req.query.userName),
         displayName: RequestService.queryParamToString(req.query.displayName),
     })
         .then((response) => {

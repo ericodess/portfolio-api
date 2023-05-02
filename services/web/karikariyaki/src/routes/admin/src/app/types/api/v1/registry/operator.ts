@@ -8,7 +8,6 @@ import { BaseApi } from '@types';
 
 interface DefaultParams {
 	_id?: string;
-	userName?: string;
 	displayName?: string;
 	photo?: string;
 }
@@ -17,7 +16,7 @@ type QueryableParams = Omit<DefaultParams, 'photo'>;
 
 type CreatableParams = Omit<DefaultParams, '_id'>;
 
-type EditableParams = Omit<DefaultParams, '_id' | 'userName'>;
+type EditableParams = Omit<DefaultParams, '_id'>;
 
 export class OperatorRegistryApiV1 extends BaseApi {
 	private _endpoint = `${this.root}/v1/admin/registry/operator`;
@@ -27,10 +26,6 @@ export class OperatorRegistryApiV1 extends BaseApi {
 
 		if (params?._id) {
 			endpoint.searchParams.append('id', params._id.trim());
-		}
-
-		if (params?.userName) {
-			endpoint.searchParams.append('userName', params?.userName.toString());
 		}
 
 		if (params?.displayName) {
@@ -48,7 +43,6 @@ export class OperatorRegistryApiV1 extends BaseApi {
 		return this.client.post<ApiResponseWrapper<Operator>>(
 			endpoint.href,
 			{
-				userName: params.userName,
 				displayName: params.displayName,
 				photo: params.photo,
 			},

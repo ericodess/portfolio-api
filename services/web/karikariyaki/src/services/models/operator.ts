@@ -11,20 +11,14 @@ interface DefaultParams {
     photo?: string;
 }
 
-type QueryableParams = Omit<DefaultParams, "photo">;
+type QueryableParams = Omit<DefaultParams, "userName" | "photo">;
 
 type CreatableParams = Omit<DefaultParams, "id">;
 
 type EditableParams = Omit<DefaultParams, "id" | "userName">;
 
 export class OperatorService {
-    public static visibleParameters = ["userName", "displayName", "photo"];
-
-    public static async queryAll() {
-        await DatabaseService.getConnection();
-
-        return OperatorModel.find().select(OperatorService.visibleParameters);
-    }
+    public static visibleParameters = ["displayName", "photo"];
 
     public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
@@ -37,18 +31,10 @@ export class OperatorService {
             ).select(OperatorService.visibleParameters);
         }
 
-        if (values.userName) {
-            query.push({
-                userNname: DatabaseService.generateBroadQuery(
-                    values.userName.trim()
-                ),
-            });
-        }
-
         if (values.displayName) {
             query.push({
                 displayName: DatabaseService.generateBroadQuery(
-                    values.displayName.trim()
+                    values.displayName
                 ),
             });
         }
@@ -90,7 +76,12 @@ export class OperatorService {
 
         return OperatorModel.findByIdAndUpdate(
             StringService.toObjectId(id),
-            { $set: values },
+            {
+                $set: {
+                    displayName: values.displayName,
+                    photo: values.photo,
+                },
+            },
             { new: true, runValidators: true }
         ).select(OperatorService.visibleParameters);
     }

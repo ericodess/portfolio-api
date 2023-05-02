@@ -88,4 +88,13 @@ export class StringService {
 
         return convertedValues;
     }
+
+    public static removeLeadingAndTrailingSlashes(target: string) {
+        const rasterizedRoute = target
+            .trim()
+            .toLowerCase()
+            .replace(/^\/+/g, "");
+
+        return rasterizedRoute.replace(/\/+$/, "");
+    }
 }
