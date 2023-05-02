@@ -8,6 +8,7 @@ export { StringService } from "./string";
 
 // Models
 export { EventService } from "./models/event";
+export { MenuService } from "./models/menu";
 export { ProductService } from "./models/product";
 export { OrderService } from "./models/order";
 export { OperatorService } from "./models/operator";

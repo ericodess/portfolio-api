@@ -15,6 +15,7 @@ export class Statics {
     public static ORDER_CLIENT_NAME_MAX_LENGTH = 25;
 
     public static EVENT_COLLECTION_NAME = "events";
+    public static MENU_COLLECTION_NAME = "menus";
     public static OPERATOR_COLLECTION_NAME = "operators";
     public static ORDER_COLLECTION_NAME = "orders";
     public static PRODUCT_COLLECTION_NAME = "products";
