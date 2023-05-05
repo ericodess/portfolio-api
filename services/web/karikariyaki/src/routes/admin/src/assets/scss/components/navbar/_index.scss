@@ -7,6 +7,10 @@ app-navbar {
 	height: 100vh;
 	overflow: hidden;
 
+	*[data-was-dispatched="true"] {
+		display: none;
+	}
+
 	.navbar {
 		&__wrapper {
 			display: flex;

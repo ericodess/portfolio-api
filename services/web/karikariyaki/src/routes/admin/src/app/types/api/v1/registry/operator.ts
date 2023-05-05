@@ -37,6 +37,14 @@ export class OperatorRegistryApiV1 extends BaseApi {
 		});
 	}
 
+	public searchSelf(): Observable<ApiResponseWrapper<Operator>> {
+		const endpoint = new URL(`${this._endpoint}/self`);
+
+		return this.client.get<ApiResponseWrapper<Operator>>(endpoint.href, {
+			withCredentials: true,
+		});
+	}
+
 	public save(params: CreatableParams): Observable<ApiResponseWrapper<Operator>> {
 		const endpoint = new URL(this._endpoint);
 

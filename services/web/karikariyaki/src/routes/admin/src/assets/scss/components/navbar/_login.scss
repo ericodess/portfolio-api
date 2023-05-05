@@ -29,17 +29,25 @@ app-navbar {
 					color: $foreground-brighter;
 					width: 100%;
 		
+					&[data-is-disabled="true"] {
+						color: $foreground-bright;
+			
+						.mat-mdc-text-field-wrapper {
+							background-color: $foreground-disabled;
+						}
+					}
+	
 					input {
 						color: $foreground-brighter;
-						height: clamp(3rem, 4vh + 1rem, 6rem) !important;
+						height: clamp(4rem, 4vh + 1rem, 6rem) !important;
 					}
-				
+		
 					.mat-mdc-text-field-wrapper {
 						background-color: $foreground-bright;
 						border-radius: $app-input-border-raidus;
 						box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
 					}
-		
+
 					.mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing {
 						border-color: transparent;
 					}
@@ -75,9 +83,9 @@ app-navbar {
 					transition: color ease-in-out 300ms, border-color ease-in-out 300ms, background-color ease-in-out 300ms;
 		
 					&:disabled {
-						color: $foreground-brighter;
-						border-color: $foreground-bright;
-						background-color: $foreground-bright;
+						color: $foreground-bright;
+						border-color: $foreground-disabled;
+						background-color: $foreground-disabled;
 						pointer-events: none;
 
 						&:hover {
@@ -97,6 +105,20 @@ app-navbar {
 						}
 					}
 				}
+			}
+
+			&__error {
+				font-family: 'Comfortaa';
+				font-weight: 800;
+				font-size: 0.8rem;
+				color: #ff9966;
+				text-align: center;
+				max-width: 100%;
+				padding: 2vh;
+				margin: 4vh 0 0 0;
+				word-wrap: break-word;
+				background-color: $foreground-bright;
+				border-radius: $app-input-border-raidus;
 			}
 		}
 	}

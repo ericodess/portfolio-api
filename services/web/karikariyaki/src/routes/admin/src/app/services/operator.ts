@@ -4,27 +4,47 @@ import { Observable, ReplaySubject } from 'rxjs';
 // Interface
 import { Operator } from '@interfaces';
 
+// Services
+import { ApiService } from '@services';
+
 @Injectable({ providedIn: 'root' })
 export class OperatorService {
 	private _operator: Operator | null;
-	private _operatorSubject: ReplaySubject<Operator>;
-	private _operatorObersavable: Observable<Operator>;
+	private _operatorSubject: ReplaySubject<Operator | null>;
+	private _operatorObersavable: Observable<Operator | null>;
 
-	constructor() {
+	constructor(private _apiService: ApiService) {
 		this._operator = null;
 
-		this._operatorSubject = new ReplaySubject<Operator>();
+		this._operatorSubject = new ReplaySubject<Operator | null>();
 		this._operatorObersavable = this._operatorSubject.asObservable();
 	}
 
 	public get operator() {
+		if (!this._operator) {
+			this._apiService.V1.operatorRegistry.searchSelf().subscribe({
+				next: (response) => {
+					if (response.wasSuccessful === false || !response.result) {
+						return;
+					}
+
+					this._operator = response.result;
+
+					this.update();
+				},
+				error: () => {
+					this._operator = null;
+
+					this.update();
+				},
+			});
+		}
+
 		return this._operatorObersavable;
 	}
 
 	public update() {
-		if (!this._operator) {
-			this.signOut();
-
+		if (this._operatorSubject.closed) {
 			return;
 		}
 
@@ -36,10 +56,8 @@ export class OperatorService {
 			return;
 		}
 
-		if (!this._operatorSubject || this._operatorSubject.closed) {
-			this._operatorSubject = new ReplaySubject<Operator>();
-
-			this._operatorObersavable = this._operatorSubject.asObservable();
+		if (this._operatorSubject.closed) {
+			this._onInit();
 		}
 
 		this._operator = operator;
@@ -48,6 +66,27 @@ export class OperatorService {
 	}
 
 	public signOut() {
-		console.log('TODO SIGN-OUT');
+		this._apiService.V1.operatorAdmin.signOut().subscribe({
+			next: () => {
+				this._onCleanUp();
+			},
+			error: () => {
+				this._onCleanUp();
+			},
+		});
+	}
+
+	private _onCleanUp() {
+		this._operator = null;
+
+		this.update();
+
+		this._operatorSubject.complete();
+	}
+
+	private _onInit() {
+		this._operatorSubject = new ReplaySubject<Operator | null>();
+
+		this._operatorObersavable = this._operatorSubject.asObservable();
 	}
 }

@@ -1,37 +1,56 @@
 <div class="navbar__wrapper">
-	<div class="navbar__login">
+	<div class="navbar__login" [attr.data-was-dispatched]="wasLoginNavbarDispatched">
 		<form [formGroup]="loginForm">
 			<app-avatar
 				[base64Image]="operator?.photo"
-				[@breathe]="getLoginAvatarBreatheAnimationStatus()"
-				(@breathe.done)="isBreathing = !isBreathing"
-				[@shrink]="getLoginAvatarShrinkAnimationStatus()"
+				[@breathe]="loginAvatarBreatheAnimationState"
+				(@breathe.done)="onLoginAvatarBreatheAnimationDone()"
+				[@shrink]="loginAvatarShrinkAnimationState"
 			></app-avatar>
 			<mat-form-field
 				appearance="outline"
-				[@shrink]="getLoginInputShrinkAnimationStatus()"
+				[attr.data-is-disabled]="loginForm.disabled"
+				[@shrink]="loginInputShrinkAnimationState"
 			>
 				<mat-label>Username</mat-label>
-				<input matInput formControlName="userName" required>
+				<input
+					matInput
+					formControlName="userName"
+					[minlength]="NAVBAR_INPUT_USER_NAME_MIN_LENGTH"
+					[maxLength]="NAVBAR_INPUT_USER_NAME_MAX_LENGTH"
+					required
+				>
 			</mat-form-field>
 			<button
 				type="button"
 				(click)="onLogin()"
-				[@shrink]="getLoginInputShrinkAnimationStatus()"
-				[disabled]="loginForm.get('userName')?.invalid"
+				[@shrink]="loginInputShrinkAnimationState"
+				(@shrink.done)="onLoginInputShrinkAnimationDone($event)"
+				[disabled]="loginForm.disabled || loginForm.get('userName')?.invalid"
 			>
 				Login
 			</button>
+			<div
+				class="navbar__login__error"
+				[attr.data-was-dispatched]="wasLoginNavbarDispatched"
+				[@shrink]="loginInputErrorShrinkAnimationState"
+			>
+				{{errorMessage}}
+			</div>
 		</form>
 	</div>
 	<div
 		class="navbar__logged"
-		[attr.data-is-expanded]="isLoggedNavbarExpanded"
- 		[@loginSwipe]="getLoginSwipeAnimation()" 
-		[@loggedSwipe]="getLoggedSwipeAnimation()"
+ 		[@loginSwipe]="wasLoginNavbarDispatched === false ? loginNavbarSwipeAnimationState : 'invalid'"
+		(@loginSwipe.done)="onLoginNavbarSwipeAnimationDone($event)"
+		[@loggedSwipe]="wasLoginNavbarDispatched ? loggedNavbarSwipeAnimationState : 'invalid'"		
 	>
 		<div class="navbar__content"></div>
-		<button class="navbar__hamburguer" (click)="onHamburgerClick()">
+		<button
+			class="navbar__hamburguer"
+			(click)="onHamburgerClick()"
+			[disabled]="wasLoginNavbarDispatched === false"
+		>
 			<svg
 				viewBox="0 0 24 24"
 				xmlns="http://www.w3.org/2000/svg"

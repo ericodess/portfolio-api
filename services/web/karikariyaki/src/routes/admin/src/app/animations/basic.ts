@@ -1,7 +1,8 @@
 import { transition, trigger, state, style, animate } from '@angular/animations';
 
-export class AvatarAnimations {
+export class BasicAnimations {
 	public static ZOOM_ANIMATION_DURATION_IN_MS = 400;
+	public static ZOOM_ANIMATION_DELAY_IN_MS = BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS * 1.5;
 	public static BREATHING_ANIMATION_DURATION_IN_MS = 1000;
 
 	public static get zoomAnimation() {
@@ -24,7 +25,7 @@ export class AvatarAnimations {
 				'open => closed',
 				[
 					animate(
-						`${AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS}ms {{delay}}ms ease-in-out`,
+						`${BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS}ms {{delay}}ms ease-in-out`,
 					),
 				],
 				{ delay: 0 },
@@ -33,7 +34,7 @@ export class AvatarAnimations {
 				'closed => open',
 				[
 					animate(
-						`${AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS}ms {{delay}}ms ease-in-out`,
+						`${BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS}ms {{delay}}ms ease-in-out`,
 					),
 				],
 				{ delay: 0 },
@@ -56,10 +57,10 @@ export class AvatarAnimations {
 				}),
 			),
 			transition('inhale => exhale', [
-				animate(`${AvatarAnimations.BREATHING_ANIMATION_DURATION_IN_MS}ms ease`),
+				animate(`${BasicAnimations.BREATHING_ANIMATION_DURATION_IN_MS}ms ease`),
 			]),
 			transition('exhale => inhale', [
-				animate(`${AvatarAnimations.BREATHING_ANIMATION_DURATION_IN_MS}ms ease`),
+				animate(`${BasicAnimations.BREATHING_ANIMATION_DURATION_IN_MS}ms ease`),
 			]),
 		]);
 	}

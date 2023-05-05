@@ -1,12 +1,12 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 // Animation
-import { AvatarAnimations } from '@animations';
+import { BasicAnimations } from '@animations';
 
 @Component({
 	selector: 'app-avatar',
 	templateUrl: './index.component.html',
-	animations: [AvatarAnimations.zoomAnimation],
+	animations: [BasicAnimations.zoomAnimation],
 })
 export class AvatarComponent implements OnChanges {
 	@Input()
@@ -14,8 +14,8 @@ export class AvatarComponent implements OnChanges {
 
 	public hasChangedImage = true;
 
-	public animationDurationInMs = AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS;
-	public animationDelayInMs = AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS * 1.5;
+	public animationDurationInMs = BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS;
+	public animationDelayInMs = BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS * 1.5;
 
 	ngOnChanges(changes: SimpleChanges): void {
 		const nextBase64Image = changes['base64Image'];
@@ -31,13 +31,13 @@ export class AvatarComponent implements OnChanges {
 
 	public getPropImageShrinkAnimationDelay() {
 		return this.hasChangedImage
-			? AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS
-			: AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS * 1.5;
+			? BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS
+			: BasicAnimations.ZOOM_ANIMATION_DELAY_IN_MS;
 	}
 
 	public getDefaultImageShrinkAnimationDelay() {
 		return this.hasChangedImage
-			? AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS * 1.5
-			: AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS;
+			? BasicAnimations.ZOOM_ANIMATION_DELAY_IN_MS
+			: BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS;
 	}
 }

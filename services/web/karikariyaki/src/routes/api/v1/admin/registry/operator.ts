@@ -1,7 +1,12 @@
 import { Router } from "express";
 
 // Services
-import { OperatorService, RequestService, ResponseService } from "@services";
+import {
+    JWTService,
+    OperatorService,
+    RequestService,
+    ResponseService,
+} from "@services";
 
 const router = Router();
 
@@ -25,6 +30,42 @@ router.get("/", (req, res) => {
         })
         .catch((error) => {
             res.status(500).json(
+                ResponseService.generateFailedResponse(error.message)
+            );
+        });
+});
+
+router.get("/self", (req, res) => {
+    const decodedAccessToken = JWTService.decodeAccessToken(
+        req.cookies[process.env.COOKIE_NAME]
+    );
+
+    if (!decodedAccessToken || !decodedAccessToken.userName) {
+        JWTService.clearCookies(res);
+
+        res.status(400).json(
+            ResponseService.generateFailedResponse("Invalid access token")
+        );
+
+        return;
+    }
+
+    OperatorService.queryByUserName(decodedAccessToken.userName)
+        .then((response) => {
+            if (!response) {
+                res.status(404).json(
+                    ResponseService.generateFailedResponse("Operator not found")
+                );
+
+                return;
+            }
+
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
+        })
+        .catch((error) => {
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });

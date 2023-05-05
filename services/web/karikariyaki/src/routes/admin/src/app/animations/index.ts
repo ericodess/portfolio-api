@@ -1,2 +1,2 @@
-export { AvatarAnimations } from './avatar';
+export { BasicAnimations } from './basic';
 export { LoggedNavbarAnimation, LoginNavbarAnimation } from './navbar';

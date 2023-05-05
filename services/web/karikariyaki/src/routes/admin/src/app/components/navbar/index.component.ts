@@ -1,20 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AnimationEvent } from '@angular/animations';
 
 // Interface
 import { Operator } from '@interfaces';
 
 // Animations
-import { AvatarAnimations, LoggedNavbarAnimation, LoginNavbarAnimation } from '@animations';
+import { BasicAnimations, LoggedNavbarAnimation, LoginNavbarAnimation } from '@animations';
 
 // Service
-import { ApiService, OperatorService } from '@services';
+import { ApiService, OperatorService, StringService } from '@services';
 
 @Component({
 	selector: 'app-navbar',
 	templateUrl: './index.component.html',
 	animations: [
-		AvatarAnimations.breatheAnimation,
+		BasicAnimations.breatheAnimation,
 		LoggedNavbarAnimation.swipeAnimation,
 		LoginNavbarAnimation.shrinkAnimation,
 		LoginNavbarAnimation.swipeAnimation,
@@ -22,20 +23,46 @@ import { ApiService, OperatorService } from '@services';
 })
 export class NavbarComponent implements OnInit {
 	/**
-	 * Primitives
+	 * Consts
+	 */
+	public readonly NAVBAR_INPUT_USER_NAME_MIN_LENGTH = 1;
+	public readonly NAVBAR_INPUT_USER_NAME_MAX_LENGTH = 25;
+
+	/**
+	 * API switches
+	 */
+	public isLoading = false;
+
+	/**
+	 * Animation switches
 	 */
 	public wasLoginInputDispatched = false;
-	public wasLoginAvatarDispatched = false;
 	public wasLoginNavbarDispatched = false;
-	public isLoggedNavbarExpanded = false;
-	public isBreathing = true;
-	public isLoading = false;
+
+	/**
+	 * Animation states
+	 */
+	public loginAvatarBreatheAnimationState: 'inhale' | 'exhale' = 'inhale';
+	public loginAvatarShrinkAnimationState: 'min' | 'max' = 'max';
+	public loginInputShrinkAnimationState: 'min' | 'max' = 'max';
+	public loginInputErrorShrinkAnimationState: 'min' | 'max' = 'min';
+	public loginNavbarSwipeAnimationState: 'right' | 'left' = 'right';
+	public loggedNavbarSwipeAnimationState: 'right' | 'left' = 'left';
+
+	/**
+	 * Error
+	 */
+	public errorMessage = '';
 
 	/**
 	 * Angular
 	 */
 	public loginForm = new FormGroup({
-		userName: new FormControl('', Validators.required),
+		userName: new FormControl('', [
+			Validators.required,
+			Validators.minLength(this.NAVBAR_INPUT_USER_NAME_MIN_LENGTH),
+			Validators.maxLength(this.NAVBAR_INPUT_USER_NAME_MAX_LENGTH),
+		]),
 	});
 
 	/**
@@ -43,54 +70,108 @@ export class NavbarComponent implements OnInit {
 	 */
 	public operator: Operator | null = null;
 
-	constructor(private _apiService: ApiService, private _operatorServidor: OperatorService) {}
+	constructor(private _apiService: ApiService, private _operatorService: OperatorService) {}
 
 	ngOnInit(): void {
-		this._operatorServidor.operator.subscribe({
+		this._operatorService.operator.subscribe({
 			next: (currentOperator) => {
 				this.operator = currentOperator;
 
-				setTimeout(() => {
-					this.wasLoginAvatarDispatched = true;
-				}, LoginNavbarAnimation.SHRINK_ANIMATION_DURATION_IN_MS + AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS + AvatarAnimations.BREATHING_ANIMATION_DURATION_IN_MS);
+				if (!currentOperator) {
+					this.retrieveLoginInput();
+
+					return;
+				}
+
+				this.dispatchLoginInput();
 
 				setTimeout(() => {
-					this.wasLoginNavbarDispatched = true;
-				}, AvatarAnimations.ZOOM_ANIMATION_DURATION_IN_MS + LoginNavbarAnimation.SHRINK_ANIMATION_DURATION_IN_MS * 3);
+					this.dispatchLoginAvatar();
+					this.dispatchLogin();
+				}, LoginNavbarAnimation.SHRINK_ANIMATION_DURATION_IN_MS + BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS);
+
+				return;
 			},
-			error: (error) => {
-				console.error(error);
+			error: () => {
+				this.setError('Failed to retrieve operator data');
+
+				this.retrieveLoginInput();
+				this.disableLoading();
 			},
 		});
 	}
 
-	public getLoginAvatarBreatheAnimationStatus = () => {
-		return this.isLoading ? (this.isBreathing ? 'inhale' : 'exhale') : 'inhale';
-	};
+	public dispatchLoginAvatar() {
+		if (this.wasLoginNavbarDispatched) {
+			return;
+		}
 
-	public getLoginAvatarShrinkAnimationStatus = () => {
-		return this.wasLoginAvatarDispatched ? 'min' : 'max';
-	};
+		this.loginAvatarShrinkAnimationState = 'min';
+	}
 
-	public getLoginInputShrinkAnimationStatus = () => {
-		return this.wasLoginInputDispatched ? 'min' : 'max';
-	};
+	public retrieveLoginInput() {
+		if (this.wasLoginNavbarDispatched) {
+			return;
+		}
 
-	public getLoginSwipeAnimation = () => {
-		return this.wasLoginAvatarDispatched
-			? this.wasLoginInputDispatched
-				? 'left'
-				: 'right'
-			: 'right';
-	};
+		this.loginInputShrinkAnimationState = 'max';
 
-	public getLoggedSwipeAnimation = () => {
-		return this.wasLoginInputDispatched && this.wasLoginNavbarDispatched
-			? this.isLoggedNavbarExpanded
-				? 'left'
-				: 'right'
-			: 'invalid';
-	};
+		this.loginForm.enable();
+	}
+
+	public dispatchLoginInput() {
+		if (this.wasLoginNavbarDispatched) {
+			return;
+		}
+
+		this.loginInputShrinkAnimationState = 'min';
+
+		this.loginForm.disable();
+	}
+
+	public enableLoading() {
+		if (this.wasLoginNavbarDispatched) {
+			return;
+		}
+
+		this.isLoading = true;
+		this.loginAvatarBreatheAnimationState = 'exhale';
+	}
+
+	public disableLoading() {
+		if (this.wasLoginNavbarDispatched) {
+			return;
+		}
+
+		this.isLoading = false;
+		this.loginAvatarBreatheAnimationState = 'inhale';
+	}
+
+	public dispatchLogin() {
+		if (this.wasLoginNavbarDispatched) {
+			return;
+		}
+
+		this.loginNavbarSwipeAnimationState = 'left';
+	}
+
+	public onHamburgerClick() {
+		if (this.wasLoginNavbarDispatched === false) {
+			return;
+		}
+
+		this.loggedNavbarSwipeAnimationState =
+			this.loggedNavbarSwipeAnimationState === 'left' ? 'right' : 'left';
+	}
+
+	public onLoginAvatarBreatheAnimationDone() {
+		if (this.wasLoginNavbarDispatched || this.isLoading === false) {
+			return;
+		}
+
+		this.loginAvatarBreatheAnimationState =
+			this.loginAvatarBreatheAnimationState === 'inhale' ? 'exhale' : 'inhale';
+	}
 
 	public onLogin() {
 		const userNameFormControl = this.loginForm.get('userName');
@@ -98,18 +179,21 @@ export class NavbarComponent implements OnInit {
 		if (
 			!userNameFormControl ||
 			userNameFormControl.invalid ||
-			userNameFormControl.value?.trim().length === 0
+			StringService.isStringInsideBoundaries(
+				userNameFormControl.value ?? '',
+				this.NAVBAR_INPUT_USER_NAME_MIN_LENGTH,
+				this.NAVBAR_INPUT_USER_NAME_MAX_LENGTH,
+			) === false
 		) {
 			return;
 		}
 
 		const userName = userNameFormControl.value as string;
 
-		this.wasLoginInputDispatched = true;
+		this.dispatchLoginInput();
 
 		const loadingAnimation = setTimeout(() => {
-			this.isLoading = true;
-			this.isBreathing = false;
+			this.enableLoading();
 		}, LoginNavbarAnimation.SHRINK_ANIMATION_DURATION_IN_MS);
 
 		this._apiService.V1.operatorAdmin.signIn(userName).subscribe({
@@ -120,22 +204,49 @@ export class NavbarComponent implements OnInit {
 
 				clearTimeout(loadingAnimation);
 
-				this.isLoading = false;
-				this.isBreathing = true;
+				this.disableLoading();
 
-				this._operatorServidor.signIn(response.result);
+				this._operatorService.signIn(response.result);
 			},
 			error: () => {
+				this.setError('Failed to sign in');
+
 				clearTimeout(loadingAnimation);
 
-				this.wasLoginInputDispatched = false;
-				this.isLoading = false;
-				this.isBreathing = true;
+				this.disableLoading();
+
+				this.retrieveLoginInput();
 			},
 		});
 	}
 
-	public onHamburgerClick() {
-		this.isLoggedNavbarExpanded = !this.isLoggedNavbarExpanded;
+	public onLoginNavbarSwipeAnimationDone(event: AnimationEvent) {
+		if (event.toState.trim().toLocaleLowerCase() !== 'left') {
+			return;
+		}
+
+		this.wasLoginNavbarDispatched = true;
+	}
+
+	public onLoginInputShrinkAnimationDone(event: AnimationEvent) {
+		if (event.toState.trim().toLocaleLowerCase() !== 'min') {
+			return;
+		}
+
+		this.wasLoginInputDispatched = true;
+	}
+
+	public setError(nextErrorMessage: string) {
+		if (nextErrorMessage.trim().length === 0) {
+			this.errorMessage = '';
+
+			this.loginInputErrorShrinkAnimationState = 'min';
+
+			return;
+		}
+
+		this.errorMessage = nextErrorMessage;
+
+		this.loginInputErrorShrinkAnimationState = 'max';
 	}
 }

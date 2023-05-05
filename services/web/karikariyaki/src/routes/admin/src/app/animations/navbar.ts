@@ -11,38 +11,38 @@ export class LoggedNavbarAnimation {
 
 	private static _mobileSwipeAnimation = trigger('loggedSwipe', [
 		state(
-			'right',
+			'left',
 			style({
 				width: 'calc(100vw + 8vh)',
 				transform: 'translateX(-102vw)',
 			}),
 		),
 		state(
-			'left',
+			'right',
 			style({
 				width: 'calc(100vw + 8vh)',
 				transform: 'translateX(0)',
 			}),
 		),
-		transition('right => left', [animate('0.2s')]),
 		transition('left => right', [animate('0.2s')]),
+		transition('right => left', [animate('0.2s')]),
 	]);
 
 	private static _desktopSwipeAnimation = trigger('loggedSwipe', [
 		state(
-			'right',
+			'left',
 			style({
 				width: '12.5vh',
 			}),
 		),
 		state(
-			'left',
+			'right',
 			style({
 				width: '35vh',
 			}),
 		),
-		transition('right => left', [animate('0.2s')]),
 		transition('left => right', [animate('0.2s')]),
+		transition('right => left', [animate('0.2s')]),
 	]);
 }
 
