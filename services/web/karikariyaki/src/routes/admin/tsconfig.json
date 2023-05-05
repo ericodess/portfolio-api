@@ -24,10 +24,14 @@
 			"dom"
 		],
 		"paths": {
-			"@services": ["src/app/services/index.ts"],
+			"@animations": ["src/app/animations/index.ts"],
+			"@components": ["src/app/components/index.ts"],
 			"@enums": ["src/app/enums/index.ts"],
+			"@imports": ["src/app/imports/index.ts"],
 			"@interfaces": ["src/app/interfaces/index.ts"],
-			"@types": ["src/app/types/index.ts"]
+			"@services": ["src/app/services/index.ts"],
+			"@types": ["src/app/types/index.ts"],
+			"@views": ["src/app/views/index.ts"]
 		}
 	},
 	"angularCompilerOptions": {
