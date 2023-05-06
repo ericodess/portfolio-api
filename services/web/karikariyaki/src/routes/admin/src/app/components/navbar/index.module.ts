@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 // Components
 import { NavbarComponent } from './index.component';
@@ -11,7 +12,8 @@ import { FormsBundle, MaterialBundle } from '@imports';
 
 @NgModule({
 	declarations: [NavbarComponent],
-	imports: [AvatarModule, FormsBundle, MaterialBundle],
+	imports: [AvatarModule, CommonModule, FormsBundle, MaterialBundle],
+	providers: [],
 	exports: [NavbarComponent],
 })
 export class NavbarModule {}

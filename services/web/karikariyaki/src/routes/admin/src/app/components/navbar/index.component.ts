@@ -224,7 +224,7 @@ export class NavbarComponent implements OnInit {
 		if (event.toState.trim().toLocaleLowerCase() !== 'left') {
 			return;
 		}
-
+		console.log('HAH');
 		this.wasLoginNavbarDispatched = true;
 	}
 

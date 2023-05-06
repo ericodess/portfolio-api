@@ -1,5 +1,5 @@
 <div class="navbar__wrapper">
-	<div class="navbar__login" [attr.data-was-dispatched]="wasLoginNavbarDispatched">
+	<div class="navbar__login" *ngIf="wasLoginNavbarDispatched === false">
 		<form [formGroup]="loginForm">
 			<app-avatar
 				[base64Image]="operator?.photo"
@@ -32,7 +32,6 @@
 			</button>
 			<div
 				class="navbar__login__error"
-				[attr.data-was-dispatched]="wasLoginNavbarDispatched"
 				[@shrink]="loginInputErrorShrinkAnimationState"
 			>
 				{{errorMessage}}
