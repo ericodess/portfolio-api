@@ -45,7 +45,7 @@ router.post("/sign-in", (req, res) => {
 });
 
 router.get("/sign-out", (req, res) => {
-    JWTService.clearCookies(res);
+    JWTService.clearCookies(req, res);
 
     res.status(200).json(ResponseService.generateSucessfulResponse());
 });

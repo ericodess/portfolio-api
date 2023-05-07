@@ -118,7 +118,7 @@ export class JWTService {
             userName = JWTService.decodeAccessToken(accessToken).userName;
         } catch (error) {
             if (error.name !== "TokenExpiredError") {
-                JWTService.clearCookies(res);
+                JWTService.clearCookies(req, res);
 
                 res.status(error.code ?? 500).json(
                     ResponseService.generateFailedResponse(error.message)
@@ -155,7 +155,7 @@ export class JWTService {
                     defaultCookieOptions
                 );
             } catch (error) {
-                JWTService.clearCookies(res);
+                JWTService.clearCookies(req, res);
 
                 res.status(error.code ?? 500).json(
                     ResponseService.generateFailedResponse(error.message)
@@ -180,7 +180,7 @@ export class JWTService {
 
             next();
         } catch (error) {
-            JWTService.clearCookies(res);
+            JWTService.clearCookies(req, res);
 
             res.status(500).json(
                 ResponseService.generateFailedResponse(error.message)
@@ -188,13 +188,18 @@ export class JWTService {
         }
     }
 
-    public static clearCookies(res: Response) {
+    public static clearCookies(req: Request, res: Response) {
         if (!res) {
             return;
         }
 
-        res.clearCookie(process.env.COOKIE_NAME);
-        res.clearCookie(process.env.COOKIE_REFRESH_NAME);
+        if (req.cookies[process.env.COOKIE_NAME]) {
+            res.clearCookie(process.env.COOKIE_NAME);
+        }
+
+        if (req.cookies[process.env.COOKIE_REFRESH_NAME]) {
+            res.clearCookie(process.env.COOKIE_REFRESH_NAME);
+        }
     }
 
     public static getExpirationTimeInMs() {

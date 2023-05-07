@@ -41,7 +41,7 @@ router.get("/self", (req, res) => {
     );
 
     if (!decodedAccessToken || !decodedAccessToken.userName) {
-        JWTService.clearCookies(res);
+        JWTService.clearCookies(req, res);
 
         res.status(400).json(
             ResponseService.generateFailedResponse("Invalid access token")
