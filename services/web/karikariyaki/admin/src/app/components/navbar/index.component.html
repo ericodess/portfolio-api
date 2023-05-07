@@ -58,7 +58,7 @@
 <button
 	class="navbar__hamburguer"
 	(click)="onHamburgerClick()"
-	[disabled]="!wasLoginNavbarDispatched"
+	[disabled]="!wasLoginNavbarDispatched && !operator"
 	>
 	<svg
 		viewBox="0 0 24 24"
