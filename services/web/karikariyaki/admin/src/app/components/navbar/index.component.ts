@@ -248,8 +248,8 @@ export class NavbarComponent implements OnInit {
 
 				this._operatorService.signIn(response.result);
 			},
-			error: () => {
-				this.setError('Failed to sign in');
+			error: (error) => {
+				this.setError(error.error.description ?? 'Failed to sign in');
 
 				clearTimeout(loadingAnimation);
 
