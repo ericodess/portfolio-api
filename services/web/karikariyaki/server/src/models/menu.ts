@@ -6,11 +6,14 @@ import { InHouseError, Statics } from "@types";
 // Service
 import { DatabaseService, StringService } from "@services";
 
+// Enums
+import { MenuRealm } from "@enums";
+
 export enum MenuErrors {
     INVALID = "ERROR_MENU_INVALID",
     NOT_FOUND = "ERROR_MENU_NOT_FOUND",
+    REALM_REQUIRED = "ERROR_MENU_REALM_REQUIRED",
     ROUTE_DUPLICATED = "ERROR_MENU_ROUTE_DUPLICATED",
-    ROUTE_REQUIRED = "ERROR_MENU_ROUTE_REQUIRED",
     TITLE_DUPLICATED = "ERROR_MENU_TITLE_DUPLICATED",
     TITLE_REQUIRED = "ERROR_MENU_TITLE_REQUIRED",
 }
@@ -21,11 +24,15 @@ const validateMenuTitle = async (title: string) => {
     });
 
     if (foundMenu) {
-        throw new InHouseError(MenuErrors.ROUTE_DUPLICATED);
+        throw new InHouseError(MenuErrors.TITLE_DUPLICATED);
     }
 };
 
 const validateMenuRoute = async (route: string) => {
+    if (!route) {
+        return;
+    }
+
     const foundMenu = await MenuModel.findOne({
         route: DatabaseService.generateExactInsensitiveQuery(
             StringService.removeLeadingAndTrailingSlashes(route)
@@ -33,7 +40,7 @@ const validateMenuRoute = async (route: string) => {
     });
 
     if (foundMenu) {
-        throw new InHouseError(MenuErrors.TITLE_DUPLICATED);
+        throw new InHouseError(MenuErrors.ROUTE_DUPLICATED);
     }
 };
 
@@ -43,9 +50,13 @@ const MenuSchema = new Schema({
         required: [true, MenuErrors.TITLE_REQUIRED],
         validate: validateMenuTitle,
     },
+    realm: {
+        type: String,
+        enum: MenuRealm,
+        required: [true, MenuErrors.REALM_REQUIRED],
+    },
     route: {
         type: String,
-        required: [true, MenuErrors.ROUTE_REQUIRED],
         validate: validateMenuRoute,
     },
     parent: {

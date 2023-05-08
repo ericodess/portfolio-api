@@ -1,5 +1,8 @@
 import { Types } from "mongoose";
 
+// Enums
+import { MenuRealm } from "@enums";
+
 export class StringService {
     public static isStringInsideBoundaries(
         value: string,
@@ -45,20 +48,20 @@ export class StringService {
             .replace(/[^a-zA-Z]/g, "");
     }
 
+    public static toMenuRealm(value: string) {
+        if (!value || Object.keys(MenuRealm).includes(value) === false) {
+            return null;
+        }
+
+        return value as keyof typeof MenuRealm;
+    }
+
     public static toObjectId(value: string) {
         if (!value) {
             return null;
         }
 
         return new Types.ObjectId(value);
-    }
-
-    public static toString(value: Types.ObjectId) {
-        if (!value) {
-            return null;
-        }
-
-        return value.toString();
     }
 
     public static toObjectIds(values: string[]) {
@@ -73,6 +76,14 @@ export class StringService {
         });
 
         return convertedValues;
+    }
+
+    public static toString(value: Types.ObjectId) {
+        if (!value) {
+            return null;
+        }
+
+        return value.toString();
     }
 
     public static toStrings(values: Types.ObjectId[]) {

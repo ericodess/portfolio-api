@@ -1,7 +1,12 @@
 import { Router } from "express";
 
 // Services
-import { MenuService, RequestService, ResponseService } from "@services";
+import {
+    MenuService,
+    RequestService,
+    ResponseService,
+    StringService,
+} from "@services";
 
 // Models
 import { MenuErrors } from "@models";
@@ -10,10 +15,7 @@ const router = Router();
 
 router.get("/", (req, res) => {
     MenuService.query({
-        id: RequestService.queryParamToString(req.query.id),
-        title: RequestService.queryParamToString(req.query.title),
-        route: RequestService.queryParamToString(req.query.route),
-        parentId: RequestService.queryParamToString(req.query.parentId),
+        realm: "INSIDE",
     })
         .then((response) => {
             res.status(200).json(
@@ -21,18 +23,21 @@ router.get("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
 });
 
 router.post("/", (req, res) => {
+    const realm = StringService.toMenuRealm(
+        RequestService.queryParamToString(req.body.realm)
+    );
     const title = RequestService.queryParamToString(req.body.title);
     const route = RequestService.queryParamToString(req.body.route);
     const parentId = RequestService.queryParamToString(req.body.parentId);
 
-    if (!title || !route) {
+    if (!title || !realm) {
         res.status(400).json(
             ResponseService.generateFailedResponse(MenuErrors.INVALID)
         );
@@ -41,6 +46,7 @@ router.post("/", (req, res) => {
     }
 
     MenuService.save({
+        realm: realm,
         title: title,
         route: route,
         parentId: parentId,
@@ -59,6 +65,9 @@ router.post("/", (req, res) => {
 
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
+    const realm = StringService.toMenuRealm(
+        RequestService.queryParamToString(req.body.realm)
+    );
     const title = RequestService.queryParamToString(req.body.title);
     const route = RequestService.queryParamToString(req.body.route);
 
@@ -70,7 +79,7 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    MenuService.update(id, { title: title, route: route })
+    MenuService.update(id, { realm: realm, title: title, route: route })
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)

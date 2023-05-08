@@ -9,6 +9,14 @@ import { ApiService } from '@services';
 
 @Injectable({ providedIn: 'root' })
 export class OperatorService {
+	/**
+	 * Primitives
+	 */
+	private _isFetching = false;
+
+	/**
+	 * In House
+	 */
 	private _operator: Operator | null;
 	private _operatorSubject: ReplaySubject<Operator | null>;
 	private _operatorObersavable: Observable<Operator | null>;
@@ -21,7 +29,9 @@ export class OperatorService {
 	}
 
 	public get operator() {
-		if (!this._operator) {
+		if (!this._operator && this._isFetching === false) {
+			this._isFetching = true;
+
 			this._apiService.V1.operatorRegistry.searchSelf().subscribe({
 				next: (response) => {
 					if (response.wasSuccessful === false || !response.result) {
@@ -31,11 +41,15 @@ export class OperatorService {
 					this._operator = response.result;
 
 					this.update();
+
+					this._isFetching = false;
 				},
 				error: () => {
 					this._operator = null;
 
 					this.update();
+
+					this._isFetching = false;
 				},
 			});
 		}

@@ -4,7 +4,7 @@ import { Schema, Types, model } from "mongoose";
 import { InHouseError, Statics } from "@types";
 
 // Enums
-import { OrderStatus } from "@enum";
+import { OrderStatus } from "@enums";
 
 // Models
 import { EventModel, OperatorModel, ProductModel, VariantModel } from "@models";

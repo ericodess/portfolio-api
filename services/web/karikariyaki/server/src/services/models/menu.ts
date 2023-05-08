@@ -6,18 +6,22 @@ import { MenuModel } from "@models";
 // Services
 import { DatabaseService, StringService } from "@services";
 
+// Enums
+import { MenuRealm } from "@enums";
+
 interface DefaultParams {
     id?: string;
+    realm?: keyof typeof MenuRealm;
     title?: string;
     route?: string;
     parentId?: string;
 }
 
-type QueryableParams = DefaultParams;
+type QueryableParams = Pick<DefaultParams, "realm">;
 
 type CreatableParams = Omit<DefaultParams, "id">;
 
-type EditableParams = Pick<DefaultParams, "title" | "route">;
+type EditableParams = Omit<DefaultParams, "id" | "parentId">;
 
 export class MenuService {
     public static visibleParameters = ["title", "route", "parent", "children"];
@@ -25,44 +29,31 @@ export class MenuService {
     private static _populateOptions = [
         {
             path: "parent",
-            select: "route",
+            select: "title",
         },
         {
             path: "children",
-            select: "route",
+            select: "title route children",
+            populate: {
+                path: "children",
+                select: "title route",
+            },
         },
     ] as PopulateOptions[];
 
     public static async query(values: QueryableParams) {
         await DatabaseService.getConnection();
 
-        const query = [];
-
-        if (values.id) {
-            query.push({
-                _id: StringService.toObjectId(values.id),
-            });
-        }
-
-        if (values.title) {
-            query.push({
-                title: DatabaseService.generateBroadQuery(values.title),
-            });
-        }
-
-        if (values.route) {
-            query.push({
-                route: DatabaseService.generateBroadQuery(values.route),
-            });
-        }
-
-        if (values.parentId) {
-            query.push({
-                parent: StringService.toObjectId(values.parentId),
-            });
-        }
-
-        return await MenuModel.find(query.length === 0 ? null : { $or: query })
+        return await MenuModel.find({
+            $and: [
+                {
+                    parent: null,
+                },
+                {
+                    realm: values.realm,
+                },
+            ],
+        })
             .select(MenuService.visibleParameters)
             .populate(MenuService._populateOptions);
     }
@@ -72,6 +63,7 @@ export class MenuService {
 
         const newEntry = new MenuModel();
 
+        newEntry.realm = values.realm;
         newEntry.title = values.title?.trim();
         newEntry.route = StringService.removeLeadingAndTrailingSlashes(
             values.route
@@ -79,15 +71,17 @@ export class MenuService {
         newEntry.parent = StringService.toObjectId(values.parentId);
 
         if (newEntry.parent) {
-            await MenuModel.findByIdAndUpdate(
+            const updatedParent = await MenuModel.findByIdAndUpdate(
                 newEntry.parent,
                 {
                     $push: {
                         children: newEntry._id,
                     },
                 },
-                { runValidators: true }
+                { new: true, runValidators: true }
             );
+
+            newEntry.realm = updatedParent.realm as keyof typeof MenuRealm;
         }
 
         await newEntry.save();
@@ -107,10 +101,24 @@ export class MenuService {
 
         const menuId = StringService.toObjectId(id);
 
+        if (values.realm) {
+            await MenuModel.updateMany(
+                {
+                    parent: menuId,
+                },
+                {
+                    $set: {
+                        realm: values.realm,
+                    },
+                }
+            );
+        }
+
         return MenuModel.findByIdAndUpdate(
             menuId,
             {
                 $set: {
+                    realm: values.realm ?? undefined,
                     title: values.title ?? undefined,
                     route: values.route ?? undefined,
                 },

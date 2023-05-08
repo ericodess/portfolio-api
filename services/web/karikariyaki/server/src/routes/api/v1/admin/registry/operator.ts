@@ -40,32 +40,32 @@ router.get("/", (req, res) => {
         });
 });
 
-router.get("/self", (req, res) => {
-    const decodedAccessToken = JWTService.decodeAccessToken(
-        req.cookies[process.env.COOKIE_NAME]
-    );
+router.get("/self", async (req, res) => {
+    try {
+        const decodedAccessToken = JWTService.decodeAccessToken(
+            req.cookies[process.env.COOKIE_NAME]
+        );
 
-    OperatorService.queryByUserName(decodedAccessToken.userName)
-        .then((response) => {
-            if (!response) {
-                res.status(404).json(
-                    ResponseService.generateFailedResponse(
-                        OperatorErrors.NOT_FOUND
-                    )
-                );
+        const foundOperator = await OperatorService.queryByUserName(
+            decodedAccessToken.userName
+        );
 
-                return;
-            }
-
-            res.status(200).json(
-                ResponseService.generateSucessfulResponse(response)
+        if (!foundOperator) {
+            res.status(404).json(
+                ResponseService.generateFailedResponse(OperatorErrors.NOT_FOUND)
             );
-        })
-        .catch((error) => {
-            res.status(error.code ?? 500).json(
-                ResponseService.generateFailedResponse(error.message)
-            );
-        });
+
+            return;
+        }
+
+        res.status(200).json(
+            ResponseService.generateSucessfulResponse(foundOperator)
+        );
+    } catch (error) {
+        res.status(error.code ?? 500).json(
+            ResponseService.generateFailedResponse(error.message)
+        );
+    }
 });
 
 router.post("/", (req, res) => {

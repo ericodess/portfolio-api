@@ -8,38 +8,21 @@ import { BaseApi } from '@types';
 
 interface DefaultParams {
 	_id?: string;
+	realm?: string;
 	title?: string;
 	route?: string;
 	parentId?: string;
 }
 
-type QueryableParams = DefaultParams;
-
 type CreatableParams = Omit<DefaultParams, '_id'>;
 
-type EditableParams = Pick<DefaultParams, 'title' | 'route'>;
+type EditableParams = Omit<DefaultParams, '_id' | 'parentId'>;
 
 export class MenuRegistryApiV1 extends BaseApi {
 	private _endpoint = `${this.root}/v1/admin/registry/menu`;
 
-	public search(params?: QueryableParams): Observable<ApiResponseWrapper<Menu[]>> {
+	public search(): Observable<ApiResponseWrapper<Menu[]>> {
 		const endpoint = new URL(this._endpoint);
-
-		if (params?._id) {
-			endpoint.searchParams.append('id', params._id.trim());
-		}
-
-		if (params?.title) {
-			endpoint.searchParams.append('title', params.title.trim());
-		}
-
-		if (params?.route) {
-			endpoint.searchParams.append('route', params?.route.trim());
-		}
-
-		if (params?.parentId) {
-			endpoint.searchParams.append('parentId', params?.parentId.trim());
-		}
 
 		return this.client.get<ApiResponseWrapper<Menu[]>>(endpoint.href, {
 			withCredentials: true,
@@ -52,6 +35,7 @@ export class MenuRegistryApiV1 extends BaseApi {
 		return this.client.post<ApiResponseWrapper<Menu>>(
 			endpoint.href,
 			{
+				realm: params.realm,
 				title: params.title,
 				route: params.route,
 				parentId: params.parentId,
@@ -68,6 +52,7 @@ export class MenuRegistryApiV1 extends BaseApi {
 		return this.client.patch<ApiResponseWrapper<Menu>>(
 			endpoint.href,
 			{
+				realm: params.realm,
 				title: params.title,
 				route: params.route,
 			},
