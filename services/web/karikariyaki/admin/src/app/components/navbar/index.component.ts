@@ -3,13 +3,13 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AnimationEvent } from '@angular/animations';
 
 // Interface
-import { Operator } from '@interfaces';
+import { Menu, Operator } from '@interfaces';
 
 // Animations
 import { BasicAnimations, LoggedNavbarAnimation, LoginNavbarAnimation } from '@animations';
 
 // Service
-import { ApiService, OperatorService, StringService } from '@services';
+import { ApiService, MenuService, OperatorService, StringService } from '@services';
 
 @Component({
 	selector: 'app-navbar',
@@ -70,11 +70,27 @@ export class NavbarComponent implements OnInit {
 	/**
 	 * In House
 	 */
+	public menu: Menu[] = [];
 	public operator: Operator | null = null;
 
-	constructor(private _apiService: ApiService, private _operatorService: OperatorService) {}
+	constructor(
+		private _apiService: ApiService,
+		private _menuService: MenuService,
+		private _operatorService: OperatorService,
+	) {}
 
 	ngOnInit(): void {
+		this._menuService.menu.subscribe({
+			next: (nextMenu) => {
+				this.menu = nextMenu;
+			},
+			error: (error) => {
+				this.menu = [];
+
+				console.log(error);
+			},
+		});
+
 		this._operatorService.operator.subscribe({
 			next: (nextOperator) => {
 				this.disableLoading();
@@ -105,6 +121,8 @@ export class NavbarComponent implements OnInit {
 				setTimeout(() => {
 					this.dispatchLogin();
 				}, BasicAnimations.SHRINK_ANIMATION_DURATION_IN_MS * 2 + 100);
+
+				this._menuService.update();
 
 				return;
 			},
