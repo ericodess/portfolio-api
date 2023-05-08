@@ -3,6 +3,9 @@ import { Router } from "express";
 // Services
 import { OrderService, RequestService, ResponseService } from "@services";
 
+// Models
+import { OrderErrors } from "@models";
+
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -39,7 +42,7 @@ router.post("/", (req, res) => {
 
     if (!event || !operator || !client || !item) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid order data")
+            ResponseService.generateFailedResponse(OrderErrors.INVALID)
         );
 
         return;
@@ -71,7 +74,7 @@ router.patch("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid order data")
+            ResponseService.generateFailedResponse(OrderErrors.INVALID)
         );
 
         return;
@@ -97,7 +100,7 @@ router.delete("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid order data")
+            ResponseService.generateFailedResponse(OrderErrors.INVALID)
         );
 
         return;
@@ -107,7 +110,9 @@ router.delete("/:id", (req, res) => {
         .then((response) => {
             if (!response) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Order not found")
+                    ResponseService.generateFailedResponse(
+                        OrderErrors.NOT_FOUND
+                    )
                 );
 
                 return;

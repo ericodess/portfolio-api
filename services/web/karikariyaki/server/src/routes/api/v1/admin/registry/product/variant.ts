@@ -3,6 +3,9 @@ import { Router } from "express";
 // Services
 import { RequestService, ResponseService, VariantService } from "@services";
 
+// Models
+import { VariantErrors } from "@models";
+
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -29,7 +32,7 @@ router.post("/", (req, res) => {
 
     if (!name || !productId) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid variant data")
+            ResponseService.generateFailedResponse(VariantErrors.INVALID)
         );
 
         return;
@@ -57,7 +60,7 @@ router.patch("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid variant data")
+            ResponseService.generateFailedResponse(VariantErrors.INVALID)
         );
 
         return;
@@ -81,7 +84,7 @@ router.delete("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid variant data")
+            ResponseService.generateFailedResponse(VariantErrors.INVALID)
         );
 
         return;
@@ -91,7 +94,9 @@ router.delete("/:id", (req, res) => {
         .then((response) => {
             if (!response) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Variant not found")
+                    ResponseService.generateFailedResponse(
+                        VariantErrors.NOT_FOUND
+                    )
                 );
 
                 return;

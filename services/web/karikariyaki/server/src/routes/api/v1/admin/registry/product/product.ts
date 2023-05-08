@@ -2,6 +2,7 @@ import { Router } from "express";
 
 // Services
 import { RequestService, ResponseService, ProductService } from "@services";
+import { ProductErrors } from "@models";
 
 const router = Router();
 
@@ -27,7 +28,7 @@ router.post("/", (req, res) => {
 
     if (!name) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid product data")
+            ResponseService.generateFailedResponse(ProductErrors.INVALID)
         );
 
         return;
@@ -54,7 +55,7 @@ router.patch("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid product data")
+            ResponseService.generateFailedResponse(ProductErrors.INVALID)
         );
 
         return;
@@ -78,7 +79,7 @@ router.delete("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid product data")
+            ResponseService.generateFailedResponse(ProductErrors.INVALID)
         );
 
         return;
@@ -88,7 +89,9 @@ router.delete("/:id", (req, res) => {
         .then((response) => {
             if (!response) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Product not found")
+                    ResponseService.generateFailedResponse(
+                        ProductErrors.NOT_FOUND
+                    )
                 );
 
                 return;

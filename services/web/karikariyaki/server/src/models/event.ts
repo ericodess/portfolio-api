@@ -1,12 +1,23 @@
 import { Schema, Types, model } from "mongoose";
 
 // Types
-import { Statics } from "@types";
+import { InHouseError, Statics } from "@types";
 
+// Models
 import { OrderModel } from "@models";
 
 // Services
 import { DatabaseService, StringService } from "@services";
+
+export enum EventErrors {
+    DATE_REQUIRED = "ERROR_EVENT_DATE_REQUIRED",
+    DATE_DUPLICATED = "ERROR_EVENT_DATE_DUPLICATED",
+    INVALID = "ERROR_EVENT_INVALID",
+    NOT_FOUND = "ERROR_EVENT_NOT_FOUND",
+    NAME_REQUIRED = "ERROR_EVENT_NAME_REQUIRED",
+    ORDER_INVALID = "ERROR_EVENT_ORDER_INVALID",
+    ORDER_DUPLICATED = "ERROR_EVENT_ORDER_DUPLICATED",
+}
 
 const validateEventDate = async (date: Date) => {
     const entry = await EventModel.findOne({
@@ -14,7 +25,7 @@ const validateEventDate = async (date: Date) => {
     });
 
     if (entry) {
-        throw Error("Event date is duplicated");
+        throw new InHouseError(EventErrors.DATE_DUPLICATED);
     }
 };
 
@@ -25,11 +36,11 @@ const validateEventOrders = async (orderIds: Types.ObjectId[]) => {
         );
 
         if (!foundOrder) {
-            throw Error("Order ID is invalid");
+            throw new InHouseError(EventErrors.ORDER_INVALID);
         }
 
         if (orderIds.filter((_) => _ !== orderId).length >= 1) {
-            throw Error("Order is duplicated");
+            throw new InHouseError(EventErrors.ORDER_DUPLICATED);
         }
     }
 };
@@ -37,11 +48,11 @@ const validateEventOrders = async (orderIds: Types.ObjectId[]) => {
 const EventSchema = new Schema({
     name: {
         type: String,
-        required: [true, "Event name is required"],
+        required: [true, EventErrors.NAME_REQUIRED],
     },
     date: {
         type: Date,
-        required: [true, "Event date is required"],
+        required: [true, EventErrors.DATE_REQUIRED],
         validate: validateEventDate,
     },
     orders: {

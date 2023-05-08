@@ -3,6 +3,9 @@ import { Router } from "express";
 // Services
 import { EventService, RequestService, ResponseService } from "@services";
 
+// Models
+import { EventErrors } from "@models";
+
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -28,7 +31,7 @@ router.post("/", (req, res) => {
 
     if (!name) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid event data")
+            ResponseService.generateFailedResponse(EventErrors.INVALID)
         );
 
         return;
@@ -55,7 +58,7 @@ router.patch("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid event data")
+            ResponseService.generateFailedResponse(EventErrors.INVALID)
         );
 
         return;
@@ -79,7 +82,7 @@ router.delete("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid event data")
+            ResponseService.generateFailedResponse(EventErrors.INVALID)
         );
 
         return;
@@ -89,7 +92,9 @@ router.delete("/:id", (req, res) => {
         .then((response) => {
             if (!response) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Event not found")
+                    ResponseService.generateFailedResponse(
+                        EventErrors.NOT_FOUND
+                    )
                 );
 
                 return;

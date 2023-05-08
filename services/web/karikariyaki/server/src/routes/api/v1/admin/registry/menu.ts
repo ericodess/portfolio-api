@@ -3,6 +3,9 @@ import { Router } from "express";
 // Services
 import { MenuService, RequestService, ResponseService } from "@services";
 
+// Models
+import { MenuErrors } from "@models";
+
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -31,7 +34,7 @@ router.post("/", (req, res) => {
 
     if (!title || !route) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid menu data")
+            ResponseService.generateFailedResponse(MenuErrors.INVALID)
         );
 
         return;
@@ -61,7 +64,7 @@ router.patch("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid menu data")
+            ResponseService.generateFailedResponse(MenuErrors.INVALID)
         );
 
         return;
@@ -85,7 +88,7 @@ router.delete("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid menu data")
+            ResponseService.generateFailedResponse(MenuErrors.INVALID)
         );
 
         return;
@@ -95,7 +98,7 @@ router.delete("/:id", (req, res) => {
         .then((response) => {
             if (!response) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Menu not found")
+                    ResponseService.generateFailedResponse(MenuErrors.NOT_FOUND)
                 );
 
                 return;

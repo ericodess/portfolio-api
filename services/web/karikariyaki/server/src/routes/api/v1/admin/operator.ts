@@ -8,6 +8,9 @@ import {
     OperatorService,
 } from "@services";
 
+// Models
+import { OperatorErrors } from "@models";
+
 const router = Router();
 
 router.post("/sign-in", (req, res) => {
@@ -15,7 +18,7 @@ router.post("/sign-in", (req, res) => {
 
     if (!userName) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid operator data")
+            ResponseService.generateFailedResponse(OperatorErrors.INVALID)
         );
 
         return;
@@ -25,7 +28,9 @@ router.post("/sign-in", (req, res) => {
         .then((response) => {
             if (!response) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Operator not found")
+                    ResponseService.generateFailedResponse(
+                        OperatorErrors.NOT_FOUND
+                    )
                 );
 
                 return;

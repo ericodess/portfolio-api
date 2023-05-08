@@ -8,13 +8,23 @@ import { InHouseError, Statics } from "@types";
 // Services
 import { OperatorService, ResponseService } from "@services";
 
+// Models
+import { OperatorErrors } from "@models";
+
+export enum JWTErrors {
+    SETTINGS_INVALID = "ERROR_JWT_SETTINGS_INVALID",
+    ACCESS_TOKEN_SETTINGS_INVALID = "ERROR_JWT_ACCESS_TOKEN_SETTINGS_INVALID",
+    ACCESS_TOKEN_NOT_FOUND = "ERROR_JWT_ACCESS_TOKEN_NOT_FOUND",
+    ACCESS_TOKEN_INVALID = "ERROR_JWT_ACCESS_TOKEN_INVALID",
+    REFRESH_TOKEN_SETTINGS_INVALID = "ERROR_JWT_REFRESH_TOKEN_SETTINGS_INVALID",
+    REFRESH_TOKEN_NOT_FOUND = "ERROR_JWT_REFRESH_TOKEN_NOT_FOUND",
+    REFRESH_TOKEN_INVALID = "ERROR_JWT_REFRESH_TOKEN_INVALID",
+}
+
 export class JWTService {
     public static encodeAccessToken(userName: string): string {
         if (!process.env.SECRET || !process.env.COOKIE_NAME) {
-            throw new InHouseError(
-                503,
-                "Invalid cookie settings, please contact the adminstrator"
-            );
+            throw new InHouseError(JWTErrors.SETTINGS_INVALID, 503);
         }
 
         return sign({ userName: userName.trim() }, process.env.SECRET, {
@@ -28,10 +38,7 @@ export class JWTService {
             !process.env.SECRET_REFRESH_SIZE ||
             Number.isNaN(parseInt(process.env.SECRET_REFRESH_SIZE))
         ) {
-            throw new InHouseError(
-                503,
-                "Invalid cookie settings, please contact the adminstrator"
-            );
+            throw new InHouseError(JWTErrors.SETTINGS_INVALID, 503);
         }
 
         return sign(
@@ -51,19 +58,19 @@ export class JWTService {
     public static decodeAccessToken(accessToken: string): JwtPayload {
         if (!process.env.SECRET) {
             throw new InHouseError(
-                503,
-                "Invalid cookie settings, please contact the adminstrator"
+                JWTErrors.ACCESS_TOKEN_SETTINGS_INVALID,
+                503
             );
         }
 
         if (!accessToken) {
-            throw new InHouseError(403, "No access token provided");
+            throw new InHouseError(JWTErrors.ACCESS_TOKEN_NOT_FOUND, 403);
         }
 
         const result = verify(accessToken, process.env.SECRET);
 
         if (typeof result === "string") {
-            throw new InHouseError(403, "Invalid refresh token result");
+            throw new InHouseError(JWTErrors.ACCESS_TOKEN_INVALID, 403);
         }
 
         return result;
@@ -72,19 +79,19 @@ export class JWTService {
     public static decodeRefreshToken(refreshToken: string): JwtPayload {
         if (!process.env.SECRET_REFRESH) {
             throw new InHouseError(
-                503,
-                "Invalid cookie settings, please contact the adminstrator"
+                JWTErrors.REFRESH_TOKEN_SETTINGS_INVALID,
+                503
             );
         }
 
         if (!refreshToken) {
-            throw new InHouseError(403, "No refresh token provided");
+            throw new InHouseError(JWTErrors.REFRESH_TOKEN_NOT_FOUND, 403);
         }
 
         const result = verify(refreshToken, process.env.SECRET_REFRESH);
 
         if (typeof result === "string") {
-            throw new InHouseError(403, "Invalid refresh token result");
+            throw new InHouseError(JWTErrors.REFRESH_TOKEN_INVALID, 403);
         }
 
         return result;
@@ -172,7 +179,9 @@ export class JWTService {
 
             if (!foundOperator) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Operator not found")
+                    ResponseService.generateFailedResponse(
+                        OperatorErrors.NOT_FOUND
+                    )
                 );
 
                 return;

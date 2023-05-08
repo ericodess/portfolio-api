@@ -1,7 +1,7 @@
 export { DatabaseService } from "./database";
 export { DateService } from "./date";
 export { HashService } from "./hash";
-export { JWTService } from "./jwt";
+export { JWTService, JWTErrors } from "./jwt";
 export { ResponseService } from "./response";
 export { RequestService } from "./request";
 export { StringService } from "./string";

@@ -8,6 +8,9 @@ import {
     ResponseService,
 } from "@services";
 
+// Models
+import { OperatorErrors } from "@models";
+
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -18,7 +21,9 @@ router.get("/", (req, res) => {
         .then((response) => {
             if (!response) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Operator not found")
+                    ResponseService.generateFailedResponse(
+                        OperatorErrors.NOT_FOUND
+                    )
                 );
 
                 return;
@@ -40,21 +45,13 @@ router.get("/self", (req, res) => {
         req.cookies[process.env.COOKIE_NAME]
     );
 
-    if (!decodedAccessToken || !decodedAccessToken.userName) {
-        JWTService.clearCookies(req, res);
-
-        res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid access token")
-        );
-
-        return;
-    }
-
     OperatorService.queryByUserName(decodedAccessToken.userName)
         .then((response) => {
             if (!response) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Operator not found")
+                    ResponseService.generateFailedResponse(
+                        OperatorErrors.NOT_FOUND
+                    )
                 );
 
                 return;
@@ -78,7 +75,7 @@ router.post("/", (req, res) => {
 
     if (!userName || !displayName) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid operator data")
+            ResponseService.generateFailedResponse(OperatorErrors.INVALID)
         );
 
         return;
@@ -108,7 +105,7 @@ router.patch("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid operator data")
+            ResponseService.generateFailedResponse(OperatorErrors.INVALID)
         );
 
         return;
@@ -135,7 +132,7 @@ router.delete("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid operator data")
+            ResponseService.generateFailedResponse(OperatorErrors.INVALID)
         );
 
         return;
@@ -145,7 +142,9 @@ router.delete("/:id", (req, res) => {
         .then((response) => {
             if (!response) {
                 res.status(404).json(
-                    ResponseService.generateFailedResponse("Operator not found")
+                    ResponseService.generateFailedResponse(
+                        OperatorErrors.NOT_FOUND
+                    )
                 );
 
                 return;

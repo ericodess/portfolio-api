@@ -1,7 +1,7 @@
 import { Schema, Types, model } from "mongoose";
 
 // Types
-import { Statics } from "@types";
+import { InHouseError, Statics } from "@types";
 
 // Enums
 import { OrderStatus } from "@enum";
@@ -12,11 +12,26 @@ import { EventModel, OperatorModel, ProductModel, VariantModel } from "@models";
 // Services
 import { StringService } from "@services";
 
+export enum OrderErrors {
+    CLIENT_NAME_GREATER_THAN_MAX_LENGTH = "ERROR_ORDER_CLIENT_NAME_GREATER_THAN_MAX_LENGTH",
+    CLIENT_NAME_LESS_THAN_MIN_LENGTH = "ERROR_ORDER_CLIENT_NAME_LESS_THAN_MIN_LENGTH",
+    CLIENT_REQUIRED = "ERROR_ORDER_CLIENT_REQUIRED",
+    EVENT_INVALID = "ERROR_ORDER_EVENT_INVALID",
+    EVENT_REQUIRED = "ERROR_ORDER_EVENT_REQUIRED",
+    INVALID = "ERROR_ORDER_INVALID",
+    ITEM_INVALID = "ERROR_ORDER_ITEM_INVALID",
+    ITEM_REQUIRED = "ERROR_ORDER_ITEM_REQUIRED",
+    ITEM_VARIANT_INVALID = "ERROR_ORDER_ITEM_VARIANT_INVALID",
+    NOT_FOUND = "ERROR_ORDER_NOT_FOUND",
+    OPERATOR_INVALID = "ERROR_ORDER_OPERATOR_INVALID",
+    OPERATOR_REQUIRED = "ERROR_ORDER_OPERATOR_REQUIRED",
+}
+
 const validateOrderEvent = async (eventId: Types.ObjectId) => {
     const foundEvent = await EventModel.findById(eventId);
 
     if (!foundEvent) {
-        throw Error("Order event ID is invalid");
+        throw new InHouseError(OrderErrors.EVENT_INVALID);
     }
 };
 
@@ -24,7 +39,7 @@ const validateOrderOperator = async (operatorId: Types.ObjectId) => {
     const foundOperator = await OperatorModel.findById(operatorId);
 
     if (!foundOperator) {
-        throw Error("Order operator ID is invalid");
+        throw new InHouseError(OrderErrors.OPERATOR_INVALID);
     }
 };
 
@@ -37,14 +52,12 @@ const validateOrderClient = async (client: string) => {
         ) === false
     ) {
         if (client.trim().length < Statics.ORDER_CLIENT_NAME_MIN_LENGTH) {
-            throw Error(
-                `Order client name is shorter than ${Statics.ORDER_CLIENT_NAME_MIN_LENGTH} characters`
+            throw new InHouseError(
+                OrderErrors.CLIENT_NAME_LESS_THAN_MIN_LENGTH
             );
         }
 
-        throw Error(
-            `Order client name is longer than ${Statics.ORDER_CLIENT_NAME_MAX_LENGTH} characters`
-        );
+        throw new InHouseError(OrderErrors.CLIENT_NAME_GREATER_THAN_MAX_LENGTH);
     }
 };
 
@@ -52,7 +65,7 @@ const validateOrderItem = async (itemId: Types.ObjectId) => {
     const foundItem = await ProductModel.findById(itemId);
 
     if (!foundItem) {
-        throw Error("Order product ID is invalid");
+        throw new InHouseError(OrderErrors.ITEM_INVALID);
     }
 };
 
@@ -64,7 +77,7 @@ const validateOrderItemVariant = async (variantId: Types.ObjectId) => {
     const foundVariant = await VariantModel.findById(variantId);
 
     if (!foundVariant) {
-        throw Error("Order product variant ID is invalid");
+        throw new InHouseError(OrderErrors.ITEM_VARIANT_INVALID);
     }
 };
 
@@ -72,7 +85,7 @@ const OrderSchema = new Schema({
     event: {
         type: Schema.Types.ObjectId,
         ref: Statics.EVENT_COLLECTION_NAME,
-        required: [true, "Event data is required"],
+        required: [true, OrderErrors.EVENT_REQUIRED],
         validate: validateOrderEvent,
     },
     status: {
@@ -83,18 +96,18 @@ const OrderSchema = new Schema({
     operator: {
         type: Schema.Types.ObjectId,
         ref: Statics.OPERATOR_COLLECTION_NAME,
-        required: [true, "Operator data is required"],
+        required: [true, OrderErrors.OPERATOR_REQUIRED],
         validate: validateOrderOperator,
     },
     client: {
         type: String,
-        required: [true, "Client data is required"],
+        required: [true, OrderErrors.CLIENT_REQUIRED],
         validate: validateOrderClient,
     },
     item: {
         type: Schema.Types.ObjectId,
         ref: Statics.PRODUCT_COLLECTION_NAME,
-        required: [true, "Item data is required"],
+        required: [true],
         validate: validateOrderItem,
     },
     variant: {
