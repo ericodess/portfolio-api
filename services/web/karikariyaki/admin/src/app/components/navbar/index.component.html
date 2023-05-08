@@ -24,6 +24,7 @@
 					formControlName="userName"
 					[minlength]="NAVBAR_INPUT_USER_NAME_MIN_LENGTH"
 					[maxLength]="NAVBAR_INPUT_USER_NAME_MAX_LENGTH"
+					(focus)="onFocus()"
 					required
 				>
 			</mat-form-field>

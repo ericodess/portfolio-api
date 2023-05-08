@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
 // Interface
-import { Menu, Operator } from '@interfaces';
+import { Menu } from '@interfaces';
 
 // Services
 import { ApiService } from '@services';

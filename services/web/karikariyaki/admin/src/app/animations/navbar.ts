@@ -15,7 +15,8 @@ export class LoggedNavbarAnimation {
 		state(
 			'left',
 			style({
-				width: '0',
+				width: '100vw',
+				marginLeft: '-100vw',
 			}),
 		),
 		state(
@@ -36,7 +37,8 @@ export class LoggedNavbarAnimation {
 		state(
 			'left',
 			style({
-				width: '0',
+				width: '30vh',
+				marginLeft: '-30vh',
 			}),
 		),
 		state(
@@ -76,7 +78,8 @@ export class LoginNavbarAnimation {
 		state(
 			'left',
 			style({
-				width: '0',
+				width: '100vw',
+				marginLeft: '-100vw',
 			}),
 		),
 		transition('right => left', [
@@ -96,12 +99,14 @@ export class LoginNavbarAnimation {
 			'right',
 			style({
 				width: '100vw',
+				marginLeft: '0',
 			}),
 		),
 		state(
 			'left',
 			style({
-				width: '0',
+				width: '30vh',
+				marginLeft: '-30vh',
 			}),
 		),
 		transition('right => left', [

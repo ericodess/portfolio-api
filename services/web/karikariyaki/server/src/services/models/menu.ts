@@ -41,21 +41,32 @@ export class MenuService {
         },
     ] as PopulateOptions[];
 
-    public static async query(values: QueryableParams) {
+    public static async query(values: QueryableParams, isRootOnly = true) {
         await DatabaseService.getConnection();
 
-        return await MenuModel.find({
-            $and: [
-                {
-                    parent: null,
-                },
-                {
-                    realm: values.realm,
-                },
-            ],
-        })
+        const query = [];
+
+        if (isRootOnly) {
+            query.push({
+                parent: null,
+            });
+        }
+
+        if (values.realm) {
+            query.push({
+                realm: values.realm,
+            });
+        }
+
+        return await MenuModel.find(
+            query.length === 0
+                ? null
+                : {
+                      $and: query,
+                  }
+        )
             .select(MenuService.visibleParameters)
-            .populate(MenuService._populateOptions);
+            .populate(isRootOnly ? MenuService._populateOptions : null);
     }
 
     public static async save(values: CreatableParams) {

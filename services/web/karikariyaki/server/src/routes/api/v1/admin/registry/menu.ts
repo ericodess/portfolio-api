@@ -14,9 +14,21 @@ import { MenuErrors } from "@models";
 const router = Router();
 
 router.get("/", (req, res) => {
-    MenuService.query({
-        realm: "INSIDE",
-    })
+    MenuService.query({}, false)
+        .then((response) => {
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
+        })
+        .catch((error) => {
+            res.status(error.code ?? 500).json(
+                ResponseService.generateFailedResponse(error.message)
+            );
+        });
+});
+
+router.get("/self", (req, res) => {
+    MenuService.query({ realm: "INSIDE" })
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)

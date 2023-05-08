@@ -215,6 +215,10 @@ export class NavbarComponent implements OnInit {
 		this.loginNavbarSwipeAnimationState = 'left';
 	}
 
+	public onFocus() {
+		this.setError('');
+	}
+
 	public onHamburgerClick() {
 		if (this.wasLoginNavbarDispatched === false) {
 			return;
@@ -308,7 +312,9 @@ export class NavbarComponent implements OnInit {
 
 	public setError(nextErrorMessage: string) {
 		if (nextErrorMessage.trim().length === 0) {
-			this.errorMessage = '';
+			setTimeout(() => {
+				this.errorMessage = '';
+			}, BasicAnimations.SHRINK_ANIMATION_DURATION_IN_MS);
 
 			this.loginInputErrorShrinkAnimationState = 'min';
 
