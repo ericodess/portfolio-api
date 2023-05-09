@@ -1,0 +1,67 @@
+.menu {
+	&__tree, &__stem {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+
+	&__tree {
+		width: 100%;
+	}
+
+	&__stem {
+		margin-left: 2vh;
+	}
+
+	&__node {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+
+		button {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			min-height: 3vh;
+			padding: 2vh;
+			border-radius: 10px;
+			gap: 0 2.5vh;
+			background-color: transparent;
+			transition: background-color ease-in-out 300ms;
+
+			&:hover {
+				cursor: pointer;
+				background-color: $foreground-bright;
+
+				svg path {
+					stroke: $yellow-bright;
+				}
+			}
+
+			span {
+				font-family: 'Comfortaa';
+				font-size: 1rem;
+				color: $foreground-brighter;
+				width: 100%;
+				word-wrap: break-word;
+				text-align: start;
+			}
+	
+			svg {
+				width: 1.8vh;
+				height: 1.8vh;
+				margin-left: auto;
+
+				path {
+					transition: stroke ease-in-out 300ms;
+				}
+			}
+
+			&[data-contains-children = "true"] {
+				& span {
+					width: calc(100% - 3.8vh);
+				}
+			}
+		}
+	}
+}

@@ -66,6 +66,7 @@ export class MenuService {
                   }
         )
             .select(MenuService.visibleParameters)
+            .sort("title")
             .populate(isRootOnly ? MenuService._populateOptions : null);
     }
 

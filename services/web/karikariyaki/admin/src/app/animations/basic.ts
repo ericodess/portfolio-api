@@ -4,6 +4,9 @@ export class BasicAnimations {
 	public static BREATHING_ANIMATION_DURATION_IN_MS = 1000;
 
 	public static SHRINK_ANIMATION_DURATION_IN_MS = 1000;
+	public static VERTICAL_SHRINK_ANIMATION_DURATION_IN_MS = 200;
+
+	public static ROTATE_ANIMATION_DURATION_IN_MS = 200;
 
 	public static ZOOM_ANIMATION_DURATION_IN_MS = 400;
 	public static ZOOM_ANIMATION_DELAY_IN_MS = BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS * 1.5;
@@ -27,6 +30,24 @@ export class BasicAnimations {
 			]),
 			transition('exhale => inhale', [
 				animate(`${BasicAnimations.BREATHING_ANIMATION_DURATION_IN_MS}ms ease`),
+			]),
+		]);
+	}
+
+	public static get verticalShrinkAnimation() {
+		return trigger('verticalShrink', [
+			state(
+				'min',
+				style({
+					height: 0,
+				}),
+			),
+			state('max', style({})),
+			transition('min => max', [
+				animate(`${BasicAnimations.VERTICAL_SHRINK_ANIMATION_DURATION_IN_MS}ms`),
+			]),
+			transition('max => min', [
+				animate(`${BasicAnimations.VERTICAL_SHRINK_ANIMATION_DURATION_IN_MS}ms`),
 			]),
 		]);
 	}
@@ -136,6 +157,29 @@ export class BasicAnimations {
 			]),
 			transition('closed => open', [
 				animate(`${BasicAnimations.ZOOM_ANIMATION_DURATION_IN_MS}ms ease-in-out`),
+			]),
+		]);
+	}
+
+	public static get rotateCounterClock180Animation() {
+		return trigger('rotateCounterClock180', [
+			state(
+				'start',
+				style({
+					transform: 'rotate(0deg)',
+				}),
+			),
+			state(
+				'end',
+				style({
+					transform: 'rotate(-180deg)',
+				}),
+			),
+			transition('start => end', [
+				animate(`${BasicAnimations.ROTATE_ANIMATION_DURATION_IN_MS}ms ease-in-out`),
+			]),
+			transition('end => start', [
+				animate(`${BasicAnimations.ROTATE_ANIMATION_DURATION_IN_MS}ms ease-in-out`),
 			]),
 		]);
 	}

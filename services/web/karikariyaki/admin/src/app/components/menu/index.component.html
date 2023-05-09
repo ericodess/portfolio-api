@@ -1,0 +1,51 @@
+<ul class="menu__tree">
+	<ng-container *ngTemplateOutlet="recursiveMenu; context:{ menus: data }"></ng-container>
+</ul>
+
+<ng-template #recursiveMenu let-menus="menus">
+	<li *ngFor="let node of menus" class="menu__node">
+		<button
+			[attr.data-contains-children]="node.children && node.children.length > 0"
+			(click)="onClick(node)"
+		>
+			<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<circle cx="12" cy="12" r="2" fill="#C79D39"/>
+			</svg>
+			<span>{{ currentLang[node.title] ? currentLang[node.title] :  node.title }}</span>
+			<svg
+				*ngIf="node.children && node.children.length > 0"
+				viewBox="0 0 21 12"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				[@rotateCounterClock180]="isNodeExpanded(node._id) ? 'end' : 'start'"
+			>
+				<path d="M2.00607 1.14285L9.21465 8.99864C9.99606 9.85021 11.3345 9.86412 12.1334 9.02899L19.6778 1.14285" stroke="#C79D39" stroke-width="3"/>
+			</svg>
+		</button>
+		<ul
+			*ngIf="node.children && node.children.length > 0" 
+			[id]="node._id"
+			class="menu__stem"
+			[@verticalShrink]="isNodeExpanded(node._id) ? 'max' : 'min'"
+		>               
+			<ng-container *ngTemplateOutlet="recursiveMenu; context:{ menus: node.children }"></ng-container>
+		</ul>
+	</li>
+</ng-template>
+
+<!--
+	<svg
+		viewBox="0 0 32 32"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path d="M23.492,2H30V8.508H23.492Z" style="fill:#1b8c98"/>
+		<path d="M11.477,7.363,15.3,2.1l5.265,3.825-3.825,5.265Z" style="fill:#1b8c98"/>
+		<path d="M20.477,12.922,26.631,10.8l2.119,6.153L22.6,19.075Z" style="fill:#1b8c98"/>
+		<path d="M2,8.453H8.508v6.508H2Z" style="fill:#4ed1f8"/>
+		<path d="M2,16H8.508v6.508H2Z" style="fill:#4ed1f8"/>
+		<path d="M9.492,16H16v6.508H9.492Z" style="fill:#4ed1f8"/>
+		<path d="M2,23.492H8.508V30H2Z" style="fill:#4ed1f8"/>
+		<path d="M9.492,23.492H16V30H9.492Z" style="fill:#4ed1f8"/>
+		<path d="M17.039,23.492h6.508V30H17.039Z" style="fill:#4ed1f8"/>
+	</svg>
+-->

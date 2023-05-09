@@ -4,5 +4,5 @@ export interface Menu {
 	title: string;
 	route: string;
 	parent?: string;
-	children: Omit<Menu, 'submenus'>;
+	children: Menu[];
 }
