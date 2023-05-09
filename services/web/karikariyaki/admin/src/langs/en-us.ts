@@ -1,0 +1,20 @@
+import { InHouseLang } from '@interfaces';
+
+export default {
+	/**
+	 * Menu
+	 */
+	MENU_HOME_TITLE: 'Home',
+
+	MENU_REGISTRY_TITLE: 'Registry',
+
+	MENU_REGISTRY_EVENT_TITLE: 'Event',
+	MENU_REGISTRY_EVENT_INDEX_TITLE: 'Item',
+	MENU_REGISTRY_EVENT_ORDER_TITLE: 'Order',
+
+	MENU_REGISTRY_OPERATOR_TITLE: 'Operator',
+
+	MENU_REGISTRY_PRODUCT_TITLE: 'Product',
+	MENU_REGISTRY_PRODUCT_INDEX_TITLE: 'Item',
+	MENU_REGISTRY_PRODUCT_VARIANT_TITLE: 'Variant',
+} as InHouseLang;
