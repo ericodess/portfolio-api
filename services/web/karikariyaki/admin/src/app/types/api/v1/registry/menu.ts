@@ -29,6 +29,14 @@ export class MenuRegistryApiV1 extends BaseApi {
 		});
 	}
 
+	public searchSelf(): Observable<ApiResponseWrapper<Menu[]>> {
+		const endpoint = new URL(this._endpoint + '/self');
+
+		return this.client.get<ApiResponseWrapper<Menu[]>>(endpoint.href, {
+			withCredentials: true,
+		});
+	}
+
 	public save(params: CreatableParams): Observable<ApiResponseWrapper<Menu>> {
 		const endpoint = new URL(this._endpoint);
 

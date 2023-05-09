@@ -4,7 +4,7 @@
 app-navbar {
 	position: fixed;
 	min-width: 100vw;
-	height: 100vh;
+	height: 100dvh;
 	display: flex;
 	flex-direction: row;
 	overflow: hidden;
@@ -36,7 +36,7 @@ app-navbar {
 			justify-content: center;
 			margin-top: auto;
 			margin-right: auto;
-			height: 7vh;
+			height: 8vh;
 			width: 8vh;
 			border-top-right-radius: 15px;
 			background-color: $foreground;
@@ -45,7 +45,7 @@ app-navbar {
 		
 			& svg {
 				height: 3.5vh;
-				width: 3.5h;
+				width: 3.5vh;
 				fill: $yellow-dark;
 				transition: fill ease-in-out 300ms;
 			}
@@ -57,7 +57,7 @@ app-navbar {
 	app-navbar {
 		.navbar {
 			&__hamburguer {
-				width: 12vh;
+				width: 8vh;
 	
 				&:hover {
 					cursor: pointer;
