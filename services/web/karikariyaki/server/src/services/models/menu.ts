@@ -24,7 +24,13 @@ type CreatableParams = Omit<DefaultParams, "id">;
 type EditableParams = Omit<DefaultParams, "id" | "parentId">;
 
 export class MenuService {
-    public static visibleParameters = ["title", "route", "parent", "children"];
+    public static visibleParameters = [
+        "title",
+        "icon",
+        "route",
+        "parent",
+        "children",
+    ];
 
     private static _populateOptions = [
         {
@@ -33,10 +39,10 @@ export class MenuService {
         },
         {
             path: "children",
-            select: "title route children",
+            select: "title icon route children",
             populate: {
                 path: "children",
-                select: "title route",
+                select: "title icon route",
             },
         },
     ] as PopulateOptions[];

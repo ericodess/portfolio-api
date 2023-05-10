@@ -10,6 +10,7 @@ interface DefaultParams {
 	_id?: string;
 	realm?: string;
 	title?: string;
+	icon?: string;
 	route?: string;
 	parentId?: string;
 }
