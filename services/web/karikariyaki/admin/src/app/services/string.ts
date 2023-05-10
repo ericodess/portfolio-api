@@ -8,4 +8,14 @@ export class StringService {
 
 		return trimmedValue.length > minSize && trimmedValue.length < maxSize;
 	}
+
+	public static removeLeadingAndTrailingSlashes(value: string) {
+		if (!value) {
+			return null;
+		}
+
+		const rasterizedRoute = value.trim().toLowerCase().replace(/^\/+/g, '');
+
+		return rasterizedRoute.replace(/\/+$/, '');
+	}
 }

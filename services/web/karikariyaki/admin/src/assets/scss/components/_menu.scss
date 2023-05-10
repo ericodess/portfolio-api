@@ -39,7 +39,7 @@
 				}
 			}
 
-			&:hover, &[data-is-expanded="true"] {
+			&:hover, &[data-is-active="true"] {
 				background-color: $foreground-bright;
 			}
 
@@ -66,6 +66,16 @@
 			&[data-contains-children="true"] {
 				& span {
 					width: calc(100% - 3.8vh);
+				}
+			}
+
+			&[data-contains-children="false"] {
+				.menu__node__indicator {
+					height: 100%;
+					min-height: 3vh;
+					width: 1vh;
+					border-radius: 15px;
+					background-color: $yellow-dark;
 				}
 			}
 		}

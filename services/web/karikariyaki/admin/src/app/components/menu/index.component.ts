@@ -11,14 +11,15 @@ import { InHouseLang, Menu } from '@interfaces';
 import Langs from '@langs';
 
 // Services
-import { LanguageService } from '@services';
+import { LanguageService, StringService } from '@services';
 
 @Component({
 	selector: 'app-menu',
 	templateUrl: './index.component.html',
 	animations: [
-		BasicAnimations.verticalShrinkAnimation,
+		BasicAnimations.fadeAnimation,
 		BasicAnimations.rotateCounterClock180Animation,
+		BasicAnimations.verticalShrinkAnimation,
 	],
 })
 export class MenuComponent implements OnInit {
@@ -29,17 +30,12 @@ export class MenuComponent implements OnInit {
 	@Input()
 	public callback: (() => void) | undefined;
 
-	public expandedNodes: string[] = [];
-
 	public currentLang: InHouseLang = Langs.enUs;
 
-	constructor(private _langService: LanguageService, private _router: Router) {}
+	private _activeRoute = '-';
+	private _activeNodes: Set<string> = new Set();
 
-	public isNodeExpanded(nodeId: string) {
-		return this.expandedNodes.find((expandedNodeId) => expandedNodeId === nodeId)
-			? true
-			: false;
-	}
+	constructor(private _langService: LanguageService, private _router: Router) {}
 
 	ngOnInit(): void {
 		this._langService.language.subscribe({
@@ -49,32 +45,89 @@ export class MenuComponent implements OnInit {
 		});
 	}
 
+	public isActive(node: Menu) {
+		const windowRoute = StringService.removeLeadingAndTrailingSlashes(this._router.url);
+
+		if (node.route === windowRoute && this._activeRoute !== windowRoute) {
+			this._updateMenuActiveItem(node.route);
+
+			this._activeRoute = windowRoute;
+		}
+
+		return this._activeNodes.has(node._id) ? true : false;
+	}
+
+	public isExpandable(node: Menu) {
+		return !!node.children && node.children.length > 0;
+	}
+
 	public onClick(node: Menu) {
 		if (!node.children || node.children.length === 0) {
 			if (node.route !== null) {
 				this._router
 					.navigate(['/' + node.route])
 					.then((response) => {
-						if (!response || !this.callback) {
+						if (!response) {
 							return;
 						}
 
-						this.callback();
+						this._updateMenuActiveItem(node.route);
+
+						if (this.callback) {
+							this.callback();
+						}
 					})
-					.catch((error) => console.log(error));
+					.catch(() => {
+						this._activeRoute = '-';
+
+						this._router.navigate(['/']);
+					});
 			}
 
 			return;
 		}
 
-		if (this.isNodeExpanded(node._id)) {
-			this.expandedNodes = this.expandedNodes.filter(
-				(expandedNodeId) => expandedNodeId !== node._id,
-			);
+		if (this.isActive(node)) {
+			this._activeNodes.delete(node._id);
 
 			return;
 		}
 
-		this.expandedNodes.push(node._id);
+		this._activeNodes.add(node._id);
+	}
+
+	private _updateMenuActiveItem(
+		targetRoute: string,
+		tree: Menu[] = this.data,
+		result: string[] = [],
+		depth = 1,
+	) {
+		for (let i = 0; i < tree.length; i++) {
+			const node = tree[i];
+
+			result.push(node._id);
+
+			if (node.route === targetRoute) {
+				this._activeNodes.clear();
+
+				result.forEach((nodeId) => {
+					this._activeNodes.add(nodeId);
+				});
+
+				break;
+			}
+
+			if (!node.children || node.children.length === 0) {
+				result = result.slice(0, -depth);
+
+				depth = 1;
+
+				continue;
+			}
+
+			depth++;
+
+			this._updateMenuActiveItem(targetRoute, node.children, result, depth);
+		}
 	}
 }

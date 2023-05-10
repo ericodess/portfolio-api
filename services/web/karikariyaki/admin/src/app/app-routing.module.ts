@@ -14,10 +14,6 @@ const routes: Routes = [
 		path: 'registry/product',
 		component: RegistryProductViewComponent,
 	},
-	{
-		path: '**',
-		redirectTo: '',
-	},
 ];
 
 @NgModule({
