@@ -343,6 +343,10 @@ export class NavbarComponent implements OnInit {
 		this.wasLoginInputDispatched = true;
 	}
 
+	public onRouting() {
+		this.loggedNavbarSwipeAnimationState = 'left';
+	}
+
 	public setError(nextErrorMessage: string) {
 		if (nextErrorMessage.trim().length === 0) {
 			setTimeout(() => {
