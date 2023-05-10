@@ -99,6 +99,10 @@ export class MenuService {
                 { new: true, runValidators: true }
             );
 
+            updatedParent.route = undefined;
+
+            await updatedParent.save();
+
             newEntry.realm = updatedParent.realm as keyof typeof MenuRealm;
         }
 
@@ -119,6 +123,8 @@ export class MenuService {
 
         const menuId = StringService.toObjectId(id);
 
+        const currentMenu = await MenuModel.findById(menuId);
+
         if (values.realm) {
             await MenuModel.updateMany(
                 {
@@ -138,7 +144,10 @@ export class MenuService {
                 $set: {
                     realm: values.realm ?? undefined,
                     title: values.title ?? undefined,
-                    route: values.route ?? undefined,
+                    route:
+                        currentMenu.children.length > 0
+                            ? undefined
+                            : values.route ?? undefined,
                 },
             },
             { new: true, runValidators: true }
