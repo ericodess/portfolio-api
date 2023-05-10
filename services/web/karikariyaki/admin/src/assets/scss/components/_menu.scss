@@ -16,6 +16,7 @@
 	&__node {
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
 		flex: 1;
 
 		button {
@@ -25,17 +26,21 @@
 			min-height: 3vh;
 			padding: 2vh;
 			border-radius: 10px;
+			margin-bottom: 1vh;
 			gap: 0 2.5vh;
 			background-color: transparent;
 			transition: background-color ease-in-out 300ms;
 
 			&:hover {
 				cursor: pointer;
-				background-color: $foreground-bright;
 
-				svg path {
-					stroke: $yellow-bright;
+				.node__arrow path {
+					stroke: $accent-bright;
 				}
+			}
+
+			&:hover, &[data-is-expanded="true"] {
+				background-color: $foreground-bright;
 			}
 
 			span {
@@ -47,21 +52,27 @@
 				text-align: start;
 			}
 	
-			svg {
+			.node__arrow {
 				width: 1.8vh;
 				height: 1.8vh;
 				margin-left: auto;
 
 				path {
+					stroke: $accent-dark;
 					transition: stroke ease-in-out 300ms;
 				}
 			}
 
-			&[data-contains-children = "true"] {
+			&[data-contains-children="true"] {
 				& span {
 					width: calc(100% - 3.8vh);
 				}
 			}
+		}
+
+		&__icon {
+			width: 2vh;
+			height: 2vh;
 		}
 	}
 }

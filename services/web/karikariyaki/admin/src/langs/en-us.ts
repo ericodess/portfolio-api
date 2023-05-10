@@ -4,6 +4,8 @@ export default {
 	/**
 	 * Menu
 	 */
+	MENU_TRANSLATE_TITLE: 'Language',
+
 	MENU_HOME_TITLE: 'Home',
 
 	MENU_REGISTRY_TITLE: 'Registry',

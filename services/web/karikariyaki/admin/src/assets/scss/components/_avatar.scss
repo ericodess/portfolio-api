@@ -6,8 +6,12 @@ app-avatar {
 	border-radius: 50%;
 	background-color: $foreground-bright;
 	color: white;
-	box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
 	overflow: hidden;
+
+	-webkit-box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1); 
+    -moz-box-shadow:    0px 10px 15px -3px rgba(0,0,0,0.1); 
+    -o-box-shadow: 		0px 10px 15px -3px rgba(0,0,0,0.1);
+	box-shadow: 		0px 10px 15px -3px rgba(0,0,0,0.1);
 
 	.animation__wrapper {
 		display: flex;

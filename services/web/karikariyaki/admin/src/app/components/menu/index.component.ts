@@ -26,6 +26,8 @@ export class MenuComponent implements OnInit {
 	public data: Menu[] = [];
 	@Input()
 	public depth = 0;
+	@Input()
+	public callback: (() => void) | undefined;
 
 	public expandedNodes: string[] = [];
 
@@ -52,7 +54,13 @@ export class MenuComponent implements OnInit {
 			if (node.route !== null) {
 				this._router
 					.navigate(['/' + node.route])
-					.then((response) => console.log(response))
+					.then((response) => {
+						if (!response || !this.callback) {
+							return;
+						}
+
+						this.callback();
+					})
 					.catch((error) => console.log(error));
 			}
 

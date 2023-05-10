@@ -244,7 +244,12 @@
 
 				& .app-button__background {
 					background-color: black;
-					transform: translateX(0);
+
+					-webkit-transform: translateX(0); 
+					-moz-transform:    translateX(0); 
+					-ms-transform:     translateX(0); 
+					-o-transform: 	   translateX(0); 
+					transform:         translateX(0);
 				}
 	
 				& .app-button__container {

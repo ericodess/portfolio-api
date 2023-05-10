@@ -38,7 +38,11 @@ app-login-view {
 			.mat-mdc-text-field-wrapper {
 				background-color: $foreground-bright;
 				border-radius: $app-input-border-raidus;
-				box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+
+				-webkit-box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1); 
+    			-moz-box-shadow:    0px 10px 15px -3px rgba(0,0,0,0.1); 
+    			-o-box-shadow:   	0px 10px 15px -3px rgba(0,0,0,0.1);
+				box-shadow: 		0px 10px 15px -3px rgba(0,0,0,0.1);
 			}
 
 			.mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing {
@@ -56,7 +60,7 @@ app-login-view {
 			}
 
 			.mdc-notched-outline--notched {
-				color: $yellow-dark;
+				color: $accent-dark;
 			}
 		}
 
@@ -71,7 +75,11 @@ app-login-view {
 			font-family: 'Comfortaa';
 			font-size: 1.2rem;
 			color: $foreground-brighter;
-			box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+
+			-webkit-box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1); 
+    		-moz-box-shadow:    0px 10px 15px -3px rgba(0,0,0,0.1); 
+    		-o-box-shadow:   	0px 10px 15px -3px rgba(0,0,0,0.1);
+			box-shadow: 		0px 10px 15px -3px rgba(0,0,0,0.1);
 
 			transition: color ease-in-out 300ms, border-color ease-in-out 300ms, background-color ease-in-out 300ms;
 
@@ -80,7 +88,7 @@ app-login-view {
 			}
 
 			&:hover, &:focus {
-				color: $yellow-dark;
+				color: $accent-dark;
 				border-color: transparent;
 				background-color: $foreground-bright;
 			}
@@ -88,7 +96,7 @@ app-login-view {
 	}
 }
 
-@media (min-width: 801px) {
+@media (min-width: 811px) {
 	app-login-view {
 		& form {
 			width: 20vw;

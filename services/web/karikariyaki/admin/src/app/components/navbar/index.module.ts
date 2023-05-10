@@ -5,14 +5,14 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './index.component';
 
 // Modules
-import { AvatarModule, MenuModule } from '@components';
+import { AvatarModule, LogoModule, MenuModule } from '@components';
 
 // Imports
 import { FormsBundle, MaterialBundle } from '@imports';
 
 @NgModule({
 	declarations: [NavbarComponent],
-	imports: [AvatarModule, CommonModule, FormsBundle, MaterialBundle, MenuModule],
+	imports: [AvatarModule, CommonModule, FormsBundle, LogoModule, MaterialBundle, MenuModule],
 	exports: [NavbarComponent],
 })
 export class NavbarModule {}

@@ -4,7 +4,7 @@ export class LoggedNavbarAnimation {
 	public static LOGGED_SWIPE_ANIMATION_DURATION_IS_MS = 200;
 
 	public static get swipeAnimation() {
-		const isMobile = matchMedia('(max-width: 801px)').matches;
+		const isMobile = matchMedia('(max-width: 811px)').matches;
 
 		return isMobile
 			? LoggedNavbarAnimation._mobileSwipeAnimation

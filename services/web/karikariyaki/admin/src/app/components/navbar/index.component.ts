@@ -3,13 +3,22 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AnimationEvent } from '@angular/animations';
 
 // Interface
-import { Menu, Operator } from '@interfaces';
+import { InHouseLang, Menu, Operator } from '@interfaces';
 
 // Animations
 import { BasicAnimations, LoggedNavbarAnimation, LoginNavbarAnimation } from '@animations';
 
 // Service
-import { ApiService, MenuService, OperatorService, StringService } from '@services';
+import {
+	ApiService,
+	LanguageService,
+	MenuService,
+	OperatorService,
+	StringService,
+} from '@services';
+
+// Langs
+import Langs from '@langs';
 
 @Component({
 	selector: 'app-navbar',
@@ -18,6 +27,8 @@ import { ApiService, MenuService, OperatorService, StringService } from '@servic
 		BasicAnimations.breatheAnimation,
 		BasicAnimations.bezierShrinkAnimation,
 		BasicAnimations.bezierShrinkHeightAnimation,
+		BasicAnimations.verticalShrinkAnimation,
+		BasicAnimations.rotateCounterClock180Animation,
 		LoggedNavbarAnimation.swipeAnimation,
 		LoginNavbarAnimation.swipeAnimation,
 	],
@@ -50,6 +61,7 @@ export class NavbarComponent implements OnInit {
 	public loginInputErrorShrinkAnimationState: 'min' | 'max' = 'min';
 	public loginNavbarSwipeAnimationState: 'right' | 'left' = 'left';
 	public loggedNavbarSwipeAnimationState: 'right' | 'left' = 'left';
+	public loggedNavbarProfileShrinkAnimationState: 'min' | 'max' = 'min';
 
 	/**
 	 * Error
@@ -72,14 +84,22 @@ export class NavbarComponent implements OnInit {
 	 */
 	public menu: Menu[] = [];
 	public operator: Operator | null = null;
+	public currentLang: InHouseLang = Langs.enUs;
 
 	constructor(
 		private _apiService: ApiService,
+		private _langService: LanguageService,
 		private _menuService: MenuService,
 		private _operatorService: OperatorService,
 	) {}
 
 	ngOnInit(): void {
+		this._langService.language.subscribe({
+			next: (nextLanguage) => {
+				this.currentLang = nextLanguage;
+			},
+		});
+
 		this._menuService.menu.subscribe({
 			next: (nextMenu) => {
 				this.menu = nextMenu;
@@ -215,7 +235,20 @@ export class NavbarComponent implements OnInit {
 		this.loginNavbarSwipeAnimationState = 'left';
 	}
 
+	public onProfileClick() {
+		if (this.wasLoginNavbarDispatched === false) {
+			return;
+		}
+
+		this.loggedNavbarProfileShrinkAnimationState =
+			this.loggedNavbarProfileShrinkAnimationState === 'min' ? 'max' : 'min';
+	}
+
 	public onFocus() {
+		if (this.wasLoginNavbarDispatched) {
+			return;
+		}
+
 		this.setError('');
 	}
 
