@@ -26,6 +26,7 @@ type EditableParams = Omit<DefaultParams, "id" | "parentId">;
 export class MenuService {
     public static visibleParameters = [
         "title",
+        "realm",
         "icon",
         "route",
         "parent",
