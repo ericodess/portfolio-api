@@ -17,7 +17,7 @@ interface DefaultParams {
     parentId?: string;
 }
 
-type QueryableParams = Pick<DefaultParams, "realm">;
+type QueryableParams = Omit<DefaultParams, "route">;
 
 type CreatableParams = Omit<DefaultParams, "id">;
 
@@ -53,15 +53,33 @@ export class MenuService {
 
         const query = [];
 
-        if (isRootOnly) {
+        if (values.id) {
             query.push({
-                parent: null,
+                _id: values.id,
             });
         }
 
         if (values.realm) {
             query.push({
                 realm: values.realm,
+            });
+        }
+
+        if (values.title) {
+            query.push({
+                title: DatabaseService.generateBroadQuery(values.title),
+            });
+        }
+
+        if (values.parentId) {
+            query.push({
+                parent: StringService.toObjectId(values.parentId),
+            });
+        }
+
+        if (isRootOnly) {
+            query.push({
+                parent: null,
             });
         }
 

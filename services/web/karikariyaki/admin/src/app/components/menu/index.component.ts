@@ -57,6 +57,10 @@ export class MenuComponent implements OnInit {
 		return this._activeNodes.has(node._id) ? true : false;
 	}
 
+	public isDisabled(node: Menu) {
+		return this.isExpandable(node) === false && node.route === null;
+	}
+
 	public isExpandable(node: Menu) {
 		return !!node.children && node.children.length > 0;
 	}

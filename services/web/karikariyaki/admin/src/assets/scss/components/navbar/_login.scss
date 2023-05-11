@@ -30,36 +30,35 @@ app-navbar {
 				margin-top: 4vh;
 		
 				mat-form-field {
-					font-family: 'Comfortaa';
-					font-weight: 600;
-					color: $foreground-brighter;
-					width: 100%;
+					font-family: 'Comfortaa' !important;
+					font-weight: 600 !important;
+					color: $foreground-brighter !important;
+					width: 100% !important;
 		
 					&[data-is-disabled="true"] {
-						color: $foreground-bright;
+						color: $foreground-bright !important;
 			
 						.mat-mdc-text-field-wrapper {
-							background-color: $foreground-disabled;
+							background-color: $foreground-disabled !important;
 						}
 					}
 	
-					input {
-						color: $foreground-brighter;
-						height: clamp(4rem, 4vh + 1rem, 6rem) !important;
+					input, mat-label {
+						color: $foreground-brighter !important;
 					}
 		
 					.mat-mdc-text-field-wrapper {
-						background-color: $foreground-bright;
-						border-radius: $app-input-border-raidus;
+						background-color: $foreground-bright !important;
+						border-radius: $app-input-border-raidus !important;
 
-						-webkit-box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1); 
-    					-moz-box-shadow:    0px 10px 15px -3px rgba(0,0,0,0.1); 
-    					-o-box-shadow:   	0px 10px 15px -3px rgba(0,0,0,0.1);
-						box-shadow:         0px 10px 15px -3px rgba(0,0,0,0.1);
+						-webkit-box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1) !important; 
+    					-moz-box-shadow:    0px 10px 15px -3px rgba(0,0,0,0.1) !important; 
+    					-o-box-shadow:   	0px 10px 15px -3px rgba(0,0,0,0.1) !important;
+						box-shadow:         0px 10px 15px -3px rgba(0,0,0,0.1) !important;
 					}
 
 					.mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing {
-						border-color: transparent;
+						border-color: $foreground-brighter !important;
 					}
 		
 					.mdc-notched-outline__leading {
@@ -73,7 +72,7 @@ app-navbar {
 					}
 		
 					.mdc-notched-outline--notched {
-						color: $accent-dark;
+						color: $accent-dark !important;
 					}
 				}
 		

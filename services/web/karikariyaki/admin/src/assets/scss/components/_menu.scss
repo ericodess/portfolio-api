@@ -31,16 +31,39 @@
 			background-color: transparent;
 			transition: background-color ease-in-out 300ms;
 
-			&:hover {
-				cursor: pointer;
+			&:disabled {
+				background-color: transparent;
+				pointer-events: none;
 
-				.node__arrow path {
-					stroke: $accent-bright;
+				&:hover {
+					cursor: default;
+				}
+
+				span {
+					color: $foreground-bright;
+				}
+
+				svg circle {
+					fill: $foreground-bright;
+				}
+
+				img {
+					opacity: 0.3;
 				}
 			}
 
-			&:hover, &[data-is-active="true"] {
-				background-color: $foreground-bright;
+			&:not([disabled]) {
+				&:hover {
+					cursor: pointer;
+	
+					.node__arrow path {
+						stroke: $accent-bright;
+					}
+				}
+	
+				&:hover, &[data-is-active="true"] {
+					background-color: $foreground-bright;
+				}
 			}
 
 			span {
@@ -83,6 +106,7 @@
 		&__icon {
 			width: 2vh;
 			height: 2vh;
+			fill: $foreground-brighter;
 		}
 	}
 }

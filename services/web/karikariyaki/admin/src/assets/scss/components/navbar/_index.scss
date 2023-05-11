@@ -9,6 +9,7 @@ app-navbar {
 	flex-direction: row;
 	overflow: hidden;
 	pointer-events: none;
+	z-index: 1;
 
 	*[data-was-dispatched="true"] {
 		display: none;

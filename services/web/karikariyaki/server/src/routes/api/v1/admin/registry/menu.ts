@@ -14,7 +14,22 @@ import { MenuErrors } from "@models";
 const router = Router();
 
 router.get("/", (req, res) => {
-    MenuService.query({}, false)
+    const id = RequestService.queryParamToString(req.query.id);
+    const realm = StringService.toMenuRealm(
+        RequestService.queryParamToString(req.query.realm)
+    );
+    const title = RequestService.queryParamToString(req.query.title);
+    const parentId = RequestService.queryParamToString(req.query.parentId);
+
+    MenuService.query(
+        {
+            id: id,
+            realm: realm,
+            title: title,
+            parentId: parentId,
+        },
+        false
+    )
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)

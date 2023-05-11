@@ -1,0 +1,33 @@
+<mat-table
+	class="table"
+	[dataSource]="dataList" 
+	#tableSortRef="matSort"
+	matSort
+>
+	<ng-container *ngFor="let header of headerList" matColumnDef="{{header}}">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>{{header}}</mat-header-cell>
+		<mat-cell *matCellDef="let row">
+			<span *ngIf="isObject(row[header]) === false">'{{row[header]}}'</span>
+			<span *ngIf="isObject(row[header])">[] {{row[header].length}} elements</span>
+			<span *ngIf="!row[header]">null</span>
+		</mat-cell>
+	</ng-container>
+	<ng-container matColumnDef="{{SETTINGS_HEADER}}">
+		<mat-header-cell *matHeaderCellDef></mat-header-cell>
+		<mat-cell *matCellDef>
+			<button class="table__row__settings" [matMenuTriggerFor]="menu">
+				<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+					<path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+				</svg>
+			</button>
+			<mat-menu #menu="matMenu">
+				<button mat-menu-item>
+				  <mat-icon>edit</mat-icon>
+				  <span>{{ currentLang['TABLE_ENTRY_EDIT_TITLE'] }}</span>
+				</button>
+			</mat-menu>
+		</mat-cell>
+	</ng-container>
+	<mat-header-row *matHeaderRowDef="headerList"></mat-header-row>
+	<mat-row *matRowDef="let row; columns: headerList" class="table__row"></mat-row>
+</mat-table>

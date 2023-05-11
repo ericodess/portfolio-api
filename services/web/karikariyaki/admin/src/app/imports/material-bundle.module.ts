@@ -14,6 +14,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -34,6 +35,7 @@ import { MatMenuModule } from '@angular/material/menu';
 		MatSelectModule,
 		MatTabsModule,
 		MatRadioModule,
+		MatSortModule,
 		MatCheckboxModule,
 		MatPaginatorModule,
 		MatMenuModule,

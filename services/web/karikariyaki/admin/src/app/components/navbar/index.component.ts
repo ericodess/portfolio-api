@@ -17,9 +17,6 @@ import {
 	StringService,
 } from '@services';
 
-// Langs
-import Langs from '@langs';
-
 @Component({
 	selector: 'app-navbar',
 	templateUrl: './index.component.html',
@@ -51,6 +48,7 @@ export class NavbarComponent implements OnInit {
 	public wasLoginInputDispatched = false;
 	public wasLoginNavbarDispatched = false;
 	public isLoggedNavbarExtended = false;
+	public didLogout = false;
 
 	/**
 	 * Animation states
@@ -84,7 +82,7 @@ export class NavbarComponent implements OnInit {
 	 */
 	public menu: Menu[] = [];
 	public operator: Operator | null = null;
-	public currentLang: InHouseLang = Langs.enUs;
+	public currentLang: InHouseLang = LanguageService.DEFAULT_LANGUAGE;
 
 	constructor(
 		private _apiService: ApiService,
@@ -117,6 +115,23 @@ export class NavbarComponent implements OnInit {
 
 				if (!nextOperator) {
 					this.operator = null;
+
+					if (this.didLogout) {
+						this.onHamburgerClick();
+
+						setTimeout(() => {
+							this.retrieveLogin();
+						}, LoggedNavbarAnimation.LOGGED_SWIPE_ANIMATION_DURATION_IS_MS);
+
+						setTimeout(() => {
+							this.retrieveLoginAvatar();
+							this.retrieveLoginInput();
+						}, LoggedNavbarAnimation.LOGGED_SWIPE_ANIMATION_DURATION_IS_MS + LoginNavbarAnimation.LOGIN_SWIPE_ANIMATION_DURATION_IS_MS + LoginNavbarAnimation.LOGIN_SWIPE_ANIMATION_DELAY_IS_MS + 100);
+
+						this.didLogout = false;
+
+						return;
+					}
 
 					this.retrieveLogin();
 
@@ -341,6 +356,12 @@ export class NavbarComponent implements OnInit {
 		}
 
 		this.wasLoginInputDispatched = true;
+	}
+
+	public onLogout() {
+		this.didLogout = true;
+
+		this._operatorService.signOut();
 	}
 
 	public setError(nextErrorMessage: string) {

@@ -9,6 +9,8 @@ import Langs from '@langs';
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
+	public static DEFAULT_LANGUAGE = Langs.enUs;
+
 	private _languageSubject: ReplaySubject<InHouseLang>;
 	private _languageObersavable: Observable<InHouseLang>;
 

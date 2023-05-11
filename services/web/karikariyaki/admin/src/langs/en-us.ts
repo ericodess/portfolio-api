@@ -4,7 +4,9 @@ export default {
 	/**
 	 * Menu
 	 */
+	MENU_EDIT_TITLE: 'Edit',
 	MENU_TRANSLATE_TITLE: 'Language',
+	MENU_LOG_OUT_TITLE: 'Log out',
 
 	MENU_HOME_TITLE: 'Home',
 
@@ -19,4 +21,9 @@ export default {
 	MENU_REGISTRY_PRODUCT_TITLE: 'Product',
 	MENU_REGISTRY_PRODUCT_INDEX_TITLE: 'Item',
 	MENU_REGISTRY_PRODUCT_VARIANT_TITLE: 'Variant',
+
+	/**
+	 * Table
+	 */
+	TABLE_ENTRY_EDIT_TITLE: 'Edit',
 } as InHouseLang;

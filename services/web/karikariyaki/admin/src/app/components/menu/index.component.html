@@ -8,6 +8,7 @@
 			[attr.data-contains-children]="isExpandable(node)"
 			[attr.data-is-active]="isActive(node)"
 			(click)="onClick(node)"
+			[disabled]="isDisabled(node)"
 		>
 			<img
 				*ngIf="node.icon"
@@ -21,7 +22,7 @@
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<circle cx="12" cy="12" r="4" fill="#4ED1F8"/>
+				<circle cx="12" cy="12" r="4"/>
 			</svg>
 			<span>{{ currentLang[node.title] ? currentLang[node.title] :  node.title }}</span>
 			<svg

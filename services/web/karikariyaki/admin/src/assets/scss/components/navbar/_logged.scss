@@ -97,7 +97,6 @@ app-navbar {
 					flex-direction: column;
 					align-items: center;
 					overflow: hidden;
-					gap: 2vh 0;
 					width: 100%;
 
 					li {
@@ -114,21 +113,38 @@ app-navbar {
 							height: 100%;
 							background-color: transparent;
 
-							&:hover {
-								cursor: pointer;
 
-								span {
-									color: $accent-bright;
+							&:disabled {
+								pointer-events: none;
+		
+								&:hover {
+									cursor: default;
+								}
+
+								span, mat-icon {
+									color: $foreground-disabled;
+								}
+							}
+		
+							&:not([disabled]) {
+								&:hover {
+									cursor: pointer;
+								}
+					
+								&:hover, &:focus {
+									cursor: pointer;
+	
+									span, mat-icon {
+										color: $accent-bright;
+									}
 								}
 							}
 	
-							svg {
+							mat-icon {
 								width: 3vh;
 								height: 3vh;
-
-								path {
-									fill: $foreground-brighter;
-								}
+								color: $foreground-brighter;
+								transition: color ease-in-out 300ms;
 							}
 	
 							span {
