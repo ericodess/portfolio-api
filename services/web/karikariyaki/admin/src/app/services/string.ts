@@ -10,12 +10,20 @@ export class StringService {
 	}
 
 	public static removeLeadingAndTrailingSlashes(value: string) {
-		if (!value) {
-			return null;
+		if (value === undefined || value === null) {
+			return;
 		}
 
 		const rasterizedRoute = value.trim().toLowerCase().replace(/^\/+/g, '');
 
 		return rasterizedRoute.replace(/\/+$/, '');
+	}
+
+	public static hasValue(value?: string) {
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		return true;
 	}
 }

@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 
 // Types
-import { Product } from '@interfaces';
+import { ProductVariant } from '@interfaces';
 
 // Services
 import { ApiService } from '@services';
 
 @Component({
-	selector: 'app-registry-product-view',
+	selector: 'app-registry-product-variant-view',
 	templateUrl: './index.component.html',
 })
-export class RegistryProductViewComponent implements OnInit {
-	public dataList: Product[] = [];
+export class RegistryProductVariantViewComponent implements OnInit {
+	public dataList: ProductVariant[] = [];
 
 	constructor(private _apiService: ApiService) {}
 
 	ngOnInit(): void {
-		this._apiService.V1.productRegistry.search().subscribe({
+		this._apiService.V1.productVariantRegistry.search().subscribe({
 			next: (response) => {
 				if (!response.result) {
 					return;

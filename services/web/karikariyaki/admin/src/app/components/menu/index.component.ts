@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { RouterEvent, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 // Animations
 import { BasicAnimations } from '@animations';
@@ -30,30 +31,56 @@ export class MenuComponent implements OnInit {
 	@Input()
 	public callback: (() => void) | undefined;
 
+	/**
+	 * In House
+	 */
 	public currentLang: InHouseLang = Langs.enUs;
 
-	private _activeRoute = '-';
+	/**
+	 * Animation
+	 */
 	private _activeNodes: Set<string> = new Set();
+	private _result: string[] = [];
+
+	private _currentRoute = '-';
 
 	constructor(private _langService: LanguageService, private _router: Router) {}
 
 	ngOnInit(): void {
+		const rasterizedWindowURL = StringService.removeLeadingAndTrailingSlashes(this._router.url);
+
+		if (StringService.hasValue(rasterizedWindowURL)) {
+			this._currentRoute = rasterizedWindowURL as string;
+
+			this._result = [];
+			this._updateMenuActiveItems();
+		}
+
 		this._langService.language.subscribe({
 			next: (nextLanguage) => {
 				this.currentLang = nextLanguage;
 			},
 		});
+		this._router.events
+			.pipe(filter((e): e is RouterEvent => e instanceof RouterEvent))
+			.subscribe({
+				next: (e) => {
+					const rasterizedEventURL = StringService.removeLeadingAndTrailingSlashes(e.url);
+
+					if (
+						StringService.hasValue(rasterizedEventURL) &&
+						this._currentRoute !== rasterizedEventURL
+					) {
+						this._currentRoute = rasterizedEventURL as string;
+
+						this._result = [];
+						this._updateMenuActiveItems();
+					}
+				},
+			});
 	}
 
 	public isActive(node: Menu) {
-		const windowRoute = StringService.removeLeadingAndTrailingSlashes(this._router.url);
-
-		if (node.route === windowRoute && this._activeRoute !== windowRoute) {
-			this._updateMenuActiveItem(node.route);
-
-			this._activeRoute = windowRoute;
-		}
-
 		return this._activeNodes.has(node._id) ? true : false;
 	}
 
@@ -75,15 +102,11 @@ export class MenuComponent implements OnInit {
 							return;
 						}
 
-						this._updateMenuActiveItem(node.route);
-
 						if (this.callback) {
 							this.callback();
 						}
 					})
 					.catch(() => {
-						this._activeRoute = '-';
-
 						this._router.navigate(['/']);
 					});
 			}
@@ -100,38 +123,37 @@ export class MenuComponent implements OnInit {
 		this._activeNodes.add(node._id);
 	}
 
-	private _updateMenuActiveItem(
-		targetRoute: string,
-		tree: Menu[] = this.data,
-		result: string[] = [],
-		depth = 1,
-	) {
+	private _updateMenuActiveItems(tree: Menu[] = this.data) {
 		for (let i = 0; i < tree.length; i++) {
 			const node = tree[i];
 
-			result.push(node._id);
+			if (node.route === this._currentRoute) {
+				this._result.push(node._id);
 
-			if (node.route === targetRoute) {
 				this._activeNodes.clear();
 
-				result.forEach((nodeId) => {
+				this._result.forEach((nodeId) => {
 					this._activeNodes.add(nodeId);
 				});
 
 				break;
 			}
 
-			if (!node.children || node.children.length === 0) {
-				result = result.slice(0, -depth);
+			const isLeaf = !node.children || node.children.length === 0;
 
-				depth = 1;
+			if (isLeaf) {
+				const isLastSibling = i === tree.length - 1;
+
+				if (isLastSibling) {
+					this._result = this._result.slice(0, -1);
+				}
 
 				continue;
 			}
 
-			depth++;
+			this._result.push(node._id);
 
-			this._updateMenuActiveItem(targetRoute, node.children, result, depth);
+			this._updateMenuActiveItems(node.children);
 		}
 	}
 }

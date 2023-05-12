@@ -2,7 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 // Views
-import { HomeViewComponent, RegistryProductViewComponent } from '@views';
+import {
+	HomeViewComponent,
+	RegistryProductViewComponent,
+	RegistryProductVariantViewComponent,
+} from '@views';
 
 const routes: Routes = [
 	{
@@ -13,6 +17,10 @@ const routes: Routes = [
 	{
 		path: 'registry/product',
 		component: RegistryProductViewComponent,
+	},
+	{
+		path: 'registry/product/variant',
+		component: RegistryProductVariantViewComponent,
 	},
 ];
 
