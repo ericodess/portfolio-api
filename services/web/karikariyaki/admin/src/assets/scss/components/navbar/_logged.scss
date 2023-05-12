@@ -101,8 +101,8 @@ app-navbar {
 
 					li {
 						width: 100%;
-						height: 6vh;
-
+						min-height: 6vh;
+					
 						button {
 							display: flex;
 							align-items: center;
@@ -154,6 +154,24 @@ app-navbar {
 								transition: color ease-in-out 300ms;
 							}
 						}
+
+						ul {
+							padding-left: 2vh;
+							overflow: hidden;
+						}
+					}
+
+					&__arrow {
+						margin-left: auto;
+					}
+
+					&__indicator {
+						height: 100%;
+						height: 2vh;
+						width: 0.5vh;
+						border-radius: 15px;
+						background-color: $yellow-dark;
+						margin-left: auto;
 					}
 				}
 			}

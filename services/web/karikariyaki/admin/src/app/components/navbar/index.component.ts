@@ -14,8 +14,12 @@ import {
 	LanguageService,
 	MenuService,
 	OperatorService,
+	SettingsService,
 	StringService,
 } from '@services';
+
+// Langs
+import { Langs, LangKey } from '@langs';
 
 @Component({
 	selector: 'app-navbar',
@@ -24,6 +28,7 @@ import {
 		BasicAnimations.breatheAnimation,
 		BasicAnimations.bezierShrinkAnimation,
 		BasicAnimations.bezierShrinkHeightAnimation,
+		BasicAnimations.fadeAnimation,
 		BasicAnimations.verticalShrinkAnimation,
 		BasicAnimations.rotateCounterClock180Animation,
 		LoggedNavbarAnimation.swipeAnimation,
@@ -60,6 +65,7 @@ export class NavbarComponent implements OnInit {
 	public loginNavbarSwipeAnimationState: 'right' | 'left' = 'left';
 	public loggedNavbarSwipeAnimationState: 'right' | 'left' = 'left';
 	public loggedNavbarProfileShrinkAnimationState: 'min' | 'max' = 'min';
+	public loggedNavbarProfileLanguageShrinkAnimationState: 'min' | 'max' = 'min';
 
 	/**
 	 * Error
@@ -82,6 +88,7 @@ export class NavbarComponent implements OnInit {
 	 */
 	public menu: Menu[] = [];
 	public operator: Operator | null = null;
+	public langList = Langs;
 	public currentLang: InHouseLang = LanguageService.DEFAULT_LANGUAGE;
 
 	constructor(
@@ -89,6 +96,7 @@ export class NavbarComponent implements OnInit {
 		private _langService: LanguageService,
 		private _menuService: MenuService,
 		private _operatorService: OperatorService,
+		private _settingsService: SettingsService,
 	) {}
 
 	ngOnInit(): void {
@@ -240,6 +248,10 @@ export class NavbarComponent implements OnInit {
 		this.loginNavbarSwipeAnimationState = 'left';
 	}
 
+	public isLanguageActive(languageDisplayName: string) {
+		return this.currentLang['LANGUAGE_DISPLAY_NAME'] === languageDisplayName;
+	}
+
 	public onProfileClick() {
 		if (this.wasLoginNavbarDispatched === false) {
 			return;
@@ -247,6 +259,16 @@ export class NavbarComponent implements OnInit {
 
 		this.loggedNavbarProfileShrinkAnimationState =
 			this.loggedNavbarProfileShrinkAnimationState === 'min' ? 'max' : 'min';
+		this.loggedNavbarProfileLanguageShrinkAnimationState = 'min';
+	}
+
+	public onProfileLanguageSettingsClick() {
+		if (this.wasLoginNavbarDispatched === false) {
+			return;
+		}
+
+		this.loggedNavbarProfileLanguageShrinkAnimationState =
+			this.loggedNavbarProfileLanguageShrinkAnimationState === 'min' ? 'max' : 'min';
 	}
 
 	public onFocus() {
@@ -264,6 +286,12 @@ export class NavbarComponent implements OnInit {
 
 		this.loggedNavbarSwipeAnimationState =
 			this.loggedNavbarSwipeAnimationState === 'left' ? 'right' : 'left';
+	}
+
+	public onLanguageUpdate(nextLang: string) {
+		this._settingsService.update({
+			language: nextLang as LangKey,
+		});
 	}
 
 	public onLoginAvatarBreatheAnimationDone() {

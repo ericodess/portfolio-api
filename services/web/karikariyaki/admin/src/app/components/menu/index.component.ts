@@ -8,9 +8,6 @@ import { BasicAnimations } from '@animations';
 // Types
 import { InHouseLang, Menu } from '@interfaces';
 
-// Langs
-import Langs from '@langs';
-
 // Services
 import { LanguageService, StringService } from '@services';
 
@@ -34,7 +31,7 @@ export class MenuComponent implements OnInit {
 	/**
 	 * In House
 	 */
-	public currentLang: InHouseLang = Langs.enUs;
+	public currentLang: InHouseLang = LanguageService.DEFAULT_LANGUAGE;
 
 	/**
 	 * Animation

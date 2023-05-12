@@ -1,8 +1,10 @@
+export { InHouseSettings } from './settings';
+
 // API
 export { ApiResponseWrapper } from './api/response-wrapper';
 export { Event } from './api/event/event';
 export { EventOrder } from './api/event/order';
-export { InHouseLang } from './lang';
+export { InHouseLang } from './language';
 export { Menu } from './api/menu';
 export { Operator } from './api/operator';
 export { Product } from './api/product/product';

@@ -18,7 +18,7 @@
 				[@bezierHeightShrink]="loginInputShrinkAnimationState"
 				[attr.data-is-disabled]="loginForm.disabled"
 			>
-				<mat-label>Username</mat-label>
+				<mat-label>{{ currentLang['LOGIN_USERNAME_INPUT_TITLE'] }}</mat-label>
 				<input
 					matInput
 					formControlName="userName"
@@ -34,13 +34,13 @@
 				[@bezierHeightShrink]="loginInputShrinkAnimationState"
 				[disabled]="loginForm.disabled || loginForm.get('userName')?.invalid"
 			>
-				Login
+				{{ currentLang['LOGIN_BUTTON_TITLE'] }}
 			</button>
 			<div
 				class="navbar__login__error"
 				[@bezierHeightShrink]="loginInputErrorShrinkAnimationState"
 			>
-				{{errorMessage}}
+				{{ currentLang[errorMessage] ? currentLang[errorMessage] : errorMessage }}
 			</div>
 		</form>
 		<app-logo [@bezierShrink]="loginInputShrinkAnimationState"></app-logo>
@@ -51,7 +51,7 @@
 			<div class="navbar__logged__profile">
 				<button class="navbar__logged__profile-button" (click)="onProfileClick()">
 					<app-avatar [base64Image]="operator.photo"></app-avatar>
-					<span>{{operator.displayName}}</span>
+					<span>{{ operator.displayName }}</span>
 					<svg
 						viewBox="0 0 21 12"
 						fill="none"
@@ -75,10 +75,26 @@
 						</button>
 					</li>
 					<li>
-						<button disabled>
+						<button (click)="onProfileLanguageSettingsClick()">
 							<mat-icon>translate</mat-icon>
 							<span>{{ currentLang['MENU_TRANSLATE_TITLE'] }}</span>
+							<mat-icon
+								class="navbar__logged__profile-settings__arrow"
+								[@rotateCounterClock180]="loggedNavbarProfileLanguageShrinkAnimationState === 'max' ? 'end' : 'start'"
+							>
+								expand_more
+							</mat-icon>
 						</button>
+						<ul [@verticalShrink]="loggedNavbarProfileLanguageShrinkAnimationState">
+							<button *ngFor="let lang of langList | keyvalue" (click)="onLanguageUpdate(lang.key)">
+								<span>{{ lang.value['LANGUAGE_DISPLAY_NAME'] }}</span>
+								<div
+									class="navbar__logged__profile-settings__indicator"
+									[@fade]="isLanguageActive(lang.value['LANGUAGE_DISPLAY_NAME']) ? 'max' : 'min'"
+								>
+								</div>
+							</button>
+						</ul>
 					</li>
 					<li>
 						<button (click)="onLogout()">

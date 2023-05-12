@@ -5,7 +5,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { Operator } from '@interfaces';
 
 // Services
-import { ApiService } from '@services';
+import { ApiService, SettingsService } from '@services';
 
 @Injectable({ providedIn: 'root' })
 export class OperatorService {
@@ -94,8 +94,6 @@ export class OperatorService {
 		this._operator = null;
 
 		this.update();
-
-		//this._operatorSubject.complete();
 	}
 
 	private _onInit() {
