@@ -15,7 +15,7 @@ import { StringService } from "@services";
 export enum OrderErrors {
     CLIENT_NAME_GREATER_THAN_MAX_LENGTH = "ERROR_ORDER_CLIENT_NAME_GREATER_THAN_MAX_LENGTH",
     CLIENT_NAME_LESS_THAN_MIN_LENGTH = "ERROR_ORDER_CLIENT_NAME_LESS_THAN_MIN_LENGTH",
-    CLIENT_REQUIRED = "ERROR_ORDER_CLIENT_REQUIRED",
+    CLIENT_NAME_REQUIRED = "ERROR_ORDER_CLIENT_NAME_REQUIRED",
     EVENT_INVALID = "ERROR_ORDER_EVENT_INVALID",
     EVENT_REQUIRED = "ERROR_ORDER_EVENT_REQUIRED",
     INVALID = "ERROR_ORDER_INVALID",
@@ -101,7 +101,7 @@ const OrderSchema = new Schema({
     },
     client: {
         type: String,
-        required: [true, OrderErrors.CLIENT_REQUIRED],
+        required: [true, OrderErrors.CLIENT_NAME_REQUIRED],
         validate: validateOrderClient,
     },
     item: {

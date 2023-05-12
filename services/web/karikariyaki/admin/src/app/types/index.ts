@@ -1,6 +1,5 @@
+// API
 export { BaseApi } from './api/base';
-
-// V1
 export { ApiV1 } from './api/v1';
 
 // Admin
