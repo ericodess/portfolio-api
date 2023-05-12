@@ -121,12 +121,7 @@ export class NavbarComponent implements OnInit {
 
 						setTimeout(() => {
 							this.retrieveLogin();
-						}, LoggedNavbarAnimation.LOGGED_SWIPE_ANIMATION_DURATION_IS_MS);
-
-						setTimeout(() => {
-							this.retrieveLoginAvatar();
-							this.retrieveLoginInput();
-						}, LoggedNavbarAnimation.LOGGED_SWIPE_ANIMATION_DURATION_IS_MS + LoginNavbarAnimation.LOGIN_SWIPE_ANIMATION_DURATION_IS_MS + LoginNavbarAnimation.LOGIN_SWIPE_ANIMATION_DELAY_IS_MS + 100);
+						}, LoggedNavbarAnimation.LOGGED_SWIPE_ANIMATION_DURATION_IS_MS + 100);
 
 						this.didLogout = false;
 
@@ -134,11 +129,6 @@ export class NavbarComponent implements OnInit {
 					}
 
 					this.retrieveLogin();
-
-					setTimeout(() => {
-						this.retrieveLoginAvatar();
-						this.retrieveLoginInput();
-					}, LoginNavbarAnimation.LOGIN_SWIPE_ANIMATION_DURATION_IS_MS + LoginNavbarAnimation.LOGIN_SWIPE_ANIMATION_DELAY_IS_MS + 100);
 
 					return;
 				}
@@ -348,6 +338,13 @@ export class NavbarComponent implements OnInit {
 		}
 
 		this.wasLoginNavbarDispatched = rasterizedEventToState === 'left';
+
+		if (rasterizedEventToState === 'right') {
+			setTimeout(() => {
+				this.retrieveLoginAvatar();
+				this.retrieveLoginInput();
+			}, 100);
+		}
 	}
 
 	public onLoginInputShrinkAnimationDone(event: AnimationEvent) {

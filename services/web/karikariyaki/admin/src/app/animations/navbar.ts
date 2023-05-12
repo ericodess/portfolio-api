@@ -22,7 +22,7 @@ export class LoggedNavbarAnimation {
 		state(
 			'right',
 			style({
-				width: '100vw',
+				width: 'calc(100vw - 8vh)',
 			}),
 		),
 		transition('left => right', [

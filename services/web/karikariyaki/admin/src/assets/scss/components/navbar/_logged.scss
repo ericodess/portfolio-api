@@ -8,7 +8,7 @@ app-navbar {
 			width: 85%;
 			margin: 4vh auto 0 auto;
 			gap: 4vh 0;
-			overflow-y: auto;
+			overflow: hidden;
 		}
 
 		&__logged {
@@ -161,6 +161,7 @@ app-navbar {
 			app-menu {
 				width: 100%;
 				margin-bottom: 4vh;
+				overflow-y: auto;
 			}
 		}
 	}
