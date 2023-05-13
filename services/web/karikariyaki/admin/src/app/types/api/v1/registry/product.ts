@@ -11,16 +11,16 @@ interface DefaultParams {
 	name?: string;
 }
 
-type QueryableParams = Omit<DefaultParams, 'variants'>;
+export type ProductQueryableParams = Omit<DefaultParams, 'variants'>;
 
-type CreatableParams = Pick<DefaultParams, 'name'>;
+export type ProductCreatableParams = Pick<DefaultParams, 'name'>;
 
-type EditableParams = Pick<DefaultParams, 'name'>;
+export type ProductEditableParams = Pick<DefaultParams, 'name'>;
 
 export class ProductRegistryApiV1 extends BaseApi {
 	private _endpoint = `${this.root}/v1/admin/registry/product`;
 
-	public search(params?: QueryableParams): Observable<ApiResponseWrapper<Product[]>> {
+	public search(params?: ProductQueryableParams): Observable<ApiResponseWrapper<Product[]>> {
 		const endpoint = new URL(this._endpoint);
 
 		if (params?._id) {
@@ -36,7 +36,7 @@ export class ProductRegistryApiV1 extends BaseApi {
 		});
 	}
 
-	public save(params: CreatableParams): Observable<ApiResponseWrapper<Product>> {
+	public save(params: ProductCreatableParams): Observable<ApiResponseWrapper<Product>> {
 		const endpoint = new URL(this._endpoint);
 
 		return this.client.post<ApiResponseWrapper<Product>>(
@@ -50,7 +50,10 @@ export class ProductRegistryApiV1 extends BaseApi {
 		);
 	}
 
-	public edit(id: string, params: EditableParams): Observable<ApiResponseWrapper<Product>> {
+	public edit(
+		id: string,
+		params: ProductEditableParams,
+	): Observable<ApiResponseWrapper<Product>> {
 		const endpoint = new URL(`${this._endpoint}/${id.trim()}`);
 
 		return this.client.patch<ApiResponseWrapper<Product>>(

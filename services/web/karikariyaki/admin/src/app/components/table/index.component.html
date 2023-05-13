@@ -14,18 +14,18 @@
 	</ng-container>
 	<ng-container matColumnDef="{{SETTINGS_HEADER}}">
 		<mat-header-cell *matHeaderCellDef></mat-header-cell>
-		<mat-cell *matCellDef>
+		<mat-cell *matCellDef="let row">
 			<button class="table__row__settings" [matMenuTriggerFor]="menu">
 				<mat-icon>more_vert</mat-icon>
 			</button>
 			<mat-menu #menu="matMenu">
-				<button mat-menu-item>
+				<button (click)="onEdit ? onEdit(row) : undefined" mat-menu-item>
 				  <mat-icon>edit</mat-icon>
 				  <span>{{ currentLang['TABLE_ENTRY_EDIT_TITLE'] }}</span>
 				</button>
 			</mat-menu>
 		</mat-cell>
 	</ng-container>
-	<mat-header-row *matHeaderRowDef="headerList"></mat-header-row>
+	<mat-header-row *matHeaderRowDef="headerList; sticky: true"></mat-header-row>
 	<mat-row *matRowDef="let row; columns: headerList" class="table__row"></mat-row>
 </mat-table>

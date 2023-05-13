@@ -1,3 +1,20 @@
-Product
-
-<app-table [data]="dataList"></app-table>
+<main class="view__registry__product">
+	<div class="view__registry__header">
+		<h1>{{ currentLang['PRODUCT_VIEW_TITLE'] }}</h1>
+		<button (click)="onCreationInit()">
+			<mat-icon>add</mat-icon>
+			<span>{{ currentLang['PRODUCT_NEW_TITLE'] }}</span>
+		</button>
+	</div>
+	<div class="view__registry__content">
+		<div class="view__registry__content__editor" [attr.data-is-visible]="isEditorOpen">
+			<div *ngIf="creatableSubject && !editableSubject" [@fade]>
+				<h3>{{ currentLang['REGISTRY_EDITOR_CREATION_TITLE'] }}</h3>
+			</div>
+			<div *ngIf="!creatableSubject && editableSubject" [@fade]>
+				<h3>{{ currentLang['REGISTRY_EDITOR_EDITION_TITLE'] }}</h3>
+			</div>
+		</div>
+		<app-table [data]="dataList" [onEdit]="onEditionInit.bind(this)"></app-table>
+	</div>
+</main>

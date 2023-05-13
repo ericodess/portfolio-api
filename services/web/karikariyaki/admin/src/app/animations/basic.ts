@@ -143,6 +143,24 @@ export class BasicAnimations {
 		]);
 	}
 
+	public static get horizontalShrinkAnimation() {
+		return trigger('horizontalShrink', [
+			state(
+				'min',
+				style({
+					width: 0,
+				}),
+			),
+			state('max', style({})),
+			transition('min => max', [
+				animate(`${BasicAnimations.VERTICAL_SHRINK_ANIMATION_DURATION_IN_MS}ms`),
+			]),
+			transition('max => min', [
+				animate(`${BasicAnimations.VERTICAL_SHRINK_ANIMATION_DURATION_IN_MS}ms`),
+			]),
+		]);
+	}
+
 	public static get verticalShrinkAnimation() {
 		return trigger('verticalShrink', [
 			state(

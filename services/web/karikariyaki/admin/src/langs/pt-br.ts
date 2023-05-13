@@ -36,6 +36,15 @@ export default {
 	TABLE_ENTRY_EDIT_TITLE: 'Editar',
 
 	/**
+	 * View
+	 */
+	REGISTRY_EDITOR_CREATION_TITLE: 'Criação',
+	REGISTRY_EDITOR_EDITION_TITLE: 'Edição',
+
+	PRODUCT_VIEW_TITLE: 'Produto',
+	PRODUCT_NEW_TITLE: 'Novo Produto',
+
+	/**
 	 * API Error
 	 */
 	ERROR_EVENT_DATE_REQUIRED: 'Data do evento é obrigatória',

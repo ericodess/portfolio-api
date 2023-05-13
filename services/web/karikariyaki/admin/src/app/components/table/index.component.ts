@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -12,9 +12,11 @@ import { LanguageService } from '@services';
 	selector: 'app-table',
 	templateUrl: './index.component.html',
 })
-export class TableComponent implements OnChanges {
+export class TableComponent<T> implements OnChanges {
 	@Input()
-	public data?: Object[];
+	public data?: T[];
+	@Input()
+	public onEdit?: (item: T) => void;
 
 	/**
 	 * Consts
@@ -28,7 +30,7 @@ export class TableComponent implements OnChanges {
 	public tableSortRef = new MatSort();
 
 	public headerList: string[] = [];
-	public dataList = new MatTableDataSource<Object>([]);
+	public dataList = new MatTableDataSource<T>([]);
 
 	/**
 	 * In House
@@ -50,17 +52,18 @@ export class TableComponent implements OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		const nextData = changes['data'].currentValue;
+		const nextData = changes['data']?.currentValue;
 
-		if (!nextData || nextData.length === 0) {
+		if (nextData && nextData.length === 0) {
 			this.headerList = [];
-
-			return;
+			this.dataList.data = [];
 		}
 
-		this.headerList = Object.keys(nextData[0]).concat(this.SETTINGS_HEADER);
+		if (nextData && nextData.length > 0) {
+			this.headerList = Object.keys(nextData[0]).concat(this.SETTINGS_HEADER);
 
-		this.dataList.data = nextData;
+			this.dataList.data = nextData;
+		}
 	}
 
 	public isObject(target: string | object) {
