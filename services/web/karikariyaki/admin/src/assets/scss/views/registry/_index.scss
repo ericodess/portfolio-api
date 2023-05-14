@@ -57,6 +57,7 @@ main {
 
 				&__editor {
 					display: flex;
+					flex-direction: column;
 					width: 100%;
 					height: 0px;
 					overflow-x: hidden;
@@ -82,6 +83,69 @@ main {
 						h3 {
 							font-family: 'Nunito';
 							font-size: clamp(1dvh, 2dvh + 1rem, 3dvh);
+							margin-bottom: 2vh;
+						}
+					}
+
+					ul {
+						display: flex;
+						flex-direction: row;
+						width: 100%;
+						margin-top: auto;
+
+						li {
+							flex: 1;
+
+							button {
+								font-family: 'Nunito';
+								width: 100%;
+								height: 6vh;
+
+								&:hover {
+									cursor: pointer;
+								}
+							}
+						}
+
+						.--confirm {
+							button {
+								background-color: #233142;
+								color: $accent-bright;
+
+								-webkit-transition: background-color ease-in-out .3s;
+								-moz-transition: 	background-color ease-in-out .3s;
+								-ms-transition: 	background-color ease-in-out .3s;
+								-o-transition: 		background-color ease-in-out .3s;
+								transition: 		background-color ease-in-out .3s;
+
+								&:hover {
+									background-color: $foreground-bright;
+								}
+
+								&:disabled {
+									cursor: default;
+									pointer-events: none;
+									background-color: $foreground-disabled;
+								}
+							}
+						}
+
+						.--cancel {
+							button {
+								background-color: transparent;
+								border-top: 1px solid #0000001f;
+								color: $foreground;
+
+								-webkit-transition: color ease-in-out .3s;
+								-moz-transition: 	color ease-in-out .3s;
+								-ms-transition: 	color ease-in-out .3s;
+								-o-transition: 		color ease-in-out .3s;
+								transition: 		color ease-in-out .3s;
+
+								&:hover {
+									color: red;
+								}
+							}
 						}
 					}
 				}

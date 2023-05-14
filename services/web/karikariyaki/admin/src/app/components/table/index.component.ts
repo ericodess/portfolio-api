@@ -17,6 +17,8 @@ export class TableComponent<T> implements OnChanges {
 	public data?: T[];
 	@Input()
 	public onEdit?: (item: T) => void;
+	@Input()
+	public onDelete?: (item: T) => void;
 
 	/**
 	 * Consts
