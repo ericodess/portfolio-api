@@ -34,7 +34,11 @@ export default {
 
 	MENU_REGISTRY_PRODUCT_TITLE: 'Produto',
 	MENU_REGISTRY_PRODUCT_INDEX_TITLE: 'Item',
+	MENU_REGISTRY_PRODUCT_NAME_INPUT: 'Nome',
+
 	MENU_REGISTRY_PRODUCT_VARIANT_TITLE: 'Variante',
+	MENU_REGISTRY_PRODUCT_VARIANT_NAME_INPUT: 'Nome',
+	MENU_REGISTRY_PRODUCT_VARIANT_PRODUCT_INPUT: 'Produto',
 
 	/**
 	 * Table
@@ -55,6 +59,11 @@ export default {
 	PRODUCT_NEW_TITLE: 'Novo Produto',
 	PRODUCT_REGISTRY_DELETE_MESSAGE:
 		'Você realmente quer excluir este produto ? Esta ação é irreversível',
+
+	PRODUCT_VARIANT_VIEW_TITLE: 'Variante de Produto',
+	PRODUCT_VARIANT_NEW_TITLE: 'Nova Variante de Produto',
+	PRODUCT_VARIANT_REGISTRY_DELETE_MESSAGE:
+		'Você realmente quer excluir esta variante de produto ? Esta ação é irreversível',
 
 	/**
 	 * API Error

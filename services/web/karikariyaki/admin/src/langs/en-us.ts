@@ -34,7 +34,11 @@ export default {
 
 	MENU_REGISTRY_PRODUCT_TITLE: 'Product',
 	MENU_REGISTRY_PRODUCT_INDEX_TITLE: 'Item',
+	MENU_REGISTRY_PRODUCT_NAME_INPUT: 'Name',
+
 	MENU_REGISTRY_PRODUCT_VARIANT_TITLE: 'Variant',
+	MENU_REGISTRY_PRODUCT_VARIANT_NAME_INPUT: 'Name',
+	MENU_REGISTRY_PRODUCT_VARIANT_PRODUCT_INPUT: 'Product',
 
 	/**
 	 * Table
@@ -55,6 +59,11 @@ export default {
 	PRODUCT_NEW_TITLE: 'New Product',
 	PRODUCT_REGISTRY_DELETE_MESSAGE:
 		"Do you really want to delete this product ? This action it's not reversable",
+
+	PRODUCT_VARIANT_VIEW_TITLE: 'Product Variant',
+	PRODUCT_VARIANT_NEW_TITLE: 'New Product Variant',
+	PRODUCT_VARIANT_REGISTRY_DELETE_MESSAGE:
+		"Do you really want to delete this product variant ? This action it's not reversable",
 
 	/**
 	 * API Error
