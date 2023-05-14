@@ -8,7 +8,7 @@
 		<mat-header-cell *matHeaderCellDef mat-sort-header>{{header}}</mat-header-cell>
 		<mat-cell *matCellDef="let row">
 			<span *ngIf="isObject(row[header]) === false">'{{row[header]}}'</span>
-			<span *ngIf="isObject(row[header])">[] {{row[header].length}} elements</span>
+			<span *ngIf="isObject(row[header])">{{ generateObjectString(row[header]) }}</span>
 			<span *ngIf="!row[header]">null</span>
 		</mat-cell>
 	</ng-container>

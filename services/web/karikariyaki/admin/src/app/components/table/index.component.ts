@@ -75,4 +75,12 @@ export class TableComponent<T> implements OnChanges {
 
 		return typeof target === 'object';
 	}
+
+	public generateObjectString(target: object) {
+		if (Array.isArray(target)) {
+			return `[] ${target.length} elements`;
+		}
+
+		return JSON.stringify(target);
+	}
 }
