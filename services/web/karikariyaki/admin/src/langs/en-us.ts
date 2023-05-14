@@ -4,6 +4,12 @@ export default {
 	LANGUAGE_DISPLAY_NAME: 'English (US)',
 
 	/**
+	 * Dialog
+	 */
+	DIALOG_CONFIRM_BUTTON: 'Confirm',
+	DIALOG_CANCEL_BUTTON: 'Cancel',
+
+	/**
 	 * Login
 	 */
 	LOGIN_USERNAME_INPUT_TITLE: 'Username',
@@ -34,15 +40,21 @@ export default {
 	 * Table
 	 */
 	TABLE_ENTRY_EDIT_TITLE: 'Edit',
+	TABLE_ENTRY_DELETE_TITLE: 'Delete',
 
 	/**
 	 * View
 	 */
 	REGISTRY_EDITOR_CREATION_TITLE: 'Creation',
 	REGISTRY_EDITOR_EDITION_TITLE: 'Edition',
+	REGISTRY_EDITOR_CREATION_ACTION: 'Create',
+	REGISTRY_EDITOR_EDITION_ACTION: 'Edit',
+	REGISTRY_EDITOR_CANCEL_ACTION: 'Cancel',
 
 	PRODUCT_VIEW_TITLE: 'Product',
 	PRODUCT_NEW_TITLE: 'New Product',
+	PRODUCT_REGISTRY_DELETE_MESSAGE:
+		"Do you really want to delete this product ? This action it's not reversable",
 
 	/**
 	 * API Error

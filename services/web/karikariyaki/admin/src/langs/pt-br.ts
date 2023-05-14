@@ -4,6 +4,12 @@ export default {
 	LANGUAGE_DISPLAY_NAME: 'Português (Brasil)',
 
 	/**
+	 * Dialog
+	 */
+	DIALOG_CONFIRM_BUTTON: 'Confirmar',
+	DIALOG_CANCEL_BUTTON: 'Cancelar',
+
+	/**
 	 * Login
 	 */
 	LOGIN_USERNAME_INPUT_TITLE: 'Usuário',
@@ -34,15 +40,21 @@ export default {
 	 * Table
 	 */
 	TABLE_ENTRY_EDIT_TITLE: 'Editar',
+	TABLE_ENTRY_DELETE_TITLE: 'Deletar',
 
 	/**
 	 * View
 	 */
 	REGISTRY_EDITOR_CREATION_TITLE: 'Criação',
 	REGISTRY_EDITOR_EDITION_TITLE: 'Edição',
+	REGISTRY_EDITOR_CREATION_ACTION: 'Criar',
+	REGISTRY_EDITOR_EDITION_ACTION: 'Editar',
+	REGISTRY_EDITOR_CANCEL_ACTION: 'Cancelar',
 
 	PRODUCT_VIEW_TITLE: 'Produto',
 	PRODUCT_NEW_TITLE: 'Novo Produto',
+	PRODUCT_REGISTRY_DELETE_MESSAGE:
+		'Você realmente quer excluir este produto ? Esta ação é irreversível',
 
 	/**
 	 * API Error
