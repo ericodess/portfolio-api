@@ -18,7 +18,7 @@
 				[@bezierHeightShrink]="loginInputShrinkAnimationState"
 				[attr.data-is-disabled]="loginForm.disabled"
 			>
-				<mat-label>{{ currentLang['LOGIN_USERNAME_INPUT_TITLE'] }}</mat-label>
+				<mat-label>{{ languageSource['LOGIN_USERNAME_INPUT_TITLE'] }}</mat-label>
 				<input
 					matInput
 					formControlName="userName"
@@ -34,13 +34,13 @@
 				[@bezierHeightShrink]="loginInputShrinkAnimationState"
 				[disabled]="loginForm.disabled || loginForm.get('userName')?.invalid"
 			>
-				{{ currentLang['LOGIN_BUTTON_TITLE'] }}
+				{{ languageSource['LOGIN_BUTTON_TITLE'] }}
 			</button>
 			<div
 				class="navbar__login__error"
 				[@bezierHeightShrink]="loginInputErrorShrinkAnimationState"
 			>
-				{{ currentLang[errorMessage] ? currentLang[errorMessage] : errorMessage }}
+				{{ languageSource[errorMessage] ? languageSource[errorMessage] : errorMessage }}
 			</div>
 		</form>
 		<app-logo [@bezierShrink]="loginInputShrinkAnimationState"></app-logo>
@@ -71,13 +71,13 @@
 					<li>
 						<button disabled>
 							<mat-icon>edit</mat-icon>
-							<span>{{ currentLang['MENU_EDIT_TITLE'] }}</span>
+							<span>{{ languageSource['MENU_EDIT_TITLE'] }}</span>
 						</button>
 					</li>
 					<li>
 						<button (click)="onProfileLanguageSettingsClick()">
 							<mat-icon>translate</mat-icon>
-							<span>{{ currentLang['MENU_TRANSLATE_TITLE'] }}</span>
+							<span>{{ languageSource['MENU_TRANSLATE_TITLE'] }}</span>
 							<mat-icon
 								class="navbar__logged__profile-settings__arrow"
 								[@rotateCounterClock180]="loggedNavbarProfileLanguageShrinkAnimationState === 'max' ? 'end' : 'start'"
@@ -99,7 +99,7 @@
 					<li>
 						<button (click)="onLogout()">
 							<mat-icon>logout</mat-icon>
-							<span>{{ currentLang['MENU_LOG_OUT_TITLE'] }}</span>
+							<span>{{ languageSource['MENU_LOG_OUT_TITLE'] }}</span>
 						</button>
 					</li>
 				</ul>

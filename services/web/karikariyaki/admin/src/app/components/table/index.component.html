@@ -21,11 +21,11 @@
 			<mat-menu #menu="matMenu">
 				<button (click)="onEdit ? onEdit(row) : undefined" mat-menu-item>
 				  <mat-icon>edit</mat-icon>
-				  <span>{{ currentLang['TABLE_ENTRY_EDIT_TITLE'] }}</span>
+				  <span>{{ languageSource['TABLE_ENTRY_EDIT_TITLE'] }}</span>
 				</button>
 				<button (click)="onDelete ? onDelete(row) : undefined" mat-menu-item>
 					<mat-icon style="color: #f44336">delete</mat-icon>
-					<span style="color: #f44336">{{ currentLang['TABLE_ENTRY_DELETE_TITLE'] }}</span>
+					<span style="color: #f44336">{{ languageSource['TABLE_ENTRY_DELETE_TITLE'] }}</span>
 				  </button>
 			</mat-menu>
 		</mat-cell>

@@ -24,7 +24,7 @@
 			>
 				<circle cx="12" cy="12" r="4"/>
 			</svg>
-			<span>{{ currentLang[node.title] ? currentLang[node.title] :  node.title }}</span>
+			<span>{{ languageSource[node.title] ? languageSource[node.title] :  node.title }}</span>
 			<svg
 				*ngIf="isExpandable(node)"
 				class="node__arrow"

@@ -6,7 +6,7 @@ import { filter } from 'rxjs';
 import { BasicAnimations } from '@animations';
 
 // Types
-import { InHouseLang, Menu } from '@interfaces';
+import { Menu } from '@interfaces';
 
 // Services
 import { LanguageService, StringService } from '@services';
@@ -31,7 +31,7 @@ export class MenuComponent implements OnInit {
 	/**
 	 * In House
 	 */
-	public currentLang: InHouseLang = LanguageService.DEFAULT_LANGUAGE;
+	public languageSource = LanguageService.DEFAULT_LANGUAGE;
 
 	/**
 	 * Animation
@@ -41,7 +41,7 @@ export class MenuComponent implements OnInit {
 
 	private _currentRoute = '-';
 
-	constructor(private _langService: LanguageService, private _router: Router) {}
+	constructor(private _languageService: LanguageService, private _router: Router) {}
 
 	ngOnInit(): void {
 		const rasterizedWindowURL = StringService.removeLeadingAndTrailingSlashes(this._router.url);
@@ -53,9 +53,9 @@ export class MenuComponent implements OnInit {
 			this._updateMenuActiveItems();
 		}
 
-		this._langService.language.subscribe({
+		this._languageService.language.subscribe({
 			next: (nextLanguage) => {
-				this.currentLang = nextLanguage;
+				this.languageSource = nextLanguage;
 			},
 		});
 		this._router.events

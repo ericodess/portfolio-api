@@ -10,6 +10,11 @@ export default {
 	DIALOG_CANCEL_BUTTON: 'Cancel',
 
 	/**
+	 * Component
+	 */
+	FILE_INPUT_TITLE: 'Drag & Drop or Browse for the file',
+
+	/**
 	 * Login
 	 */
 	LOGIN_USERNAME_INPUT_TITLE: 'Username',
@@ -34,11 +39,20 @@ export default {
 
 	MENU_REGISTRY_PRODUCT_TITLE: 'Product',
 	MENU_REGISTRY_PRODUCT_INDEX_TITLE: 'Item',
-	MENU_REGISTRY_PRODUCT_NAME_INPUT: 'Name',
 
 	MENU_REGISTRY_PRODUCT_VARIANT_TITLE: 'Variant',
-	MENU_REGISTRY_PRODUCT_VARIANT_NAME_INPUT: 'Name',
-	MENU_REGISTRY_PRODUCT_VARIANT_PRODUCT_INPUT: 'Product',
+
+	/**
+	 * Registry
+	 */
+	REGISTRY_OPERATOR_DISPLAY_NAME_INPUT: 'Display Name',
+	REGISTRY_OPERATOR_USER_NAME_INPUT: 'User Name',
+	REGISTRY_OPERATOR_PHOTO_INPUT: 'Photo',
+
+	REGISTRY_PRODUCT_NAME_INPUT: 'Name',
+
+	REGISTRY_PRODUCT_VARIANT_NAME_INPUT: 'Name',
+	REGISTRY_PRODUCT_VARIANT_PRODUCT_INPUT: 'Product',
 
 	/**
 	 * Table
@@ -55,15 +69,20 @@ export default {
 	REGISTRY_EDITOR_EDITION_ACTION: 'Edit',
 	REGISTRY_EDITOR_CANCEL_ACTION: 'Cancel',
 
+	OPERATOR_VIEW_TITLE: 'Operator',
+	OPERATOR_NEW_TITLE: 'New Operator',
+	OPERATOR_REGISTRY_DELETE_MESSAGE:
+		'Do you really want to delete this operator ? This action is ireversable',
+
 	PRODUCT_VIEW_TITLE: 'Product',
 	PRODUCT_NEW_TITLE: 'New Product',
 	PRODUCT_REGISTRY_DELETE_MESSAGE:
-		"Do you really want to delete this product ? This action it's not reversable",
+		'Do you really want to delete this product ? This action is ireversable',
 
 	PRODUCT_VARIANT_VIEW_TITLE: 'Product Variant',
 	PRODUCT_VARIANT_NEW_TITLE: 'New Product Variant',
 	PRODUCT_VARIANT_REGISTRY_DELETE_MESSAGE:
-		"Do you really want to delete this product variant ? This action it's not reversable",
+		'Do you really want to delete this product variant ? This action is ireversable',
 
 	/**
 	 * API Error

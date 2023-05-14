@@ -21,7 +21,7 @@ export class DialogComponent implements OnInit {
 	/**
 	 * Language
 	 */
-	public currentLang = LanguageService.DEFAULT_LANGUAGE;
+	public languageSource = LanguageService.DEFAULT_LANGUAGE;
 
 	constructor(
 		public dialogRef: MatDialogRef<DialogComponent>,
@@ -37,7 +37,7 @@ export class DialogComponent implements OnInit {
 	ngOnInit(): void {
 		this._languageService.language.subscribe({
 			next: (nextLanguage) => {
-				this.currentLang = nextLanguage;
+				this.languageSource = nextLanguage;
 			},
 		});
 	}

@@ -7,16 +7,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { BasicAnimations } from '@animations';
 
 // Types
-import { Product, ProductVariant } from '@interfaces';
+import { Operator } from '@interfaces';
 
 // Services
-import { ApiService, LanguageService } from '@services';
+import { ApiService, FileService, LanguageService } from '@services';
 
 // Components
 import { DialogComponent } from '@components';
 
 @Component({
-	selector: 'app-registry-product-variant-view',
+	selector: 'app-registry-operator-view',
 	templateUrl: './index.component.html',
 	animations: [
 		BasicAnimations.horizontalShrinkAnimation,
@@ -32,19 +32,20 @@ import { DialogComponent } from '@components';
 		]),
 	],
 })
-export class RegistryProductVariantViewComponent implements OnInit {
+export class RegistryOperatorViewComponent implements OnInit {
 	/**
 	 * Table
 	 */
-	public dataList: ProductVariant[] = [];
+	public dataList: Operator[] = [];
 
 	/**
 	 * Editor
 	 */
 	public isEditorOpen = false;
 	public editorType: 'creation' | 'edition' = 'edition';
-	public deletionTarget: ProductVariant | undefined;
-	public editionTarget: ProductVariant | undefined;
+	public deletionTarget: Operator | undefined;
+	public editionTarget: Operator | undefined;
+	public selectedPhotoBase64: string | undefined;
 
 	/**
 	 * Language
@@ -55,17 +56,12 @@ export class RegistryProductVariantViewComponent implements OnInit {
 	 * Forms
 	 */
 	public creationFormGroup = new FormGroup({
-		name: new FormControl('', [Validators.required]),
-		product: new FormControl('', [Validators.required]),
+		displayName: new FormControl('', [Validators.required]),
+		userName: new FormControl('', [Validators.required]),
 	});
 	public editionFormGroup = new FormGroup({
-		name: new FormControl('', [Validators.required]),
-		product: new FormControl('', [Validators.required]),
+		displayName: new FormControl('', [Validators.required]),
 	});
-
-	public filteredAvailableProducts: Product[] = [];
-
-	private _availableProducts: Product[] = [];
 
 	constructor(
 		private _apiService: ApiService,
@@ -83,25 +79,36 @@ export class RegistryProductVariantViewComponent implements OnInit {
 		});
 	}
 
-	public onCreationInit() {
-		this._updateAvailableProducts();
+	public isEditionTargetTheSame() {
+		if (!this.editionTarget || !this.editionTarget._id) {
+			return false;
+		}
 
+		return (
+			this.editionFormGroup.controls.displayName.value?.trim() ===
+				this.editionTarget.displayName.trim() &&
+			this.selectedPhotoBase64 === this.editionTarget.photo
+		);
+	}
+
+	public onCreationInit() {
 		this.isEditorOpen = true;
 		this.editorType = 'creation';
+
+		this.editionTarget = undefined;
+		this.selectedPhotoBase64 = undefined;
 	}
 
 	public onCreation() {
-		if (this.creationFormGroup.invalid || !this.creationFormGroup.controls.product.value) {
+		if (this.creationFormGroup.invalid || !this.selectedPhotoBase64) {
 			return;
 		}
 
-		const productVariantName = this.creationFormGroup.controls.name.value as string;
-		const product = this.creationFormGroup.controls.product.value as unknown as Product;
-
-		this._apiService.V1.productVariantRegistry
+		this._apiService.V1.operatorRegistry
 			.save({
-				name: productVariantName,
-				productId: product._id,
+				userName: this.creationFormGroup.controls.userName.value as string,
+				displayName: this.creationFormGroup.controls.displayName.value as string,
+				photo: this.selectedPhotoBase64,
 			})
 			.subscribe({
 				next: () => {
@@ -110,19 +117,13 @@ export class RegistryProductVariantViewComponent implements OnInit {
 			});
 	}
 
-	public displayProductAutocomplete(product: Product) {
-		if (!product) {
-			return '';
-		}
-
-		return product.name;
-	}
-
-	public onEditionInit(item: ProductVariant) {
+	public onEditionInit(item: Operator) {
 		this.isEditorOpen = true;
 		this.editorType = 'edition';
 
-		this.editionFormGroup.controls['name'].setValue(item.name);
+		this.editionFormGroup.controls.displayName.setValue(item.displayName);
+
+		this.selectedPhotoBase64 = item.photo;
 
 		this.editionTarget = item;
 	}
@@ -132,9 +133,18 @@ export class RegistryProductVariantViewComponent implements OnInit {
 			return;
 		}
 
-		this._apiService.V1.productVariantRegistry
+		const nextDisplayName = this.editionFormGroup.controls.displayName.value as string;
+
+		this._apiService.V1.operatorRegistry
 			.edit(this.editionTarget._id, {
-				name: this.creationFormGroup.controls.name.value as string,
+				displayName:
+					this.editionTarget.displayName !== nextDisplayName
+						? nextDisplayName
+						: undefined,
+				photo:
+					this.editionTarget.photo !== this.selectedPhotoBase64
+						? this.selectedPhotoBase64
+						: undefined,
 			})
 			.subscribe({
 				next: () => {
@@ -147,11 +157,14 @@ export class RegistryProductVariantViewComponent implements OnInit {
 		this.isEditorOpen = false;
 		this.editorType = 'creation';
 
+		this.editionTarget = undefined;
+		this.selectedPhotoBase64 = undefined;
+
 		this.creationFormGroup.reset();
 		this.editionFormGroup.reset();
 	}
 
-	public onDeleteInit(item: ProductVariant) {
+	public onDeleteInit(item: Operator) {
 		if (!item || !item._id) {
 			return;
 		}
@@ -180,10 +193,26 @@ export class RegistryProductVariantViewComponent implements OnInit {
 			return;
 		}
 
-		this._apiService.V1.productVariantRegistry.delete(this.deletionTarget._id).subscribe({
+		this._apiService.V1.operatorRegistry.delete(this.deletionTarget._id).subscribe({
 			next: () => {
 				this._onSuccessfulResponse();
 			},
+		});
+	}
+
+	public onFileUpload(files: File[]) {
+		if (files.length === 0) {
+			return;
+		}
+
+		FileService.toBase64(files[0]).then((base64) => {
+			if (!base64 || typeof base64 === 'object') {
+				this.selectedPhotoBase64 = undefined;
+
+				return;
+			}
+
+			this.selectedPhotoBase64 = base64;
 		});
 	}
 
@@ -194,26 +223,13 @@ export class RegistryProductVariantViewComponent implements OnInit {
 	}
 
 	private _refreshList() {
-		this._apiService.V1.productVariantRegistry.search().subscribe({
+		this._apiService.V1.operatorRegistry.search().subscribe({
 			next: (response) => {
 				if (!response.result) {
 					return;
 				}
 
 				this.dataList = response.result;
-			},
-		});
-	}
-
-	private _updateAvailableProducts() {
-		this._apiService.V1.productRegistry.search().subscribe({
-			next: (response) => {
-				if (response.wasSuccessful === false || !response.result) {
-					return;
-				}
-
-				this._availableProducts = response.result;
-				this.filteredAvailableProducts = this._availableProducts;
 			},
 		});
 	}

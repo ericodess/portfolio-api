@@ -11,12 +11,12 @@ main {
 				flex-direction: row;
 				align-items: center;
 				gap: 0 3vh;
-				margin-bottom: 2dvh;
+				margin-bottom: 2vh;
 		
 				h1 {
 					font-family: 'Nunito';
 					font-weight: bold;
-					font-size: clamp(2dvh, 3dvh + 1rem, 4dvh);
+					font-size: clamp(2vh, 3vh + 1rem, 4vh);
 					color: $foreground;
 				}
 			
@@ -40,11 +40,6 @@ main {
 					-ms-transition: 	color ease-in-out .3s;
 					-o-transition: 		color ease-in-out .3s;
 					transition: 		color ease-in-out .3s;
-		
-					&:hover {
-						cursor: pointer;
-						color: $accent-bright;
-					}
 				}
 			}
 
@@ -60,8 +55,7 @@ main {
 					flex-direction: column;
 					width: 100%;
 					height: 0px;
-					overflow-x: hidden;
-					overflow-y: auto;
+					overflow: hidden;
 			
 					-webkit-transition: height ease-in-out .3s;
 					-moz-transition: 	height ease-in-out .3s;
@@ -71,18 +65,22 @@ main {
 				
 					&[data-is-visible="true"] {
 						width: 100%;
-						height: 30dvh;
+						height: 70dvh;
 						border: 1px solid #0000001f;
 						border-radius: 15px;
 					}
 
 					> div {
+						display: flex;
+						flex-direction: column;
 						flex: 1;
 						padding: 2vh;
+						overflow: hidden;
+						overflow-y: auto;
 
 						h3 {
 							font-family: 'Nunito';
-							font-size: clamp(1dvh, 2dvh + 1rem, 3dvh);
+							font-size: clamp(1vh, 2vh + 1rem, 3vh);
 							margin-bottom: 2vh;
 						}
 
@@ -90,11 +88,10 @@ main {
 							display: flex;
 							flex-direction: column;
 							width: 100%;
-							height: 100%;
 						}
 					}
 
-					ul {
+					> ul {
 						display: flex;
 						flex-direction: row;
 						width: 100%;
@@ -107,10 +104,6 @@ main {
 								font-family: 'Nunito';
 								width: 100%;
 								height: 6vh;
-
-								&:hover {
-									cursor: pointer;
-								}
 							}
 						}
 
@@ -124,10 +117,6 @@ main {
 								-ms-transition: 	background-color ease-in-out .3s;
 								-o-transition: 		background-color ease-in-out .3s;
 								transition: 		background-color ease-in-out .3s;
-
-								&:hover {
-									background-color: $foreground-bright;
-								}
 
 								&:disabled {
 									cursor: default;
@@ -148,11 +137,40 @@ main {
 								-ms-transition: 	color ease-in-out .3s;
 								-o-transition: 		color ease-in-out .3s;
 								transition: 		color ease-in-out .3s;
-
-								&:hover {
-									color: red;
-								}
 							}
+						}
+					}
+
+					app-file-selector {
+						display: flex;
+						flex-direction: column;
+						gap: 1.5vh 0;
+
+						span {
+							font-family: 'Nunito';
+							font-size: clamp(1vh, 1vh + 1rem, 2vh);
+						}
+
+						.dropzone {
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							justify-content: center;
+							height: 7vh;
+							padding: 1vh;
+							border: 1px solid #00000061;
+							border-radius: 4px;	
+							gap: 1vh 0;
+							color: $foreground;
+							font-family: 'Nunito';
+							font-size: clamp(1vh, 1vh + 1rem, 2vh);
+						}
+						
+						img {
+							height: 20vh;
+							width: 20vh;
+							border-radius: 5px;
+							margin: 1.5vh auto 0 auto;
 						}
 					}
 				}
@@ -165,6 +183,15 @@ main {
 	main {
 		.view {
 			&__registry {
+				&__header {
+					button {			
+						&:hover {
+							cursor: pointer;
+							color: $accent-bright;
+						}
+					}
+				}
+
 				&__content {
 					flex-direction: row;
 
@@ -181,6 +208,32 @@ main {
 						&[data-is-visible="true"] {
 							width: 50vw;
 							height: 76vh;
+						}
+
+						> ul {
+							li {
+								button {
+									&:hover {
+										cursor: pointer;
+									}
+								}
+							}
+
+							.--confirm {
+								button {
+									&:hover {
+										background-color: $foreground-bright;
+									}
+								}
+							}
+	
+							.--cancel {
+								button {
+									&:hover {
+										color: red;
+									}
+								}
+							}
 						}
 					}
 

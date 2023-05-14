@@ -10,6 +10,11 @@ export default {
 	DIALOG_CANCEL_BUTTON: 'Cancelar',
 
 	/**
+	 * Component
+	 */
+	FILE_INPUT_TITLE: 'Arraste ou Pesquise o arquivo',
+
+	/**
 	 * Login
 	 */
 	LOGIN_USERNAME_INPUT_TITLE: 'Usuário',
@@ -30,15 +35,24 @@ export default {
 	MENU_REGISTRY_EVENT_INDEX_TITLE: 'Item',
 	MENU_REGISTRY_EVENT_ORDER_TITLE: 'Pedido',
 
-	MENU_REGISTRY_OPERATOR_TITLE: 'Operadores',
+	MENU_REGISTRY_OPERATOR_TITLE: 'Operador',
 
 	MENU_REGISTRY_PRODUCT_TITLE: 'Produto',
 	MENU_REGISTRY_PRODUCT_INDEX_TITLE: 'Item',
-	MENU_REGISTRY_PRODUCT_NAME_INPUT: 'Nome',
 
 	MENU_REGISTRY_PRODUCT_VARIANT_TITLE: 'Variante',
-	MENU_REGISTRY_PRODUCT_VARIANT_NAME_INPUT: 'Nome',
-	MENU_REGISTRY_PRODUCT_VARIANT_PRODUCT_INPUT: 'Produto',
+
+	/**
+	 * Registry
+	 */
+	REGISTRY_OPERATOR_DISPLAY_NAME_INPUT: 'Nome de exibição',
+	REGISTRY_OPERATOR_USER_NAME_INPUT: 'Nome de usuário',
+	REGISTRY_OPERATOR_PHOTO_INPUT: 'Foto',
+
+	REGISTRY_PRODUCT_NAME_INPUT: 'Nome',
+
+	REGISTRY_PRODUCT_VARIANT_NAME_INPUT: 'Nome',
+	REGISTRY_PRODUCT_VARIANT_PRODUCT_INPUT: 'Produto',
 
 	/**
 	 * Table
@@ -54,6 +68,11 @@ export default {
 	REGISTRY_EDITOR_CREATION_ACTION: 'Criar',
 	REGISTRY_EDITOR_EDITION_ACTION: 'Editar',
 	REGISTRY_EDITOR_CANCEL_ACTION: 'Cancelar',
+
+	OPERATOR_VIEW_TITLE: 'Operador',
+	OPERATOR_NEW_TITLE: 'Novo Operador',
+	OPERATOR_REGISTRY_DELETE_MESSAGE:
+		'Você realmente quer excluir este(a) operador(a) ? Esta ação é irreversível',
 
 	PRODUCT_VIEW_TITLE: 'Produto',
 	PRODUCT_NEW_TITLE: 'Novo Produto',

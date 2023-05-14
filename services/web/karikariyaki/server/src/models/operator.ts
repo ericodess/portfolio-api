@@ -71,7 +71,13 @@ const validateOperatorPhoto = async (photoInBase64: string) => {
         return;
     }
 
-    if (isBase64(photoInBase64, { allowEmpty: false }) === false) {
+    if (
+        isBase64(photoInBase64, {
+            allowEmpty: false,
+            allowMime: true,
+            mimeRequired: true,
+        }) === false
+    ) {
         throw new InHouseError(OperatorErrors.PHOTO_INVALID);
     }
 };

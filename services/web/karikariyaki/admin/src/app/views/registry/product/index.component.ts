@@ -49,7 +49,7 @@ export class RegistryProductViewComponent implements OnInit {
 	/**
 	 * Language
 	 */
-	public currentLang = LanguageService.DEFAULT_LANGUAGE;
+	public languageSource = LanguageService.DEFAULT_LANGUAGE;
 
 	/**
 	 * Forms
@@ -72,7 +72,7 @@ export class RegistryProductViewComponent implements OnInit {
 
 		this._languageService.language.subscribe({
 			next: (nextLanguage) => {
-				this.currentLang = nextLanguage;
+				this.languageSource = nextLanguage;
 			},
 		});
 	}
@@ -138,7 +138,7 @@ export class RegistryProductViewComponent implements OnInit {
 
 		const dialogRef = this._dialog.open(DialogComponent, {
 			data: {
-				message: this.currentLang['PRODUCT_REGISTRY_DELETE_MESSAGE'],
+				message: this.languageSource['PRODUCT_REGISTRY_DELETE_MESSAGE'],
 			},
 		});
 

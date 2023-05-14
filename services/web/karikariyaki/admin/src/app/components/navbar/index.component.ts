@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AnimationEvent } from '@angular/animations';
 
 // Interface
-import { InHouseLang, Menu, Operator } from '@interfaces';
+import { Menu, Operator } from '@interfaces';
 
 // Animations
 import { BasicAnimations, LoggedNavbarAnimation, LoginNavbarAnimation } from '@animations';
@@ -89,20 +89,20 @@ export class NavbarComponent implements OnInit {
 	public menu: Menu[] = [];
 	public operator: Operator | null = null;
 	public langList = Langs;
-	public currentLang: InHouseLang = LanguageService.DEFAULT_LANGUAGE;
+	public languageSource = LanguageService.DEFAULT_LANGUAGE;
 
 	constructor(
 		private _apiService: ApiService,
-		private _langService: LanguageService,
+		private _languageService: LanguageService,
 		private _menuService: MenuService,
 		private _operatorService: OperatorService,
 		private _settingsService: SettingsService,
 	) {}
 
 	ngOnInit(): void {
-		this._langService.language.subscribe({
+		this._languageService.language.subscribe({
 			next: (nextLanguage) => {
-				this.currentLang = nextLanguage;
+				this.languageSource = nextLanguage;
 			},
 		});
 
@@ -249,7 +249,7 @@ export class NavbarComponent implements OnInit {
 	}
 
 	public isLanguageActive(languageDisplayName: string) {
-		return this.currentLang['LANGUAGE_DISPLAY_NAME'] === languageDisplayName;
+		return this.languageSource['LANGUAGE_DISPLAY_NAME'] === languageDisplayName;
 	}
 
 	public onProfileClick() {

@@ -1,9 +1,6 @@
-import { Component, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-// Types
-import { InHouseLang } from '@interfaces';
 
 // Services
 import { LanguageService } from '@services';
@@ -37,14 +34,14 @@ export class TableComponent<T> implements OnChanges {
 	/**
 	 * In House
 	 */
-	public currentLang: InHouseLang = LanguageService.DEFAULT_LANGUAGE;
+	public languageSource = LanguageService.DEFAULT_LANGUAGE;
 
-	constructor(private _langService: LanguageService) {}
+	constructor(private _languageService: LanguageService) {}
 
 	ngOnInit(): void {
-		this._langService.language.subscribe({
+		this._languageService.language.subscribe({
 			next: (nextLanguage) => {
-				this.currentLang = nextLanguage;
+				this.languageSource = nextLanguage;
 			},
 		});
 	}

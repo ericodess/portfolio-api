@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 // Views
 import {
 	HomeViewComponent,
+	RegistryOperatorViewComponent,
 	RegistryProductViewComponent,
 	RegistryProductVariantViewComponent,
 } from '@views';
@@ -13,6 +14,10 @@ const routes: Routes = [
 		path: '',
 		pathMatch: 'full',
 		component: HomeViewComponent,
+	},
+	{
+		path: 'registry/operator',
+		component: RegistryOperatorViewComponent,
 	},
 	{
 		path: 'registry/product',
