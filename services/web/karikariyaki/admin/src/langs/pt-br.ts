@@ -77,6 +77,8 @@ export default {
 	REGISTRY_EDITOR_EDITION_ACTION: 'Editar',
 	REGISTRY_EDITOR_CANCEL_ACTION: 'Cancelar',
 
+	MENU_VIEW_TITLE: 'Menu',
+	MENU_NEW_TITLE: 'Novo Menu',
 	MENU_REGISTRY_DELETE_MESSAGE:
 		'Você realmente quer excluir este menu ? Esta ação é irreversível',
 

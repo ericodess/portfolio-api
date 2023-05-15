@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BasicAnimations } from '@animations';
 
 // Types
-import { Menu, Operator } from '@interfaces';
+import { Menu } from '@interfaces';
 
 // Services
 import { ApiService, FileService, LanguageService } from '@services';
@@ -58,13 +58,13 @@ export class RegistryMenuViewComponent implements OnInit {
 	public creationFormGroup = new FormGroup({
 		realm: new FormControl('', [Validators.required]),
 		title: new FormControl('', [Validators.required]),
-		route: new FormControl('', [Validators.required]),
+		route: new FormControl(''),
 		parent: new FormControl(''),
 	});
 	public editionFormGroup = new FormGroup({
 		realm: new FormControl('', [Validators.required]),
 		title: new FormControl('', [Validators.required]),
-		route: new FormControl('', [Validators.required]),
+		route: new FormControl(''),
 	});
 
 	/**
@@ -159,10 +159,7 @@ export class RegistryMenuViewComponent implements OnInit {
 			.edit(this.editionTarget._id, {
 				realm: this.editionTarget.realm !== realm ? realm : undefined,
 				title: this.editionTarget.title !== title ? title : undefined,
-				icon:
-					this.editionTarget.icon !== this.selectedPhotoBase64
-						? this.selectedPhotoBase64
-						: undefined,
+				icon: this.selectedPhotoBase64,
 				route: this.editionTarget.route !== route ? route : undefined,
 			})
 			.subscribe({

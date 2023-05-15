@@ -1,9 +1,9 @@
 <main class="view__registry__product">
 	<div class="view__registry__header">
-		<h1>{{ languageSource['OPERATOR_VIEW_TITLE'] }}</h1>
+		<h1>{{ languageSource['MENU_VIEW_TITLE'] }}</h1>
 		<button (click)="onCreationInit()">
 			<mat-icon>add</mat-icon>
-			<span>{{ languageSource['OPERATOR_NEW_TITLE'] }}</span>
+			<span>{{ languageSource['MENU_NEW_TITLE'] }}</span>
 		</button>
 	</div>
 	<div class="view__registry__content">
@@ -34,7 +34,7 @@
 					</mat-form-field>
 					<mat-form-field appearance="outline">
 						<mat-label>{{ languageSource['REGISTRY_MENU_ROUTE_INPUT'] }}</mat-label>
-						<input matInput formControlName="route" required>
+						<input matInput formControlName="route">
 					</mat-form-field>
 					<mat-form-field appearance="outline">
 						<mat-label>{{ languageSource['REGISTRY_MENU_PARENT_INPUT'] }}</mat-label>
@@ -87,7 +87,7 @@
 					</mat-form-field>
 					<mat-form-field appearance="outline">
 						<mat-label>{{ languageSource['REGISTRY_MENU_ROUTE_INPUT'] }}</mat-label>
-						<input matInput formControlName="route" required>
+						<input matInput formControlName="route">
 					</mat-form-field>
 				</form>
 				<app-file-selector
