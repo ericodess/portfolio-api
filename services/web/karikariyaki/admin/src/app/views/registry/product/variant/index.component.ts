@@ -82,6 +82,8 @@ export class RegistryProductVariantViewComponent implements OnInit {
 	}
 
 	public onCreationInit() {
+		this.onCancel();
+
 		this._updateAvailableProducts();
 
 		this.isEditorOpen = true;
@@ -117,6 +119,8 @@ export class RegistryProductVariantViewComponent implements OnInit {
 	}
 
 	public onEditionInit(item: ProductVariant) {
+		this.onCancel();
+
 		this.isEditorOpen = true;
 		this.editorType = 'edition';
 

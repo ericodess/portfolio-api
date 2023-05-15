@@ -78,6 +78,8 @@ export class RegistryProductViewComponent implements OnInit {
 	}
 
 	public onCreationInit() {
+		this.onCancel();
+
 		this.isEditorOpen = true;
 		this.editorType = 'creation';
 	}
@@ -99,6 +101,8 @@ export class RegistryProductViewComponent implements OnInit {
 	}
 
 	public onEditionInit(item: Product) {
+		this.onCancel();
+
 		this.isEditorOpen = true;
 		this.editorType = 'edition';
 

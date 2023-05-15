@@ -92,11 +92,10 @@ export class RegistryOperatorViewComponent implements OnInit {
 	}
 
 	public onCreationInit() {
+		this.onCancel();
+
 		this.isEditorOpen = true;
 		this.editorType = 'creation';
-
-		this.editionTarget = undefined;
-		this.selectedPhotoBase64 = undefined;
 	}
 
 	public onCreation() {
@@ -118,6 +117,8 @@ export class RegistryOperatorViewComponent implements OnInit {
 	}
 
 	public onEditionInit(item: Operator) {
+		this.onCancel();
+
 		this.isEditorOpen = true;
 		this.editorType = 'edition';
 

@@ -98,6 +98,8 @@ export class RegistryMenuViewComponent implements OnInit {
 	}
 
 	public onCreationInit() {
+		this.onCancel();
+
 		this._updateAvailableRealms();
 		this._updateAvailableMenus();
 
@@ -133,6 +135,8 @@ export class RegistryMenuViewComponent implements OnInit {
 	}
 
 	public onEditionInit(item: Menu) {
+		this.onCancel();
+
 		this._updateAvailableRealms();
 
 		this.isEditorOpen = true;
@@ -174,6 +178,7 @@ export class RegistryMenuViewComponent implements OnInit {
 		this.editorType = 'creation';
 
 		this.editionTarget = undefined;
+		this.selectedPhotoBase64 = undefined;
 
 		this.creationFormGroup.reset();
 		this.editionFormGroup.reset();
