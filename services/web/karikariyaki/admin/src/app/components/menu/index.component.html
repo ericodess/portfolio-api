@@ -13,7 +13,7 @@
 			<img
 				*ngIf="node.icon"
 				class="menu__node__icon"
-				[src]="'data:image/svg+xml;base64,' + node.icon.trim()"
+				[src]="node.icon"
 			/>
 			<svg
 				*ngIf="!node.icon"

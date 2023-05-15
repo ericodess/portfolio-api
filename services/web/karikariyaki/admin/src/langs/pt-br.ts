@@ -35,6 +35,8 @@ export default {
 	MENU_REGISTRY_EVENT_INDEX_TITLE: 'Item',
 	MENU_REGISTRY_EVENT_ORDER_TITLE: 'Pedido',
 
+	MENU_REGISTRY_MENU_TITLE: 'Menu',
+
 	MENU_REGISTRY_OPERATOR_TITLE: 'Operador',
 
 	MENU_REGISTRY_PRODUCT_TITLE: 'Produto',
@@ -45,6 +47,12 @@ export default {
 	/**
 	 * Registry
 	 */
+	REGISTRY_MENU_REALM_INPUT: 'Dominio',
+	REGISTRY_MENU_TITLE_INPUT: 'Título',
+	REGISTRY_MENU_ROUTE_INPUT: 'Rota',
+	REGISTRY_MENU_PARENT_INPUT: 'Menu Parente',
+	REGISTRY_MENU_ICON_INPUT: 'Ícone',
+
 	REGISTRY_OPERATOR_DISPLAY_NAME_INPUT: 'Nome de exibição',
 	REGISTRY_OPERATOR_USER_NAME_INPUT: 'Nome de usuário',
 	REGISTRY_OPERATOR_PHOTO_INPUT: 'Foto',
@@ -68,6 +76,9 @@ export default {
 	REGISTRY_EDITOR_CREATION_ACTION: 'Criar',
 	REGISTRY_EDITOR_EDITION_ACTION: 'Editar',
 	REGISTRY_EDITOR_CANCEL_ACTION: 'Cancelar',
+
+	MENU_REGISTRY_DELETE_MESSAGE:
+		'Você realmente quer excluir este menu ? Esta ação é irreversível',
 
 	OPERATOR_VIEW_TITLE: 'Operador',
 	OPERATOR_NEW_TITLE: 'Novo Operador',

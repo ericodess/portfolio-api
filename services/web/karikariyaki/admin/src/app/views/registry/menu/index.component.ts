@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BasicAnimations } from '@animations';
 
 // Types
-import { Operator } from '@interfaces';
+import { Menu, Operator } from '@interfaces';
 
 // Services
 import { ApiService, FileService, LanguageService } from '@services';
@@ -32,19 +32,19 @@ import { DialogComponent } from '@components';
 		]),
 	],
 })
-export class RegistryOperatorViewComponent implements OnInit {
+export class RegistryMenuViewComponent implements OnInit {
 	/**
 	 * Table
 	 */
-	public dataList: Operator[] = [];
+	public dataList: Menu[] = [];
 
 	/**
 	 * Editor
 	 */
 	public isEditorOpen = false;
 	public editorType: 'creation' | 'edition' = 'edition';
-	public deletionTarget: Operator | undefined;
-	public editionTarget: Operator | undefined;
+	public deletionTarget: Menu | undefined;
+	public editionTarget: Menu | undefined;
 	public selectedPhotoBase64: string | undefined;
 
 	/**
@@ -56,12 +56,22 @@ export class RegistryOperatorViewComponent implements OnInit {
 	 * Forms
 	 */
 	public creationFormGroup = new FormGroup({
-		displayName: new FormControl('', [Validators.required]),
-		userName: new FormControl('', [Validators.required]),
+		realm: new FormControl('', [Validators.required]),
+		title: new FormControl('', [Validators.required]),
+		route: new FormControl('', [Validators.required]),
+		parent: new FormControl(''),
 	});
 	public editionFormGroup = new FormGroup({
-		displayName: new FormControl('', [Validators.required]),
+		realm: new FormControl('', [Validators.required]),
+		title: new FormControl('', [Validators.required]),
+		route: new FormControl('', [Validators.required]),
 	});
+
+	/**
+	 * In House
+	 */
+	public availableRealms: string[] = [];
+	public availableMenus: Menu[] = [];
 
 	constructor(
 		private _apiService: ApiService,
@@ -79,36 +89,41 @@ export class RegistryOperatorViewComponent implements OnInit {
 		});
 	}
 
-	public isEditionTargetTheSame() {
-		if (!this.editionTarget || !this.editionTarget._id) {
-			return false;
+	public displayProductAutocomplete(menu: Menu) {
+		if (!menu) {
+			return '';
 		}
 
-		return (
-			this.editionFormGroup.controls.displayName.value?.trim() ===
-				this.editionTarget.displayName.trim() &&
-			this.selectedPhotoBase64 === this.editionTarget.photo
-		);
+		return menu.title;
 	}
 
 	public onCreationInit() {
+		this._updateAvailableRealms();
+		this._updateAvailableMenus();
+
 		this.isEditorOpen = true;
 		this.editorType = 'creation';
 
 		this.editionTarget = undefined;
-		this.selectedPhotoBase64 = undefined;
 	}
 
 	public onCreation() {
-		if (this.creationFormGroup.invalid || !this.selectedPhotoBase64) {
+		if (this.creationFormGroup.invalid) {
 			return;
 		}
 
-		this._apiService.V1.operatorRegistry
+		const realm = this.creationFormGroup.controls.realm.value as string;
+		const title = this.creationFormGroup.controls.title.value as string;
+		const route = this.creationFormGroup.controls.route.value as string;
+		const parentId = this.creationFormGroup.controls.parent.value as string;
+
+		this._apiService.V1.menuRegistry
 			.save({
-				userName: this.creationFormGroup.controls.userName.value as string,
-				displayName: this.creationFormGroup.controls.displayName.value as string,
-				photo: this.selectedPhotoBase64,
+				realm: realm ?? undefined,
+				title: title ?? undefined,
+				icon: this.selectedPhotoBase64 ?? undefined,
+				route: route ?? undefined,
+				parentId: parentId ?? undefined,
 			})
 			.subscribe({
 				next: () => {
@@ -117,15 +132,18 @@ export class RegistryOperatorViewComponent implements OnInit {
 			});
 	}
 
-	public onEditionInit(item: Operator) {
+	public onEditionInit(item: Menu) {
+		this._updateAvailableRealms();
+
 		this.isEditorOpen = true;
 		this.editorType = 'edition';
 
-		this.editionFormGroup.controls.displayName.setValue(item.displayName);
-
-		this.selectedPhotoBase64 = item.photo;
+		this.editionFormGroup.controls.realm.setValue(item.realm);
+		this.editionFormGroup.controls.title.setValue(item.title);
+		this.editionFormGroup.controls.route.setValue(item.route);
 
 		this.editionTarget = item;
+		this.selectedPhotoBase64 = item.icon;
 	}
 
 	public onEdition() {
@@ -133,18 +151,19 @@ export class RegistryOperatorViewComponent implements OnInit {
 			return;
 		}
 
-		const nextDisplayName = this.editionFormGroup.controls.displayName.value as string;
+		const realm = this.editionFormGroup.controls.realm.value ?? undefined;
+		const title = this.editionFormGroup.controls.title.value ?? undefined;
+		const route = this.editionFormGroup.controls.route.value ?? undefined;
 
-		this._apiService.V1.operatorRegistry
+		this._apiService.V1.menuRegistry
 			.edit(this.editionTarget._id, {
-				displayName:
-					this.editionTarget.displayName !== nextDisplayName
-						? nextDisplayName
-						: undefined,
-				photo:
-					this.editionTarget.photo !== this.selectedPhotoBase64
+				realm: this.editionTarget.realm !== realm ? realm : undefined,
+				title: this.editionTarget.title !== title ? title : undefined,
+				icon:
+					this.editionTarget.icon !== this.selectedPhotoBase64
 						? this.selectedPhotoBase64
 						: undefined,
+				route: this.editionTarget.route !== route ? route : undefined,
 			})
 			.subscribe({
 				next: () => {
@@ -158,20 +177,19 @@ export class RegistryOperatorViewComponent implements OnInit {
 		this.editorType = 'creation';
 
 		this.editionTarget = undefined;
-		this.selectedPhotoBase64 = undefined;
 
 		this.creationFormGroup.reset();
 		this.editionFormGroup.reset();
 	}
 
-	public onDeleteInit(item: Operator) {
+	public onDeleteInit(item: Menu) {
 		if (!item || !item._id) {
 			return;
 		}
 
 		const dialogRef = this._dialog.open(DialogComponent, {
 			data: {
-				message: this.languageSource['OPERATOR_REGISTRY_DELETE_MESSAGE'],
+				message: this.languageSource['MENU_REGISTRY_DELETE_MESSAGE'],
 			},
 		});
 
@@ -193,7 +211,7 @@ export class RegistryOperatorViewComponent implements OnInit {
 			return;
 		}
 
-		this._apiService.V1.operatorRegistry.delete(this.deletionTarget._id).subscribe({
+		this._apiService.V1.menuRegistry.delete(this.deletionTarget._id).subscribe({
 			next: () => {
 				this._onSuccessfulResponse();
 			},
@@ -223,13 +241,37 @@ export class RegistryOperatorViewComponent implements OnInit {
 	}
 
 	private _refreshList() {
-		this._apiService.V1.operatorRegistry.search().subscribe({
+		this._apiService.V1.menuRegistry.search().subscribe({
 			next: (response) => {
 				if (!response.result) {
 					return;
 				}
 
 				this.dataList = response.result;
+			},
+		});
+	}
+
+	private _updateAvailableRealms() {
+		this._apiService.V1.menuRegistry.realms().subscribe({
+			next: (response) => {
+				if (response.wasSuccessful === false || !response.result) {
+					return;
+				}
+
+				this.availableRealms = response.result;
+			},
+		});
+	}
+
+	private _updateAvailableMenus() {
+		this._apiService.V1.menuRegistry.search().subscribe({
+			next: (response) => {
+				if (response.wasSuccessful === false || !response.result) {
+					return;
+				}
+
+				this.availableMenus = response.result;
 			},
 		});
 	}

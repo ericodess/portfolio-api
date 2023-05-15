@@ -13,6 +13,7 @@ interface DefaultParams {
     id?: string;
     realm?: keyof typeof MenuRealm;
     title?: string;
+    icon?: string;
     route?: string;
     parentId?: string;
 }
@@ -102,6 +103,7 @@ export class MenuService {
 
         newEntry.realm = values.realm;
         newEntry.title = values.title?.trim();
+        newEntry.icon = values.icon?.trim();
         newEntry.route = StringService.removeLeadingAndTrailingSlashes(
             values.route
         );
@@ -136,6 +138,7 @@ export class MenuService {
         await DatabaseService.getConnection();
 
         values.title = values.title?.trim();
+        values.icon = values.icon?.trim();
         values.route = StringService.removeLeadingAndTrailingSlashes(
             values.route
         );
@@ -163,6 +166,7 @@ export class MenuService {
                 $set: {
                     realm: values.realm ?? undefined,
                     title: values.title ?? undefined,
+                    icon: values.icon ?? undefined,
                     route:
                         currentMenu.children.length > 0
                             ? undefined

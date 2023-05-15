@@ -35,7 +35,13 @@ const validateMenuIcon = async (iconInBase64: string) => {
         return;
     }
 
-    if (isBase64(iconInBase64, { allowEmpty: false }) === false) {
+    if (
+        isBase64(iconInBase64, {
+            allowEmpty: false,
+            allowMime: true,
+            mimeRequired: true,
+        }) === false
+    ) {
         throw new InHouseError(MenuErrors.ICON_INVALID);
     }
 };

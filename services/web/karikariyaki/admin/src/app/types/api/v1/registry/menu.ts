@@ -48,6 +48,14 @@ export class MenuRegistryApiV1 extends BaseApi {
 		});
 	}
 
+	public realms(): Observable<ApiResponseWrapper<string[]>> {
+		const endpoint = new URL(this._endpoint + '/realms');
+
+		return this.client.get<ApiResponseWrapper<string[]>>(endpoint.href, {
+			withCredentials: true,
+		});
+	}
+
 	public searchSelf(): Observable<ApiResponseWrapper<Menu[]>> {
 		const endpoint = new URL(this._endpoint + '/self');
 
@@ -64,6 +72,7 @@ export class MenuRegistryApiV1 extends BaseApi {
 			{
 				realm: params.realm,
 				title: params.title,
+				icon: params.icon,
 				route: params.route,
 				parentId: params.parentId,
 			},
@@ -81,6 +90,7 @@ export class MenuRegistryApiV1 extends BaseApi {
 			{
 				realm: params.realm,
 				title: params.title,
+				icon: params.icon,
 				route: params.route,
 			},
 			{

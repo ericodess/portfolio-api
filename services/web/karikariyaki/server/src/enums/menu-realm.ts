@@ -1,5 +1,5 @@
 export enum MenuRealm {
-    INSIDE,
-    PUBLIC,
-    OUTSIDE,
+    INSIDE = "INSIDE",
+    PUBLIC = "PUBLIC",
+    OUTSIDE = "OUTSIDE",
 }

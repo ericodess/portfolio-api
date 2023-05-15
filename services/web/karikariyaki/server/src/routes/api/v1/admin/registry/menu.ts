@@ -11,6 +11,9 @@ import {
 // Models
 import { MenuErrors } from "@models";
 
+// Enums
+import { MenuRealm } from "@enums";
+
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -42,6 +45,12 @@ router.get("/", (req, res) => {
         });
 });
 
+router.get("/realms", (req, res) => {
+    res.status(200).json(
+        ResponseService.generateSucessfulResponse(Object.values(MenuRealm))
+    );
+});
+
 router.get("/self", (req, res) => {
     MenuService.query({ realm: "INSIDE" })
         .then((response) => {
@@ -61,6 +70,7 @@ router.post("/", (req, res) => {
         RequestService.queryParamToString(req.body.realm)
     );
     const title = RequestService.queryParamToString(req.body.title);
+    const icon = RequestService.queryParamToString(req.body.icon);
     const route = RequestService.queryParamToString(req.body.route);
     const parentId = RequestService.queryParamToString(req.body.parentId);
 
@@ -75,6 +85,7 @@ router.post("/", (req, res) => {
     MenuService.save({
         realm: realm,
         title: title,
+        icon: icon,
         route: route,
         parentId: parentId,
     })
@@ -95,6 +106,7 @@ router.patch("/:id", (req, res) => {
     const realm = StringService.toMenuRealm(
         RequestService.queryParamToString(req.body.realm)
     );
+    const icon = RequestService.queryParamToString(req.body.icon);
     const title = RequestService.queryParamToString(req.body.title);
     const route = RequestService.queryParamToString(req.body.route);
 
@@ -106,7 +118,12 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    MenuService.update(id, { realm: realm, title: title, route: route })
+    MenuService.update(id, {
+        realm: realm,
+        icon: icon,
+        title: title,
+        route: route,
+    })
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)
