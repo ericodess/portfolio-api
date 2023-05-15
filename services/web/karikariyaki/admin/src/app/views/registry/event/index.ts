@@ -1,4 +1,4 @@
-export { RegistryProductViewComponent } from './index.component';
-export { RegistryProductViewModule } from './index.module';
-export { RegistryProductVariantViewComponent } from './variant/index.component';
-export { RegistryProductVariantViewModule } from './variant/index.module';
+export { RegistryEventViewComponent } from './index.component';
+export { RegistryEventViewModule } from './index.module';
+export { RegistryEventOrderViewComponent } from './order/index.component';
+export { RegistryEventOrderViewModule } from './order/index.module';

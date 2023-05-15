@@ -6,6 +6,9 @@ import { OrderService, RequestService, ResponseService } from "@services";
 // Models
 import { OrderErrors } from "@models";
 
+// Enums
+import { OrderStatus } from "@enums";
+
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -28,6 +31,12 @@ router.get("/", (req, res) => {
                 ResponseService.generateFailedResponse(error.message)
             );
         });
+});
+
+router.get("/status", (req, res) => {
+    res.status(200).json(
+        ResponseService.generateSucessfulResponse(Object.values(OrderStatus))
+    );
 });
 
 router.post("/", (req, res) => {

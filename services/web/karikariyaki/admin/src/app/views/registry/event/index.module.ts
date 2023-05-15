@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // Components
-import { RegistryProductViewComponent } from './index.component';
+import { RegistryEventViewComponent } from './index.component';
 
 // Modules
 import { TableModule } from '@components';
@@ -11,8 +11,8 @@ import { TableModule } from '@components';
 import { FormsBundle, MaterialBundle } from '@imports';
 
 @NgModule({
-	declarations: [RegistryProductViewComponent],
+	declarations: [RegistryEventViewComponent],
 	imports: [CommonModule, FormsBundle, MaterialBundle, TableModule],
-	exports: [RegistryProductViewComponent],
+	exports: [RegistryEventViewComponent],
 })
-export class RegistryProductViewModule {}
+export class RegistryEventViewModule {}

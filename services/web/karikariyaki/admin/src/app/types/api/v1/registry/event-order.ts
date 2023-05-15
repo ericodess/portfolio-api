@@ -6,13 +6,10 @@ import { ApiResponseWrapper, EventOrder } from '@interfaces';
 // Types
 import { BaseApi } from '@types';
 
-// Enums
-import { OrderStatus } from '@enums';
-
 interface DefaultParams {
 	_id?: string;
 	eventId?: string;
-	status?: OrderStatus;
+	status?: string;
 	operatorId?: string;
 	clientName?: string;
 	itemId?: string;
@@ -60,6 +57,14 @@ export class EventOrderRegistryApiV1 extends BaseApi {
 		}
 
 		return this.client.get<ApiResponseWrapper<EventOrder[]>>(endpoint.href, {
+			withCredentials: true,
+		});
+	}
+
+	public status(): Observable<ApiResponseWrapper<string[]>> {
+		const endpoint = new URL(this._endpoint + '/status');
+
+		return this.client.get<ApiResponseWrapper<string[]>>(endpoint.href, {
 			withCredentials: true,
 		});
 	}

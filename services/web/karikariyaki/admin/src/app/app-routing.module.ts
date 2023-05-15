@@ -8,6 +8,8 @@ import {
 	RegistryOperatorViewComponent,
 	RegistryProductViewComponent,
 	RegistryProductVariantViewComponent,
+	RegistryEventViewComponent,
+	RegistryEventOrderViewComponent,
 } from '@views';
 
 const routes: Routes = [
@@ -17,24 +19,49 @@ const routes: Routes = [
 		component: HomeViewComponent,
 	},
 	{
-		path: 'registry/menu',
-		pathMatch: 'full',
-		component: RegistryMenuViewComponent,
-	},
-	{
-		path: 'registry/operator',
-		pathMatch: 'full',
-		component: RegistryOperatorViewComponent,
-	},
-	{
-		path: 'registry/product',
-		pathMatch: 'full',
-		component: RegistryProductViewComponent,
-	},
-	{
-		path: 'registry/product/variant',
-		pathMatch: 'full',
-		component: RegistryProductVariantViewComponent,
+		path: 'registry',
+		children: [
+			{
+				path: 'event',
+				children: [
+					{
+						path: '',
+						pathMatch: 'full',
+						component: RegistryEventViewComponent,
+					},
+					{
+						path: 'order',
+						pathMatch: 'full',
+						component: RegistryEventOrderViewComponent,
+					},
+				],
+			},
+			{
+				path: 'menu',
+				pathMatch: 'full',
+				component: RegistryMenuViewComponent,
+			},
+			{
+				path: 'operator',
+				pathMatch: 'full',
+				component: RegistryOperatorViewComponent,
+			},
+			{
+				path: 'product',
+				children: [
+					{
+						path: '',
+						pathMatch: 'full',
+						component: RegistryProductViewComponent,
+					},
+					{
+						path: 'variant',
+						pathMatch: 'full',
+						component: RegistryProductVariantViewComponent,
+					},
+				],
+			},
+		],
 	},
 ];
 

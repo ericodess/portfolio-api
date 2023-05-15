@@ -89,7 +89,7 @@ export class RegistryMenuViewComponent implements OnInit {
 		});
 	}
 
-	public displayProductAutocomplete(menu: Menu) {
+	public displayMenuAutocomplete(menu: Menu) {
 		if (!menu) {
 			return '';
 		}

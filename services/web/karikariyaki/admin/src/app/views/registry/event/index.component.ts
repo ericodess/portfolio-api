@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BasicAnimations } from '@animations';
 
 // Types
-import { Product } from '@interfaces';
+import { Event } from '@interfaces';
 
 // Services
 import { ApiService, LanguageService } from '@services';
@@ -16,7 +16,7 @@ import { ApiService, LanguageService } from '@services';
 import { DialogComponent } from '@components';
 
 @Component({
-	selector: 'app-registry-product-view',
+	selector: 'app-registry-event-view',
 	templateUrl: './index.component.html',
 	animations: [
 		BasicAnimations.horizontalShrinkAnimation,
@@ -32,19 +32,19 @@ import { DialogComponent } from '@components';
 		]),
 	],
 })
-export class RegistryProductViewComponent implements OnInit {
+export class RegistryEventViewComponent implements OnInit {
 	/**
 	 * Table
 	 */
-	public dataList: Product[] = [];
+	public dataList: Event[] = [];
 
 	/**
 	 * Editor
 	 */
 	public isEditorOpen = false;
 	public editorType: 'creation' | 'edition' = 'edition';
-	public deletionTarget: Product | undefined;
-	public editionTarget: Product | undefined;
+	public deletionTarget: Event | undefined;
+	public editionTarget: Event | undefined;
 
 	/**
 	 * Language
@@ -87,7 +87,7 @@ export class RegistryProductViewComponent implements OnInit {
 			return;
 		}
 
-		this._apiService.V1.productRegistry
+		this._apiService.V1.eventRegistry
 			.save({
 				name: this.creationFormGroup.controls.name.value as string,
 			})
@@ -98,7 +98,7 @@ export class RegistryProductViewComponent implements OnInit {
 			});
 	}
 
-	public onEditionInit(item: Product) {
+	public onEditionInit(item: Event) {
 		this.isEditorOpen = true;
 		this.editorType = 'edition';
 
@@ -112,7 +112,7 @@ export class RegistryProductViewComponent implements OnInit {
 			return;
 		}
 
-		this._apiService.V1.productRegistry
+		this._apiService.V1.eventRegistry
 			.edit(this.editionTarget._id, {
 				name: this.editionFormGroup.controls.name.value as string,
 			})
@@ -131,14 +131,14 @@ export class RegistryProductViewComponent implements OnInit {
 		this.editionFormGroup.reset();
 	}
 
-	public onDeleteInit(item: Product) {
+	public onDeleteInit(item: Event) {
 		if (!item || !item._id) {
 			return;
 		}
 
 		const dialogRef = this._dialog.open(DialogComponent, {
 			data: {
-				message: this.languageSource['PRODUCT_REGISTRY_DELETE_MESSAGE'],
+				message: this.languageSource['EVENT_REGISTRY_DELETE_MESSAGE'],
 			},
 		});
 
@@ -160,7 +160,7 @@ export class RegistryProductViewComponent implements OnInit {
 			return;
 		}
 
-		this._apiService.V1.productRegistry.delete(this.deletionTarget._id).subscribe({
+		this._apiService.V1.eventRegistry.delete(this.deletionTarget._id).subscribe({
 			next: () => {
 				this._onSuccessfulResponse();
 			},
@@ -174,7 +174,7 @@ export class RegistryProductViewComponent implements OnInit {
 	}
 
 	private _refreshList() {
-		this._apiService.V1.productRegistry.search().subscribe({
+		this._apiService.V1.eventRegistry.search().subscribe({
 			next: (response) => {
 				if (!response.result) {
 					return;

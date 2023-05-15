@@ -1,4 +1,4 @@
-<main class="view__registry__product">
+<main>
 	<div class="view__registry__header">
 		<h1>{{ languageSource['MENU_VIEW_TITLE'] }}</h1>
 		<button (click)="onCreationInit()">
@@ -41,14 +41,14 @@
 						<input
 							matInput
 							formControlName="parent"
-							[matAutocomplete]="autoProduct"
+							[matAutocomplete]="autoMenu"
 						>
-						<mat-autocomplete #autoProduct="matAutocomplete" [displayWith]="displayProductAutocomplete">
+						<mat-autocomplete #autoMenu="matAutocomplete" [displayWith]="displayMenuAutocomplete">
 							<mat-option
-								*ngFor="let product of availableMenus"
-								[value]="product"
+								*ngFor="let menu of availableMenus"
+								[value]="menu"
 							>
-							<span>{{ product.title }}</span>
+							<span>{{ menu.title }}</span>
 						  </mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
