@@ -76,8 +76,7 @@ services:
         networks:
             - main-network
         volumes:
-            - ./node_modules/karikariyaki/admin:/app/admin/node_modules
-            - ./node_modules/karikariyaki/server:/app/server/node_modules
+            - ./node_modules/karikariyaki:/app/node_modules
         depends_on:
             - mongodb
         restart: unless-stopped
