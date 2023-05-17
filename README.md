@@ -1,16 +1,14 @@
-[![portfolio-api](https://raw.githubusercontent.com/ericodesu/portfolio-api/master/.github/images/project-thumbnail.png)](https://api.ericodesu.com)
+[![portfolio-api](.github/images/project-thumbnail.png)](https://api.ericodesu.com)
 
 # portfolio-api
 
 ### tl;dr
 
  ```
-git clone https://github.com/ericodesu/portfolio-api.git
+git clone https://github.com/pepeien/portfolio-api.git
 cd portfolio-api/
 docker-compose up --build
 ```
-
-Then open [http://localhost:9001/](http://localhost:9001/) to access **efrederick** service or [http://localhost:9002/](http://localhost:9002/) to access **namah** service. The initial structure of your app is setup. You may also need to install nginx at your machine with you want to be at the public side, read **Setting up nginx & SSL** for more.
 
 ### Setting up nginx & SSL
 
@@ -34,7 +32,7 @@ Now you are ready to use the project, just issue a `docker-compose up --build` a
 
 ## About the Project
 
-Firstly, this project was to only provide [namah](https://github.com/ericodess/namah) project, but as i worked on it, i deciced to be the back-end source for all my portfolio related projects.
+Firstly, this project was to only provide [namah](https://github.com/pepeien/namah) project, but as i worked on it, i deciced to be the back-end source for all my portfolio related projects.
 
 ## Documentation
 
