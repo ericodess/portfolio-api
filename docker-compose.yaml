@@ -20,9 +20,9 @@ services:
             context: ./services/web/namah
             dockerfile: Dockerfile
         ports:
-            - "9002:9002"   
+            - "9002:9002"
         networks:
-            - main-network           
+            - main-network
         volumes:
             - /node_modules/namah:/app/node_modules
         restart: unless-stopped
@@ -113,7 +113,7 @@ services:
             - CHECKSUM=SHA1
             - COMPRESSION=GZ
             - SPLIT_DB=FALSE
-            - CONTAINER_ENABLE_MONITORING=FALSE    
+            - CONTAINER_ENABLE_MONITORING=FALSE
         restart: always
 
 volumes:
