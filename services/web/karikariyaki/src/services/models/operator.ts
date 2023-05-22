@@ -1,26 +1,18 @@
 // Models
 import { OperatorModel } from "@models";
+import {
+    OperatorCreatableParams,
+    OperatorEditableParams,
+    OperatorQueryableParams,
+} from "karikarihelper";
 
 // Services
 import { DatabaseService, StringService } from "@services";
 
-interface DefaultParams {
-    id?: string;
-    userName?: string;
-    displayName?: string;
-    photo?: string;
-}
-
-type QueryableParams = Omit<DefaultParams, "userName" | "photo">;
-
-type CreatableParams = Omit<DefaultParams, "id">;
-
-type EditableParams = Omit<DefaultParams, "id" | "userName">;
-
 export class OperatorService {
     public static visibleParameters = ["displayName", "photo"];
 
-    public static async query(values: QueryableParams) {
+    public static async query(values: OperatorQueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -52,7 +44,7 @@ export class OperatorService {
         );
     }
 
-    public static async save(values: CreatableParams) {
+    public static async save(values: OperatorCreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new OperatorModel();
@@ -68,7 +60,7 @@ export class OperatorService {
         );
     }
 
-    public static async update(id: string, values: EditableParams) {
+    public static async update(id: string, values: OperatorEditableParams) {
         await DatabaseService.getConnection();
 
         values.displayName = values.displayName?.trim();

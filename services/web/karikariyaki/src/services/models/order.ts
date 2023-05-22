@@ -1,26 +1,15 @@
 import { PopulateOptions } from "mongoose";
+import {
+    EventOrderCreatableParams,
+    EventOrderEditableParams,
+    EventOrderQueryableParams,
+} from "karikarihelper";
 
 // Models
 import { EventModel, OrderModel } from "@models";
 
 // Services
 import { DatabaseService, StringService } from "@services";
-
-interface DefaultParams {
-    id?: string;
-    event?: string;
-    status?: string;
-    operator?: string;
-    client?: string;
-    item?: string;
-    variant?: string;
-}
-
-type QueryableParams = DefaultParams;
-
-type CreatableParams = Omit<DefaultParams, "id">;
-
-type EditableParams = Pick<DefaultParams, "status">;
 
 export class OrderService {
     public static visibleParameters = ["status", "client"];
@@ -44,7 +33,7 @@ export class OrderService {
         },
     ] as PopulateOptions[];
 
-    public static async query(values: QueryableParams) {
+    public static async query(values: EventOrderQueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -57,28 +46,28 @@ export class OrderService {
             ).populate(OrderService._populateOptions);
         }
 
-        if (values.event) {
-            query.push({ event: values.event });
+        if (values.eventId) {
+            query.push({ event: values.eventId });
         }
 
         if (values.status) {
             query.push({ status: values.status });
         }
 
-        if (values.operator) {
-            query.push({ operator: values.operator });
+        if (values.operatorId) {
+            query.push({ operator: values.operatorId });
         }
 
-        if (values.client) {
-            query.push({ client: values.client });
+        if (values.clientName) {
+            query.push({ client: values.clientName });
         }
 
-        if (values.item) {
-            query.push({ item: values.item });
+        if (values.itemId) {
+            query.push({ item: values.itemId });
         }
 
-        if (values.variant) {
-            query.push({ variant: values.variant });
+        if (values.variantId) {
+            query.push({ variant: values.variantId });
         }
 
         return await OrderModel.find(query.length === 0 ? null : { $or: query })
@@ -86,17 +75,17 @@ export class OrderService {
             .populate(OrderService._populateOptions);
     }
 
-    public static async save(values: CreatableParams) {
+    public static async save(values: EventOrderCreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new OrderModel();
 
-        newEntry.event = StringService.toObjectId(values.event);
+        newEntry.event = StringService.toObjectId(values.eventId);
         newEntry.status = newEntry.status;
-        newEntry.operator = StringService.toObjectId(values.operator);
-        newEntry.client = values.client?.trim();
-        newEntry.item = StringService.toObjectId(values.item);
-        newEntry.variant = StringService.toObjectId(values.variant);
+        newEntry.operator = StringService.toObjectId(values.operatorId);
+        newEntry.client = values.clientName?.trim();
+        newEntry.item = StringService.toObjectId(values.itemId);
+        newEntry.variant = StringService.toObjectId(values.variantId);
 
         await EventModel.findByIdAndUpdate(
             newEntry.event,
@@ -115,7 +104,7 @@ export class OrderService {
             .populate(OrderService._populateOptions);
     }
 
-    public static async update(id: string, values: EditableParams) {
+    public static async update(id: string, values: EventOrderEditableParams) {
         await DatabaseService.getConnection();
 
         return OrderModel.findByIdAndUpdate(

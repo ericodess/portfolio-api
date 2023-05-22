@@ -1,22 +1,15 @@
-import { PopulateOptions, Types } from "mongoose";
+import { PopulateOptions } from "mongoose";
+import {
+    EventCreatableParams,
+    EventEditableParams,
+    EventQueryableParams,
+} from "karikarihelper";
 
 // Models
 import { EventModel, OrderModel } from "@models";
 
 // Services
 import { DatabaseService, DateService, StringService } from "@services";
-
-interface DefaultParams {
-    id?: string;
-    name?: string;
-    date?: Date;
-}
-
-type QueryableParams = DefaultParams;
-
-type CreatableParams = Pick<DefaultParams, "name">;
-
-type EditableParams = Pick<DefaultParams, "name">;
 
 export class EventService {
     public static visibleParameters = ["name", "date", "orders"];
@@ -40,7 +33,7 @@ export class EventService {
         ],
     } as PopulateOptions;
 
-    public static async query(values: QueryableParams) {
+    public static async query(values: EventQueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -70,13 +63,13 @@ export class EventService {
             .populate(EventService._populateOptions);
     }
 
-    public static async save(values: CreatableParams) {
+    public static async save(values: EventCreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new EventModel();
 
         newEntry.name = values.name.trim();
-        newEntry.date = DateService.standarizeCurrentDate(new Date());
+        newEntry.date = DateService.standarizeCurrentDate(values.date);
 
         await newEntry.save();
 
@@ -85,7 +78,7 @@ export class EventService {
             .populate(EventService._populateOptions);
     }
 
-    public static async update(id: string, values: EditableParams) {
+    public static async update(id: string, values: EventEditableParams) {
         await DatabaseService.getConnection();
 
         values.name = values.name?.trim();

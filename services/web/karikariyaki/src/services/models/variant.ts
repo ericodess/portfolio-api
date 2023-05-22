@@ -1,22 +1,15 @@
 import { PopulateOptions } from "mongoose";
+import {
+    ProductVariantCreatableParams,
+    ProductVariantEditableParams,
+    ProductVariantQueryableParams,
+} from "karikarihelper";
 
 // Models
 import { ProductModel, VariantModel } from "@models";
 
 // Services
 import { DatabaseService, StringService } from "@services";
-
-interface DefaultParams {
-    id?: string;
-    name?: string;
-    productId?: string;
-}
-
-type QueryableParams = DefaultParams;
-
-type CreatableParams = Omit<DefaultParams, "id">;
-
-type EditableParams = Pick<DefaultParams, "name">;
 
 export class VariantService {
     public static visibleParameters = ["name", "product"];
@@ -26,7 +19,7 @@ export class VariantService {
         select: "name",
     } as PopulateOptions;
 
-    public static async query(values: QueryableParams) {
+    public static async query(values: ProductVariantQueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -52,7 +45,7 @@ export class VariantService {
             .populate(VariantService._populateOptions);
     }
 
-    public static async save(values: CreatableParams) {
+    public static async save(values: ProductVariantCreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new VariantModel();
@@ -77,7 +70,10 @@ export class VariantService {
             .populate(VariantService._populateOptions);
     }
 
-    public static async update(id: string, values: EditableParams) {
+    public static async update(
+        id: string,
+        values: ProductVariantEditableParams
+    ) {
         await DatabaseService.getConnection();
 
         values.name = values.name?.trim();
