@@ -107,7 +107,7 @@ const OrderSchema = new Schema({
     item: {
         type: Schema.Types.ObjectId,
         ref: Statics.PRODUCT_COLLECTION_NAME,
-        required: [true],
+        required: [true, OrderErrors.ITEM_REQUIRED],
         validate: validateOrderItem,
     },
     variant: {
