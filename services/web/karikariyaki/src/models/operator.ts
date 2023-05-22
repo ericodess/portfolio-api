@@ -1,8 +1,11 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 import isBase64 from "is-base64";
 
 // Types
 import { InHouseError, Statics } from "@types";
+
+// Model
+import RealmModel from "./realm";
 
 // Services
 import { DatabaseService, StringService } from "@services";
@@ -17,6 +20,8 @@ export enum OperatorErrors {
     USER_NAME_GREATER_THAN_MAX_LENGTH = "ERROR_OPERATOR_USER_NAME_GREATER_THAN_MAX_LENGTH",
     USER_NAME_LESS_THAN_MIN_LENGTH = "ERROR_OPERATOR_USER_NAME_LESS_THAN_MIN_LENGTH",
     USER_NAME_REQUIRED = "ERROR_OPERATOR_USER_NAME_REQUIRED",
+    REALM_INVALID = "ERROR_OPERATOR_REALM_INVALID",
+    REALM_REQUIRED = "ERROR_OPERATOR_REALM_REQUIRED",
     PHOTO_INVALID = "ERROR_OPERATOR_PHOTO_INVALID",
 }
 
@@ -66,6 +71,14 @@ const validateOperatorDisplayName = async (displayName: string) => {
     }
 };
 
+const validateOperatorRealm = async (realmId: Types.ObjectId) => {
+    const foundRealm = await RealmModel.findById(realmId);
+
+    if (!foundRealm) {
+        throw new InHouseError(OperatorErrors.REALM_INVALID);
+    }
+};
+
 const validateOperatorPhoto = async (photoInBase64: string) => {
     if (!photoInBase64 || photoInBase64.trim().length === 0) {
         return;
@@ -93,6 +106,12 @@ const OperatorSchema = new Schema(
             type: String,
             required: [true, OperatorErrors.DISPLAY_NAME_REQUIRED],
             validate: validateOperatorDisplayName,
+        },
+        realm: {
+            type: Schema.Types.ObjectId,
+            ref: Statics.REALM_COLLECTION_NAME,
+            required: [true, OperatorErrors.REALM_REQUIRED],
+            validate: validateOperatorRealm,
         },
         photo: {
             type: String,

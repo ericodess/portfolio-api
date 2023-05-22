@@ -16,6 +16,7 @@ const router = Router();
 router.get("/", (req, res) => {
     OperatorService.query({
         id: RequestService.queryParamToString(req.query.id),
+        realmId: RequestService.queryParamToString(req.query.realmId),
         displayName: RequestService.queryParamToString(req.query.displayName),
     })
         .then((response) => {
@@ -71,9 +72,10 @@ router.get("/self", async (req, res) => {
 router.post("/", (req, res) => {
     const userName = RequestService.queryParamToString(req.body.userName);
     const displayName = RequestService.queryParamToString(req.body.displayName);
+    const realmId = RequestService.queryParamToString(req.body.realmId);
     const photo = RequestService.queryParamToString(req.body.photo);
 
-    if (!userName || !displayName) {
+    if (!userName || !displayName || !realmId) {
         res.status(400).json(
             ResponseService.generateFailedResponse(OperatorErrors.INVALID)
         );
@@ -84,6 +86,7 @@ router.post("/", (req, res) => {
     OperatorService.save({
         userName: userName,
         displayName: displayName,
+        realmId: realmId,
         photo: photo,
     })
         .then((response) => {

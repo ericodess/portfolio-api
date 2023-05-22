@@ -1,16 +1,23 @@
-// Models
-import { OperatorModel } from "@models";
+import { PopulateOptions } from "mongoose";
 import {
     OperatorCreatableParams,
     OperatorEditableParams,
     OperatorQueryableParams,
 } from "karikarihelper";
 
+// Models
+import { OperatorModel } from "@models";
+
 // Services
 import { DatabaseService, StringService } from "@services";
 
 export class OperatorService {
-    public static visibleParameters = ["displayName", "photo"];
+    public static visibleParameters = ["displayName", "realm", "photo"];
+
+    private static _populateOptions = {
+        path: "realm",
+        select: "name",
+    } as PopulateOptions;
 
     public static async query(values: OperatorQueryableParams) {
         await DatabaseService.getConnection();
@@ -18,9 +25,9 @@ export class OperatorService {
         const query = [];
 
         if (values.id) {
-            return await OperatorModel.findById(
-                StringService.toObjectId(values.id)
-            ).select(OperatorService.visibleParameters);
+            query.push({
+                _id: StringService.toObjectId(values.id),
+            });
         }
 
         if (values.displayName) {
@@ -31,9 +38,17 @@ export class OperatorService {
             });
         }
 
+        if (values.realmId) {
+            query.push({
+                realm: StringService.toObjectId(values.realmId),
+            });
+        }
+
         return await OperatorModel.find(
             query.length === 0 ? null : { $or: query }
-        ).select(OperatorService.visibleParameters);
+        )
+            .select(OperatorService.visibleParameters)
+            .populate(OperatorService._populateOptions);
     }
 
     public static async queryByUserName(userName: string) {
@@ -51,13 +66,14 @@ export class OperatorService {
 
         newEntry.userName = values.userName;
         newEntry.displayName = values.displayName;
+        newEntry.realm = StringService.toObjectId(values.realmId);
         newEntry.photo = values.photo;
 
         await newEntry.save();
 
-        return OperatorModel.findById(newEntry._id).select(
-            OperatorService.visibleParameters
-        );
+        return OperatorModel.findById(newEntry._id)
+            .select(OperatorService.visibleParameters)
+            .populate(OperatorService._populateOptions);
     }
 
     public static async update(id: string, values: OperatorEditableParams) {
@@ -75,14 +91,16 @@ export class OperatorService {
                 },
             },
             { new: true, runValidators: true }
-        ).select(OperatorService.visibleParameters);
+        )
+            .select(OperatorService.visibleParameters)
+            .populate(OperatorService._populateOptions);
     }
 
     public static async delete(id: string) {
         await DatabaseService.getConnection();
 
-        return OperatorModel.findByIdAndDelete(
-            StringService.toObjectId(id)
-        ).select(OperatorService.visibleParameters);
+        return OperatorModel.findByIdAndDelete(StringService.toObjectId(id))
+            .select(OperatorService.visibleParameters)
+            .populate(OperatorService._populateOptions);
     }
 }
