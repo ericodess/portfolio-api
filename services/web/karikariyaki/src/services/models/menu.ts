@@ -1,4 +1,9 @@
 import { PopulateOptions } from "mongoose";
+import {
+    MenuCreatableParams,
+    MenuEditableParams,
+    MenuQueryableParams,
+} from "karikarihelper";
 
 // Models
 import { MenuModel } from "@models";
@@ -8,21 +13,6 @@ import { DatabaseService, StringService } from "@services";
 
 // Enums
 import { MenuRealm } from "@enums";
-
-interface DefaultParams {
-    id?: string;
-    realm?: keyof typeof MenuRealm;
-    title?: string;
-    icon?: string;
-    route?: string;
-    parentId?: string;
-}
-
-type QueryableParams = Omit<DefaultParams, "route">;
-
-type CreatableParams = Omit<DefaultParams, "id">;
-
-type EditableParams = Omit<DefaultParams, "id" | "parentId">;
 
 export class MenuService {
     public static visibleParameters = [
@@ -49,7 +39,7 @@ export class MenuService {
         },
     ] as PopulateOptions[];
 
-    public static async query(values: QueryableParams, isRootOnly = true) {
+    public static async query(values: MenuQueryableParams, isRootOnly = true) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -96,7 +86,7 @@ export class MenuService {
             .populate(isRootOnly ? MenuService._populateOptions : null);
     }
 
-    public static async save(values: CreatableParams) {
+    public static async save(values: MenuCreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new MenuModel();
@@ -134,7 +124,7 @@ export class MenuService {
             .populate(MenuService._populateOptions);
     }
 
-    public static async update(id: string, values: EditableParams) {
+    public static async update(id: string, values: MenuEditableParams) {
         await DatabaseService.getConnection();
 
         values.title = values.title?.trim();

@@ -12,4 +12,5 @@ export { MenuService } from "./models/menu";
 export { ProductService } from "./models/product";
 export { OrderService } from "./models/order";
 export { OperatorService } from "./models/operator";
+export { RealmService } from "./models/realm";
 export { VariantService } from "./models/variant";
