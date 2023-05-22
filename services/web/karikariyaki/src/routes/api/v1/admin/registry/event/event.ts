@@ -28,8 +28,9 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
     const name = req.body.name;
+    const date = RequestService.queryParamToDate(req.body.date);
 
-    if (!name) {
+    if (!name || !date) {
         res.status(400).json(
             ResponseService.generateFailedResponse(EventErrors.INVALID)
         );
@@ -39,6 +40,7 @@ router.post("/", (req, res) => {
 
     EventService.save({
         name: name,
+        date: date,
     })
         .then((response) => {
             res.status(200).json(
