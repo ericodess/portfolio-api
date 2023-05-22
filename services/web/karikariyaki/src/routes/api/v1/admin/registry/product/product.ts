@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
     ProductService.query({
         id: RequestService.queryParamToString(req.query.id),
         name: RequestService.queryParamToString(req.query.name),
+        realmId: RequestService.queryParamToString(req.query.realmId),
     })
         .then((response) => {
             res.status(200).json(
@@ -25,8 +26,9 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
     const name = RequestService.queryParamToString(req.body.name);
+    const realmId = RequestService.queryParamToString(req.body.realmId);
 
-    if (!name) {
+    if (!name || !realmId) {
         res.status(400).json(
             ResponseService.generateFailedResponse(ProductErrors.INVALID)
         );
@@ -36,6 +38,7 @@ router.post("/", (req, res) => {
 
     ProductService.save({
         name: name,
+        realmId: realmId,
     })
         .then((response) => {
             res.status(200).json(

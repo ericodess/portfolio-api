@@ -7,14 +7,10 @@ import { InHouseError, Statics } from "@types";
 // Service
 import { DatabaseService, StringService } from "@services";
 
-// Enums
-import { MenuRealm } from "@enums";
-
 export enum MenuErrors {
     INVALID = "ERROR_MENU_INVALID",
     ICON_INVALID = "ERROR_MENU_ICON_INVALID",
     NOT_FOUND = "ERROR_MENU_NOT_FOUND",
-    REALM_REQUIRED = "ERROR_MENU_REALM_REQUIRED",
     ROUTE_DUPLICATED = "ERROR_MENU_ROUTE_DUPLICATED",
     TITLE_DUPLICATED = "ERROR_MENU_TITLE_DUPLICATED",
     TITLE_REQUIRED = "ERROR_MENU_TITLE_REQUIRED",
@@ -71,11 +67,6 @@ const MenuSchema = new Schema({
     icon: {
         type: String,
         validate: validateMenuIcon,
-    },
-    realm: {
-        type: String,
-        enum: MenuRealm,
-        required: [true, MenuErrors.REALM_REQUIRED],
     },
     route: {
         type: String,

@@ -1,8 +1,5 @@
 import { Types } from "mongoose";
 
-// Enums
-import { MenuRealm } from "@enums";
-
 export class StringService {
     public static isStringInsideBoundaries(
         value: string,
@@ -46,14 +43,6 @@ export class StringService {
                 return index === 0 ? word.toLowerCase() : word.toUpperCase();
             })
             .replace(/[^a-zA-Z]/g, "");
-    }
-
-    public static toMenuRealm(value: string) {
-        if (!value || Object.keys(MenuRealm).includes(value) === false) {
-            return null;
-        }
-
-        return value as keyof typeof MenuRealm;
     }
 
     public static toObjectId(value: string) {

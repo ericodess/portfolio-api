@@ -11,9 +11,6 @@ import { MenuModel } from "@models";
 // Services
 import { DatabaseService, StringService } from "@services";
 
-// Enums
-import { MenuRealm } from "@enums";
-
 export class MenuService {
     public static visibleParameters = [
         "title",
@@ -47,12 +44,6 @@ export class MenuService {
         if (values.id) {
             query.push({
                 _id: values.id,
-            });
-        }
-
-        if (values.realm) {
-            query.push({
-                realm: values.realm,
             });
         }
 
@@ -91,7 +82,6 @@ export class MenuService {
 
         const newEntry = new MenuModel();
 
-        newEntry.realm = values.realm;
         newEntry.title = values.title?.trim();
         newEntry.icon = values.icon?.trim();
         newEntry.route = StringService.removeLeadingAndTrailingSlashes(
@@ -100,7 +90,7 @@ export class MenuService {
         newEntry.parent = StringService.toObjectId(values.parentId);
 
         if (newEntry.parent) {
-            const updatedParent = await MenuModel.findByIdAndUpdate(
+            await MenuModel.findByIdAndUpdate(
                 newEntry.parent,
                 {
                     route: undefined,
@@ -110,8 +100,6 @@ export class MenuService {
                 },
                 { new: true, runValidators: true }
             );
-
-            newEntry.realm = updatedParent.realm as keyof typeof MenuRealm;
         }
 
         await newEntry.save();
@@ -134,24 +122,10 @@ export class MenuService {
 
         const currentMenu = await MenuModel.findById(menuId);
 
-        if (values.realm) {
-            await MenuModel.updateMany(
-                {
-                    parent: menuId,
-                },
-                {
-                    $set: {
-                        realm: values.realm,
-                    },
-                }
-            );
-        }
-
         return MenuModel.findByIdAndUpdate(
             menuId,
             {
                 $set: {
-                    realm: values.realm ?? undefined,
                     title: values.title ?? undefined,
                     icon: values.icon ?? undefined,
                     route:

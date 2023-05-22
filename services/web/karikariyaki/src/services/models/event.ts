@@ -20,7 +20,11 @@ export class EventService {
         populate: [
             {
                 path: "operator",
-                select: "displayName",
+                select: ["displayName", "realm"],
+                populate: {
+                    path: "realm",
+                    select: "name",
+                },
             },
             {
                 path: "item",

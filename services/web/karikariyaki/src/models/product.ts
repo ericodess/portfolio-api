@@ -4,7 +4,7 @@ import { Schema, Types, model } from "mongoose";
 import { InHouseError, Statics } from "@types";
 
 // Models
-import { VariantModel } from "@models";
+import { RealmModel, VariantModel } from "@models";
 
 // Services
 import { StringService } from "@services";
@@ -16,6 +16,8 @@ export enum ProductErrors {
     NAME_LESS_THAN_MIN_LENGTH = "ERROR_PRODUCT_NAME_LESS_THAN_MIN_LENGTH",
     NAME_REQUIRED = "ERROR_PRODUCT_NAME_REQUIRED",
     NOT_FOUND = "ERROR_PRODUCT_NOT_FOUND",
+    REALM_INVALID = "ERROR_PRODUCT_REALM_INVALID",
+    REALM_REQUIRED = "ERROR_PRODUCT_REALM_REQUIRED",
     VARIANT_DUPLICATED = "ERROR_PRODUCT_VARIANT_DUPLICATED",
     VARIANT_INVALID = "ERROR_PRODUCT_VARIANT_INVALID",
 }
@@ -44,6 +46,14 @@ const validateProductName = async (name: string) => {
     }
 };
 
+const validateOperatorRealm = async (realmId: Types.ObjectId) => {
+    const foundRealm = await RealmModel.findById(realmId);
+
+    if (!foundRealm) {
+        throw new InHouseError(ProductErrors.REALM_INVALID);
+    }
+};
+
 const validateProductVariants = async (variantIds: Types.ObjectId[]) => {
     for (const variantId of variantIds) {
         const foundVariant = await VariantModel.findById(variantId);
@@ -63,6 +73,12 @@ const ProductSchema = new Schema({
         type: String,
         required: [true, ProductErrors.VARIANT_INVALID],
         validate: validateProductName,
+    },
+    realm: {
+        type: Schema.Types.ObjectId,
+        ref: Statics.REALM_COLLECTION_NAME,
+        required: [true, ProductErrors.REALM_REQUIRED],
+        validate: validateOperatorRealm,
     },
     variants: {
         type: [

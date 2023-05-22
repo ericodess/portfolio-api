@@ -12,12 +12,18 @@ import { ProductModel, VariantModel } from "@models";
 import { DatabaseService, StringService } from "@services";
 
 export class VariantService {
-    public static visibleParameters = ["name", "product"];
+    public static visibleParameters = ["name", "product", "realm"];
 
-    private static _populateOptions = {
-        path: "product",
-        select: "name",
-    } as PopulateOptions;
+    private static _populateOptions = [
+        {
+            path: "product",
+            select: "name",
+        },
+        {
+            path: "realm",
+            select: "name",
+        },
+    ] as PopulateOptions[];
 
     public static async query(values: ProductVariantQueryableParams) {
         await DatabaseService.getConnection();
@@ -53,15 +59,17 @@ export class VariantService {
         newEntry.name = values.name.trim();
         newEntry.product = StringService.toObjectId(values.productId);
 
-        await ProductModel.findByIdAndUpdate(
+        const foundProduct = await ProductModel.findByIdAndUpdate(
             newEntry.product,
             {
                 $push: {
                     variants: newEntry._id,
                 },
             },
-            { runValidators: true }
+            { new: true, runValidators: true }
         );
+
+        newEntry.realm = foundProduct.realm;
 
         await newEntry.save();
 

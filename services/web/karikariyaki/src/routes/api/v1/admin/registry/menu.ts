@@ -11,16 +11,10 @@ import {
 // Models
 import { MenuErrors } from "@models";
 
-// Enums
-import { MenuRealm } from "@enums";
-
 const router = Router();
 
 router.get("/", (req, res) => {
     const id = RequestService.queryParamToString(req.query.id);
-    const realm = StringService.toMenuRealm(
-        RequestService.queryParamToString(req.query.realm)
-    );
     const title = RequestService.queryParamToString(req.query.title);
     const parentId = RequestService.queryParamToString(req.query.parentId);
     const isRootOnly = RequestService.queryParamToBoolean(req.query.isRootOnly);
@@ -28,7 +22,6 @@ router.get("/", (req, res) => {
     MenuService.query(
         {
             id: id,
-            realm: realm,
             title: title,
             parentId: parentId,
         },
@@ -46,36 +39,13 @@ router.get("/", (req, res) => {
         });
 });
 
-router.get("/realms", (req, res) => {
-    res.status(200).json(
-        ResponseService.generateSucessfulResponse(Object.values(MenuRealm))
-    );
-});
-
-router.get("/self", (req, res) => {
-    MenuService.query({ realm: "INSIDE" })
-        .then((response) => {
-            res.status(200).json(
-                ResponseService.generateSucessfulResponse(response)
-            );
-        })
-        .catch((error) => {
-            res.status(error.code ?? 500).json(
-                ResponseService.generateFailedResponse(error.message)
-            );
-        });
-});
-
 router.post("/", (req, res) => {
-    const realm = StringService.toMenuRealm(
-        RequestService.queryParamToString(req.body.realm)
-    );
     const title = RequestService.queryParamToString(req.body.title);
     const icon = RequestService.queryParamToString(req.body.icon);
     const route = RequestService.queryParamToString(req.body.route);
     const parentId = RequestService.queryParamToString(req.body.parentId);
 
-    if (!title || !realm) {
+    if (!title) {
         res.status(400).json(
             ResponseService.generateFailedResponse(MenuErrors.INVALID)
         );
@@ -84,7 +54,6 @@ router.post("/", (req, res) => {
     }
 
     MenuService.save({
-        realm: realm,
         title: title,
         icon: icon,
         route: route,
@@ -104,9 +73,6 @@ router.post("/", (req, res) => {
 
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
-    const realm = StringService.toMenuRealm(
-        RequestService.queryParamToString(req.body.realm)
-    );
     const icon = RequestService.queryParamToString(req.body.icon);
     const title = RequestService.queryParamToString(req.body.title);
     const route = RequestService.queryParamToString(req.body.route);
@@ -120,7 +86,6 @@ router.patch("/:id", (req, res) => {
     }
 
     MenuService.update(id, {
-        realm: realm,
         icon: icon,
         title: title,
         route: route,

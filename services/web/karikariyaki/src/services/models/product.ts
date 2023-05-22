@@ -14,10 +14,16 @@ import { DatabaseService, StringService } from "@services";
 export class ProductService {
     public static visibleParameters = ["name", "variants"];
 
-    private static _populateOptions = {
-        path: "variants",
-        select: "name",
-    } as PopulateOptions;
+    private static _populateOptions = [
+        {
+            path: "variants",
+            select: "name",
+        },
+        {
+            path: "realm",
+            select: "name",
+        },
+    ] as PopulateOptions[];
 
     public static async query(values: ProductQueryableParams) {
         await DatabaseService.getConnection();
@@ -36,6 +42,12 @@ export class ProductService {
             });
         }
 
+        if (values.realmId) {
+            query.push({
+                realm: StringService.toObjectId(values.realmId),
+            });
+        }
+
         return await ProductModel.find(
             query.length === 0 ? null : { $or: query }
         )
@@ -49,6 +61,7 @@ export class ProductService {
         const newEntry = new ProductModel();
 
         newEntry.name = values.name.trim();
+        newEntry.realm = StringService.toObjectId(values.realmId);
 
         await newEntry.save();
 
