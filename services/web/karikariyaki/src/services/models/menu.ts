@@ -103,16 +103,13 @@ export class MenuService {
             const updatedParent = await MenuModel.findByIdAndUpdate(
                 newEntry.parent,
                 {
+                    route: undefined,
                     $push: {
                         children: newEntry._id,
                     },
                 },
                 { new: true, runValidators: true }
             );
-
-            updatedParent.route = undefined;
-
-            await updatedParent.save();
 
             newEntry.realm = updatedParent.realm as keyof typeof MenuRealm;
         }
