@@ -14,7 +14,6 @@ import { DatabaseService, StringService } from "@services";
 export class MenuService {
     public static visibleParameters = [
         "title",
-        "realm",
         "icon",
         "route",
         "parent",
