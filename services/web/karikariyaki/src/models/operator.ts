@@ -97,7 +97,6 @@ const OperatorSchema = new Schema(
         photo: {
             type: String,
             validate: validateOperatorPhoto,
-            default: Statics.DEFAULT_USER_PHOTO_BASE64,
         },
     },
     {
