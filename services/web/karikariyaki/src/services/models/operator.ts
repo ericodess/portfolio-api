@@ -54,9 +54,9 @@ export class OperatorService {
     public static async queryByUserName(userName: string) {
         await DatabaseService.getConnection();
 
-        return await OperatorModel.findOne({ userName: userName }).select(
-            OperatorService.visibleParameters
-        );
+        return await OperatorModel.findOne({ userName: userName })
+            .select(OperatorService.visibleParameters)
+            .populate(OperatorService._populateOptions);
     }
 
     public static async save(values: OperatorCreatableParams) {
