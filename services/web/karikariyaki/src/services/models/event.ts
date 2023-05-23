@@ -27,11 +27,7 @@ export class EventService {
                 },
             },
             {
-                path: "item",
-                select: "name",
-            },
-            {
-                path: "variant",
+                path: "items",
                 select: "name",
             },
         ],
