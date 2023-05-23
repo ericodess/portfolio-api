@@ -18,8 +18,6 @@ export enum ProductErrors {
     NOT_FOUND = "ERROR_PRODUCT_NOT_FOUND",
     REALM_INVALID = "ERROR_PRODUCT_REALM_INVALID",
     REALM_REQUIRED = "ERROR_PRODUCT_REALM_REQUIRED",
-    VARIANT_DUPLICATED = "ERROR_PRODUCT_VARIANT_DUPLICATED",
-    VARIANT_INVALID = "ERROR_PRODUCT_VARIANT_INVALID",
 }
 
 const validateProductName = async (name: string) => {
@@ -58,7 +56,7 @@ const validateOperatorRealm = async (realmId: Types.ObjectId) => {
 const ProductSchema = new Schema({
     name: {
         type: String,
-        required: [true, ProductErrors.VARIANT_INVALID],
+        required: [true, ProductErrors.NAME_REQUIRED],
         validate: validateProductName,
     },
     realm: {

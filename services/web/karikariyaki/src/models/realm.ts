@@ -23,7 +23,7 @@ const validateRealmName = async (name: string) => {
             Statics.REALM_CLIENT_NAME_MAX_LENGTH
         ) === false
     ) {
-        if (name.trim().length < Statics.VARIANT_NAME_MIN_LENGTH) {
+        if (name.trim().length < Statics.REALM_CLIENT_NAME_MIN_LENGTH) {
             throw new InHouseError(RealmErrors.NAME_LESS_THAN_MIN_LENGTH);
         }
 

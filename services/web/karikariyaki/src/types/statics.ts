@@ -8,9 +8,6 @@ export class Statics {
     public static PRODUCT_NAME_MIN_LENGTH = 1;
     public static PRODUCT_NAME_MAX_LENGTH = 50;
 
-    public static VARIANT_NAME_MIN_LENGTH = 1;
-    public static VARIANT_NAME_MAX_LENGTH = 50;
-
     public static ORDER_CLIENT_NAME_MIN_LENGTH = 1;
     public static ORDER_CLIENT_NAME_MAX_LENGTH = 25;
 
@@ -23,7 +20,6 @@ export class Statics {
     public static ORDER_COLLECTION_NAME = "orders";
     public static PRODUCT_COLLECTION_NAME = "products";
     public static REALM_COLLECTION_NAME = "realms";
-    public static VARIANT_COLLECTION_NAME = "variants";
 
     public static DEFAULT_COOKIE_EXPIRATION_TIME_IN_DAYS = 3;
     public static DEFAULT_COOKIE_REFRESH_EXPIRATION_TIME_IN_DAYS = 7;
