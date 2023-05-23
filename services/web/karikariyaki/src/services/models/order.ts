@@ -17,7 +17,7 @@ export class OrderService {
     private static _populateOptions = [
         {
             path: "event",
-            select: "name date",
+            select: ["name", "date"],
         },
         {
             path: "operator",
@@ -28,11 +28,7 @@ export class OrderService {
             },
         },
         {
-            path: "item",
-            select: "name",
-        },
-        {
-            path: "variant",
+            path: "items",
             select: "name",
         },
     ] as PopulateOptions[];
@@ -66,12 +62,8 @@ export class OrderService {
             query.push({ client: values.clientName });
         }
 
-        if (values.itemId) {
-            query.push({ item: values.itemId });
-        }
-
-        if (values.variantId) {
-            query.push({ variant: values.variantId });
+        if (values.itemsId) {
+            query.push({ items: values.itemsId });
         }
 
         return await OrderModel.find(query.length === 0 ? null : { $or: query })
@@ -88,8 +80,7 @@ export class OrderService {
         newEntry.status = newEntry.status;
         newEntry.operator = StringService.toObjectId(values.operatorId);
         newEntry.client = values.clientName?.trim();
-        newEntry.item = StringService.toObjectId(values.itemId);
-        newEntry.variant = StringService.toObjectId(values.variantId);
+        newEntry.items = StringService.toObjectIds(values.itemsId);
 
         await EventModel.findByIdAndUpdate(
             newEntry.event,

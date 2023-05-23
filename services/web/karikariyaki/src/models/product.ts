@@ -4,10 +4,10 @@ import { Schema, Types, model } from "mongoose";
 import { InHouseError, Statics } from "@types";
 
 // Models
-import { RealmModel, VariantModel } from "@models";
+import { RealmModel } from "@models";
 
 // Services
-import { StringService } from "@services";
+import { DatabaseService, StringService } from "@services";
 
 export enum ProductErrors {
     INVALID = "ERROR_PRODUCT_INVALID",
@@ -38,7 +38,8 @@ const validateProductName = async (name: string) => {
     }
 
     const entry = await ProductModel.findOne({
-        name: name.trim(),
+        name: DatabaseService.generateExactInsensitiveQuery(name),
+        parent: null,
     });
 
     if (entry) {
@@ -54,20 +55,6 @@ const validateOperatorRealm = async (realmId: Types.ObjectId) => {
     }
 };
 
-const validateProductVariants = async (variantIds: Types.ObjectId[]) => {
-    for (const variantId of variantIds) {
-        const foundVariant = await VariantModel.findById(variantId);
-
-        if (!foundVariant) {
-            throw new InHouseError(ProductErrors.VARIANT_INVALID);
-        }
-
-        if (variantIds.filter((_) => _ !== variantId).length >= 1) {
-            throw new InHouseError(ProductErrors.VARIANT_INVALID);
-        }
-    }
-};
-
 const ProductSchema = new Schema({
     name: {
         type: String,
@@ -80,15 +67,18 @@ const ProductSchema = new Schema({
         required: [true, ProductErrors.REALM_REQUIRED],
         validate: validateOperatorRealm,
     },
+    parent: {
+        type: Schema.Types.ObjectId,
+        ref: Statics.PRODUCT_COLLECTION_NAME,
+    },
     variants: {
         type: [
             {
                 type: Schema.Types.ObjectId,
-                ref: Statics.VARIANT_COLLECTION_NAME,
+                ref: Statics.PRODUCT_COLLECTION_NAME,
             },
         ],
         default: [],
-        validate: validateProductVariants,
     },
 });
 

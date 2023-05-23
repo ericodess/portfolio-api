@@ -6,21 +6,25 @@ import {
 } from "karikarihelper";
 
 // Models
-import { ProductModel, VariantModel } from "@models";
+import { ProductModel } from "@models";
 
 // Services
 import { DatabaseService, StringService } from "@services";
 
 export class ProductService {
-    public static visibleParameters = ["name", "variants"];
+    public static visibleParameters = ["name", "realm", "parent", "variants"];
 
     private static _populateOptions = [
         {
-            path: "variants",
+            path: "realm",
             select: "name",
         },
         {
-            path: "realm",
+            path: "parent",
+            select: "name",
+        },
+        {
+            path: "variants",
             select: "name",
         },
     ] as PopulateOptions[];
@@ -48,6 +52,12 @@ export class ProductService {
             });
         }
 
+        if (values.parentId) {
+            query.push({
+                parent: StringService.toObjectId(values.parentId),
+            });
+        }
+
         return await ProductModel.find(
             query.length === 0 ? null : { $or: query }
         )
@@ -62,6 +72,21 @@ export class ProductService {
 
         newEntry.name = values.name.trim();
         newEntry.realm = StringService.toObjectId(values.realmId);
+        newEntry.parent = StringService.toObjectId(values.parentId);
+
+        if (values.parentId) {
+            const foundProduct = await ProductModel.findByIdAndUpdate(
+                newEntry.parent,
+                {
+                    $push: {
+                        variants: newEntry._id,
+                    },
+                },
+                { new: true, runValidators: true }
+            );
+
+            newEntry.realm = foundProduct.realm;
+        }
 
         await newEntry.save();
 
@@ -93,9 +118,20 @@ export class ProductService {
 
         const productId = StringService.toObjectId(id);
 
-        await VariantModel.deleteMany({
-            product: productId,
+        await ProductModel.deleteMany({
+            parent: productId,
         });
+
+        await ProductModel.updateMany(
+            {
+                variants: productId,
+            },
+            {
+                $pull: {
+                    variants: productId,
+                },
+            }
+        );
 
         return ProductModel.findByIdAndDelete(productId)
             .select(ProductService.visibleParameters)

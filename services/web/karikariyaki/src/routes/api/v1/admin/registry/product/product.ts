@@ -11,6 +11,7 @@ router.get("/", (req, res) => {
         id: RequestService.queryParamToString(req.query.id),
         name: RequestService.queryParamToString(req.query.name),
         realmId: RequestService.queryParamToString(req.query.realmId),
+        parentId: RequestService.queryParamToString(req.query.parentId),
     })
         .then((response) => {
             res.status(200).json(
@@ -27,6 +28,7 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
     const name = RequestService.queryParamToString(req.body.name);
     const realmId = RequestService.queryParamToString(req.body.realmId);
+    const parentId = RequestService.queryParamToString(req.body.parentId);
 
     if (!name || !realmId) {
         res.status(400).json(
@@ -39,6 +41,7 @@ router.post("/", (req, res) => {
     ProductService.save({
         name: name,
         realmId: realmId,
+        parentId: parentId,
     })
         .then((response) => {
             res.status(200).json(

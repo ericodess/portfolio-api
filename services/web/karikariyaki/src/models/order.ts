@@ -7,7 +7,7 @@ import { InHouseError, Statics } from "@types";
 import { OrderStatus } from "@enums";
 
 // Models
-import { EventModel, OperatorModel, ProductModel, VariantModel } from "@models";
+import { EventModel, OperatorModel } from "@models";
 
 // Services
 import { StringService } from "@services";
@@ -61,26 +61,6 @@ const validateOrderClient = async (client: string) => {
     }
 };
 
-const validateOrderItem = async (itemId: Types.ObjectId) => {
-    const foundItem = await ProductModel.findById(itemId);
-
-    if (!foundItem) {
-        throw new InHouseError(OrderErrors.ITEM_INVALID);
-    }
-};
-
-const validateOrderItemVariant = async (variantId: Types.ObjectId) => {
-    if (!variantId) {
-        return;
-    }
-
-    const foundVariant = await VariantModel.findById(variantId);
-
-    if (!foundVariant) {
-        throw new InHouseError(OrderErrors.ITEM_VARIANT_INVALID);
-    }
-};
-
 const OrderSchema = new Schema({
     event: {
         type: Schema.Types.ObjectId,
@@ -104,16 +84,14 @@ const OrderSchema = new Schema({
         required: [true, OrderErrors.CLIENT_NAME_REQUIRED],
         validate: validateOrderClient,
     },
-    item: {
-        type: Schema.Types.ObjectId,
-        ref: Statics.PRODUCT_COLLECTION_NAME,
-        required: [true, OrderErrors.ITEM_REQUIRED],
-        validate: validateOrderItem,
-    },
-    variant: {
-        type: Schema.Types.ObjectId,
-        ref: Statics.VARIANT_COLLECTION_NAME,
-        validate: validateOrderItemVariant,
+    items: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: Statics.PRODUCT_COLLECTION_NAME,
+            },
+        ],
+        default: [],
     },
 });
 

@@ -18,8 +18,7 @@ router.get("/", (req, res) => {
         status: RequestService.queryParamToString(req.query.status),
         operatorId: RequestService.queryParamToString(req.query.operatorId),
         clientName: RequestService.queryParamToString(req.query.clientName),
-        itemId: RequestService.queryParamToString(req.query.itemId),
-        variantId: RequestService.queryParamToString(req.query.variantId),
+        itemsId: RequestService.queryParamToStrings(req.query.itemId),
     })
         .then((response) => {
             res.status(200).json(
@@ -43,13 +42,18 @@ router.post("/", (req, res) => {
     const eventId = RequestService.queryParamToString(req.body.eventId);
     const operatorId = RequestService.queryParamToString(req.body.operatorId);
     const clientName = RequestService.queryParamToString(req.body.clientName);
-    const itemId = RequestService.queryParamToString(req.body.itemId);
+    const itemsId = RequestService.queryParamToStrings(req.body.itemsId);
 
     // Non obligatory params
     const status = RequestService.queryParamToString(req.body.status);
-    const variantId = RequestService.queryParamToString(req.body.variantId);
 
-    if (!eventId || !operatorId || !clientName || !itemId) {
+    if (
+        !eventId ||
+        !operatorId ||
+        !clientName ||
+        !itemsId ||
+        itemsId.length === 0
+    ) {
         res.status(400).json(
             ResponseService.generateFailedResponse(OrderErrors.INVALID)
         );
@@ -62,8 +66,7 @@ router.post("/", (req, res) => {
         status: status,
         operatorId: operatorId,
         clientName: clientName,
-        itemId: itemId,
-        variantId: variantId,
+        itemsId: itemsId,
     })
         .then((response) => {
             res.status(200).json(
