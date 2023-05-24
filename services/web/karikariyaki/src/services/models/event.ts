@@ -33,17 +33,15 @@ export class EventService {
         ],
     } as PopulateOptions;
 
-    public static async query(values: EventQueryableParams) {
+    public static async query(values: EventQueryableParams, populate = true) {
         await DatabaseService.getConnection();
 
         const query = [];
 
         if (values.id) {
-            return (
-                await EventModel.findById(
-                    StringService.toObjectId(values.id)
-                ).select(EventService.visibleParameters)
-            ).populate(EventService._populateOptions);
+            query.push({
+                _id: values.id,
+            });
         }
 
         if (values.name) {
@@ -58,9 +56,17 @@ export class EventService {
             });
         }
 
-        return await EventModel.find(query.length === 0 ? null : { $or: query })
-            .select(EventService.visibleParameters)
-            .populate(EventService._populateOptions);
+        if (populate) {
+            return await EventModel.find(
+                query.length === 0 ? null : { $or: query }
+            )
+                .select(EventService.visibleParameters)
+                .populate(EventService._populateOptions);
+        }
+
+        return await EventModel.find(
+            query.length === 0 ? null : { $or: query }
+        ).select(EventService.visibleParameters);
     }
 
     public static async save(values: EventCreatableParams) {
@@ -69,7 +75,9 @@ export class EventService {
         const newEntry = new EventModel();
 
         newEntry.name = values.name.trim();
-        newEntry.date = DateService.standarizeCurrentDate(values.date);
+        newEntry.date = DateService.standarizeCurrentDate(
+            new Date(values.date)
+        );
 
         await newEntry.save();
 

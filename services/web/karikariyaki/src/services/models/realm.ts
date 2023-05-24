@@ -19,9 +19,9 @@ export class RealmService {
         const query = [];
 
         if (values.id) {
-            return RealmModel.findById(
-                StringService.toObjectId(values.id)
-            ).select(RealmService.visibleParameters);
+            query.push({
+                _id: values.id,
+            });
         }
 
         if (values.name) {
