@@ -3,30 +3,66 @@ import cookie from "cookie";
 // Socket
 import { io } from "../setup";
 
+// Routes
+import {
+    createEvent,
+    joinEvent,
+    joinEvents,
+    leaveEvent,
+    leaveEvents,
+} from "./routes";
+
 // Services
-import { EventService, JWTService } from "@services";
+import { JWTService, OperatorService } from "@services";
 
 export class RejiSocket {
-    public static namespace = io.of("/reji");
+    public static namespace = io.of("karikariyaki/ws/reji");
 
     public static setup() {
         RejiSocket.namespace.on("connection", async (socket) => {
-            const cookies = cookie.parse(socket.handshake.headers.cookie);
-            const accessToken = cookies[process.env["COOKIE_NAME"]];
+            const rawCookies = socket.handshake.headers.cookie;
 
-            if (!accessToken) {
-                socket.disconnect();
-
+            if (!rawCookies) {
                 return;
             }
 
-            //console.log(JWTService.decodeAccessToken(accessToken));
+            const parsedCookies = cookie.parse(rawCookies);
 
-            const events = await EventService.query({});
-            console.log(events);
-            //socket.join('orders');
+            const accessToken = parsedCookies[process.env["COOKIE_NAME"]];
 
-            //PrompterNamespace.namespace.to(orderId).emit("refresh", orders);
+            if (!accessToken) {
+                return;
+            }
+
+            const decodedAccessToken =
+                JWTService.decodeAccessToken(accessToken);
+
+            if (!decodedAccessToken || !decodedAccessToken.userName) {
+                return;
+            }
+
+            const loggedOperator = await OperatorService.queryByUserName(
+                decodedAccessToken.userName
+            );
+
+            if (!loggedOperator) {
+                return;
+            }
+
+            /**
+             * Events
+             */
+            joinEvents(socket);
+            leaveEvents(socket);
+
+            /**
+             * Event
+             */
+            const realmId = loggedOperator.realm._id.toString();
+
+            createEvent(RejiSocket.namespace, socket);
+            joinEvent(socket, realmId);
+            leaveEvent(socket);
         });
     }
 }

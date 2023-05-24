@@ -4,6 +4,7 @@ export { HashService } from "./hash";
 export { JWTService, JWTErrors } from "./jwt";
 export { ResponseService } from "./response";
 export { RequestService } from "./request";
+export { SocketService } from "./socket";
 export { StringService } from "./string";
 
 // Models
