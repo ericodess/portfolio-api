@@ -6,13 +6,13 @@ import {
 } from "karikarihelper";
 
 // Models
-import { EventModel, OrderModel } from "@models";
+import { EventModel, OperatorModel, OrderModel } from "@models";
 
 // Services
-import { DatabaseService, StringService } from "@services";
+import { DatabaseService, OperatorService, StringService } from "@services";
 
 export class OrderService {
-    public static visibleParameters = ["status", "client"];
+    public static visibleParameters = ["realm", "status", "client"];
 
     private static _populateOptions = [
         {
@@ -21,11 +21,11 @@ export class OrderService {
         },
         {
             path: "operator",
-            select: ["displayName", "realm"],
-            populate: {
-                path: "realm",
-                select: "name",
-            },
+            select: "displayName",
+        },
+        {
+            path: "realm",
+            select: "name",
         },
         {
             path: "items",
@@ -39,11 +39,9 @@ export class OrderService {
         const query = [];
 
         if (values.id) {
-            return (
-                await OrderModel.findById(values.id).select(
-                    OrderService.visibleParameters
-                )
-            ).populate(OrderService._populateOptions);
+            query.push({
+                _id: values.id,
+            });
         }
 
         if (values.eventId) {
@@ -79,6 +77,13 @@ export class OrderService {
         newEntry.event = StringService.toObjectId(values.eventId);
         newEntry.status = newEntry.status;
         newEntry.operator = StringService.toObjectId(values.operatorId);
+
+        const foundOperator = await OperatorService.query({
+            id: newEntry.operator.toString(),
+        });
+
+        newEntry.realm = foundOperator[0].realm._id;
+
         newEntry.client = values.clientName?.trim();
         newEntry.items = StringService.toObjectIds(values.itemsId);
 

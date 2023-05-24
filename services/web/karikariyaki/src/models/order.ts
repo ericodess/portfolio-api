@@ -7,7 +7,7 @@ import { InHouseError, Statics } from "@types";
 import { OrderStatus } from "@enums";
 
 // Models
-import { EventModel, OperatorModel } from "@models";
+import { EventModel, OperatorModel, RealmModel } from "@models";
 
 // Services
 import { StringService } from "@services";
@@ -24,6 +24,8 @@ export enum OrderErrors {
     NOT_FOUND = "ERROR_ORDER_NOT_FOUND",
     OPERATOR_INVALID = "ERROR_ORDER_OPERATOR_INVALID",
     OPERATOR_REQUIRED = "ERROR_ORDER_OPERATOR_REQUIRED",
+    REALM_INVALID = "ERROR_OPERATOR_REALM_INVALID",
+    REALM_REQUIRED = "ERROR_OPERATOR_REALM_REQUIRED",
 }
 
 const validateOrderEvent = async (eventId: Types.ObjectId) => {
@@ -39,6 +41,14 @@ const validateOrderOperator = async (operatorId: Types.ObjectId) => {
 
     if (!foundOperator) {
         throw new InHouseError(OrderErrors.OPERATOR_INVALID);
+    }
+};
+
+const validateOperatorRealm = async (realmId: Types.ObjectId) => {
+    const foundRealm = await RealmModel.findById(realmId);
+
+    if (!foundRealm) {
+        throw new InHouseError(OrderErrors.REALM_INVALID);
     }
 };
 
@@ -77,6 +87,12 @@ const OrderSchema = new Schema({
         ref: Statics.OPERATOR_COLLECTION_NAME,
         required: [true, OrderErrors.OPERATOR_REQUIRED],
         validate: validateOrderOperator,
+    },
+    realm: {
+        type: Schema.Types.ObjectId,
+        ref: Statics.REALM_COLLECTION_NAME,
+        required: [true, OrderErrors.REALM_REQUIRED],
+        validate: validateOperatorRealm,
     },
     client: {
         type: String,
