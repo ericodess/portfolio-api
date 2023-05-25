@@ -27,10 +27,10 @@ export class MenuService {
         },
         {
             path: "children",
-            select: "title icon route children",
+            select: ["title", "icon", "route", "children"],
             populate: {
                 path: "children",
-                select: "title icon route",
+                select: ["title", "icon", "route"],
             },
         },
     ] as PopulateOptions[];

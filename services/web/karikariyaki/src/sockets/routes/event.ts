@@ -1,10 +1,15 @@
 import { Namespace, Socket } from "socket.io";
 
 // Types
-import { EventCreatableParams } from "karikarihelper";
+import { EventCreatableParams, Event } from "karikarihelper";
 
 // Services
-import { EventService, ResponseService, SocketService } from "@services";
+import {
+    EventService,
+    OrderService,
+    ResponseService,
+    SocketService,
+} from "@services";
 
 const createEvent = (namespace: Namespace, socket: Socket) =>
     socket.on("event:create", (values: EventCreatableParams) => {
@@ -28,20 +33,40 @@ const joinEvent = (socket: Socket, realmId: string) =>
 
         EventService.query({
             id: eventId,
-        }).then((foundEvent) => {
-            if (foundEvent.length === 0) {
-                return;
-            }
+        })
+            .then((foundEvent) => {
+                if (foundEvent.length === 0) {
+                    return;
+                }
 
-            SocketService.leaveRooms(socket, "event");
+                let selectedEvent = foundEvent[0].toObject<Event>();
 
-            socket.join(`event/${eventId}/${realmId}`);
+                selectedEvent.orders = [];
 
-            socket.emit(
-                "event:refresh",
-                ResponseService.generateSucessfulResponse(foundEvent[0])
-            );
-        });
+                SocketService.leaveRooms(socket, "event");
+
+                socket.join(`event/${eventId}/${realmId}`);
+
+                socket.emit(
+                    "event:refresh",
+                    ResponseService.generateSucessfulResponse(selectedEvent)
+                );
+
+                OrderService.query({
+                    eventId: eventId,
+                    realmId: realmId,
+                })
+                    .then((eventOrders) => {
+                        socket.emit(
+                            "orders:refresh",
+                            ResponseService.generateSucessfulResponse(
+                                eventOrders
+                            )
+                        );
+                    })
+                    .catch((error) => console.log(error));
+            })
+            .catch((error) => console.log(error));
     });
 
 const leaveEvent = (socket: Socket) =>

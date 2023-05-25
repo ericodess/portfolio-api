@@ -12,7 +12,7 @@ export class StringService {
 
         const trimmedValue = value.trim();
 
-        return trimmedValue.length > minSize && trimmedValue.length < maxSize;
+        return trimmedValue.length >= minSize && trimmedValue.length <= maxSize;
     }
 
     public static toBoolean(value: string) {

@@ -6,7 +6,7 @@ import {
 } from "karikarihelper";
 
 // Models
-import { EventModel, OperatorModel, OrderModel } from "@models";
+import { EventModel, OrderModel } from "@models";
 
 // Services
 import { DatabaseService, OperatorService, StringService } from "@services";
@@ -56,6 +56,10 @@ export class OrderService {
             query.push({ operator: values.operatorId });
         }
 
+        if (values.realmId) {
+            query.push({ realm: values.realmId });
+        }
+
         if (values.clientName) {
             query.push({ client: values.clientName });
         }
@@ -64,7 +68,9 @@ export class OrderService {
             query.push({ items: values.itemsId });
         }
 
-        return await OrderModel.find(query.length === 0 ? null : { $or: query })
+        return await OrderModel.find(
+            query.length === 0 ? null : { $and: query }
+        )
             .select(OrderService.visibleParameters)
             .populate(OrderService._populateOptions);
     }
