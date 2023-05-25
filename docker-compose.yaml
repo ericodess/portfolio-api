@@ -1,15 +1,33 @@
 version: "3.8"
 
 services:
+    proxy:
+        container_name: portfolio_proxy
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+            args:
+                CONFIG_FILE_LOCATION: ./reverse_proxy_dev.conf
+        ports:
+            - "80:80"
+        networks:
+            - web-network
+        depends_on:
+            - projects
+            - namah
+            - gifter
+            - dashboard
+            - cors-anywhere
+            - karikariyaki
+        restart: unless-stopped
+
     projects:
         container_name: portfolio_web_api_projects
         build:
             context: ./services/web/projects
             dockerfile: Dockerfile
-        ports:
-            - "9001:9001"
         networks:
-            - main-network
+            - web-network
         depends_on:
             - mongodb
         restart: unless-stopped
@@ -19,10 +37,8 @@ services:
         build:
             context: ./services/web/namah
             dockerfile: Dockerfile
-        ports:
-            - "9002:9002"
         networks:
-            - main-network
+            - web-network
         volumes:
             - /node_modules/namah:/app/node_modules
         restart: unless-stopped
@@ -32,10 +48,8 @@ services:
         build:
             context: ./services/web/gifter
             dockerfile: Dockerfile
-        ports:
-            - "9003:9003"
         networks:
-            - main-network
+            - web-network
         volumes:
             - ./node_modules/gifter:/app/node_modules
         restart: unless-stopped
@@ -45,10 +59,8 @@ services:
         build:
             context: ./services/web/dashboard
             dockerfile: Dockerfile
-        ports:
-            - "9004:9004"
         networks:
-            - main-network
+            - web-network
         volumes:
             - ./node_modules/dashboard:/app/node_modules
         restart: unless-stopped
@@ -58,10 +70,8 @@ services:
         build:
            context: ./services/web/cors-anywhere
            dockerfile: Dockerfile
-        ports:
-            - "9005:9005"
         networks:
-            - main-network
+            - web-network
         volumes:
             - ./node_modules/cors-anywhere:/app/node_modules
         restart: unless-stopped
@@ -71,10 +81,8 @@ services:
         build:
            context: ./services/web/karikariyaki
            dockerfile: Dockerfile
-        ports:
-            - "9006:9006"
         networks:
-            - main-network
+            - web-network
         volumes:
             - ./node_modules/karikariyaki:/app/node_modules
         depends_on:
@@ -85,7 +93,7 @@ services:
         container_name: portfolio_database_mongo
         image: mongo:6-jammy
         networks:
-            - main-network
+            - web-network
             - database-network
         volumes:
             - db-data:/data/db
@@ -121,7 +129,7 @@ volumes:
     db-backup:
 
 networks:
-    main-network:
+    web-network:
         driver: bridge
     database-network:
         driver: bridge
