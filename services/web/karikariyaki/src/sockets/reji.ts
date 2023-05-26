@@ -6,6 +6,8 @@ import { io } from "../setup";
 // Routes
 import {
     createEvent,
+    createOrder,
+    editOrder,
     joinEvent,
     joinEvents,
     leaveEvent,
@@ -58,11 +60,18 @@ export class RejiSocket {
             /**
              * Event
              */
-            const realmId = loggedOperator.realm._id.toString();
+            socket.data.operatorId = loggedOperator._id.toString();
+            socket.data.realmId = loggedOperator.realm._id.toString();
 
             createEvent(RejiSocket.namespace, socket);
-            joinEvent(socket, realmId);
+            joinEvent(socket);
             leaveEvent(socket);
+
+            /**
+             * Orders
+             */
+            createOrder(socket);
+            editOrder(socket);
         });
     }
 }

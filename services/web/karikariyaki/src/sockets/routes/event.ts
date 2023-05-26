@@ -25,8 +25,10 @@ const createEvent = (namespace: Namespace, socket: Socket) =>
         });
     });
 
-const joinEvent = (socket: Socket, realmId: string) =>
+const joinEvent = (socket: Socket) =>
     socket.on("event:join", (eventId) => {
+        const realmId = socket.data.realmId;
+
         if (!eventId || !realmId) {
             return;
         }
@@ -57,6 +59,8 @@ const joinEvent = (socket: Socket, realmId: string) =>
                     realmId: realmId,
                 })
                     .then((eventOrders) => {
+                        socket.data.eventId = eventId;
+
                         socket.emit(
                             "orders:refresh",
                             ResponseService.generateSucessfulResponse(
