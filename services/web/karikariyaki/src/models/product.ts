@@ -18,6 +18,7 @@ export enum ProductErrors {
     NOT_FOUND = "ERROR_PRODUCT_NOT_FOUND",
     REALM_INVALID = "ERROR_PRODUCT_REALM_INVALID",
     REALM_REQUIRED = "ERROR_PRODUCT_REALM_REQUIRED",
+    PARENT_INVALID = "ERROR_PRODUCT_PARENT_INVALID",
 }
 
 const validateProductName = async (name: string) => {
@@ -45,11 +46,19 @@ const validateProductName = async (name: string) => {
     }
 };
 
-const validateOperatorRealm = async (realmId: Types.ObjectId) => {
+const validateProductRealm = async (realmId: Types.ObjectId) => {
     const foundRealm = await RealmModel.findById(realmId);
 
     if (!foundRealm) {
         throw new InHouseError(ProductErrors.REALM_INVALID);
+    }
+};
+
+const validateProductParent = async (parentProductId: Types.ObjectId) => {
+    const foundRealm = await ProductModel.findById(parentProductId);
+
+    if (!foundRealm) {
+        throw new InHouseError(ProductErrors.PARENT_INVALID);
     }
 };
 
@@ -63,11 +72,12 @@ const ProductSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: Statics.REALM_COLLECTION_NAME,
         required: [true, ProductErrors.REALM_REQUIRED],
-        validate: validateOperatorRealm,
+        validate: validateProductRealm,
     },
     parent: {
         type: Schema.Types.ObjectId,
         ref: Statics.PRODUCT_COLLECTION_NAME,
+        validate: validateProductParent,
     },
     variants: {
         type: [
