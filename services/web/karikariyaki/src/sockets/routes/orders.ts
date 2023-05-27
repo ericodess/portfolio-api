@@ -5,51 +5,79 @@ import { EventOrderCreatableParams } from "karikarihelper";
 import { OrderStatus } from "@enums";
 
 // Services
-import { OrderService, ResponseService, SocketService } from "@services";
+import {
+    DateService,
+    EventService,
+    OrderService,
+    ResponseService,
+} from "@services";
+
+// Sockets
+import { RejiSocket } from "@sockets";
+import { InHouseError } from "@types";
+import { EventErrors, OrderErrors } from "@models";
 
 const createOrder = (socket: Socket) =>
-    socket.on("orders:create", (values: EventOrderCreatableParams) => {
+    socket.on("orders:create", async (values: EventOrderCreatableParams) => {
         const realmId = socket.data.realmId;
         const eventId = socket.data.eventId;
         const operatorId = socket.data.operatorId;
         const itemsIds = values.itemsId;
         const clientName = values.clientName;
 
-        if (
-            !eventId ||
-            !realmId ||
-            !operatorId ||
-            !clientName ||
-            itemsIds.length === 0
-        ) {
-            return;
+        try {
+            if (
+                !eventId ||
+                !realmId ||
+                !operatorId ||
+                !clientName ||
+                itemsIds.length === 0
+            ) {
+                throw new InHouseError(OrderErrors.INVALID);
+            }
+
+            const foundEvent = await EventService.queryById(eventId);
+
+            if (!foundEvent) {
+                throw new InHouseError(EventErrors.NOT_FOUND);
+            }
+
+            const eventDate = foundEvent.date;
+
+            if (
+                DateService.isSameDate(
+                    eventDate,
+                    DateService.standarizeCurrentDate()
+                ) === false
+            ) {
+                throw new InHouseError(EventErrors.NOT_ACTIVE);
+            }
+
+            await OrderService.save({
+                eventId: eventId,
+                status: OrderStatus.COOKING,
+                operatorId: operatorId,
+                clientName: clientName,
+                itemsId: itemsIds,
+            });
+
+            const eventOrders = await OrderService.query({
+                eventId: eventId,
+                realmId: realmId,
+            });
+
+            RejiSocket.namespace
+                .to(`event/${eventId}/${realmId}`)
+                .emit(
+                    "orders:refresh",
+                    ResponseService.generateSucessfulResponse(eventOrders)
+                );
+        } catch (error) {
+            socket.emit(
+                "orders:error",
+                ResponseService.generateFailedResponse(error.message)
+            );
         }
-
-        OrderService.save({
-            eventId: eventId,
-            status: OrderStatus.COOKING,
-            operatorId: operatorId,
-            clientName: clientName,
-            itemsId: itemsIds,
-        })
-            .then(() => {
-                OrderService.query({
-                    eventId: eventId,
-                    realmId: realmId,
-                })
-                    .then((eventOrders) => {
-                        socket.data.eventId = eventId;
-
-                        socket.emit(
-                            "orders:refresh",
-                            ResponseService.generateSucessfulResponse(
-                                eventOrders
-                            )
-                        );
-                    })
-                    .catch((error) => console.log(error));
-            })
-            .catch((error) => console.log(error));
     });
 
 const editOrder = (socket: Socket) =>

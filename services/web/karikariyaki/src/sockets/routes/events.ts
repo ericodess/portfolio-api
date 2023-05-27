@@ -4,17 +4,17 @@ import { Socket } from "socket.io";
 import { EventService, ResponseService, SocketService } from "@services";
 
 const joinEvents = (socket: Socket) =>
-    socket.on("events:join", () => {
-        EventService.query({}, false).then((events) => {
-            SocketService.leaveRooms(socket, "event");
+    socket.on("events:join", async () => {
+        const events = await EventService.query({}, false);
 
-            socket.join("events");
+        SocketService.leaveRooms(socket, "event");
 
-            socket.emit(
-                "events:refresh",
-                ResponseService.generateSucessfulResponse(events)
-            );
-        });
+        socket.join("events");
+
+        socket.emit(
+            "events:refresh",
+            ResponseService.generateSucessfulResponse(events)
+        );
     });
 
 const leaveEvents = (socket: Socket) =>

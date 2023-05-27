@@ -7,11 +7,12 @@ import { InHouseError, Statics } from "@types";
 import { OrderModel } from "@models";
 
 // Services
-import { DatabaseService, StringService } from "@services";
+import { StringService } from "@services";
 
 export enum EventErrors {
     DATE_REQUIRED = "ERROR_EVENT_DATE_REQUIRED",
     INVALID = "ERROR_EVENT_INVALID",
+    NOT_ACTIVE = "ERROR_EVENT_NOT_ACTIVE",
     NOT_FOUND = "ERROR_EVENT_NOT_FOUND",
     NAME_REQUIRED = "ERROR_EVENT_NAME_REQUIRED",
     ORDER_INVALID = "ERROR_EVENT_ORDER_INVALID",

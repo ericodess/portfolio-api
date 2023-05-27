@@ -1,80 +1,105 @@
-import { Namespace, Socket } from "socket.io";
+import { Socket } from "socket.io";
 
 // Types
 import { EventCreatableParams, Event } from "karikarihelper";
 
+// Socktes
+import { RejiSocket } from "@sockets";
+
 // Services
 import {
+    DateService,
     EventService,
     OrderService,
     ResponseService,
     SocketService,
 } from "@services";
+import { EventErrors } from "@models";
+import { InHouseError } from "@types";
 
-const createEvent = (namespace: Namespace, socket: Socket) =>
-    socket.on("event:create", (values: EventCreatableParams) => {
-        EventService.save(values).then(() => {
-            EventService.query({}, false).then((updatedEvents) => {
-                namespace
-                    .to("events")
-                    .emit(
-                        "events:refresh",
-                        ResponseService.generateSucessfulResponse(updatedEvents)
-                    );
-            });
-        });
+const createEvent = (socket: Socket) =>
+    socket.on("event:create", async (values: EventCreatableParams) => {
+        try {
+            await EventService.save(values);
+
+            const updatedEvents = await EventService.query({}, false);
+
+            RejiSocket.namespace
+                .to("events")
+                .emit(
+                    "events:refresh",
+                    ResponseService.generateSucessfulResponse(updatedEvents)
+                );
+        } catch (error) {
+            socket.emit(
+                "event:error",
+                ResponseService.generateFailedResponse(error.message)
+            );
+        }
     });
 
 const joinEvent = (socket: Socket) =>
-    socket.on("event:join", (eventId) => {
+    socket.on("event:join", async (eventId) => {
         const realmId = socket.data.realmId;
 
         if (!eventId || !realmId) {
-            return;
+            throw new InHouseError(EventErrors.INVALID);
         }
 
-        EventService.query({
-            id: eventId,
-        })
-            .then((foundEvent) => {
-                if (foundEvent.length === 0) {
-                    return;
-                }
+        try {
+            const foundEvent = await EventService.queryById(eventId);
 
-                let selectedEvent = foundEvent[0].toObject<Event>();
+            if (!foundEvent) {
+                throw new InHouseError(EventErrors.NOT_FOUND);
+            }
 
-                selectedEvent.orders = [];
+            if (
+                DateService.isSameDate(
+                    foundEvent.date,
+                    DateService.standarizeCurrentDate()
+                ) === false
+            ) {
+                throw new InHouseError(EventErrors.NOT_ACTIVE);
+            }
 
-                SocketService.leaveRooms(socket, "event");
+            let selectedEvent = foundEvent.toObject<Event>();
 
-                socket.join(`event/${eventId}/${realmId}`);
+            selectedEvent.orders = [];
 
-                socket.emit(
-                    "event:refresh",
-                    ResponseService.generateSucessfulResponse(selectedEvent)
-                );
+            SocketService.leaveRooms(socket, "event");
 
-                OrderService.query({
-                    eventId: eventId,
-                    realmId: realmId,
-                })
-                    .then((eventOrders) => {
-                        socket.data.eventId = eventId;
+            socket.join(`event/${eventId}/${realmId}`);
 
-                        socket.emit(
-                            "orders:refresh",
-                            ResponseService.generateSucessfulResponse(
-                                eventOrders
-                            )
-                        );
-                    })
-                    .catch((error) => console.log(error));
-            })
-            .catch((error) => console.log(error));
+            socket.data.eventId = eventId;
+
+            socket.emit(
+                "event:refresh",
+                ResponseService.generateSucessfulResponse(selectedEvent)
+            );
+
+            const eventOrders = await OrderService.query({
+                eventId: eventId,
+                realmId: realmId,
+            });
+
+            socket.data.eventId = eventId;
+
+            socket.emit(
+                "orders:refresh",
+                ResponseService.generateSucessfulResponse(eventOrders)
+            );
+        } catch (error) {
+            socket.emit(
+                "event:error",
+                ResponseService.generateFailedResponse(error.message)
+            );
+        }
     });
 
 const leaveEvent = (socket: Socket) =>
     socket.on("event:leave", () => {
+        socket.data.eventId = null;
+
         SocketService.leaveRooms(socket, "event");
 
         socket.emit(

@@ -69,6 +69,14 @@ export class EventService {
         ).select(EventService.visibleParameters);
     }
 
+    public static async queryById(id: string) {
+        await DatabaseService.getConnection();
+
+        return await EventModel.findById(id)
+            .select(EventService.visibleParameters)
+            .populate(EventService._populateOptions);
+    }
+
     public static async save(values: EventCreatableParams) {
         await DatabaseService.getConnection();
 
