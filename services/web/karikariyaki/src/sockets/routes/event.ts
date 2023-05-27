@@ -1,10 +1,12 @@
 import { Socket } from "socket.io";
-
-// Types
 import { EventCreatableParams, Event } from "karikarihelper";
 
+// Types
+import { InHouseError } from "@types";
+import { EventErrors } from "@models";
+
 // Socktes
-import { RejiSocket } from "@sockets";
+import { PrompterSocket, RejiSocket } from "@sockets";
 
 // Services
 import {
@@ -14,8 +16,6 @@ import {
     ResponseService,
     SocketService,
 } from "@services";
-import { EventErrors } from "@models";
-import { InHouseError } from "@types";
 
 const createEvent = (socket: Socket) =>
     socket.on("event:create", async (values: EventCreatableParams) => {
@@ -25,6 +25,12 @@ const createEvent = (socket: Socket) =>
             const updatedEvents = await EventService.query({}, false);
 
             RejiSocket.namespace
+                .to("events")
+                .emit(
+                    "events:refresh",
+                    ResponseService.generateSucessfulResponse(updatedEvents)
+                );
+            PrompterSocket.namespace
                 .to("events")
                 .emit(
                     "events:refresh",
@@ -53,12 +59,7 @@ const joinEvent = (socket: Socket) =>
                 throw new InHouseError(EventErrors.NOT_FOUND);
             }
 
-            if (
-                DateService.isSameDate(
-                    foundEvent.date,
-                    DateService.standarizeCurrentDate()
-                ) === false
-            ) {
+            if (DateService.isToday(foundEvent.date) === false) {
                 throw new InHouseError(EventErrors.NOT_ACTIVE);
             }
 

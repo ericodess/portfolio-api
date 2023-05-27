@@ -3,6 +3,8 @@ import { EventOrderCreatableParams } from "karikarihelper";
 
 // Types
 import { OrderStatus } from "@enums";
+import { InHouseError } from "@types";
+import { EventErrors, OrderErrors } from "@models";
 
 // Services
 import {
@@ -13,9 +15,7 @@ import {
 } from "@services";
 
 // Sockets
-import { RejiSocket } from "@sockets";
-import { InHouseError } from "@types";
-import { EventErrors, OrderErrors } from "@models";
+import { PrompterSocket, RejiSocket } from "@sockets";
 
 const createOrder = (socket: Socket) =>
     socket.on("orders:create", async (values: EventOrderCreatableParams) => {
@@ -44,12 +44,7 @@ const createOrder = (socket: Socket) =>
 
             const eventDate = foundEvent.date;
 
-            if (
-                DateService.isSameDate(
-                    eventDate,
-                    DateService.standarizeCurrentDate()
-                ) === false
-            ) {
+            if (DateService.isToday(eventDate) === false) {
                 throw new InHouseError(EventErrors.NOT_ACTIVE);
             }
 
@@ -67,6 +62,12 @@ const createOrder = (socket: Socket) =>
             });
 
             RejiSocket.namespace
+                .to(`event/${eventId}/${realmId}`)
+                .emit(
+                    "orders:refresh",
+                    ResponseService.generateSucessfulResponse(eventOrders)
+                );
+            PrompterSocket.namespace
                 .to(`event/${eventId}/${realmId}`)
                 .emit(
                     "orders:refresh",

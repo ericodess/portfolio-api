@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export class DateService {
     public static standarizeCurrentDate(targetDate = new Date()): Date {
         const standarizedDate = new Date(targetDate.getTime());
@@ -7,14 +9,14 @@ export class DateService {
         return standarizedDate;
     }
 
-    public static isSameDate(target: Date, current: Date): boolean {
-        const broadTargetDate = new Date(target.toISOString().split("T")[0]);
-        const broadCurrentDate = new Date(current.toISOString().split("T")[0]);
+    public static isToday(target: Date): boolean {
+        const targetMoment = DateTime.fromISO(
+            target.toISOString().split("T")[0]
+        ).setZone("America/Danmarkshavn");
+        const nowMoment = DateTime.fromISO(
+            DateTime.now().toISO().split("T")[0]
+        ).setZone("America/Danmarkshavn");
 
-        return (
-            broadTargetDate.getDate() === broadCurrentDate.getDate() &&
-            broadTargetDate.getMonth() === broadCurrentDate.getMonth() &&
-            broadTargetDate.getFullYear() === broadCurrentDate.getFullYear()
-        );
+        return targetMoment.diff(nowMoment, "days").days === 0;
     }
 }
