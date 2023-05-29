@@ -11,9 +11,14 @@ RUN npm run build
 
 FROM nginx:1.25.0
 
+ARG LETSENCRYPT_FOLDER_LOCATION=/etc/letsencrypt
+ARG CERTBOT_FOLDER_LOCATION=/var/www/certbot
 ARG CONFIG_FILE_LOCATION=./reverse_proxy.conf
 
+COPY ${LETSENCRYPT_FOLDER_LOCATION} /etc/letsencrypt
+COPY ${CERTBOT_FOLDER_LOCATION} /var/www/certbot
 COPY ${CONFIG_FILE_LOCATION} /etc/nginx/conf.d/default.conf
 COPY --from=builder /usr/src/app/dist/home /usr/share/nginx/html
 
 EXPOSE 80
+
