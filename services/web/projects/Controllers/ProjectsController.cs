@@ -35,7 +35,7 @@ namespace Projects.Controllers
 
             try
             {
-                if (_client.Credentials.Login == null)
+                if (_client.Credentials == null)
                 {
                     var apiKey = await GetApiKey();
 
