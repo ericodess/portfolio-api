@@ -9,8 +9,8 @@ namespace Projects.Types.DAO
 
         public void ProcessGithubRepository(Repository repository)
         {
-            this.RepoURL = repository.Name;
-            this.RepoURL = repository.Url;
+            this.Name = repository.Name;
+            this.RepoURL = repository.HtmlUrl;
         }
     }
 }

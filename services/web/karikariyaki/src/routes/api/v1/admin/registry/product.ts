@@ -2,6 +2,7 @@ import { Router } from "express";
 
 // Services
 import { RequestService, ResponseService, ProductService } from "@services";
+import { ProductErrors } from "@models";
 
 const router = Router();
 
@@ -9,6 +10,8 @@ router.get("/", (req, res) => {
     ProductService.query({
         id: RequestService.queryParamToString(req.query.id),
         name: RequestService.queryParamToString(req.query.name),
+        realmId: RequestService.queryParamToString(req.query.realmId),
+        parentId: RequestService.queryParamToString(req.query.parentId),
     })
         .then((response) => {
             res.status(200).json(
@@ -24,10 +27,12 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
     const name = RequestService.queryParamToString(req.body.name);
+    const realmId = RequestService.queryParamToString(req.body.realmId);
+    const parentId = RequestService.queryParamToString(req.body.parentId);
 
-    if (!name) {
+    if (!name || !realmId) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid product data")
+            ResponseService.generateFailedResponse(ProductErrors.INVALID)
         );
 
         return;
@@ -35,9 +40,13 @@ router.post("/", (req, res) => {
 
     ProductService.save({
         name: name,
+        realmId: realmId,
+        parentId: parentId,
     })
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(
@@ -52,7 +61,7 @@ router.patch("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid product data")
+            ResponseService.generateFailedResponse(ProductErrors.INVALID)
         );
 
         return;
@@ -76,15 +85,27 @@ router.delete("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid product data")
+            ResponseService.generateFailedResponse(ProductErrors.INVALID)
         );
 
         return;
     }
 
     ProductService.delete(id)
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            if (!response) {
+                res.status(404).json(
+                    ResponseService.generateFailedResponse(
+                        ProductErrors.NOT_FOUND
+                    )
+                );
+
+                return;
+            }
+
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(

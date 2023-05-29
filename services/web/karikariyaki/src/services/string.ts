@@ -12,7 +12,7 @@ export class StringService {
 
         const trimmedValue = value.trim();
 
-        return trimmedValue.length > minSize && trimmedValue.length < maxSize;
+        return trimmedValue.length >= minSize && trimmedValue.length <= maxSize;
     }
 
     public static toBoolean(value: string) {
@@ -53,14 +53,6 @@ export class StringService {
         return new Types.ObjectId(value);
     }
 
-    public static toString(value: Types.ObjectId) {
-        if (!value) {
-            return null;
-        }
-
-        return value.toString();
-    }
-
     public static toObjectIds(values: string[]) {
         if (!values) {
             return null;
@@ -75,6 +67,14 @@ export class StringService {
         return convertedValues;
     }
 
+    public static toString(value: Types.ObjectId) {
+        if (!value) {
+            return null;
+        }
+
+        return value.toString();
+    }
+
     public static toStrings(values: Types.ObjectId[]) {
         if (!values) {
             return null;
@@ -87,5 +87,15 @@ export class StringService {
         });
 
         return convertedValues;
+    }
+
+    public static removeLeadingAndTrailingSlashes(value: string) {
+        if (!value) {
+            return null;
+        }
+
+        const rasterizedRoute = value.trim().toLowerCase().replace(/^\/+/g, "");
+
+        return rasterizedRoute.replace(/\/+$/, "");
     }
 }

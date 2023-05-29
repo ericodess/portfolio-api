@@ -11,7 +11,12 @@
 
 			& .app-button__background {
 				background-color: black;
-				transform: translateX(0);
+
+				-webkit-transform: translateX(0); 
+    			-moz-transform:    translateX(0); 
+    			-ms-transform:     translateX(0); 
+    			-o-transform: 	   translateX(0); 
+				transform: 		   translateX(0);
 			}
 
 			& .app-button__container {
@@ -27,7 +32,12 @@
 		height: 100%;
 		padding: 0.3vh 0;
 		z-index: -1;
-		transform: translateX(-100vh);
+
+		-webkit-transform: translateX(-100vh); 
+		-moz-transform:    translateX(-100vh); 
+		-ms-transform:     translateX(-100vh); 
+		-o-transform: 	   translateX(-100vh); 
+		transform: 		   translateX(-100vh);
 
 		-webkit-transition: transform ease-in-out .3s;
 		-moz-transition: 	transform ease-in-out .3s;

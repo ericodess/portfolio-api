@@ -1,108 +1,97 @@
 import { PopulateOptions } from "mongoose";
+import {
+    EventOrderCreatableParams,
+    EventOrderEditableParams,
+    EventOrderQueryableParams,
+} from "karikarihelper";
 
 // Models
 import { EventModel, OrderModel } from "@models";
 
 // Services
-import { DatabaseService, StringService } from "@services";
-
-interface DefaultParams {
-    id?: string;
-    event?: string;
-    status?: string;
-    operator?: string;
-    client?: string;
-    item?: string;
-    variant?: string;
-}
-
-type QueryableParams = DefaultParams;
-
-type CreatableParams = Omit<DefaultParams, "id">;
-
-type EditableParams = Pick<DefaultParams, "status">;
+import { DatabaseService, OperatorService, StringService } from "@services";
 
 export class OrderService {
-    public static visibleParameters = ["status", "client"];
+    public static visibleParameters = ["realm", "status", "client"];
 
     private static _populateOptions = [
         {
             path: "event",
-            select: "name date",
+            select: ["name", "date"],
         },
         {
             path: "operator",
             select: "displayName",
         },
         {
-            path: "item",
+            path: "realm",
             select: "name",
         },
         {
-            path: "variant",
+            path: "items",
             select: "name",
         },
     ] as PopulateOptions[];
 
-    public static async queryAll() {
-        await DatabaseService.getConnection();
-
-        return OrderModel.find().select(OrderService.visibleParameters);
-    }
-
-    public static async query(values: QueryableParams) {
+    public static async query(values: EventOrderQueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
 
         if (values.id) {
-            return (
-                await OrderModel.findById(values.id).select(
-                    OrderService.visibleParameters
-                )
-            ).populate(OrderService._populateOptions);
+            query.push({
+                _id: values.id,
+            });
         }
 
-        if (values.event) {
-            query.push({ event: values.event });
+        if (values.eventId) {
+            query.push({ event: values.eventId });
         }
 
         if (values.status) {
             query.push({ status: values.status });
         }
 
-        if (values.operator) {
-            query.push({ operator: values.operator });
+        if (values.operatorId) {
+            query.push({ operator: values.operatorId });
         }
 
-        if (values.client) {
-            query.push({ client: values.client });
+        if (values.realmId) {
+            query.push({ realm: values.realmId });
         }
 
-        if (values.item) {
-            query.push({ item: values.item });
+        if (values.clientName) {
+            query.push({ client: values.clientName });
         }
 
-        if (values.variant) {
-            query.push({ variant: values.variant });
+        if (values.itemsId) {
+            query.push({ items: values.itemsId });
         }
 
-        return await OrderModel.find(query.length === 0 ? null : { $or: query })
+        return await OrderModel.find(
+            query.length === 0 ? null : { $and: query }
+        )
             .select(OrderService.visibleParameters)
             .populate(OrderService._populateOptions);
     }
 
-    public static async save(values: CreatableParams) {
+    public static async save(values: EventOrderCreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new OrderModel();
 
-        newEntry.event = StringService.toObjectId(values.event);
+        newEntry.event = StringService.toObjectId(values.eventId);
         newEntry.status = newEntry.status;
-        newEntry.operator = StringService.toObjectId(values.operator);
-        newEntry.client = values.client?.trim();
-        newEntry.item = StringService.toObjectId(values.item);
-        newEntry.variant = StringService.toObjectId(values.variant);
+        newEntry.operator = StringService.toObjectId(values.operatorId);
+
+        const foundOperator = await OperatorService.query({
+            id: newEntry.operator.toString(),
+        });
+
+        newEntry.realm = foundOperator[0].realm._id;
+
+        newEntry.client = values.clientName?.trim();
+        newEntry.items = StringService.toObjectIds(values.itemsId);
 
         await EventModel.findByIdAndUpdate(
             newEntry.event,
@@ -114,15 +103,23 @@ export class OrderService {
             { runValidators: true }
         );
 
-        return newEntry.save();
+        await newEntry.save();
+
+        return OrderModel.findById(newEntry._id)
+            .select(OrderService.visibleParameters)
+            .populate(OrderService._populateOptions);
     }
 
-    public static async update(id: string, values: EditableParams) {
+    public static async update(id: string, values: EventOrderEditableParams) {
         await DatabaseService.getConnection();
 
         return OrderModel.findByIdAndUpdate(
             StringService.toObjectId(id),
-            { $set: values },
+            {
+                $set: {
+                    status: values.status,
+                },
+            },
             { new: true, runValidators: true }
         )
             .select(OrderService.visibleParameters)
@@ -145,6 +142,8 @@ export class OrderService {
             }
         );
 
-        return OrderModel.findByIdAndDelete(orderId);
+        return OrderModel.findByIdAndDelete(orderId)
+            .select(OrderService.visibleParameters)
+            .populate(OrderService._populateOptions);
     }
 }

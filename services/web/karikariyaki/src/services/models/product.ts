@@ -1,48 +1,43 @@
-import { PopulateOptions, Types } from "mongoose";
+import { PopulateOptions } from "mongoose";
+import {
+    ProductCreatableParams,
+    ProductEditableParams,
+    ProductQueryableParams,
+} from "karikarihelper";
 
 // Models
-import { ProductModel, VariantModel } from "@models";
+import { ProductModel } from "@models";
 
 // Services
 import { DatabaseService, StringService } from "@services";
 
-interface DefaultParams {
-    id?: string;
-    name?: string;
-    variants?: Types.ObjectId[];
-}
-
-type QueryableParams = DefaultParams;
-
-type CreatableParams = Pick<DefaultParams, "name">;
-
-type EditableParams = Pick<DefaultParams, "name">;
-
 export class ProductService {
-    public static visibleParameters = ["name", "variants"];
+    public static visibleParameters = ["name", "realm", "parent", "variants"];
 
-    private static _populateOptions = {
-        path: "variants",
-        select: "name",
-    } as PopulateOptions;
+    private static _populateOptions = [
+        {
+            path: "realm",
+            select: "name",
+        },
+        {
+            path: "parent",
+            select: "name",
+        },
+        {
+            path: "variants",
+            select: "name",
+        },
+    ] as PopulateOptions[];
 
-    public static async queryAll() {
-        await DatabaseService.getConnection();
-
-        return ProductModel.find().select(ProductService.visibleParameters);
-    }
-
-    public static async query(values: QueryableParams) {
+    public static async query(values: ProductQueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
 
         if (values.id) {
-            return (
-                await ProductModel.findById(
-                    StringService.toObjectId(values.id)
-                ).select(ProductService.visibleParameters)
-            ).populate(ProductService._populateOptions);
+            query.push({
+                _id: StringService.toObjectId(values.id),
+            });
         }
 
         if (values.name) {
@@ -51,8 +46,16 @@ export class ProductService {
             });
         }
 
-        if (values.variants) {
-            query.push({ variants: values.variants });
+        if (values.realmId) {
+            query.push({
+                realm: StringService.toObjectId(values.realmId),
+            });
+        }
+
+        if (values.parentId) {
+            query.push({
+                parent: StringService.toObjectId(values.parentId),
+            });
         }
 
         return await ProductModel.find(
@@ -62,24 +65,48 @@ export class ProductService {
             .populate(ProductService._populateOptions);
     }
 
-    public static async save(values: CreatableParams) {
+    public static async save(values: ProductCreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new ProductModel();
 
         newEntry.name = values.name.trim();
+        newEntry.realm = StringService.toObjectId(values.realmId);
+        newEntry.parent = StringService.toObjectId(values.parentId);
 
-        return newEntry.save();
+        if (values.parentId) {
+            const foundProduct = await ProductModel.findByIdAndUpdate(
+                newEntry.parent,
+                {
+                    $push: {
+                        variants: newEntry._id,
+                    },
+                },
+                { new: true, runValidators: true }
+            );
+
+            newEntry.realm = foundProduct.realm;
+        }
+
+        await newEntry.save();
+
+        return ProductModel.findById(newEntry._id)
+            .select(ProductService.visibleParameters)
+            .populate(ProductService._populateOptions);
     }
 
-    public static async update(id: string, values: EditableParams) {
+    public static async update(id: string, values: ProductEditableParams) {
         await DatabaseService.getConnection();
 
         values.name = values.name?.trim();
 
         return ProductModel.findByIdAndUpdate(
             StringService.toObjectId(id),
-            { $set: values },
+            {
+                $set: {
+                    name: values.name,
+                },
+            },
             { new: true, runValidators: true }
         )
             .select(ProductService.visibleParameters)
@@ -91,14 +118,23 @@ export class ProductService {
 
         const productId = StringService.toObjectId(id);
 
-        const foundVariants = await VariantModel.find({
-            product: productId,
+        await ProductModel.deleteMany({
+            parent: productId,
         });
 
-        for (const foundVariant of foundVariants) {
-            await VariantModel.findByIdAndDelete(foundVariant._id);
-        }
+        await ProductModel.updateMany(
+            {
+                variants: productId,
+            },
+            {
+                $pull: {
+                    variants: productId,
+                },
+            }
+        );
 
-        return ProductModel.findByIdAndDelete(productId);
+        return ProductModel.findByIdAndDelete(productId)
+            .select(ProductService.visibleParameters)
+            .populate(ProductService._populateOptions);
     }
 }

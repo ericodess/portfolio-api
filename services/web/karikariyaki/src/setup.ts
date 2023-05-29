@@ -8,10 +8,12 @@ const server = createServer(app);
 
 // Socket
 const io = new Server(server, {
+    path: "/karikariyaki/ws",
     cors: {
+        credentials: true,
         origin: process.env.ORIGIN_ADDRESS
             ? process.env.ORIGIN_ADDRESS.split(" ")
-            : ["http://localhost:3000"],
+            : ["http://localhost"],
     },
 });
 

@@ -1,23 +1,15 @@
-import { PopulateOptions, Types } from "mongoose";
+import { PopulateOptions } from "mongoose";
+import {
+    EventCreatableParams,
+    EventEditableParams,
+    EventQueryableParams,
+} from "karikarihelper";
 
 // Models
 import { EventModel, OrderModel } from "@models";
 
 // Services
 import { DatabaseService, DateService, StringService } from "@services";
-
-interface DefaultParams {
-    id?: string;
-    name?: string;
-    date?: Date;
-    orders?: Types.ObjectId[];
-}
-
-type QueryableParams = DefaultParams;
-
-type CreatableParams = Pick<DefaultParams, "name">;
-
-type EditableParams = Pick<DefaultParams, "name">;
 
 export class EventService {
     public static visibleParameters = ["name", "date", "orders"];
@@ -31,33 +23,25 @@ export class EventService {
                 select: "displayName",
             },
             {
-                path: "item",
+                path: "realm",
                 select: "name",
             },
             {
-                path: "variant",
+                path: "items",
                 select: "name",
             },
         ],
     } as PopulateOptions;
 
-    public static async queryAll() {
-        await DatabaseService.getConnection();
-
-        return EventModel.find().select(EventService.visibleParameters);
-    }
-
-    public static async query(values: QueryableParams) {
+    public static async query(values: EventQueryableParams, populate = true) {
         await DatabaseService.getConnection();
 
         const query = [];
 
         if (values.id) {
-            return (
-                await EventModel.findById(
-                    StringService.toObjectId(values.id)
-                ).select(EventService.visibleParameters)
-            ).populate(EventService._populateOptions);
+            query.push({
+                _id: values.id,
+            });
         }
 
         if (values.name) {
@@ -72,34 +56,56 @@ export class EventService {
             });
         }
 
-        if (values.orders) {
-            query.push({ orders: values.orders });
+        if (populate) {
+            return await EventModel.find(
+                query.length === 0 ? null : { $or: query }
+            )
+                .select(EventService.visibleParameters)
+                .populate(EventService._populateOptions);
         }
 
-        return await EventModel.find(query.length === 0 ? null : { $or: query })
+        return await EventModel.find(
+            query.length === 0 ? null : { $or: query }
+        ).select(EventService.visibleParameters);
+    }
+
+    public static async queryById(id: string) {
+        await DatabaseService.getConnection();
+
+        return await EventModel.findById(id)
             .select(EventService.visibleParameters)
             .populate(EventService._populateOptions);
     }
 
-    public static async save(values: CreatableParams) {
+    public static async save(values: EventCreatableParams) {
         await DatabaseService.getConnection();
 
         const newEntry = new EventModel();
 
         newEntry.name = values.name.trim();
-        newEntry.date = DateService.standarizeCurrentDate(new Date());
+        newEntry.date = DateService.standarizeCurrentDate(
+            new Date(values.date)
+        );
 
-        return newEntry.save();
+        await newEntry.save();
+
+        return EventModel.findById(newEntry._id)
+            .select(EventService.visibleParameters)
+            .populate(EventService._populateOptions);
     }
 
-    public static async update(id: string, values: EditableParams) {
+    public static async update(id: string, values: EventEditableParams) {
         await DatabaseService.getConnection();
 
         values.name = values.name?.trim();
 
         return EventModel.findByIdAndUpdate(
             StringService.toObjectId(id),
-            { $set: values },
+            {
+                $set: {
+                    name: values.name,
+                },
+            },
             { new: true, runValidators: true }
         )
             .select(EventService.visibleParameters)
@@ -111,14 +117,12 @@ export class EventService {
 
         const eventId = StringService.toObjectId(id);
 
-        const foundOrders = await OrderModel.find({
+        await OrderModel.deleteMany({
             event: eventId,
         });
 
-        for (const foundOrder of foundOrders) {
-            await OrderModel.findByIdAndDelete(foundOrder._id);
-        }
-
-        return EventModel.findByIdAndDelete(eventId);
+        return EventModel.findByIdAndDelete(eventId)
+            .select(EventService.visibleParameters)
+            .populate(EventService._populateOptions);
     }
 }

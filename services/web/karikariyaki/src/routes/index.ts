@@ -1,10 +1,10 @@
 import { Router } from "express";
 
 // Routes
-import karikariyakiRouter from "./karikariyaki";
+import apiRouter from "./api";
 
 const router = Router();
 
-router.use("/karikariyaki", karikariyakiRouter);
+router.use("/api", apiRouter);
 
 export default router;

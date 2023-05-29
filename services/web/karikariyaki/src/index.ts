@@ -14,12 +14,12 @@ import { app, server } from "./setup";
 // Routes
 import routes from "@routes";
 
-// Sockets
-import { AdminNamespace, ClientNamespace } from "@sockets";
+// Socket Setup
+import { ClientSocket, PrompterSocket, RejiSocket } from "@sockets";
 
 const allowedDomains = process.env.ORIGIN_ADDRESS
     ? process.env.ORIGIN_ADDRESS.split(" ")
-    : ["http://localhost:3000"];
+    : ["http://localhost"];
 
 // Add-ons
 app.use(morgan("dev"));
@@ -43,12 +43,14 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.json({ limit: "5mb" }));
 
-app.use("/", routes);
+app.use("/karikariyaki", routes);
 
 // Sockets
-AdminNamespace.setup();
-ClientNamespace.setup();
+
+ClientSocket.setup();
+PrompterSocket.setup();
+RejiSocket.setup();
 
 server.listen(process.env.PORT || 9006);

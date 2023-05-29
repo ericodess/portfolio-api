@@ -1,39 +1,34 @@
-import { Socket } from "socket.io";
 import { io } from "../setup";
 
 // Services
-import { JWTService } from "@services";
+import { OrderService } from "@services";
 
 export class ClientSocket {
     public static namespace = io.of("/client");
 
     public static setup() {
-        ClientSocket.namespace.on("connection", (socket) => {
-            ClientSocket._setupCreateOrderTunnel(socket);
-            ClientSocket._setupCheckOrderTunnel(socket);
-            ClientSocket._setupPickOrderTunnel(socket);
-        });
-    }
+        ClientSocket.namespace.on("connection", async (socket) => {
+            const orderId = socket.handshake.query.order;
 
-    private static _setupMiddleware() {
-        //ClientSocket.namespace.use();
-    }
+            if (!orderId || typeof orderId === "object") {
+                socket.disconnect();
 
-    private static _setupCreateOrderTunnel(socket: Socket) {
-        socket.on("create_order", (arg, callback) => {
-            callback("いらっしゃいませ");
-        });
-    }
+                return;
+            }
 
-    private static _setupCheckOrderTunnel(socket: Socket) {
-        socket.on("check_order", (arg, callback) => {
-            callback("いらっしゃいませ");
-        });
-    }
+            const order = await OrderService.query({
+                id: orderId,
+            });
 
-    private static _setupPickOrderTunnel(socket: Socket) {
-        socket.on("pick_order", (arg, callback) => {
-            callback("いらっしゃいませ");
+            if (!order) {
+                socket.disconnect();
+
+                return;
+            }
+
+            socket.join(orderId);
+
+            ClientSocket.namespace.to(orderId).emit("refresh", order);
         });
     }
 }

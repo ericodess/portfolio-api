@@ -1,15 +1,17 @@
 import { Router } from "express";
 
 // Services
-import { RequestService, ResponseService, VariantService } from "@services";
+import { RequestService, ResponseService, RealmService } from "@services";
+
+// Models
+import { RealmErrors } from "@models";
 
 const router = Router();
 
 router.get("/", (req, res) => {
-    VariantService.query({
+    RealmService.query({
         id: RequestService.queryParamToString(req.query.id),
         name: RequestService.queryParamToString(req.query.name),
-        product: RequestService.queryParamToString(req.query.productId),
     })
         .then((response) => {
             res.status(200).json(
@@ -25,22 +27,22 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
     const name = RequestService.queryParamToString(req.body.name);
-    const productId = RequestService.queryParamToString(req.body.productId);
 
-    if (!name || !productId) {
+    if (!name) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid variant data")
+            ResponseService.generateFailedResponse(RealmErrors.INVALID)
         );
 
         return;
     }
 
-    VariantService.save({
+    RealmService.save({
         name: name,
-        product: productId,
     })
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(
@@ -55,13 +57,13 @@ router.patch("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid variant data")
+            ResponseService.generateFailedResponse(RealmErrors.INVALID)
         );
 
         return;
     }
 
-    VariantService.update(id, { name: name })
+    RealmService.update(id, { name: name })
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)
@@ -79,15 +81,27 @@ router.delete("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid variant data")
+            ResponseService.generateFailedResponse(RealmErrors.INVALID)
         );
 
         return;
     }
 
-    VariantService.delete(id)
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+    RealmService.delete(id)
+        .then((response) => {
+            if (!response) {
+                res.status(404).json(
+                    ResponseService.generateFailedResponse(
+                        RealmErrors.NOT_FOUND
+                    )
+                );
+
+                return;
+            }
+
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(

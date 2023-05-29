@@ -3,6 +3,9 @@ import { Router } from "express";
 // Services
 import { EventService, RequestService, ResponseService } from "@services";
 
+// Models
+import { EventErrors } from "@models";
+
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -25,10 +28,11 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
     const name = req.body.name;
+    const date = RequestService.queryParamToDate(req.body.date);
 
-    if (!name) {
+    if (!name || !date) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid event data")
+            ResponseService.generateFailedResponse(EventErrors.INVALID)
         );
 
         return;
@@ -36,9 +40,12 @@ router.post("/", (req, res) => {
 
     EventService.save({
         name: name,
+        date: date,
     })
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(
@@ -53,7 +60,7 @@ router.patch("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid event data")
+            ResponseService.generateFailedResponse(EventErrors.INVALID)
         );
 
         return;
@@ -77,15 +84,27 @@ router.delete("/:id", (req, res) => {
 
     if (!id) {
         res.status(400).json(
-            ResponseService.generateFailedResponse("Invalid event data")
+            ResponseService.generateFailedResponse(EventErrors.INVALID)
         );
 
         return;
     }
 
     EventService.delete(id)
-        .then(() => {
-            res.status(200).json(ResponseService.generateSucessfulResponse());
+        .then((response) => {
+            if (!response) {
+                res.status(404).json(
+                    ResponseService.generateFailedResponse(
+                        EventErrors.NOT_FOUND
+                    )
+                );
+
+                return;
+            }
+
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
         })
         .catch((error) => {
             res.status(500).json(

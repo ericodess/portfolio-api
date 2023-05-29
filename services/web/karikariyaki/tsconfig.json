@@ -5,7 +5,7 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@enum": ["src/enums/index.ts"],
+      "@enums": ["src/enums/index.ts"],
       "@models": ["src/models/index.ts"],
       "@routes": ["src/routes/index.ts"],
       "@services": ["src/services/index.ts"],

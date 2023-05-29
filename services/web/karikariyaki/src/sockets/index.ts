@@ -1,2 +1,3 @@
-export { AdminNamespace } from "./admin";
-export { ClientSocket as ClientNamespace } from "./client";
+export { ClientSocket } from "./client";
+export { PrompterSocket } from "./prompter";
+export { RejiSocket } from "./reji";
