@@ -252,11 +252,4 @@ export default [
 			},
 		],
 	},
-	{
-		name: 'Karikariyaki',
-		rootUrl: rootUrl,
-		rootPath: 'karikariyaki',
-		isSecure: isSecure,
-		endpoints: [],
-	},
 ] as ApiSource[];
