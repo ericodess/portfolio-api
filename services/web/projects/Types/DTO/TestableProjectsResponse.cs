@@ -5,7 +5,7 @@ namespace Projects.Types.DTO
 {
     public class TestableProjectsResponse
     {
-        public List<TestableProject> TeststableProjects { get; set; } = new();
+        public List<TestableProject> TestableProjects { get; set; } = new();
 
         public void ProcessGithubRepositories(SearchRepositoryResult RepositorySearchResponse) {
             foreach(var UserRepo in RepositorySearchResponse.Items)
@@ -19,7 +19,7 @@ namespace Projects.Types.DTO
 
                 NewTestableProject.ProcessGithubRepository(UserRepo);
 
-                TeststableProjects.Add(NewTestableProject);
+                TestableProjects.Add(NewTestableProject);
 
             }
         }
