@@ -6,9 +6,10 @@ services:
         build:
             context: ./nginx
             dockerfile: Dockerfile
+            args:
+              - CONFIG_FILE_LOCATION: ./reverse_proxy_dev.conf
         ports:
             - "80:80"
-            - "443:443"
         networks:
             - web-network
         depends_on:
@@ -20,20 +21,6 @@ services:
             - cors-anywhere
             - karikariyaki
         restart: unless-stopped
-        volumes:
-            - ./nginx/certbot/conf:/etc/letsencrypt
-            - ./nginx/certbot/www:/var/www/certbot
-        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
-    proxy_certbot:
-        image: certbot/certbot
-        networks:
-            - web-network
-        restart: unless-stopped
-        volumes:
-            - ./nginx/certbot/conf:/etc/letsencrypt
-            - ./nginx/certbot/www:/var/www/certbot
-        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
     projects:
         container_name: portfolio_web_api_projects
