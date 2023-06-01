@@ -13,7 +13,6 @@ services:
         networks:
             - web-network
         depends_on:
-            - proxy_certbot
             - projects
             - namah
             - gifter
