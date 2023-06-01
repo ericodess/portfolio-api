@@ -7,7 +7,7 @@ services:
             context: ./nginx
             dockerfile: Dockerfile
             args:
-              - CONFIG_FILE_LOCATION: ./reverse_proxy_dev.conf
+                CONFIG_FILE_LOCATION: ./reverse_proxy_dev.conf
         ports:
             - "80:80"
         networks:
@@ -42,6 +42,8 @@ services:
             - web-network
         volumes:
             - /node_modules/namah:/app/node_modules
+        depends_on:
+            - mongodb
         restart: unless-stopped
 
     gifter:
@@ -53,6 +55,8 @@ services:
             - web-network
         volumes:
             - ./node_modules/gifter:/app/node_modules
+        depends_on:
+            - mongodb
         restart: unless-stopped
 
     dashboard:
@@ -64,6 +68,8 @@ services:
             - web-network
         volumes:
             - ./node_modules/dashboard:/app/node_modules
+        depends_on:
+            - mongodb
         restart: unless-stopped
 
     cors-anywhere:
@@ -75,6 +81,8 @@ services:
             - web-network
         volumes:
             - ./node_modules/cors-anywhere:/app/node_modules
+        depends_on:
+            - mongodb
         restart: unless-stopped
 
     karikariyaki:
