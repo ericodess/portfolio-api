@@ -51,6 +51,10 @@ const EventSchema = new Schema({
         default: [],
         validate: validateEventOrders,
     },
+    isOpen: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const EventModel = model(Statics.EVENT_COLLECTION_NAME, EventSchema);

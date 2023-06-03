@@ -13,6 +13,7 @@ router.get("/", (req, res) => {
         id: RequestService.queryParamToString(req.query.id),
         name: RequestService.queryParamToString(req.query.name),
         date: RequestService.queryParamToDate(req.query.date),
+        isOpen: RequestService.queryParamToBoolean(req.query.isOpen),
     })
         .then((response) => {
             res.status(200).json(
@@ -29,6 +30,7 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
     const name = req.body.name;
     const date = RequestService.queryParamToDate(req.body.date);
+    const isOpen = RequestService.queryParamToBoolean(req.body.isOpen);
 
     if (!name || !date) {
         res.status(400).json(
@@ -41,6 +43,7 @@ router.post("/", (req, res) => {
     EventService.save({
         name: name,
         date: date,
+        isOpen: isOpen,
     })
         .then((response) => {
             res.status(200).json(
@@ -57,6 +60,7 @@ router.post("/", (req, res) => {
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
     const name = req.body.name;
+    const isOpen = RequestService.queryParamToBoolean(req.body.isOpen);
 
     if (!id) {
         res.status(400).json(
@@ -66,7 +70,7 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    EventService.update(id, { name: name })
+    EventService.update(id, { name: name, isOpen: isOpen })
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)

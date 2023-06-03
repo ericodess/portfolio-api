@@ -33,7 +33,10 @@ export class OrderService {
         },
     ] as PopulateOptions[];
 
-    public static async query(values: EventOrderQueryableParams) {
+    public static async query(
+        values: EventOrderQueryableParams,
+        willPupulate = true
+    ) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -68,9 +71,23 @@ export class OrderService {
             query.push({ items: values.itemsId });
         }
 
+        if (willPupulate) {
+            return await OrderModel.find(
+                query.length === 0 ? null : { $and: query }
+            )
+                .select(OrderService.visibleParameters)
+                .populate(OrderService._populateOptions);
+        }
+
         return await OrderModel.find(
             query.length === 0 ? null : { $and: query }
-        )
+        ).select(OrderService.visibleParameters);
+    }
+
+    public static async queryById(id: string) {
+        await DatabaseService.getConnection();
+
+        return await OrderModel.findById(id)
             .select(OrderService.visibleParameters)
             .populate(OrderService._populateOptions);
     }

@@ -1,5 +1,8 @@
 import { Socket } from "socket.io";
-import { EventOrderCreatableParams } from "karikarihelper";
+import {
+    EventOrderCreatableParams,
+    EventOrderEditableParams,
+} from "karikarihelper";
 
 // Types
 import { OrderStatus } from "@enums";
@@ -42,9 +45,7 @@ const createOrder = (socket: Socket) =>
                 throw new InHouseError(EventErrors.NOT_FOUND);
             }
 
-            const eventDate = foundEvent.date;
-
-            if (DateService.isToday(eventDate) === false) {
+            if (foundEvent.isOpen === false) {
                 throw new InHouseError(EventErrors.NOT_ACTIVE);
             }
 
@@ -82,11 +83,57 @@ const createOrder = (socket: Socket) =>
     });
 
 const editOrder = (socket: Socket) =>
-    socket.on("orders:edit", () => {
-        socket.emit(
-            "orders:refresh",
-            ResponseService.generateSucessfulResponse(null)
-        );
-    });
+    socket.on(
+        "orders:edit",
+        async (order: { id: string; values: EventOrderEditableParams }) => {
+            const realmId = socket.data.realmId;
+            const eventId = socket.data.eventId;
+
+            try {
+                if (!eventId || !realmId) {
+                    throw new InHouseError(OrderErrors.INVALID);
+                }
+
+                const foundEvent = await EventService.queryById(eventId);
+
+                if (!foundEvent) {
+                    throw new InHouseError(EventErrors.NOT_FOUND);
+                }
+
+                if (foundEvent.isOpen === false) {
+                    throw new InHouseError(EventErrors.NOT_ACTIVE);
+                }
+
+                const foundOrder = await OrderService.queryById(order.id);
+
+                if (!foundOrder) {
+                    throw new InHouseError(OrderErrors.NOT_FOUND);
+                }
+
+                if (foundOrder.status === OrderStatus.PICKED_UP) {
+                    throw new InHouseError(OrderErrors.PICKED_UP);
+                }
+
+                await OrderService.update(order.id, order.values);
+
+                const eventOrders = await OrderService.query({
+                    eventId: eventId,
+                    realmId: realmId,
+                });
+
+                RejiSocket.namespace
+                    .to(`event/${eventId}/${realmId}`)
+                    .emit(
+                        "orders:refresh",
+                        ResponseService.generateSucessfulResponse(eventOrders)
+                    );
+            } catch (error) {
+                socket.emit(
+                    "orders:error",
+                    ResponseService.generateFailedResponse(error.message)
+                );
+            }
+        }
+    );
 
 export { createOrder, editOrder };

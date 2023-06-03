@@ -10,7 +10,6 @@ import { PrompterSocket, RejiSocket } from "@sockets";
 
 // Services
 import {
-    DateService,
     EventService,
     OrderService,
     ResponseService,
@@ -59,7 +58,7 @@ const joinEvent = (socket: Socket) =>
                 throw new InHouseError(EventErrors.NOT_FOUND);
             }
 
-            if (DateService.isToday(foundEvent.date) === false) {
+            if (foundEvent.isOpen === false) {
                 throw new InHouseError(EventErrors.NOT_ACTIVE);
             }
 
@@ -90,6 +89,7 @@ const joinEvent = (socket: Socket) =>
                 ResponseService.generateSucessfulResponse(eventOrders)
             );
         } catch (error) {
+            console.log(error);
             socket.emit(
                 "event:error",
                 ResponseService.generateFailedResponse(error.message)
