@@ -244,8 +244,7 @@ export class JWTService {
     public static getDefaultCookieOptions(): CookieOptions {
         return {
             httpOnly: true,
-            sameSite: "strict",
-            secure: false,
+            secure: true,
         };
     }
 }
