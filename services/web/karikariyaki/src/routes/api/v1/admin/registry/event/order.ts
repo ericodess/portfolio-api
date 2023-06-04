@@ -44,7 +44,7 @@ router.get("/status", (req, res) => {
     );
 });
 
-router.get("/qr/:eventId", (req, res) => {
+router.get("/qr/:orderId", (req, res) => {
     if (!process.env["CLIENT_APP_ADDRESS"]) {
         res.status(500).json(
             ResponseService.generateFailedResponse(
@@ -55,9 +55,9 @@ router.get("/qr/:eventId", (req, res) => {
         return;
     }
 
-    const eventId = req.params.eventId;
+    const orderId = req.params.orderId;
 
-    if (!eventId) {
+    if (!orderId) {
         res.status(400).json(
             ResponseService.generateFailedResponse(OrderErrors.INVALID)
         );
@@ -65,21 +65,37 @@ router.get("/qr/:eventId", (req, res) => {
         return;
     }
 
-    const redirectorURI = `${process.env["CLIENT_APP_ADDRESS"]}/${eventId}`;
+    OrderService.queryById(orderId)
+        .then((foundOrder) => {
+            if (!foundOrder) {
+                res.status(404).json(
+                    ResponseService.generateFailedResponse(
+                        OrderErrors.NOT_FOUND
+                    )
+                );
 
-    QRCode.toDataURL(redirectorURI, {
-        color: {
-            light: "#0000",
-        },
-        width: 512,
-    })
-        .then((result) => {
-            res.status(200).json(
-                ResponseService.generateSucessfulResponse({
-                    base64: result,
-                    redirector: redirectorURI,
-                } as QrCodeRseponse)
-            );
+                return;
+            }
+
+            const redirectorURI = `${process.env["CLIENT_APP_ADDRESS"]}/${foundOrder.realm._id}/${foundOrder.id}`;
+
+            QRCode.toDataURL(redirectorURI, {
+                color: {
+                    light: "#0000",
+                },
+                width: 512,
+            })
+                .then((result) => {
+                    res.status(200).json(
+                        ResponseService.generateSucessfulResponse({
+                            base64: result,
+                            redirector: redirectorURI,
+                        } as QrCodeRseponse)
+                    );
+                })
+                .catch((error) => {
+                    ResponseService.generateFailedResponse(error.message);
+                });
         })
         .catch((error) => {
             ResponseService.generateFailedResponse(error.message);
