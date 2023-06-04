@@ -1,4 +1,6 @@
 import { Router } from "express";
+import QRCode from "qrcode";
+import { QrCodeRseponse } from "karikarihelper";
 
 // Services
 import { OrderService, RequestService, ResponseService } from "@services";
@@ -10,6 +12,10 @@ import { OrderErrors } from "@models";
 import { OrderStatus } from "@enums";
 
 const router = Router();
+
+export enum RedirectorErrors {
+    CLIENT_APP_ADDRESS_MISSING = "ERROR_CLIENT_APP_ADDRESS_MISSING",
+}
 
 router.get("/", (req, res) => {
     OrderService.query({
@@ -36,6 +42,64 @@ router.get("/status", (req, res) => {
     res.status(200).json(
         ResponseService.generateSucessfulResponse(Object.values(OrderStatus))
     );
+});
+
+router.get("/qr/:orderId", (req, res) => {
+    if (!process.env["CLIENT_APP_ADDRESS"]) {
+        res.status(500).json(
+            ResponseService.generateFailedResponse(
+                RedirectorErrors.CLIENT_APP_ADDRESS_MISSING
+            )
+        );
+
+        return;
+    }
+
+    const orderId = req.params.orderId;
+
+    if (!orderId) {
+        res.status(400).json(
+            ResponseService.generateFailedResponse(OrderErrors.INVALID)
+        );
+
+        return;
+    }
+
+    OrderService.queryById(orderId)
+        .then((foundOrder) => {
+            if (!foundOrder) {
+                res.status(404).json(
+                    ResponseService.generateFailedResponse(
+                        OrderErrors.NOT_FOUND
+                    )
+                );
+
+                return;
+            }
+
+            const redirectorURI = `${process.env["CLIENT_APP_ADDRESS"]}/${foundOrder.realm._id}/${foundOrder.id}`;
+
+            QRCode.toDataURL(redirectorURI, {
+                color: {
+                    light: "#0000",
+                },
+                width: 512,
+            })
+                .then((result) => {
+                    res.status(200).json(
+                        ResponseService.generateSucessfulResponse({
+                            base64: result,
+                            redirector: redirectorURI,
+                        } as QrCodeRseponse)
+                    );
+                })
+                .catch((error) => {
+                    ResponseService.generateFailedResponse(error.message);
+                });
+        })
+        .catch((error) => {
+            ResponseService.generateFailedResponse(error.message);
+        });
 });
 
 router.post("/", (req, res) => {

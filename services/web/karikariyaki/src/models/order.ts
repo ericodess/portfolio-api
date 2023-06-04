@@ -24,6 +24,7 @@ export enum OrderErrors {
     NOT_FOUND = "ERROR_ORDER_NOT_FOUND",
     OPERATOR_INVALID = "ERROR_ORDER_OPERATOR_INVALID",
     OPERATOR_REQUIRED = "ERROR_ORDER_OPERATOR_REQUIRED",
+    PICKED_UP = "ERROR_ORDER_PICKED_UP",
     REALM_INVALID = "ERROR_OPERATOR_REALM_INVALID",
     REALM_REQUIRED = "ERROR_OPERATOR_REALM_REQUIRED",
 }
@@ -70,45 +71,48 @@ const validateOrderClient = async (client: string) => {
     }
 };
 
-const OrderSchema = new Schema({
-    event: {
-        type: Schema.Types.ObjectId,
-        ref: Statics.EVENT_COLLECTION_NAME,
-        required: [true, OrderErrors.EVENT_REQUIRED],
-        validate: validateOrderEvent,
+const OrderSchema = new Schema(
+    {
+        event: {
+            type: Schema.Types.ObjectId,
+            ref: Statics.EVENT_COLLECTION_NAME,
+            required: [true, OrderErrors.EVENT_REQUIRED],
+            validate: validateOrderEvent,
+        },
+        status: {
+            type: String,
+            enum: OrderStatus,
+            default: OrderStatus.COOKING,
+        },
+        operator: {
+            type: Schema.Types.ObjectId,
+            ref: Statics.OPERATOR_COLLECTION_NAME,
+            required: [true, OrderErrors.OPERATOR_REQUIRED],
+            validate: validateOrderOperator,
+        },
+        realm: {
+            type: Schema.Types.ObjectId,
+            ref: Statics.REALM_COLLECTION_NAME,
+            required: [true, OrderErrors.REALM_REQUIRED],
+            validate: validateOperatorRealm,
+        },
+        client: {
+            type: String,
+            required: [true, OrderErrors.CLIENT_NAME_REQUIRED],
+            validate: validateOrderClient,
+        },
+        items: {
+            type: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: Statics.PRODUCT_COLLECTION_NAME,
+                },
+            ],
+            default: [],
+        },
     },
-    status: {
-        type: String,
-        enum: OrderStatus,
-        default: OrderStatus.COOKING,
-    },
-    operator: {
-        type: Schema.Types.ObjectId,
-        ref: Statics.OPERATOR_COLLECTION_NAME,
-        required: [true, OrderErrors.OPERATOR_REQUIRED],
-        validate: validateOrderOperator,
-    },
-    realm: {
-        type: Schema.Types.ObjectId,
-        ref: Statics.REALM_COLLECTION_NAME,
-        required: [true, OrderErrors.REALM_REQUIRED],
-        validate: validateOperatorRealm,
-    },
-    client: {
-        type: String,
-        required: [true, OrderErrors.CLIENT_NAME_REQUIRED],
-        validate: validateOrderClient,
-    },
-    items: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: Statics.PRODUCT_COLLECTION_NAME,
-            },
-        ],
-        default: [],
-    },
-});
+    { timestamps: true }
+);
 
 const OrderModel = model(Statics.ORDER_COLLECTION_NAME, OrderSchema);
 

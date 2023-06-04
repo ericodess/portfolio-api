@@ -12,7 +12,7 @@ import { EventModel, OrderModel } from "@models";
 import { DatabaseService, DateService, StringService } from "@services";
 
 export class EventService {
-    public static visibleParameters = ["name", "date", "orders"];
+    public static visibleParameters = ["name", "date", "orders", "isOpen"];
 
     private static _populateOptions = {
         path: "orders",
@@ -56,6 +56,12 @@ export class EventService {
             });
         }
 
+        if (values.isOpen !== null && values.isOpen !== undefined) {
+            query.push({
+                isOpen: values.isOpen,
+            });
+        }
+
         if (populate) {
             return await EventModel.find(
                 query.length === 0 ? null : { $or: query }
@@ -86,6 +92,7 @@ export class EventService {
         newEntry.date = DateService.standarizeCurrentDate(
             new Date(values.date)
         );
+        newEntry.isOpen = DateService.isToday(newEntry.date);
 
         await newEntry.save();
 
@@ -104,9 +111,10 @@ export class EventService {
             {
                 $set: {
                     name: values.name,
+                    isOpen: values.isOpen,
                 },
             },
-            { new: true, runValidators: true }
+            { new: true, runValidators: true, setDefaultsOnInsert: false }
         )
             .select(EventService.visibleParameters)
             .populate(EventService._populateOptions);

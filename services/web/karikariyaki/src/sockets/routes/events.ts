@@ -1,11 +1,26 @@
 import { Socket } from "socket.io";
 
 // Services
-import { EventService, ResponseService, SocketService } from "@services";
+import {
+    DateService,
+    EventService,
+    ResponseService,
+    SocketService,
+} from "@services";
 
 const joinEvents = (socket: Socket) =>
     socket.on("events:join", async () => {
-        const events = await EventService.query({}, false);
+        let events = await EventService.query({}, false);
+
+        for (const event of events) {
+            if (event.isOpen !== DateService.isToday(event.date)) {
+                await EventService.update(event._id.toString(), {
+                    isOpen: !event.isOpen,
+                });
+            }
+        }
+
+        events = await EventService.query({}, false);
 
         SocketService.leaveRooms(socket, "event");
 

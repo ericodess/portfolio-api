@@ -59,7 +59,7 @@ const joinEvent = (socket: Socket) =>
                 throw new InHouseError(EventErrors.NOT_FOUND);
             }
 
-            if (DateService.isToday(foundEvent.date) === false) {
+            if (DateService.isFuture(foundEvent.date)) {
                 throw new InHouseError(EventErrors.NOT_ACTIVE);
             }
 
