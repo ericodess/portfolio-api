@@ -1,5 +1,6 @@
 import { Router } from "express";
 import QRCode from "qrcode";
+import { QrCodeRseponse } from "karikarihelper";
 
 // Services
 import { OrderService, RequestService, ResponseService } from "@services";
@@ -9,9 +10,12 @@ import { OrderErrors } from "@models";
 
 // Enums
 import { OrderStatus } from "@enums";
-import { PassThrough } from "stream";
 
 const router = Router();
+
+export enum RedirectorErrors {
+    CLIENT_APP_ADDRESS_MISSING = "ERROR_CLIENT_APP_ADDRESS_MISSING",
+}
 
 router.get("/", (req, res) => {
     OrderService.query({
@@ -41,6 +45,16 @@ router.get("/status", (req, res) => {
 });
 
 router.get("/qr/:eventId", (req, res) => {
+    if (!process.env["CLIENT_APP_ADDRESS"]) {
+        res.status(500).json(
+            ResponseService.generateFailedResponse(
+                RedirectorErrors.CLIENT_APP_ADDRESS_MISSING
+            )
+        );
+
+        return;
+    }
+
     const eventId = req.params.eventId;
 
     if (!eventId) {
@@ -51,7 +65,9 @@ router.get("/qr/:eventId", (req, res) => {
         return;
     }
 
-    QRCode.toDataURL(`${process.env["CLIENT_APP_ADDRESS"]}/${eventId}`, {
+    const redirectorURI = `${process.env["CLIENT_APP_ADDRESS"]}/${eventId}`;
+
+    QRCode.toDataURL(redirectorURI, {
         color: {
             light: "#0000",
         },
@@ -59,7 +75,10 @@ router.get("/qr/:eventId", (req, res) => {
     })
         .then((result) => {
             res.status(200).json(
-                ResponseService.generateSucessfulResponse(result)
+                ResponseService.generateSucessfulResponse({
+                    base64: result,
+                    redirector: redirectorURI,
+                } as QrCodeRseponse)
             );
         })
         .catch((error) => {
