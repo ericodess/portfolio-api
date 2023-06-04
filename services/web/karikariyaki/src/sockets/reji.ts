@@ -68,7 +68,7 @@ export class RejiSocket {
             leaveEvent(socket);
 
             /**
-             * Orders
+             * Order
              */
             createOrder(socket);
             editOrder(socket);

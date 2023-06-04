@@ -92,7 +92,7 @@ export class EventService {
         newEntry.date = DateService.standarizeCurrentDate(
             new Date(values.date)
         );
-        newEntry.isOpen = values.isOpen ?? false;
+        newEntry.isOpen = DateService.isToday(newEntry.date);
 
         await newEntry.save();
 

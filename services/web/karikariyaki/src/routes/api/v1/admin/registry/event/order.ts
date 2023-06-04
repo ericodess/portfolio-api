@@ -1,4 +1,5 @@
 import { Router } from "express";
+import QRCode from "qrcode";
 
 // Services
 import { OrderService, RequestService, ResponseService } from "@services";
@@ -8,6 +9,7 @@ import { OrderErrors } from "@models";
 
 // Enums
 import { OrderStatus } from "@enums";
+import { PassThrough } from "stream";
 
 const router = Router();
 
@@ -36,6 +38,33 @@ router.get("/status", (req, res) => {
     res.status(200).json(
         ResponseService.generateSucessfulResponse(Object.values(OrderStatus))
     );
+});
+
+router.get("/qr/:eventId", (req, res) => {
+    const eventId = req.params.eventId;
+
+    if (!eventId) {
+        res.status(400).json(
+            ResponseService.generateFailedResponse(OrderErrors.INVALID)
+        );
+
+        return;
+    }
+
+    QRCode.toDataURL(`${process.env["CLIENT_APP_ADDRESS"]}/${eventId}`, {
+        color: {
+            light: "#0000",
+        },
+        width: 512,
+    })
+        .then((result) => {
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(result)
+            );
+        })
+        .catch((error) => {
+            ResponseService.generateFailedResponse(error.message);
+        });
 });
 
 router.post("/", (req, res) => {

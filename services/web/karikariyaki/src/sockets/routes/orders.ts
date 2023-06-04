@@ -10,18 +10,13 @@ import { InHouseError } from "@types";
 import { EventErrors, OrderErrors } from "@models";
 
 // Services
-import {
-    DateService,
-    EventService,
-    OrderService,
-    ResponseService,
-} from "@services";
+import { EventService, OrderService, ResponseService } from "@services";
 
 // Sockets
 import { PrompterSocket, RejiSocket } from "@sockets";
 
 const createOrder = (socket: Socket) =>
-    socket.on("orders:create", async (values: EventOrderCreatableParams) => {
+    socket.on("order:create", async (values: EventOrderCreatableParams) => {
         const realmId = socket.data.realmId;
         const eventId = socket.data.eventId;
         const operatorId = socket.data.operatorId;
@@ -76,7 +71,7 @@ const createOrder = (socket: Socket) =>
                 );
         } catch (error) {
             socket.emit(
-                "orders:error",
+                "order:error",
                 ResponseService.generateFailedResponse(error.message)
             );
         }
@@ -84,7 +79,7 @@ const createOrder = (socket: Socket) =>
 
 const editOrder = (socket: Socket) =>
     socket.on(
-        "orders:edit",
+        "order:edit",
         async (order: { id: string; values: EventOrderEditableParams }) => {
             const realmId = socket.data.realmId;
             const eventId = socket.data.eventId;
@@ -129,7 +124,7 @@ const editOrder = (socket: Socket) =>
                     );
             } catch (error) {
                 socket.emit(
-                    "orders:error",
+                    "order:error",
                     ResponseService.generateFailedResponse(error.message)
                 );
             }
