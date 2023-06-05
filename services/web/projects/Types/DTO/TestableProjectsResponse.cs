@@ -20,8 +20,9 @@ namespace Projects.Types.DTO
                 NewTestableProject.ProcessGithubRepository(UserRepo);
 
                 TestableProjects.Add(NewTestableProject);
-
             }
+
+           TestableProjects = TestableProjects.OrderBy(_ => _.Name).ToList();
         }
     }
 }
