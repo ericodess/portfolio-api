@@ -1,8 +1,16 @@
 import { Router } from "express";
 
-// Services
-import { RequestService, ResponseService, ProductService } from "@services";
+// Types
 import { ProductErrors } from "@models";
+
+// Services
+import {
+    RequestService,
+    ResponseService,
+    ProductService,
+    JWTService,
+    OperatorService,
+} from "@services";
 
 const router = Router();
 
@@ -23,6 +31,30 @@ router.get("/", (req, res) => {
                 ResponseService.generateFailedResponse(error.message)
             );
         });
+});
+
+router.get("/self", async (req, res) => {
+    try {
+        const decodedAccessToken = JWTService.decodeAccessToken(
+            req.cookies[process.env.COOKIE_NAME]
+        );
+
+        const foundOperator = await OperatorService.queryByUserName(
+            decodedAccessToken.userName
+        );
+
+        const foundProducts = await ProductService.query({
+            realmId: foundOperator.realm._id.toString(),
+        });
+
+        res.status(200).json(
+            ResponseService.generateSucessfulResponse(foundProducts)
+        );
+    } catch (error) {
+        res.status(error.code ?? 500).json(
+            ResponseService.generateFailedResponse(error.message)
+        );
+    }
 });
 
 router.post("/", (req, res) => {
