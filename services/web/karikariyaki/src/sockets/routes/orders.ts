@@ -122,6 +122,12 @@ const editOrder = (socket: Socket) =>
                         "orders:refresh",
                         ResponseService.generateSucessfulResponse(eventOrders)
                     );
+                PrompterSocket.namespace
+                    .to(`event/${eventId}/${realmId}`)
+                    .emit(
+                        "orders:refresh",
+                        ResponseService.generateSucessfulResponse(eventOrders)
+                    );
             } catch (error) {
                 socket.emit(
                     "order:error",
