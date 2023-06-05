@@ -30,7 +30,7 @@ namespace Projects.Types.DTO
             }
 
            RegularProjects = RegularProjects.OrderBy(_ => _.Name).ToList();
-           TestableProjectss = TestableProjects.OrderBy(_ => _.Name).ToList();
+           TestableProjects = TestableProjects.OrderBy(_ => _.Name).ToList();
         }
     }
 }
