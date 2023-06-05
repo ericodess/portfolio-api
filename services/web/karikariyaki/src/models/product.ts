@@ -55,6 +55,10 @@ const validateProductRealm = async (realmId: Types.ObjectId) => {
 };
 
 const validateProductParent = async (parentProductId: Types.ObjectId) => {
+    if (!parentProductId) {
+        return;
+    }
+
     const foundRealm = await ProductModel.findById(parentProductId);
 
     if (!foundRealm) {
