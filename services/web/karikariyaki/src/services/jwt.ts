@@ -6,7 +6,7 @@ import randToken from "rand-token";
 import { InHouseError, Statics } from "@types";
 
 // Services
-import { OperatorService, ResponseService } from "@services";
+import { OperatorService, RequestService, ResponseService } from "@services";
 
 // Models
 import { OperatorErrors } from "@models";
@@ -244,8 +244,14 @@ export class JWTService {
     public static getDefaultCookieOptions(): CookieOptions {
         return {
             httpOnly: true,
-            sameSite: "none",
-            secure: true,
+            sameSite: RequestService.queryParamToBoolean(
+                process.env.IS_PRODUCTION
+            )
+                ? "none"
+                : "strict",
+            secure: RequestService.queryParamToBoolean(
+                process.env.IS_PRODUCTION
+            ),
         };
     }
 }

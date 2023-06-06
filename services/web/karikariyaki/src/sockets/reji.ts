@@ -7,6 +7,7 @@ import { io } from "../setup";
 import {
     createEvent,
     createOrder,
+    deleteOrder,
     editOrder,
     joinEvent,
     joinEvents,
@@ -71,6 +72,7 @@ export class RejiSocket {
              * Order
              */
             createOrder(socket);
+            deleteOrder(socket);
             editOrder(socket);
         });
     }

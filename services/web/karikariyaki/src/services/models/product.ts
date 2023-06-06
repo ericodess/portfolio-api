@@ -58,9 +58,7 @@ export class ProductService {
             });
         }
 
-        return await ProductModel.find(
-            query.length === 0 ? null : { $or: query }
-        )
+        return ProductModel.find(query.length === 0 ? null : { $or: query })
             .select(ProductService.visibleParameters)
             .populate(ProductService._populateOptions);
     }

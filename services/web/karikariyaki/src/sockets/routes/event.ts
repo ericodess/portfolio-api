@@ -53,10 +53,19 @@ const joinEvent = (socket: Socket) =>
         }
 
         try {
-            const foundEvent = await EventService.queryById(eventId);
+            let foundEvent = await EventService.queryById(eventId);
 
             if (!foundEvent) {
                 throw new InHouseError(EventErrors.NOT_FOUND);
+            }
+
+            if (foundEvent.isOpen !== DateService.isToday(foundEvent.date)) {
+                foundEvent = await EventService.update(
+                    foundEvent._id.toString(),
+                    {
+                        isOpen: !foundEvent.isOpen,
+                    }
+                );
             }
 
             if (DateService.isFuture(foundEvent.date)) {
