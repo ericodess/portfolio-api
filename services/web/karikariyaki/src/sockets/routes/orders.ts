@@ -10,10 +10,12 @@ import { InHouseError } from "@types";
 import { EventErrors, OrderErrors } from "@models";
 
 // Services
-import { EventService, OrderService, ResponseService } from "@services";
-
-// Sockets
-import { PrompterSocket, RejiSocket } from "@sockets";
+import {
+    EventService,
+    OrderService,
+    ResponseService,
+    SocketService,
+} from "@services";
 
 const createOrder = (socket: Socket) =>
     socket.on("order:create", async (values: EventOrderCreatableParams) => {
@@ -52,23 +54,48 @@ const createOrder = (socket: Socket) =>
                 itemsId: itemsIds,
             });
 
-            const eventOrders = await OrderService.query({
-                eventId: eventId,
-                realmId: realmId,
-            });
+            await SocketService.refreshOrders(eventId, realmId);
+        } catch (error) {
+            socket.emit(
+                "order:error",
+                ResponseService.generateFailedResponse(error.message)
+            );
+        }
+    });
 
-            RejiSocket.namespace
-                .to(`event/${eventId}/${realmId}`)
-                .emit(
-                    "orders:refresh",
-                    ResponseService.generateSucessfulResponse(eventOrders)
-                );
-            PrompterSocket.namespace
-                .to(`event/${eventId}/${realmId}`)
-                .emit(
-                    "orders:refresh",
-                    ResponseService.generateSucessfulResponse(eventOrders)
-                );
+const deleteOrder = (socket: Socket) =>
+    socket.on("order:delete", async (id: string) => {
+        const realmId = socket.data.realmId;
+        const eventId = socket.data.eventId;
+
+        try {
+            if (!eventId || !realmId) {
+                throw new InHouseError(OrderErrors.INVALID);
+            }
+
+            const foundEvent = await EventService.queryById(eventId);
+
+            if (!foundEvent) {
+                throw new InHouseError(EventErrors.NOT_FOUND);
+            }
+
+            if (foundEvent.isOpen === false) {
+                throw new InHouseError(EventErrors.NOT_ACTIVE);
+            }
+
+            const foundOrder = await OrderService.queryById(id);
+
+            if (!foundOrder) {
+                throw new InHouseError(OrderErrors.NOT_FOUND);
+            }
+
+            if (foundOrder.status !== OrderStatus.COOKING) {
+                throw new InHouseError(OrderErrors.INVALID);
+            }
+
+            await OrderService.delete(id);
+
+            await SocketService.refreshOrders(eventId, realmId);
         } catch (error) {
             socket.emit(
                 "order:error",
@@ -111,23 +138,7 @@ const editOrder = (socket: Socket) =>
 
                 await OrderService.update(order.id, order.values);
 
-                const eventOrders = await OrderService.query({
-                    eventId: eventId,
-                    realmId: realmId,
-                });
-
-                RejiSocket.namespace
-                    .to(`event/${eventId}/${realmId}`)
-                    .emit(
-                        "orders:refresh",
-                        ResponseService.generateSucessfulResponse(eventOrders)
-                    );
-                PrompterSocket.namespace
-                    .to(`event/${eventId}/${realmId}`)
-                    .emit(
-                        "orders:refresh",
-                        ResponseService.generateSucessfulResponse(eventOrders)
-                    );
+                await SocketService.refreshOrders(eventId, realmId);
             } catch (error) {
                 socket.emit(
                     "order:error",
@@ -137,4 +148,4 @@ const editOrder = (socket: Socket) =>
         }
     );
 
-export { createOrder, editOrder };
+export { createOrder, deleteOrder, editOrder };
