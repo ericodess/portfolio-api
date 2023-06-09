@@ -2,6 +2,7 @@ import { Socket } from "socket.io";
 import {
     EventOrderCreatableParams,
     EventOrderEditableParams,
+    EventOrderQueryableParams,
 } from "karikarihelper";
 
 // Types
@@ -96,6 +97,8 @@ const deleteOrder = (socket: Socket) =>
             await OrderService.delete(id);
 
             await SocketService.refreshOrders(eventId, realmId);
+
+            await SocketService.refreshOrder(id);
         } catch (error) {
             socket.emit(
                 "order:error",
@@ -139,6 +142,8 @@ const editOrder = (socket: Socket) =>
                 await OrderService.update(order.id, order.values);
 
                 await SocketService.refreshOrders(eventId, realmId);
+
+                await SocketService.refreshOrder(order.id);
             } catch (error) {
                 socket.emit(
                     "order:error",
@@ -148,4 +153,32 @@ const editOrder = (socket: Socket) =>
         }
     );
 
-export { createOrder, deleteOrder, editOrder };
+const joinOrder = (socket: Socket) => {
+    socket.on("order:join", async (id: string) => {
+        try {
+            const foundOrder = await OrderService.queryById(id);
+
+            if (!foundOrder) {
+                throw new InHouseError(OrderErrors.NOT_FOUND);
+            }
+
+            SocketService.leaveRooms(socket, "event");
+
+            socket.join(
+                `event/${foundOrder.event._id.toString()}/${foundOrder.realm._id.toString()}/${foundOrder._id.toString()}`
+            );
+
+            socket.emit(
+                "order:refresh",
+                ResponseService.generateSucessfulResponse(foundOrder)
+            );
+        } catch (error) {
+            socket.emit(
+                "order:error",
+                ResponseService.generateFailedResponse(error.message)
+            );
+        }
+    });
+};
+
+export { createOrder, deleteOrder, editOrder, joinOrder };

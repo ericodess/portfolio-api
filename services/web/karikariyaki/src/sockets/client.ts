@@ -1,34 +1,17 @@
 import { io } from "../setup";
 
-// Services
-import { OrderService } from "@services";
+// Routes
+import { joinOrder } from "./routes";
 
 export class ClientSocket {
-    public static namespace = io.of("/client");
+    public static namespace = io.of("karikariyaki/ws/client");
 
     public static setup() {
-        ClientSocket.namespace.on("connection", async (socket) => {
-            const orderId = socket.handshake.query.order;
-
-            if (!orderId || typeof orderId === "object") {
-                socket.disconnect();
-
-                return;
-            }
-
-            const order = await OrderService.query({
-                id: orderId,
-            });
-
-            if (!order) {
-                socket.disconnect();
-
-                return;
-            }
-
-            socket.join(orderId);
-
-            ClientSocket.namespace.to(orderId).emit("refresh", order);
+        ClientSocket.namespace.on("connection", (socket) => {
+            /**
+             * Orders
+             */
+            joinOrder(socket);
         });
     }
 }
