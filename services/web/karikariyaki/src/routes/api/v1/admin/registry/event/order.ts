@@ -77,7 +77,7 @@ router.get("/qr/:orderId", (req, res) => {
                 return;
             }
 
-            const redirectorURI = `${process.env["CLIENT_APP_ADDRESS"]}/${foundOrder.realm._id}/${foundOrder.id}`;
+            const redirectorURI = `${process.env["CLIENT_APP_ADDRESS"]}/order/${foundOrder.id}`;
 
             QRCode.toDataURL(redirectorURI, {
                 color: {
