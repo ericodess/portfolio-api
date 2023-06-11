@@ -3,6 +3,7 @@ import {
     MenuCreatableParams,
     MenuEditableParams,
     MenuQueryableParams,
+    Operator,
 } from "karikarihelper";
 
 // Models
@@ -15,6 +16,7 @@ export class MenuService {
     public static visibleParameters = [
         "title",
         "icon",
+        "roles",
         "route",
         "parent",
         "children",
@@ -27,7 +29,7 @@ export class MenuService {
         },
         {
             path: "children",
-            select: ["title", "icon", "route", "children"],
+            select: ["title", "icon", "roles", "route", "children"],
             populate: {
                 path: "children",
                 select: ["title", "icon", "route"],
@@ -35,7 +37,11 @@ export class MenuService {
         },
     ] as PopulateOptions[];
 
-    public static async query(values: MenuQueryableParams, isRootOnly = true) {
+    public static async query(
+        operator: Operator,
+        values: MenuQueryableParams,
+        isRootOnly = true
+    ) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -64,6 +70,12 @@ export class MenuService {
             });
         }
 
+        query.push({
+            roles: {
+                $in: ["", operator.role],
+            },
+        });
+
         return await MenuModel.find(
             query.length === 0
                 ? null
@@ -73,7 +85,9 @@ export class MenuService {
         )
             .select(MenuService.visibleParameters)
             .sort("title")
-            .populate(isRootOnly ? MenuService._populateOptions : null);
+            .populate(
+                isRootOnly ? MenuService._getPopulateOptions(operator) : null
+            );
     }
 
     public static async save(values: MenuCreatableParams) {
@@ -162,5 +176,32 @@ export class MenuService {
         return MenuModel.findByIdAndDelete(menuId)
             .select(MenuService.visibleParameters)
             .populate(MenuService._populateOptions);
+    }
+
+    private static _getPopulateOptions(operator: Operator) {
+        return [
+            {
+                path: "parent",
+                select: "title",
+            },
+            {
+                path: "children",
+                select: ["title", "icon", "roles", "route", "children"],
+                match: {
+                    roles: {
+                        $in: ["", operator.role],
+                    },
+                },
+                populate: {
+                    path: "children",
+                    select: ["title", "icon", "roles", "route"],
+                    match: {
+                        roles: {
+                            $in: ["", operator.role],
+                        },
+                    },
+                },
+            },
+        ] as PopulateOptions[];
     }
 }

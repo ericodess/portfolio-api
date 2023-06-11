@@ -12,7 +12,7 @@ import { OperatorModel } from "@models";
 import { DatabaseService, StringService } from "@services";
 
 export class OperatorService {
-    public static visibleParameters = ["displayName", "realm", "photo"];
+    public static visibleParameters = ["displayName", "role", "realm", "photo"];
 
     private static _populateOptions = {
         path: "realm",
@@ -45,7 +45,7 @@ export class OperatorService {
         }
 
         return await OperatorModel.find(
-            query.length === 0 ? null : { $or: query }
+            query.length === 0 ? null : { $and: query }
         )
             .select(OperatorService.visibleParameters)
             .populate(OperatorService._populateOptions);

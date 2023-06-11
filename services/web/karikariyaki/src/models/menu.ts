@@ -68,6 +68,10 @@ const MenuSchema = new Schema({
         type: String,
         validate: validateMenuIcon,
     },
+    roles: {
+        type: Array<string>,
+        default: [""],
+    },
     route: {
         type: String,
         validate: validateMenuRoute,

@@ -1,12 +1,8 @@
 import { Router } from "express";
+import { Operator } from "karikarihelper";
 
 // Services
-import {
-    MenuService,
-    RequestService,
-    ResponseService,
-    StringService,
-} from "@services";
+import { MenuService, RequestService, ResponseService } from "@services";
 
 // Models
 import { MenuErrors } from "@models";
@@ -20,12 +16,13 @@ router.get("/", (req, res) => {
     const isRootOnly = RequestService.queryParamToBoolean(req.query.isRootOnly);
 
     MenuService.query(
+        res.locals.operator as Operator,
         {
             id: id,
             title: title,
             parentId: parentId,
         },
-        isRootOnly
+        isRootOnly ?? false
     )
         .then((response) => {
             res.status(200).json(

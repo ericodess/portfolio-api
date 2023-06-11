@@ -1,5 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 import isBase64 from "is-base64";
+import { OperatorRole } from "karikarihelper";
 
 // Types
 import { InHouseError, Statics } from "@types";
@@ -106,6 +107,11 @@ const OperatorSchema = new Schema(
             type: String,
             required: [true, OperatorErrors.DISPLAY_NAME_REQUIRED],
             validate: validateOperatorDisplayName,
+        },
+        role: {
+            type: String,
+            enum: OperatorRole,
+            default: OperatorRole.WORKER,
         },
         realm: {
             type: Schema.Types.ObjectId,
