@@ -4,6 +4,7 @@ import {
     MenuEditableParams,
     MenuQueryableParams,
     Operator,
+    OperatorRole,
 } from "karikarihelper";
 
 // Models
@@ -37,11 +38,7 @@ export class MenuService {
         },
     ] as PopulateOptions[];
 
-    public static async query(
-        operator: Operator,
-        values: MenuQueryableParams,
-        isRootOnly = true
-    ) {
+    public static async query(operator: Operator, values: MenuQueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -64,15 +61,12 @@ export class MenuService {
             });
         }
 
-        if (isRootOnly) {
-            query.push({
-                parent: null,
-            });
-        }
-
         query.push({
             roles: {
-                $in: ["", operator.role],
+                $in:
+                    operator.role === OperatorRole.ADMIN
+                        ? ["", ...Object.values(OperatorRole)]
+                        : ["", operator.role],
             },
         });
 
@@ -85,9 +79,33 @@ export class MenuService {
         )
             .select(MenuService.visibleParameters)
             .sort("title")
-            .populate(
-                isRootOnly ? MenuService._getPopulateOptions(operator) : null
-            );
+            .populate(MenuService._getPopulateOptions(operator));
+    }
+
+    public static async querySelf(operator: Operator) {
+        await DatabaseService.getConnection();
+
+        const query = [];
+
+        query.push({
+            parent: null,
+        });
+
+        query.push({
+            roles: {
+                $in:
+                    operator.role === OperatorRole.ADMIN
+                        ? ["", ...Object.values(OperatorRole)]
+                        : ["", operator.role],
+            },
+        });
+
+        return await MenuModel.find({
+            $and: query,
+        })
+            .select(MenuService.visibleParameters)
+            .sort("title")
+            .populate(MenuService._getPopulateOptions(operator));
     }
 
     public static async save(values: MenuCreatableParams) {

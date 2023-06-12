@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { EventCreatableParams, Event } from "karikarihelper";
+import { EventCreatableParams, Event, Operator } from "karikarihelper";
 
 // Types
 import { InHouseError } from "@types";
@@ -46,9 +46,9 @@ const createEvent = (socket: Socket) =>
 
 const joinEvent = (socket: Socket) =>
     socket.on("event:join", async (eventId) => {
-        const realmId = socket.data.realmId;
+        const operator = socket.data.operator as Operator;
 
-        if (!eventId || !realmId) {
+        if (!eventId || !operator) {
             throw new InHouseError(EventErrors.INVALID);
         }
 
@@ -78,7 +78,7 @@ const joinEvent = (socket: Socket) =>
 
             SocketService.leaveRooms(socket, "event");
 
-            socket.join(`event/${eventId}/${realmId}`);
+            socket.join(`event/${eventId}/${operator.realm._id}`);
 
             socket.data.eventId = eventId;
 
@@ -87,9 +87,8 @@ const joinEvent = (socket: Socket) =>
                 ResponseService.generateSucessfulResponse(selectedEvent)
             );
 
-            const eventOrders = await OrderService.query({
+            const eventOrders = await OrderService.query(operator, {
                 eventId: eventId,
-                realmId: realmId,
             });
 
             socket.data.eventId = eventId;

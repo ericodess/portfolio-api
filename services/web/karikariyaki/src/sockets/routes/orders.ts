@@ -3,6 +3,7 @@ import {
     EventOrderCreatableParams,
     EventOrderEditableParams,
     EventOrderQueryableParams,
+    Operator,
 } from "karikarihelper";
 
 // Types
@@ -20,20 +21,13 @@ import {
 
 const createOrder = (socket: Socket) =>
     socket.on("order:create", async (values: EventOrderCreatableParams) => {
-        const realmId = socket.data.realmId;
+        const operator = socket.data.operator as Operator;
         const eventId = socket.data.eventId;
-        const operatorId = socket.data.operatorId;
         const itemsIds = values.itemsId;
         const clientName = values.clientName;
 
         try {
-            if (
-                !eventId ||
-                !realmId ||
-                !operatorId ||
-                !clientName ||
-                itemsIds.length === 0
-            ) {
+            if (!operator || !eventId || !clientName || itemsIds.length === 0) {
                 throw new InHouseError(OrderErrors.INVALID);
             }
 
@@ -47,15 +41,14 @@ const createOrder = (socket: Socket) =>
                 throw new InHouseError(EventErrors.NOT_ACTIVE);
             }
 
-            await OrderService.save({
+            await OrderService.save(operator, {
                 eventId: eventId,
                 status: OrderStatus.COOKING,
-                operatorId: operatorId,
                 clientName: clientName,
                 itemsId: itemsIds,
             });
 
-            await SocketService.refreshOrders(eventId, realmId);
+            await SocketService.refreshOrders(eventId, operator);
         } catch (error) {
             socket.emit(
                 "order:error",
@@ -66,11 +59,11 @@ const createOrder = (socket: Socket) =>
 
 const deleteOrder = (socket: Socket) =>
     socket.on("order:delete", async (id: string) => {
-        const realmId = socket.data.realmId;
+        const operator = socket.data.operator as Operator;
         const eventId = socket.data.eventId;
 
         try {
-            if (!eventId || !realmId) {
+            if (!operator || !eventId) {
                 throw new InHouseError(OrderErrors.INVALID);
             }
 
@@ -94,9 +87,9 @@ const deleteOrder = (socket: Socket) =>
                 throw new InHouseError(OrderErrors.INVALID);
             }
 
-            await OrderService.delete(id);
+            await OrderService.delete(operator, id);
 
-            await SocketService.refreshOrders(eventId, realmId);
+            await SocketService.refreshOrders(eventId, operator);
 
             await SocketService.refreshOrder(id);
         } catch (error) {
@@ -111,11 +104,11 @@ const editOrder = (socket: Socket) =>
     socket.on(
         "order:edit",
         async (order: { id: string; values: EventOrderEditableParams }) => {
-            const realmId = socket.data.realmId;
+            const operator = socket.data.operator as Operator;
             const eventId = socket.data.eventId;
 
             try {
-                if (!eventId || !realmId) {
+                if (!operator || !eventId) {
                     throw new InHouseError(OrderErrors.INVALID);
                 }
 
@@ -139,9 +132,9 @@ const editOrder = (socket: Socket) =>
                     throw new InHouseError(OrderErrors.PICKED_UP);
                 }
 
-                await OrderService.update(order.id, order.values);
+                await OrderService.update(operator, order.id, order.values);
 
-                await SocketService.refreshOrders(eventId, realmId);
+                await SocketService.refreshOrders(eventId, operator);
 
                 await SocketService.refreshOrder(order.id);
             } catch (error) {

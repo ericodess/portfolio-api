@@ -1,25 +1,19 @@
 import { Router } from "express";
+import { Operator } from "karikarihelper";
 
 // Types
 import { ProductErrors } from "@models";
 
 // Services
-import {
-    RequestService,
-    ResponseService,
-    ProductService,
-    JWTService,
-    OperatorService,
-} from "@services";
+import { RequestService, ResponseService, ProductService } from "@services";
 
 const router = Router();
 
 router.get("/", (req, res) => {
-    ProductService.query({
+    ProductService.query(res.locals.operator as Operator, {
         id: RequestService.queryParamToString(req.query.id),
         name: RequestService.queryParamToString(req.query.name),
         realmId: RequestService.queryParamToString(req.query.realmId),
-        parentId: RequestService.queryParamToString(req.query.parentId),
     })
         .then((response) => {
             res.status(200).json(
@@ -27,40 +21,15 @@ router.get("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
 });
 
-router.get("/self", async (req, res) => {
-    try {
-        const decodedAccessToken = JWTService.decodeAccessToken(
-            req.cookies[process.env.COOKIE_NAME]
-        );
-
-        const foundOperator = await OperatorService.queryByUserName(
-            decodedAccessToken.userName
-        );
-
-        const foundProducts = await ProductService.query({
-            realmId: foundOperator.realm._id.toString(),
-        });
-
-        res.status(200).json(
-            ResponseService.generateSucessfulResponse(foundProducts)
-        );
-    } catch (error) {
-        res.status(error.code ?? 500).json(
-            ResponseService.generateFailedResponse(error.message)
-        );
-    }
-});
-
 router.post("/", (req, res) => {
     const name = RequestService.queryParamToString(req.body.name);
     const realmId = RequestService.queryParamToString(req.body.realmId);
-    const parentId = RequestService.queryParamToString(req.body.parentId);
 
     if (!name || !realmId) {
         res.status(400).json(
@@ -70,10 +39,9 @@ router.post("/", (req, res) => {
         return;
     }
 
-    ProductService.save({
+    ProductService.save(res.locals.operator as Operator, {
         name: name,
         realmId: realmId,
-        parentId: parentId,
     })
         .then((response) => {
             res.status(200).json(
@@ -81,7 +49,7 @@ router.post("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -99,14 +67,14 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    ProductService.update(id, { name: name })
+    ProductService.update(res.locals.operator as Operator, id, { name: name })
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -123,7 +91,7 @@ router.delete("/:id", (req, res) => {
         return;
     }
 
-    ProductService.delete(id)
+    ProductService.delete(res.locals.operator as Operator, id)
         .then((response) => {
             if (!response) {
                 res.status(404).json(
@@ -140,7 +108,7 @@ router.delete("/:id", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });

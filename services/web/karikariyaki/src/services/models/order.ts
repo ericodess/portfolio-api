@@ -3,10 +3,15 @@ import {
     EventOrderCreatableParams,
     EventOrderEditableParams,
     EventOrderQueryableParams,
+    Operator,
+    OperatorRole,
 } from "karikarihelper";
 
+// Types
+import { InHouseError } from "@types";
+
 // Models
-import { EventModel, OrderModel } from "@models";
+import { EventModel, OperatorErrors, OrderModel } from "@models";
 
 // Services
 import { DatabaseService, OperatorService, StringService } from "@services";
@@ -34,6 +39,7 @@ export class OrderService {
     ] as PopulateOptions[];
 
     public static async query(
+        operator: Operator,
         values: EventOrderQueryableParams,
         willPupulate = true
     ) {
@@ -59,8 +65,22 @@ export class OrderService {
             query.push({ operator: values.operatorId });
         }
 
-        if (values.realmId) {
-            query.push({ realm: values.realmId });
+        let realmQuery = {
+            realm: StringService.toObjectId(operator.realm._id),
+        };
+
+        if (operator.role === OperatorRole.ADMIN) {
+            realmQuery = null;
+
+            if (values.realmId) {
+                realmQuery = {
+                    realm: StringService.toObjectId(values.realmId),
+                };
+            }
+        }
+
+        if (realmQuery) {
+            query.push(realmQuery);
         }
 
         if (values.clientName) {
@@ -72,14 +92,12 @@ export class OrderService {
         }
 
         if (willPupulate) {
-            return await OrderModel.find(
-                query.length === 0 ? null : { $and: query }
-            )
+            return OrderModel.find(query.length === 0 ? null : { $and: query })
                 .select(OrderService.visibleParameters)
                 .populate(OrderService._populateOptions);
         }
 
-        return await OrderModel.find(
+        return OrderModel.find(
             query.length === 0 ? null : { $and: query }
         ).select(OrderService.visibleParameters);
     }
@@ -87,25 +105,37 @@ export class OrderService {
     public static async queryById(id: string) {
         await DatabaseService.getConnection();
 
-        return await OrderModel.findById(id)
+        return OrderModel.findById(id)
             .select(OrderService.visibleParameters)
             .populate(OrderService._populateOptions);
     }
 
-    public static async save(values: EventOrderCreatableParams) {
+    public static async save(
+        operator: Operator,
+        values: EventOrderCreatableParams
+    ) {
         await DatabaseService.getConnection();
 
         const newEntry = new OrderModel();
 
         newEntry.event = StringService.toObjectId(values.eventId);
         newEntry.status = newEntry.status;
-        newEntry.operator = StringService.toObjectId(values.operatorId);
 
-        const foundOperator = await OperatorService.query({
-            id: newEntry.operator.toString(),
-        });
+        if (operator.role === OperatorRole.ADMIN) {
+            const foundOperator = await OperatorService.queryId(
+                values.operatorId
+            );
 
-        newEntry.realm = foundOperator[0].realm._id;
+            if (!foundOperator) {
+                throw new InHouseError(OperatorErrors.NOT_FOUND, 404);
+            }
+
+            newEntry.operator = foundOperator._id;
+            newEntry.realm = foundOperator.realm._id;
+        } else {
+            newEntry.operator = StringService.toObjectId(operator._id);
+            newEntry.realm = StringService.toObjectId(operator.realm._id);
+        }
 
         newEntry.client = values.clientName?.trim();
         newEntry.items = StringService.toObjectIds(values.itemsId);
@@ -127,8 +157,20 @@ export class OrderService {
             .populate(OrderService._populateOptions);
     }
 
-    public static async update(id: string, values: EventOrderEditableParams) {
+    public static async update(
+        operator: Operator,
+        id: string,
+        values: EventOrderEditableParams
+    ) {
         await DatabaseService.getConnection();
+
+        if (operator.role !== OperatorRole.ADMIN) {
+            const foundOperator = await OrderModel.findById(id);
+
+            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+                throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+            }
+        }
 
         return OrderModel.findByIdAndUpdate(
             StringService.toObjectId(id),
@@ -143,8 +185,16 @@ export class OrderService {
             .populate(OrderService._populateOptions);
     }
 
-    public static async delete(id: string) {
+    public static async delete(operator: Operator, id: string) {
         await DatabaseService.getConnection();
+
+        if (operator.role !== OperatorRole.ADMIN) {
+            const foundOperator = await OrderModel.findById(id);
+
+            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+                throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+            }
+        }
 
         const orderId = StringService.toObjectId(id);
 

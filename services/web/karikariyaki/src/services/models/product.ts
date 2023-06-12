@@ -1,35 +1,33 @@
 import { PopulateOptions } from "mongoose";
 import {
+    Operator,
+    OperatorRole,
     ProductCreatableParams,
     ProductEditableParams,
     ProductQueryableParams,
 } from "karikarihelper";
 
 // Models
-import { ProductModel } from "@models";
+import { OperatorErrors, ProductModel } from "@models";
 
 // Services
 import { DatabaseService, StringService } from "@services";
+import { InHouseError } from "@types";
 
 export class ProductService {
-    public static visibleParameters = ["name", "realm", "parent", "variants"];
+    public static visibleParameters = ["name", "realm"];
 
     private static _populateOptions = [
         {
             path: "realm",
             select: "name",
         },
-        {
-            path: "parent",
-            select: "name",
-        },
-        {
-            path: "variants",
-            select: "name",
-        },
     ] as PopulateOptions[];
 
-    public static async query(values: ProductQueryableParams) {
+    public static async query(
+        operator: Operator,
+        values: ProductQueryableParams
+    ) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -46,45 +44,43 @@ export class ProductService {
             });
         }
 
-        if (values.realmId) {
-            query.push({
-                realm: StringService.toObjectId(values.realmId),
-            });
+        let realmQuery = {
+            realm: StringService.toObjectId(operator.realm._id),
+        };
+
+        if (operator.role === OperatorRole.ADMIN) {
+            realmQuery = null;
+
+            if (values.realmId) {
+                realmQuery = {
+                    realm: StringService.toObjectId(values.realmId),
+                };
+            }
         }
 
-        if (values.parentId) {
-            query.push({
-                parent: StringService.toObjectId(values.parentId),
-            });
+        if (realmQuery) {
+            query.push(realmQuery);
         }
 
-        return ProductModel.find(query.length === 0 ? null : { $or: query })
+        return ProductModel.find(query.length === 0 ? null : { $and: query })
             .select(ProductService.visibleParameters)
             .populate(ProductService._populateOptions);
     }
 
-    public static async save(values: ProductCreatableParams) {
+    public static async save(
+        operator: Operator,
+        values: ProductCreatableParams
+    ) {
         await DatabaseService.getConnection();
 
         const newEntry = new ProductModel();
 
         newEntry.name = values.name.trim();
-        newEntry.realm = StringService.toObjectId(values.realmId);
-        newEntry.parent = StringService.toObjectId(values.parentId);
-
-        if (values.parentId) {
-            const foundProduct = await ProductModel.findByIdAndUpdate(
-                newEntry.parent,
-                {
-                    $push: {
-                        variants: newEntry._id,
-                    },
-                },
-                { new: true, runValidators: true }
-            );
-
-            newEntry.realm = foundProduct.realm;
-        }
+        newEntry.realm = StringService.toObjectId(
+            operator.role === OperatorRole.ADMIN
+                ? values.realmId
+                : operator.realm._id
+        );
 
         await newEntry.save();
 
@@ -93,8 +89,20 @@ export class ProductService {
             .populate(ProductService._populateOptions);
     }
 
-    public static async update(id: string, values: ProductEditableParams) {
+    public static async update(
+        operator: Operator,
+        id: string,
+        values: ProductEditableParams
+    ) {
         await DatabaseService.getConnection();
+
+        if (operator.role !== OperatorRole.ADMIN) {
+            const foundOperator = await ProductModel.findById(id);
+
+            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+                throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+            }
+        }
 
         values.name = values.name?.trim();
 
@@ -111,8 +119,16 @@ export class ProductService {
             .populate(ProductService._populateOptions);
     }
 
-    public static async delete(id: string) {
+    public static async delete(operator: Operator, id: string) {
         await DatabaseService.getConnection();
+
+        if (operator.role !== OperatorRole.ADMIN) {
+            const foundOperator = await ProductModel.findById(id);
+
+            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+                throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+            }
+        }
 
         const productId = StringService.toObjectId(id);
 

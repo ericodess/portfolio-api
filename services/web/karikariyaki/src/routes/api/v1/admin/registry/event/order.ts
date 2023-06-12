@@ -1,6 +1,6 @@
 import { Router } from "express";
 import QRCode from "qrcode";
-import { QrCodeRseponse } from "karikarihelper";
+import { Operator, QrCodeRseponse } from "karikarihelper";
 
 // Services
 import { OrderService, RequestService, ResponseService } from "@services";
@@ -18,7 +18,7 @@ export enum RedirectorErrors {
 }
 
 router.get("/", (req, res) => {
-    OrderService.query({
+    OrderService.query(res.locals.operator as Operator, {
         id: RequestService.queryParamToString(req.query.id),
         eventId: RequestService.queryParamToString(req.query.eventId),
         status: RequestService.queryParamToString(req.query.status),
@@ -32,7 +32,7 @@ router.get("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -104,20 +104,14 @@ router.get("/qr/:orderId", (req, res) => {
 
 router.post("/", (req, res) => {
     const eventId = RequestService.queryParamToString(req.body.eventId);
-    const operatorId = RequestService.queryParamToString(req.body.operatorId);
     const clientName = RequestService.queryParamToString(req.body.clientName);
     const itemsId = RequestService.queryParamToStrings(req.body.itemsId);
 
     // Non obligatory params
+    const operatorId = RequestService.queryParamToString(req.body.operatorId);
     const status = RequestService.queryParamToString(req.body.status);
 
-    if (
-        !eventId ||
-        !operatorId ||
-        !clientName ||
-        !itemsId ||
-        itemsId.length === 0
-    ) {
+    if (!eventId || !clientName || !itemsId || itemsId.length === 0) {
         res.status(400).json(
             ResponseService.generateFailedResponse(OrderErrors.INVALID)
         );
@@ -125,7 +119,7 @@ router.post("/", (req, res) => {
         return;
     }
 
-    OrderService.save({
+    OrderService.save(res.locals.operator as Operator, {
         eventId: eventId,
         status: status,
         operatorId: operatorId,
@@ -138,7 +132,7 @@ router.post("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -156,7 +150,7 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    OrderService.update(id, {
+    OrderService.update(res.locals.operator as Operator, id, {
         status: status,
     })
         .then((response) => {
@@ -165,7 +159,7 @@ router.patch("/:id", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -182,7 +176,7 @@ router.delete("/:id", (req, res) => {
         return;
     }
 
-    OrderService.delete(id)
+    OrderService.delete(res.locals.operator as Operator, id)
         .then((response) => {
             if (!response) {
                 res.status(404).json(
@@ -199,7 +193,7 @@ router.delete("/:id", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
