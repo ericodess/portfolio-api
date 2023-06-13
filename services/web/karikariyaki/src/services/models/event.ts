@@ -64,14 +64,14 @@ export class EventService {
 
         if (populate) {
             return await EventModel.find(
-                query.length === 0 ? null : { $or: query }
+                query.length === 0 ? null : { $and: query }
             )
                 .select(EventService.visibleParameters)
                 .populate(EventService._populateOptions);
         }
 
         return await EventModel.find(
-            query.length === 0 ? null : { $or: query }
+            query.length === 0 ? null : { $and: query }
         ).select(EventService.visibleParameters);
     }
 

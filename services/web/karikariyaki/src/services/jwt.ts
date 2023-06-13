@@ -187,6 +187,8 @@ export class JWTService {
                 return;
             }
 
+            res.locals.operator = foundOperator;
+
             next();
         } catch (error) {
             JWTService.clearCookies(req, res);

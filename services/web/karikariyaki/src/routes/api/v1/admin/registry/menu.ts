@@ -1,15 +1,11 @@
 import { Router } from "express";
+import { Operator, OperatorRole } from "karikarihelper";
 
 // Services
-import {
-    MenuService,
-    RequestService,
-    ResponseService,
-    StringService,
-} from "@services";
+import { MenuService, RequestService, ResponseService } from "@services";
 
 // Models
-import { MenuErrors } from "@models";
+import { MenuErrors, OperatorErrors } from "@models";
 
 const router = Router();
 
@@ -17,16 +13,26 @@ router.get("/", (req, res) => {
     const id = RequestService.queryParamToString(req.query.id);
     const title = RequestService.queryParamToString(req.query.title);
     const parentId = RequestService.queryParamToString(req.query.parentId);
-    const isRootOnly = RequestService.queryParamToBoolean(req.query.isRootOnly);
 
-    MenuService.query(
-        {
-            id: id,
-            title: title,
-            parentId: parentId,
-        },
-        isRootOnly
-    )
+    MenuService.query(res.locals.operator as Operator, {
+        id: id,
+        title: title,
+        parentId: parentId,
+    })
+        .then((response) => {
+            res.status(200).json(
+                ResponseService.generateSucessfulResponse(response)
+            );
+        })
+        .catch((error) => {
+            res.status(error.code ?? 500).json(
+                ResponseService.generateFailedResponse(error.message)
+            );
+        });
+});
+
+router.get("/self", (req, res) => {
+    MenuService.querySelf(res.locals.operator as Operator)
         .then((response) => {
             res.status(200).json(
                 ResponseService.generateSucessfulResponse(response)
@@ -53,6 +59,16 @@ router.post("/", (req, res) => {
         return;
     }
 
+    const operator = res.locals.operator as Operator;
+
+    if (operator.role !== OperatorRole.ADMIN) {
+        res.status(403).json(
+            ResponseService.generateFailedResponse(OperatorErrors.FORBIDDEN)
+        );
+
+        return;
+    }
+
     MenuService.save({
         title: title,
         icon: icon,
@@ -65,7 +81,7 @@ router.post("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -85,6 +101,16 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
+    const operator = res.locals.operator as Operator;
+
+    if (operator.role !== OperatorRole.ADMIN) {
+        res.status(403).json(
+            ResponseService.generateFailedResponse(OperatorErrors.FORBIDDEN)
+        );
+
+        return;
+    }
+
     MenuService.update(id, {
         icon: icon,
         title: title,
@@ -96,7 +122,7 @@ router.patch("/:id", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -108,6 +134,16 @@ router.delete("/:id", (req, res) => {
     if (!id) {
         res.status(400).json(
             ResponseService.generateFailedResponse(MenuErrors.INVALID)
+        );
+
+        return;
+    }
+
+    const operator = res.locals.operator as Operator;
+
+    if (operator.role !== OperatorRole.ADMIN) {
+        res.status(403).json(
+            ResponseService.generateFailedResponse(OperatorErrors.FORBIDDEN)
         );
 
         return;
@@ -128,7 +164,7 @@ router.delete("/:id", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });

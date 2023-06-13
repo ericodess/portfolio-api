@@ -10,6 +10,7 @@ import { RejiSocket, PrompterSocket, ClientSocket } from "@sockets";
 // Services
 import { OrderService } from "./models/order";
 import { ResponseService } from "./response";
+import { Operator } from "karikarihelper";
 
 export class SocketService {
     public static leaveRooms(socket: Socket, roomPrefix: string) {
@@ -20,20 +21,20 @@ export class SocketService {
             });
     }
 
-    public static async refreshOrders(eventId: string, realmId: string) {
-        const eventOrders = await OrderService.query({
+    public static async refreshOrders(eventId: string, operator: Operator) {
+        const eventOrders = await OrderService.query(operator, {
             eventId: eventId,
-            realmId: realmId,
+            realmId: operator.realm._id,
         });
 
         RejiSocket.namespace
-            .to(`event/${eventId}/${realmId}`)
+            .to(`event/${eventId}/${operator.realm._id}`)
             .emit(
                 "orders:refresh",
                 ResponseService.generateSucessfulResponse(eventOrders)
             );
         PrompterSocket.namespace
-            .to(`event/${eventId}/${realmId}`)
+            .to(`event/${eventId}/${operator.realm._id}`)
             .emit(
                 "orders:refresh",
                 ResponseService.generateSucessfulResponse(eventOrders)

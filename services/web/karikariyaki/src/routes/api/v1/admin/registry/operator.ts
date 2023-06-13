@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { Operator } from "karikarihelper";
 
 // Services
 import {
@@ -14,7 +15,7 @@ import { OperatorErrors } from "@models";
 const router = Router();
 
 router.get("/", (req, res) => {
-    OperatorService.query({
+    OperatorService.query(res.locals.operator as Operator, {
         id: RequestService.queryParamToString(req.query.id),
         realmId: RequestService.queryParamToString(req.query.realmId),
         displayName: RequestService.queryParamToString(req.query.displayName),
@@ -35,7 +36,7 @@ router.get("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -83,7 +84,7 @@ router.post("/", (req, res) => {
         return;
     }
 
-    OperatorService.save({
+    OperatorService.save(res.locals.operator as Operator, {
         userName: userName,
         displayName: displayName,
         realmId: realmId,
@@ -95,7 +96,7 @@ router.post("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -114,7 +115,7 @@ router.patch("/:id", (req, res) => {
         return;
     }
 
-    OperatorService.update(id, {
+    OperatorService.update(res.locals.operator as Operator, id, {
         displayName: displayName,
         photo: photo,
     })
@@ -124,7 +125,7 @@ router.patch("/:id", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -141,7 +142,7 @@ router.delete("/:id", (req, res) => {
         return;
     }
 
-    OperatorService.delete(id)
+    OperatorService.delete(res.locals.operator as Operator, id)
         .then((response) => {
             if (!response) {
                 res.status(404).json(
@@ -158,7 +159,7 @@ router.delete("/:id", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });

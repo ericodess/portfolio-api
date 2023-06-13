@@ -61,8 +61,7 @@ export class RejiSocket {
             /**
              * Event
              */
-            socket.data.operatorId = loggedOperator._id.toString();
-            socket.data.realmId = loggedOperator.realm._id.toString();
+            socket.data.operator = loggedOperator;
 
             createEvent(socket);
             joinEvent(socket);

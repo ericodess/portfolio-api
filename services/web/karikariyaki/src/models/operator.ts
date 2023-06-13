@@ -1,5 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 import isBase64 from "is-base64";
+import { OperatorRole } from "karikarihelper";
 
 // Types
 import { InHouseError, Statics } from "@types";
@@ -14,6 +15,7 @@ export enum OperatorErrors {
     DISPLAY_NAME_GREATER_THAN_MAX_LENGTH = "ERROR_OPERATOR_DISPLAY_NAME_GREATER_THAN_MAX_LENGTH",
     DISPLAY_NAME_LESS_THAN_MIN_LENGTH = "ERROR_OPERATOR_DISPLAY_NAME_GREATER_THAN_MIN_LENGTH",
     DISPLAY_NAME_REQUIRED = "ERROR_OPERATOR_DISPLAY_NAME_REQUIRED",
+    FORBIDDEN = "ERROR_OPERATOR_FORBIDDEN",
     INVALID = "ERROR_OPERATOR_INVALID",
     NOT_FOUND = "ERROR_OPERATOR_NOT_FOUND",
     USER_NAME_DUPLICATED = "ERROR_OPERATOR_USER_NAME_DUPLICATED",
@@ -106,6 +108,11 @@ const OperatorSchema = new Schema(
             type: String,
             required: [true, OperatorErrors.DISPLAY_NAME_REQUIRED],
             validate: validateOperatorDisplayName,
+        },
+        role: {
+            type: String,
+            enum: OperatorRole,
+            default: OperatorRole.WORKER,
         },
         realm: {
             type: Schema.Types.ObjectId,

@@ -31,7 +31,7 @@ export class RealmService {
         }
 
         return RealmModel.find(
-            query.length === 0 ? null : { $or: query }
+            query.length === 0 ? null : { $and: query }
         ).select(RealmService.visibleParameters);
     }
 

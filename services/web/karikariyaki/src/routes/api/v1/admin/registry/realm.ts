@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -45,7 +45,7 @@ router.post("/", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -70,7 +70,7 @@ router.patch("/:id", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });
@@ -104,7 +104,7 @@ router.delete("/:id", (req, res) => {
             );
         })
         .catch((error) => {
-            res.status(500).json(
+            res.status(error.code ?? 500).json(
                 ResponseService.generateFailedResponse(error.message)
             );
         });

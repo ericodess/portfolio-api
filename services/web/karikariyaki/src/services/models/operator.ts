@@ -1,25 +1,31 @@
 import { PopulateOptions } from "mongoose";
 import {
+    Operator,
     OperatorCreatableParams,
     OperatorEditableParams,
     OperatorQueryableParams,
+    OperatorRole,
 } from "karikarihelper";
 
 // Models
-import { OperatorModel } from "@models";
+import { OperatorErrors, OperatorModel } from "@models";
 
 // Services
 import { DatabaseService, StringService } from "@services";
+import { InHouseError } from "@types";
 
 export class OperatorService {
-    public static visibleParameters = ["displayName", "realm", "photo"];
+    public static visibleParameters = ["displayName", "role", "realm", "photo"];
 
     private static _populateOptions = {
         path: "realm",
         select: "name",
     } as PopulateOptions;
 
-    public static async query(values: OperatorQueryableParams) {
+    public static async query(
+        operator: Operator,
+        values: OperatorQueryableParams
+    ) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -38,15 +44,35 @@ export class OperatorService {
             });
         }
 
-        if (values.realmId) {
-            query.push({
-                realm: StringService.toObjectId(values.realmId),
-            });
+        let realmQuery = {
+            realm: StringService.toObjectId(operator.realm._id),
+        };
+
+        if (operator.role === OperatorRole.ADMIN) {
+            realmQuery = null;
+
+            if (values.realmId) {
+                realmQuery = {
+                    realm: StringService.toObjectId(values.realmId),
+                };
+            }
+        }
+
+        if (realmQuery) {
+            query.push(realmQuery);
         }
 
         return await OperatorModel.find(
-            query.length === 0 ? null : { $or: query }
+            query.length === 0 ? null : { $and: query }
         )
+            .select(OperatorService.visibleParameters)
+            .populate(OperatorService._populateOptions);
+    }
+
+    public static async queryId(id: string) {
+        await DatabaseService.getConnection();
+
+        return await OperatorModel.findById(id)
             .select(OperatorService.visibleParameters)
             .populate(OperatorService._populateOptions);
     }
@@ -59,14 +85,21 @@ export class OperatorService {
             .populate(OperatorService._populateOptions);
     }
 
-    public static async save(values: OperatorCreatableParams) {
+    public static async save(
+        operator: Operator,
+        values: OperatorCreatableParams
+    ) {
         await DatabaseService.getConnection();
 
         const newEntry = new OperatorModel();
 
         newEntry.userName = values.userName;
         newEntry.displayName = values.displayName;
-        newEntry.realm = StringService.toObjectId(values.realmId);
+        newEntry.realm = StringService.toObjectId(
+            operator.role === OperatorRole.ADMIN
+                ? values.realmId
+                : operator.realm._id
+        );
         newEntry.photo = values.photo;
 
         await newEntry.save();
@@ -76,8 +109,20 @@ export class OperatorService {
             .populate(OperatorService._populateOptions);
     }
 
-    public static async update(id: string, values: OperatorEditableParams) {
+    public static async update(
+        operator: Operator,
+        id: string,
+        values: OperatorEditableParams
+    ) {
         await DatabaseService.getConnection();
+
+        if (operator.role !== OperatorRole.ADMIN) {
+            const foundOperator = await OperatorModel.findById(id);
+
+            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+                throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+            }
+        }
 
         values.displayName = values.displayName?.trim();
         values.photo = values.photo ?? undefined;
@@ -96,8 +141,16 @@ export class OperatorService {
             .populate(OperatorService._populateOptions);
     }
 
-    public static async delete(id: string) {
+    public static async delete(operator: Operator, id: string) {
         await DatabaseService.getConnection();
+
+        if (operator.role !== OperatorRole.ADMIN) {
+            const foundOperator = await OperatorModel.findById(id);
+
+            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+                throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+            }
+        }
 
         return OperatorModel.findByIdAndDelete(StringService.toObjectId(id))
             .select(OperatorService.visibleParameters)

@@ -3,6 +3,8 @@ import {
     MenuCreatableParams,
     MenuEditableParams,
     MenuQueryableParams,
+    Operator,
+    OperatorRole,
 } from "karikarihelper";
 
 // Models
@@ -15,6 +17,7 @@ export class MenuService {
     public static visibleParameters = [
         "title",
         "icon",
+        "roles",
         "route",
         "parent",
         "children",
@@ -27,7 +30,7 @@ export class MenuService {
         },
         {
             path: "children",
-            select: ["title", "icon", "route", "children"],
+            select: ["title", "icon", "roles", "route", "children"],
             populate: {
                 path: "children",
                 select: ["title", "icon", "route"],
@@ -35,7 +38,7 @@ export class MenuService {
         },
     ] as PopulateOptions[];
 
-    public static async query(values: MenuQueryableParams, isRootOnly = true) {
+    public static async query(operator: Operator, values: MenuQueryableParams) {
         await DatabaseService.getConnection();
 
         const query = [];
@@ -58,11 +61,14 @@ export class MenuService {
             });
         }
 
-        if (isRootOnly) {
-            query.push({
-                parent: null,
-            });
-        }
+        query.push({
+            roles: {
+                $in:
+                    operator.role === OperatorRole.ADMIN
+                        ? ["", ...Object.values(OperatorRole)]
+                        : ["", operator.role],
+            },
+        });
 
         return await MenuModel.find(
             query.length === 0
@@ -73,7 +79,33 @@ export class MenuService {
         )
             .select(MenuService.visibleParameters)
             .sort("title")
-            .populate(isRootOnly ? MenuService._populateOptions : null);
+            .populate(MenuService._getPopulateOptions(operator));
+    }
+
+    public static async querySelf(operator: Operator) {
+        await DatabaseService.getConnection();
+
+        const query = [];
+
+        query.push({
+            parent: null,
+        });
+
+        query.push({
+            roles: {
+                $in:
+                    operator.role === OperatorRole.ADMIN
+                        ? ["", ...Object.values(OperatorRole)]
+                        : ["", operator.role],
+            },
+        });
+
+        return await MenuModel.find({
+            $and: query,
+        })
+            .select(MenuService.visibleParameters)
+            .sort("title")
+            .populate(MenuService._getPopulateOptions(operator));
     }
 
     public static async save(values: MenuCreatableParams) {
@@ -162,5 +194,32 @@ export class MenuService {
         return MenuModel.findByIdAndDelete(menuId)
             .select(MenuService.visibleParameters)
             .populate(MenuService._populateOptions);
+    }
+
+    private static _getPopulateOptions(operator: Operator) {
+        return [
+            {
+                path: "parent",
+                select: "title",
+            },
+            {
+                path: "children",
+                select: ["title", "icon", "roles", "route", "children"],
+                match: {
+                    roles: {
+                        $in: ["", operator.role],
+                    },
+                },
+                populate: {
+                    path: "children",
+                    select: ["title", "icon", "roles", "route"],
+                    match: {
+                        roles: {
+                            $in: ["", operator.role],
+                        },
+                    },
+                },
+            },
+        ] as PopulateOptions[];
     }
 }
