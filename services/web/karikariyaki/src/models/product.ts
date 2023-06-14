@@ -78,18 +78,12 @@ const ProductSchema = new Schema({
         required: [true, ProductErrors.REALM_REQUIRED],
         validate: validateProductRealm,
     },
-    parent: {
-        type: Schema.Types.ObjectId,
-        ref: Statics.PRODUCT_COLLECTION_NAME,
-        validate: validateProductParent,
+    optionals: {
+        type: Array<string>,
+        default: [],
     },
-    variants: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: Statics.PRODUCT_COLLECTION_NAME,
-            },
-        ],
+    aditionals: {
+        type: Array<string>,
         default: [],
     },
 });
