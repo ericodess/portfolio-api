@@ -157,7 +157,10 @@ export class OperatorService {
         if (operator.role !== OperatorRole.ADMIN) {
             const foundOperator = await OperatorService.queryId(id);
 
-            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+            if (
+                operator.realm._id.toString() !==
+                foundOperator.realm._id.toString()
+            ) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
             }
         }
@@ -187,7 +190,10 @@ export class OperatorService {
         if (operator.role !== OperatorRole.ADMIN) {
             const foundOperator = await OperatorService.queryId(id);
 
-            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+            if (
+                operator.realm._id.toString() !==
+                foundOperator.realm._id.toString()
+            ) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
             }
         }
