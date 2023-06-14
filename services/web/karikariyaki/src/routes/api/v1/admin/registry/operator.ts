@@ -48,7 +48,7 @@ router.get("/roles", async (req, res) => {
 
         res.status(200).json(
             ResponseService.generateSucessfulResponse(
-                OperatorService.getValidRoles(operator.role)
+                OperatorService.getAvailableRolesByRole(operator.role)
             )
         );
     } catch (error) {

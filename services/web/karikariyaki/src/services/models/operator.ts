@@ -17,11 +17,29 @@ import { InHouseError } from "@types";
 export class OperatorService {
     public static visibleParameters = ["displayName", "role", "realm", "photo"];
 
-    private static _availableRoles = Object.values(OperatorRole);
     private static _populateOptions = {
         path: "realm",
         select: "name",
     } as PopulateOptions;
+    private static _validRoles = Object.values(OperatorRole);
+
+    public static getAvailableRolesByRole(role: OperatorRole): string[] {
+        switch (role) {
+            case OperatorRole.ADMIN:
+                return OperatorService._validRoles;
+
+            case OperatorRole.MANAGER:
+                return OperatorService._validRoles.filter(
+                    (role) => role === OperatorRole.WORKER
+                );
+
+            case OperatorRole.WORKER:
+                return [];
+
+            default:
+                return [];
+        }
+    }
 
     public static async query(
         operator: Operator,
@@ -70,7 +88,7 @@ export class OperatorService {
             .populate(OperatorService._populateOptions);
     }
 
-    public static async queryId(id: string) {
+    public static async queryById(id: string) {
         await DatabaseService.getConnection();
 
         return await OperatorModel.findById(id)
@@ -90,7 +108,7 @@ export class OperatorService {
         operator: Operator,
         values: OperatorCreatableParams
     ) {
-        const isRoleInvalid = !OperatorService.getValidRoles(
+        const isRoleInvalid = !OperatorService.getAvailableRolesByRole(
             operator.role
         ).find((role) => role === values.role.trim());
 
@@ -119,24 +137,6 @@ export class OperatorService {
             .populate(OperatorService._populateOptions);
     }
 
-    public static getValidRoles(baseRole: OperatorRole): string[] {
-        switch (baseRole) {
-            case OperatorRole.ADMIN:
-                return OperatorService._availableRoles;
-
-            case OperatorRole.MANAGER:
-                return OperatorService._availableRoles.filter(
-                    (role) => role === OperatorRole.WORKER
-                );
-
-            case OperatorRole.WORKER:
-                return [];
-
-            default:
-                return [];
-        }
-    }
-
     public static async update(
         operator: Operator,
         id: string,
@@ -144,7 +144,7 @@ export class OperatorService {
     ) {
         const isRoleInvalid =
             values.role &&
-            !OperatorService.getValidRoles(operator.role).find(
+            !OperatorService.getAvailableRolesByRole(operator.role).find(
                 (role) => role === values.role.trim()
             );
 
@@ -155,7 +155,7 @@ export class OperatorService {
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
-            const foundOperator = await OperatorService.queryId(id);
+            const foundOperator = await OperatorService.queryById(id);
 
             if (
                 operator.realm._id.toString() !==
@@ -188,7 +188,7 @@ export class OperatorService {
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
-            const foundOperator = await OperatorService.queryId(id);
+            const foundOperator = await OperatorService.queryById(id);
 
             if (
                 operator.realm._id.toString() !==
