@@ -20,7 +20,7 @@ export class RealmService {
         operator: Operator,
         values: RealmQueryableParams
     ) {
-        if (operator.role !== OperatorRole.ADMIN) {
+        if (RealmService._canPerformModifications(operator)) {
             throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
         }
 
@@ -52,7 +52,7 @@ export class RealmService {
     }
 
     public static async save(operator: Operator, values: RealmCreatableParams) {
-        if (operator.role !== OperatorRole.ADMIN) {
+        if (RealmService._canPerformModifications(operator)) {
             throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
         }
 
@@ -74,7 +74,7 @@ export class RealmService {
         id: string,
         values: RealmEditableParams
     ) {
-        if (operator.role !== OperatorRole.ADMIN) {
+        if (RealmService._canPerformModifications(operator)) {
             throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
         }
 
@@ -94,7 +94,7 @@ export class RealmService {
     }
 
     public static async delete(operator: Operator, id: string) {
-        if (operator.role !== OperatorRole.ADMIN) {
+        if (RealmService._canPerformModifications(operator)) {
             throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
         }
 
@@ -105,5 +105,9 @@ export class RealmService {
         return RealmModel.findByIdAndDelete(realmObjectId).select(
             RealmService.visibleParameters
         );
+    }
+
+    private static _canPerformModifications(operator: Operator) {
+        return operator.role !== OperatorRole.ADMIN;
     }
 }

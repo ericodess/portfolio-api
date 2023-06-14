@@ -7,12 +7,12 @@ import {
     OperatorRole,
 } from "karikarihelper";
 
-// Models
+// Types
 import { OperatorErrors, OperatorModel } from "@models";
+import { InHouseError } from "@types";
 
 // Services
 import { DatabaseService, StringService } from "@services";
-import { InHouseError } from "@types";
 
 export class OperatorService {
     public static visibleParameters = ["displayName", "role", "realm", "photo"];

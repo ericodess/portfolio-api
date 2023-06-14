@@ -7,12 +7,12 @@ import {
     ProductQueryableParams,
 } from "karikarihelper";
 
-// Models
+// Types
 import { OperatorErrors, ProductModel } from "@models";
+import { InHouseError } from "@types";
 
 // Services
 import { DatabaseService, StringService } from "@services";
-import { InHouseError } from "@types";
 
 export class ProductService {
     public static visibleParameters = ["name", "realm"];

@@ -9,8 +9,6 @@ import {
 
 // Types
 import { InHouseError } from "@types";
-
-// Models
 import { EventModel, OperatorErrors, OrderErrors, OrderModel } from "@models";
 
 // Services
