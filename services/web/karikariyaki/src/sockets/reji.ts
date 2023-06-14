@@ -5,7 +5,6 @@ import { io } from "../setup";
 
 // Routes
 import {
-    createEvent,
     createOrder,
     deleteOrder,
     editOrder,
@@ -63,7 +62,6 @@ export class RejiSocket {
              */
             socket.data.operator = loggedOperator;
 
-            createEvent(socket);
             joinEvent(socket);
             leaveEvent(socket);
 

@@ -6,6 +6,7 @@ import { EventService, RequestService, ResponseService } from "@services";
 // Types
 import { EventErrors } from "@models";
 import { InHouseError } from "@types";
+import { Operator } from "karikarihelper";
 
 const router = Router();
 
@@ -38,11 +39,14 @@ router.post("/", async (req, res) => {
             throw new InHouseError(EventErrors.INVALID, 400);
         }
 
-        const response = await EventService.save({
-            name: name,
-            date: date,
-            isOpen: isOpen,
-        });
+        const response = await EventService.save(
+            res.locals.operator as Operator,
+            {
+                name: name,
+                date: date,
+                isOpen: isOpen,
+            }
+        );
 
         res.status(200).json(
             ResponseService.generateSucessfulResponse(response)
@@ -64,10 +68,14 @@ router.patch("/:id", async (req, res) => {
             throw new InHouseError(EventErrors.INVALID, 400);
         }
 
-        const response = await EventService.update(id, {
-            name: name,
-            isOpen: isOpen,
-        });
+        const response = await EventService.update(
+            res.locals.operator as Operator,
+            id,
+            {
+                name: name,
+                isOpen: isOpen,
+            }
+        );
 
         res.status(200).json(
             ResponseService.generateSucessfulResponse(response)
@@ -87,7 +95,10 @@ router.delete("/:id", async (req, res) => {
             throw new InHouseError(EventErrors.INVALID, 400);
         }
 
-        const response = await EventService.delete(id);
+        const response = await EventService.delete(
+            res.locals.operator as Operator,
+            id
+        );
 
         if (!response) {
             throw new InHouseError(EventErrors.NOT_FOUND, 404);
