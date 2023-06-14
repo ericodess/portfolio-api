@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Operator } from "karikarihelper";
+import { Operator, OperatorRole } from "karikarihelper";
 
 // Services
 import {
@@ -11,35 +11,51 @@ import {
 
 // Models
 import { OperatorErrors } from "@models";
+import { InHouseError } from "@types";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-    OperatorService.query(res.locals.operator as Operator, {
-        id: RequestService.queryParamToString(req.query.id),
-        realmId: RequestService.queryParamToString(req.query.realmId),
-        displayName: RequestService.queryParamToString(req.query.displayName),
-    })
-        .then((response) => {
-            if (!response) {
-                res.status(404).json(
-                    ResponseService.generateFailedResponse(
-                        OperatorErrors.NOT_FOUND
-                    )
-                );
-
-                return;
+router.get("/", async (req, res) => {
+    try {
+        const foundOperators = await OperatorService.query(
+            res.locals.operator as Operator,
+            {
+                id: RequestService.queryParamToString(req.query.id),
+                realmId: RequestService.queryParamToString(req.query.realmId),
+                displayName: RequestService.queryParamToString(
+                    req.query.displayName
+                ),
             }
+        );
 
-            res.status(200).json(
-                ResponseService.generateSucessfulResponse(response)
-            );
-        })
-        .catch((error) => {
-            res.status(error.code ?? 500).json(
-                ResponseService.generateFailedResponse(error.message)
-            );
-        });
+        if (!foundOperators) {
+            throw new InHouseError(OperatorErrors.NOT_FOUND, 404);
+        }
+
+        res.status(200).json(
+            ResponseService.generateSucessfulResponse(foundOperators)
+        );
+    } catch (error) {
+        res.status(error.code ?? 500).json(
+            ResponseService.generateFailedResponse(error.message)
+        );
+    }
+});
+
+router.get("/roles", async (req, res) => {
+    try {
+        const operator = res.locals.operator as Operator;
+
+        res.status(200).json(
+            ResponseService.generateSucessfulResponse(
+                OperatorService.getValidRoles(operator.role)
+            )
+        );
+    } catch (error) {
+        res.status(error.code ?? 500).json(
+            ResponseService.generateFailedResponse(error.message)
+        );
+    }
 });
 
 router.get("/self", async (req, res) => {
@@ -53,11 +69,7 @@ router.get("/self", async (req, res) => {
         );
 
         if (!foundOperator) {
-            res.status(404).json(
-                ResponseService.generateFailedResponse(OperatorErrors.NOT_FOUND)
-            );
-
-            return;
+            throw new InHouseError(OperatorErrors.NOT_FOUND, 404);
         }
 
         res.status(200).json(
@@ -70,99 +82,99 @@ router.get("/self", async (req, res) => {
     }
 });
 
-router.post("/", (req, res) => {
-    const userName = RequestService.queryParamToString(req.body.userName);
-    const displayName = RequestService.queryParamToString(req.body.displayName);
-    const realmId = RequestService.queryParamToString(req.body.realmId);
-    const photo = RequestService.queryParamToString(req.body.photo);
-
-    if (!userName || !displayName || !realmId) {
-        res.status(400).json(
-            ResponseService.generateFailedResponse(OperatorErrors.INVALID)
+router.post("/", async (req, res) => {
+    try {
+        const userName = RequestService.queryParamToString(req.body.userName);
+        const displayName = RequestService.queryParamToString(
+            req.body.displayName
         );
+        const realmId = RequestService.queryParamToString(req.body.realmId);
+        const role = RequestService.queryParamToString(req.body.role);
+        const photo = RequestService.queryParamToString(req.body.photo);
 
-        return;
-    }
+        if (!userName || !displayName || !realmId || !role) {
+            throw new InHouseError(OperatorErrors.INVALID, 400);
+        }
 
-    OperatorService.save(res.locals.operator as Operator, {
-        userName: userName,
-        displayName: displayName,
-        realmId: realmId,
-        photo: photo,
-    })
-        .then((response) => {
-            res.status(200).json(
-                ResponseService.generateSucessfulResponse(response)
-            );
-        })
-        .catch((error) => {
-            res.status(error.code ?? 500).json(
-                ResponseService.generateFailedResponse(error.message)
-            );
-        });
-});
-
-router.patch("/:id", (req, res) => {
-    const id = RequestService.queryParamToString(req.params.id);
-    const displayName = RequestService.queryParamToString(req.body.displayName);
-    const photo = RequestService.queryParamToString(req.body.photo);
-
-    if (!id) {
-        res.status(400).json(
-            ResponseService.generateFailedResponse(OperatorErrors.INVALID)
-        );
-
-        return;
-    }
-
-    OperatorService.update(res.locals.operator as Operator, id, {
-        displayName: displayName,
-        photo: photo,
-    })
-        .then((response) => {
-            res.status(200).json(
-                ResponseService.generateSucessfulResponse(response)
-            );
-        })
-        .catch((error) => {
-            res.status(error.code ?? 500).json(
-                ResponseService.generateFailedResponse(error.message)
-            );
-        });
-});
-
-router.delete("/:id", (req, res) => {
-    const id = RequestService.queryParamToString(req.params.id);
-
-    if (!id) {
-        res.status(400).json(
-            ResponseService.generateFailedResponse(OperatorErrors.INVALID)
-        );
-
-        return;
-    }
-
-    OperatorService.delete(res.locals.operator as Operator, id)
-        .then((response) => {
-            if (!response) {
-                res.status(404).json(
-                    ResponseService.generateFailedResponse(
-                        OperatorErrors.NOT_FOUND
-                    )
-                );
-
-                return;
+        const response = await OperatorService.save(
+            res.locals.operator as Operator,
+            {
+                userName: userName,
+                displayName: displayName,
+                realmId: realmId,
+                role: role,
+                photo: photo,
             }
+        );
 
-            res.status(200).json(
-                ResponseService.generateSucessfulResponse(response)
-            );
-        })
-        .catch((error) => {
-            res.status(error.code ?? 500).json(
-                ResponseService.generateFailedResponse(error.message)
-            );
-        });
+        res.status(200).json(
+            ResponseService.generateSucessfulResponse(response)
+        );
+    } catch (error) {
+        res.status(error.code ?? 500).json(
+            ResponseService.generateFailedResponse(error.message)
+        );
+    }
+});
+
+router.patch("/:id", async (req, res) => {
+    try {
+        const id = RequestService.queryParamToString(req.params.id);
+        const displayName = RequestService.queryParamToString(
+            req.body.displayName
+        );
+        const role = RequestService.queryParamToString(req.body.role);
+        const photo = RequestService.queryParamToString(req.body.photo);
+
+        if (!id) {
+            throw new InHouseError(OperatorErrors.INVALID, 400);
+        }
+
+        const response = await OperatorService.update(
+            res.locals.operator as Operator,
+            id,
+            {
+                displayName: displayName,
+                role: role,
+                photo: photo,
+            }
+        );
+
+        res.status(200).json(
+            ResponseService.generateSucessfulResponse(response)
+        );
+    } catch (error) {
+        res.status(error.code ?? 500).json(
+            ResponseService.generateFailedResponse(error.message)
+        );
+    }
+});
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const id = RequestService.queryParamToString(req.params.id);
+
+        if (!id) {
+            throw new InHouseError(OperatorErrors.INVALID, 400);
+        }
+
+        const response = await OperatorService.delete(
+            res.locals.operator as Operator,
+            id
+        );
+
+        if (!response) {
+            throw new InHouseError(OperatorErrors.NOT_FOUND, 404);
+        }
+
+        res.status(200).json(
+            ResponseService.generateSucessfulResponse(response)
+        );
+    } catch (error) {
+        res.status(error.code ?? 500).json(
+            ResponseService.generateFailedResponse(error.message)
+        );
+    }
 });
 
 export default router;

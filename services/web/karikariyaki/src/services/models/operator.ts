@@ -17,6 +17,7 @@ import { InHouseError } from "@types";
 export class OperatorService {
     public static visibleParameters = ["displayName", "role", "realm", "photo"];
 
+    private static _availableRoles = Object.values(OperatorRole);
     private static _populateOptions = {
         path: "realm",
         select: "name",
@@ -89,6 +90,14 @@ export class OperatorService {
         operator: Operator,
         values: OperatorCreatableParams
     ) {
+        const isRoleInvalid = !OperatorService.getValidRoles(
+            operator.role
+        ).find((role) => role === values.role.trim());
+
+        if (isRoleInvalid) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const newEntry = new OperatorModel();
@@ -100,6 +109,7 @@ export class OperatorService {
                 ? values.realmId
                 : operator.realm._id
         );
+        newEntry.role = values.role.trim();
         newEntry.photo = values.photo;
 
         await newEntry.save();
@@ -109,11 +119,39 @@ export class OperatorService {
             .populate(OperatorService._populateOptions);
     }
 
+    public static getValidRoles(baseRole: OperatorRole): string[] {
+        switch (baseRole) {
+            case OperatorRole.ADMIN:
+                return OperatorService._availableRoles;
+
+            case OperatorRole.MANAGER:
+                return OperatorService._availableRoles.filter(
+                    (role) => role === OperatorRole.WORKER
+                );
+
+            case OperatorRole.WORKER:
+                return [];
+
+            default:
+                return [];
+        }
+    }
+
     public static async update(
         operator: Operator,
         id: string,
         values: OperatorEditableParams
     ) {
+        const isRoleInvalid =
+            values.role &&
+            !OperatorService.getValidRoles(operator.role).find(
+                (role) => role === values.role.trim()
+            );
+
+        if (isRoleInvalid) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
@@ -124,7 +162,8 @@ export class OperatorService {
             }
         }
 
-        values.displayName = values.displayName?.trim();
+        values.displayName = values.displayName?.trim() ?? undefined;
+        values.role = values.role?.trim() ?? undefined;
         values.photo = values.photo ?? undefined;
 
         return OperatorModel.findByIdAndUpdate(
@@ -132,6 +171,7 @@ export class OperatorService {
             {
                 $set: {
                     displayName: values.displayName,
+                    role: values.role,
                     photo: values.photo,
                 },
             },
