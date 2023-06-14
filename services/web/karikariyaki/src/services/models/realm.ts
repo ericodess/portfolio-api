@@ -1,11 +1,14 @@
 import {
+    Operator,
+    OperatorRole,
     RealmCreatableParams,
     RealmEditableParams,
     RealmQueryableParams,
 } from "karikarihelper";
 
-// Models
-import { RealmModel } from "@models";
+// Types
+import { InHouseError } from "@types";
+import { OperatorErrors, RealmModel } from "@models";
 
 // Services
 import { DatabaseService, StringService } from "@services";
@@ -13,7 +16,14 @@ import { DatabaseService, StringService } from "@services";
 export class RealmService {
     public static visibleParameters = ["name"];
 
-    public static async query(values: RealmQueryableParams) {
+    public static async query(
+        operator: Operator,
+        values: RealmQueryableParams
+    ) {
+        if (operator.role !== OperatorRole.ADMIN) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const query = [];
@@ -35,7 +45,17 @@ export class RealmService {
         ).select(RealmService.visibleParameters);
     }
 
-    public static async save(values: RealmCreatableParams) {
+    public static async queryId(id: string) {
+        return RealmModel.findById(StringService.toObjectId(id)).select(
+            RealmService.visibleParameters
+        );
+    }
+
+    public static async save(operator: Operator, values: RealmCreatableParams) {
+        if (operator.role !== OperatorRole.ADMIN) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const newEntry = new RealmModel();
@@ -49,7 +69,15 @@ export class RealmService {
         );
     }
 
-    public static async update(id: string, values: RealmEditableParams) {
+    public static async update(
+        operator: Operator,
+        id: string,
+        values: RealmEditableParams
+    ) {
+        if (operator.role !== OperatorRole.ADMIN) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         values.name = values.name?.trim();
@@ -65,7 +93,11 @@ export class RealmService {
         ).select(RealmService.visibleParameters);
     }
 
-    public static async delete(id: string) {
+    public static async delete(operator: Operator, id: string) {
+        if (operator.role !== OperatorRole.ADMIN) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const realmObjectId = StringService.toObjectId(id);
