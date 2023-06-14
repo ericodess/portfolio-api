@@ -75,7 +75,7 @@ export class MenuService {
             },
         });
 
-        return await MenuModel.find(
+        return MenuModel.find(
             query.length === 0
                 ? null
                 : {
@@ -105,7 +105,7 @@ export class MenuService {
             },
         });
 
-        return await MenuModel.find({
+        return MenuModel.find({
             $and: query,
         })
             .select(MenuService.visibleParameters)

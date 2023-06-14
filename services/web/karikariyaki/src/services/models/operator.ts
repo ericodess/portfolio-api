@@ -81,9 +81,7 @@ export class OperatorService {
             query.push(realmQuery);
         }
 
-        return await OperatorModel.find(
-            query.length === 0 ? null : { $and: query }
-        )
+        return OperatorModel.find(query.length === 0 ? null : { $and: query })
             .select(OperatorService.visibleParameters)
             .populate(OperatorService._populateOptions);
     }
@@ -91,7 +89,7 @@ export class OperatorService {
     public static async queryById(id: string) {
         await DatabaseService.getConnection();
 
-        return await OperatorModel.findById(id)
+        return OperatorModel.findById(id)
             .select(OperatorService.visibleParameters)
             .populate(OperatorService._populateOptions);
     }
@@ -99,7 +97,7 @@ export class OperatorService {
     public static async queryByUserName(userName: string) {
         await DatabaseService.getConnection();
 
-        return await OperatorModel.findOne({ userName: userName })
+        return OperatorModel.findOne({ userName: userName })
             .select(OperatorService.visibleParameters)
             .populate(OperatorService._populateOptions);
     }
