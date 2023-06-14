@@ -9,12 +9,15 @@ import {
 
 // Types
 import { InHouseError } from "@types";
-
-// Models
-import { EventModel, OperatorErrors, OrderModel } from "@models";
+import { EventModel, OperatorErrors, OrderErrors, OrderModel } from "@models";
 
 // Services
-import { DatabaseService, OperatorService, StringService } from "@services";
+import {
+    DatabaseService,
+    OperatorService,
+    ProductService,
+    StringService,
+} from "@services";
 
 export class OrderService {
     public static visibleParameters = ["realm", "status", "client"];
@@ -41,7 +44,7 @@ export class OrderService {
     public static async query(
         operator: Operator,
         values: EventOrderQueryableParams,
-        willPupulate = true
+        willPopulate = true
     ) {
         await DatabaseService.getConnection();
 
@@ -91,7 +94,7 @@ export class OrderService {
             query.push({ items: values.itemsId });
         }
 
-        if (willPupulate) {
+        if (willPopulate) {
             return OrderModel.find(query.length === 0 ? null : { $and: query })
                 .select(OrderService.visibleParameters)
                 .populate(OrderService._populateOptions);
@@ -121,11 +124,11 @@ export class OrderService {
         newEntry.event = StringService.toObjectId(values.eventId);
         newEntry.status = newEntry.status;
 
-        if (operator.role === OperatorRole.ADMIN) {
-            const foundOperator = await OperatorService.queryId(
-                values.operatorId
-            );
+        const foundOperator = await OperatorService.queryById(
+            values.operatorId
+        );
 
+        if (operator.role === OperatorRole.ADMIN) {
             if (!foundOperator) {
                 throw new InHouseError(OperatorErrors.NOT_FOUND, 404);
             }
@@ -138,6 +141,18 @@ export class OrderService {
         }
 
         newEntry.client = values.clientName?.trim();
+
+        for (const itemId of values.itemsId) {
+            const foundItem = await ProductService.queryById(itemId);
+
+            if (
+                foundItem.realm._id.toString() !==
+                foundOperator.realm._id.toString()
+            ) {
+                throw new InHouseError(OrderErrors.REALM_INVALID, 400);
+            }
+        }
+
         newEntry.items = StringService.toObjectIds(values.itemsId);
 
         await EventModel.findByIdAndUpdate(
@@ -165,9 +180,12 @@ export class OrderService {
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
-            const foundOperator = await OrderModel.findById(id);
+            const foundOperator = await OrderService.queryById(id);
 
-            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+            if (
+                operator.realm._id.toString() !==
+                foundOperator.realm._id.toString()
+            ) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
             }
         }
@@ -189,9 +207,12 @@ export class OrderService {
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
-            const foundOperator = await OrderModel.findById(id);
+            const foundOperator = await OrderService.queryById(id);
 
-            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+            if (
+                operator.realm._id.toString() !==
+                foundOperator.realm._id.toString()
+            ) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
             }
         }

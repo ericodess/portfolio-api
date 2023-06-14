@@ -7,8 +7,9 @@ import {
     OperatorRole,
 } from "karikarihelper";
 
-// Models
-import { MenuModel } from "@models";
+// Types
+import { MenuModel, OperatorErrors } from "@models";
+import { InHouseError } from "@types";
 
 // Services
 import { DatabaseService, StringService } from "@services";
@@ -39,6 +40,10 @@ export class MenuService {
     ] as PopulateOptions[];
 
     public static async query(operator: Operator, values: MenuQueryableParams) {
+        if (MenuService._canPerformModifications(operator)) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const query = [];
@@ -70,7 +75,7 @@ export class MenuService {
             },
         });
 
-        return await MenuModel.find(
+        return MenuModel.find(
             query.length === 0
                 ? null
                 : {
@@ -100,7 +105,7 @@ export class MenuService {
             },
         });
 
-        return await MenuModel.find({
+        return MenuModel.find({
             $and: query,
         })
             .select(MenuService.visibleParameters)
@@ -108,7 +113,11 @@ export class MenuService {
             .populate(MenuService._getPopulateOptions(operator));
     }
 
-    public static async save(values: MenuCreatableParams) {
+    public static async save(operator: Operator, values: MenuCreatableParams) {
+        if (MenuService._canPerformModifications(operator)) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const newEntry = new MenuModel();
@@ -140,7 +149,15 @@ export class MenuService {
             .populate(MenuService._populateOptions);
     }
 
-    public static async update(id: string, values: MenuEditableParams) {
+    public static async update(
+        operator: Operator,
+        id: string,
+        values: MenuEditableParams
+    ) {
+        if (MenuService._canPerformModifications(operator)) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         values.title = values.title?.trim();
@@ -171,7 +188,11 @@ export class MenuService {
             .populate(MenuService._populateOptions);
     }
 
-    public static async delete(id: string) {
+    public static async delete(operator: Operator, id: string) {
+        if (MenuService._canPerformModifications(operator)) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const menuId = StringService.toObjectId(id);
@@ -221,5 +242,9 @@ export class MenuService {
                 },
             },
         ] as PopulateOptions[];
+    }
+
+    private static _canPerformModifications(operator: Operator) {
+        return operator.role !== OperatorRole.ADMIN;
     }
 }

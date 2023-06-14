@@ -7,12 +7,12 @@ import {
     ProductQueryableParams,
 } from "karikarihelper";
 
-// Models
+// Types
 import { OperatorErrors, ProductModel } from "@models";
+import { InHouseError } from "@types";
 
 // Services
 import { DatabaseService, StringService } from "@services";
-import { InHouseError } from "@types";
 
 export class ProductService {
     public static visibleParameters = ["name", "realm"];
@@ -67,6 +67,14 @@ export class ProductService {
             .populate(ProductService._populateOptions);
     }
 
+    public static async queryById(id: string) {
+        await DatabaseService.getConnection();
+
+        return ProductModel.findById(StringService.toObjectId(id))
+            .select(ProductService.visibleParameters)
+            .populate(ProductService._populateOptions);
+    }
+
     public static async save(
         operator: Operator,
         values: ProductCreatableParams
@@ -99,7 +107,10 @@ export class ProductService {
         if (operator.role !== OperatorRole.ADMIN) {
             const foundOperator = await ProductModel.findById(id);
 
-            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+            if (
+                operator.realm._id.toString() !==
+                foundOperator.realm._id.toString()
+            ) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
             }
         }
@@ -123,29 +134,17 @@ export class ProductService {
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
-            const foundOperator = await ProductModel.findById(id);
+            const foundProduct = await ProductService.queryById(id);
 
-            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+            if (
+                operator.realm._id.toString() !==
+                foundProduct.realm._id.toString()
+            ) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
             }
         }
 
         const productId = StringService.toObjectId(id);
-
-        await ProductModel.deleteMany({
-            parent: productId,
-        });
-
-        await ProductModel.updateMany(
-            {
-                variants: productId,
-            },
-            {
-                $pull: {
-                    variants: productId,
-                },
-            }
-        );
 
         return ProductModel.findByIdAndDelete(productId)
             .select(ProductService.visibleParameters)

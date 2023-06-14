@@ -3,13 +3,16 @@ import {
     EventCreatableParams,
     EventEditableParams,
     EventQueryableParams,
+    Operator,
+    OperatorRole,
 } from "karikarihelper";
 
 // Models
-import { EventModel, OrderModel } from "@models";
+import { EventModel, OperatorErrors, OrderModel } from "@models";
 
 // Services
 import { DatabaseService, DateService, StringService } from "@services";
+import { InHouseError } from "@types";
 
 export class EventService {
     public static visibleParameters = ["name", "date", "orders", "isOpen"];
@@ -63,14 +66,12 @@ export class EventService {
         }
 
         if (populate) {
-            return await EventModel.find(
-                query.length === 0 ? null : { $and: query }
-            )
+            return EventModel.find(query.length === 0 ? null : { $and: query })
                 .select(EventService.visibleParameters)
                 .populate(EventService._populateOptions);
         }
 
-        return await EventModel.find(
+        return EventModel.find(
             query.length === 0 ? null : { $and: query }
         ).select(EventService.visibleParameters);
     }
@@ -78,12 +79,16 @@ export class EventService {
     public static async queryById(id: string) {
         await DatabaseService.getConnection();
 
-        return await EventModel.findById(id)
+        return EventModel.findById(id)
             .select(EventService.visibleParameters)
             .populate(EventService._populateOptions);
     }
 
-    public static async save(values: EventCreatableParams) {
+    public static async save(operator: Operator, values: EventCreatableParams) {
+        if (EventService._canPerformModifications(operator)) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const newEntry = new EventModel();
@@ -101,7 +106,15 @@ export class EventService {
             .populate(EventService._populateOptions);
     }
 
-    public static async update(id: string, values: EventEditableParams) {
+    public static async update(
+        operator: Operator,
+        id: string,
+        values: EventEditableParams
+    ) {
+        if (EventService._canPerformModifications(operator)) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         values.name = values.name?.trim();
@@ -120,7 +133,11 @@ export class EventService {
             .populate(EventService._populateOptions);
     }
 
-    public static async delete(id: string) {
+    public static async delete(operator: Operator, id: string) {
+        if (EventService._canPerformModifications(operator)) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const eventId = StringService.toObjectId(id);
@@ -132,5 +149,9 @@ export class EventService {
         return EventModel.findByIdAndDelete(eventId)
             .select(EventService.visibleParameters)
             .populate(EventService._populateOptions);
+    }
+
+    private static _canPerformModifications(operator: Operator) {
+        return operator.role !== OperatorRole.ADMIN;
     }
 }

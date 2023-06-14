@@ -7,12 +7,12 @@ import {
     OperatorRole,
 } from "karikarihelper";
 
-// Models
+// Types
 import { OperatorErrors, OperatorModel } from "@models";
+import { InHouseError } from "@types";
 
 // Services
 import { DatabaseService, StringService } from "@services";
-import { InHouseError } from "@types";
 
 export class OperatorService {
     public static visibleParameters = ["displayName", "role", "realm", "photo"];
@@ -21,6 +21,25 @@ export class OperatorService {
         path: "realm",
         select: "name",
     } as PopulateOptions;
+    private static _validRoles = Object.values(OperatorRole);
+
+    public static getAvailableRolesByRole(role: OperatorRole): string[] {
+        switch (role) {
+            case OperatorRole.ADMIN:
+                return OperatorService._validRoles;
+
+            case OperatorRole.MANAGER:
+                return OperatorService._validRoles.filter(
+                    (role) => role === OperatorRole.WORKER
+                );
+
+            case OperatorRole.WORKER:
+                return [];
+
+            default:
+                return [];
+        }
+    }
 
     public static async query(
         operator: Operator,
@@ -62,17 +81,15 @@ export class OperatorService {
             query.push(realmQuery);
         }
 
-        return await OperatorModel.find(
-            query.length === 0 ? null : { $and: query }
-        )
+        return OperatorModel.find(query.length === 0 ? null : { $and: query })
             .select(OperatorService.visibleParameters)
             .populate(OperatorService._populateOptions);
     }
 
-    public static async queryId(id: string) {
+    public static async queryById(id: string) {
         await DatabaseService.getConnection();
 
-        return await OperatorModel.findById(id)
+        return OperatorModel.findById(id)
             .select(OperatorService.visibleParameters)
             .populate(OperatorService._populateOptions);
     }
@@ -80,7 +97,7 @@ export class OperatorService {
     public static async queryByUserName(userName: string) {
         await DatabaseService.getConnection();
 
-        return await OperatorModel.findOne({ userName: userName })
+        return OperatorModel.findOne({ userName: userName })
             .select(OperatorService.visibleParameters)
             .populate(OperatorService._populateOptions);
     }
@@ -89,6 +106,14 @@ export class OperatorService {
         operator: Operator,
         values: OperatorCreatableParams
     ) {
+        const isRoleInvalid = !OperatorService.getAvailableRolesByRole(
+            operator.role
+        ).find((role) => role === values.role.trim());
+
+        if (isRoleInvalid) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         const newEntry = new OperatorModel();
@@ -100,6 +125,7 @@ export class OperatorService {
                 ? values.realmId
                 : operator.realm._id
         );
+        newEntry.role = values.role.trim();
         newEntry.photo = values.photo;
 
         await newEntry.save();
@@ -114,17 +140,31 @@ export class OperatorService {
         id: string,
         values: OperatorEditableParams
     ) {
+        const isRoleInvalid =
+            values.role &&
+            !OperatorService.getAvailableRolesByRole(operator.role).find(
+                (role) => role === values.role.trim()
+            );
+
+        if (isRoleInvalid) {
+            throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
+        }
+
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
-            const foundOperator = await OperatorModel.findById(id);
+            const foundOperator = await OperatorService.queryById(id);
 
-            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+            if (
+                operator.realm._id.toString() !==
+                foundOperator.realm._id.toString()
+            ) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
             }
         }
 
-        values.displayName = values.displayName?.trim();
+        values.displayName = values.displayName?.trim() ?? undefined;
+        values.role = values.role?.trim() ?? undefined;
         values.photo = values.photo ?? undefined;
 
         return OperatorModel.findByIdAndUpdate(
@@ -132,6 +172,7 @@ export class OperatorService {
             {
                 $set: {
                     displayName: values.displayName,
+                    role: values.role,
                     photo: values.photo,
                 },
             },
@@ -145,9 +186,12 @@ export class OperatorService {
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
-            const foundOperator = await OperatorModel.findById(id);
+            const foundOperator = await OperatorService.queryById(id);
 
-            if (operator.realm._id !== foundOperator.realm._id.toString()) {
+            if (
+                operator.realm._id.toString() !==
+                foundOperator.realm._id.toString()
+            ) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
             }
         }

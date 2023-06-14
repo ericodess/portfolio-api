@@ -5,9 +5,6 @@ import { EventCreatableParams, Event, Operator } from "karikarihelper";
 import { InHouseError } from "@types";
 import { EventErrors } from "@models";
 
-// Socktes
-import { PrompterSocket, RejiSocket } from "@sockets";
-
 // Services
 import {
     DateService,
@@ -16,33 +13,6 @@ import {
     ResponseService,
     SocketService,
 } from "@services";
-
-const createEvent = (socket: Socket) =>
-    socket.on("event:create", async (values: EventCreatableParams) => {
-        try {
-            await EventService.save(values);
-
-            const updatedEvents = await EventService.query({}, false);
-
-            RejiSocket.namespace
-                .to("events")
-                .emit(
-                    "events:refresh",
-                    ResponseService.generateSucessfulResponse(updatedEvents)
-                );
-            PrompterSocket.namespace
-                .to("events")
-                .emit(
-                    "events:refresh",
-                    ResponseService.generateSucessfulResponse(updatedEvents)
-                );
-        } catch (error) {
-            socket.emit(
-                "event:error",
-                ResponseService.generateFailedResponse(error.message)
-            );
-        }
-    });
 
 const joinEvent = (socket: Socket) =>
     socket.on("event:join", async (eventId) => {
@@ -57,15 +27,6 @@ const joinEvent = (socket: Socket) =>
 
             if (!foundEvent) {
                 throw new InHouseError(EventErrors.NOT_FOUND);
-            }
-
-            if (foundEvent.isOpen !== DateService.isToday(foundEvent.date)) {
-                foundEvent = await EventService.update(
-                    foundEvent._id.toString(),
-                    {
-                        isOpen: !foundEvent.isOpen,
-                    }
-                );
             }
 
             if (DateService.isFuture(foundEvent.date)) {
@@ -117,4 +78,4 @@ const leaveEvent = (socket: Socket) =>
         );
     });
 
-export { createEvent, joinEvent, leaveEvent };
+export { joinEvent, leaveEvent };
