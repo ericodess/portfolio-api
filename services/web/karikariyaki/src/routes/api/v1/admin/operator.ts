@@ -8,51 +8,52 @@ import {
     OperatorService,
 } from "@services";
 
-// Models
+// Types
 import { OperatorErrors } from "@models";
+import { InHouseError } from "@types";
 
 const router = Router();
 
-router.post("/sign-in", (req, res) => {
-    const userName = RequestService.queryParamToString(req.body.userName);
+router.post("/sign-in", async (req, res) => {
+    try {
+        const userName = RequestService.queryParamToString(req.body.userName);
 
-    if (!userName) {
-        res.status(400).json(
-            ResponseService.generateFailedResponse(OperatorErrors.INVALID)
+        if (!userName) {
+            throw new InHouseError(OperatorErrors.INVALID, 400);
+        }
+
+        const response = await OperatorService.queryByUserName(userName);
+
+        if (!response) {
+            res.status(404).json(
+                ResponseService.generateFailedResponse(OperatorErrors.NOT_FOUND)
+            );
+
+            return;
+        }
+
+        JWTService.saveCookies(res, userName);
+
+        res.status(200).json(
+            ResponseService.generateSucessfulResponse(response)
         );
-
-        return;
+    } catch (error) {
+        res.status(error.code ?? 500).json(
+            ResponseService.generateFailedResponse(error.message)
+        );
     }
-
-    OperatorService.queryByUserName(userName)
-        .then((response) => {
-            if (!response) {
-                res.status(404).json(
-                    ResponseService.generateFailedResponse(
-                        OperatorErrors.NOT_FOUND
-                    )
-                );
-
-                return;
-            }
-
-            JWTService.saveCookies(res, userName);
-
-            res.status(200).json(
-                ResponseService.generateSucessfulResponse(response)
-            );
-        })
-        .catch((error) => {
-            res.status(error.code ?? 500).json(
-                ResponseService.generateFailedResponse(error.message)
-            );
-        });
 });
 
 router.get("/sign-out", (req, res) => {
-    JWTService.clearCookies(req, res);
+    try {
+        JWTService.clearCookies(req, res);
 
-    res.status(200).json(ResponseService.generateSucessfulResponse());
+        res.status(200).json(ResponseService.generateSucessfulResponse());
+    } catch (error) {
+        res.status(error.code ?? 500).json(
+            ResponseService.generateFailedResponse(error.message)
+        );
+    }
 });
 
 export default router;
