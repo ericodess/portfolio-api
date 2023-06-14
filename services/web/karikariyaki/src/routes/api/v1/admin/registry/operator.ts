@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { Operator, OperatorRole } from "karikarihelper";
+import { Operator } from "karikarihelper";
+
+// Types
+import { OperatorErrors } from "@models";
+import { InHouseError } from "@types";
 
 // Services
 import {
@@ -8,10 +12,6 @@ import {
     RequestService,
     ResponseService,
 } from "@services";
-
-// Models
-import { OperatorErrors } from "@models";
-import { InHouseError } from "@types";
 
 const router = Router();
 

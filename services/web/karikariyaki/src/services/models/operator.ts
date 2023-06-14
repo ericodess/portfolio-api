@@ -155,7 +155,7 @@ export class OperatorService {
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
-            const foundOperator = await OperatorModel.findById(id);
+            const foundOperator = await OperatorService.queryId(id);
 
             if (operator.realm._id !== foundOperator.realm._id.toString()) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
@@ -185,7 +185,7 @@ export class OperatorService {
         await DatabaseService.getConnection();
 
         if (operator.role !== OperatorRole.ADMIN) {
-            const foundOperator = await OperatorModel.findById(id);
+            const foundOperator = await OperatorService.queryId(id);
 
             if (operator.realm._id !== foundOperator.realm._id.toString()) {
                 throw new InHouseError(OperatorErrors.FORBIDDEN, 403);
