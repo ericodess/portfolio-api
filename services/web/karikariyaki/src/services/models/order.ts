@@ -197,7 +197,7 @@ export class OrderService {
                     status: values.status,
                 },
             },
-            { new: true, runValidators: true }
+            { runValidators: true }
         )
             .select(OrderService.visibleParameters)
             .populate(OrderService._populateOptions);

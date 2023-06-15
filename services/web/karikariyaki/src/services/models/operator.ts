@@ -176,7 +176,7 @@ export class OperatorService {
                     photo: values.photo,
                 },
             },
-            { new: true, runValidators: true }
+            { runValidators: true }
         )
             .select(OperatorService.visibleParameters)
             .populate(OperatorService._populateOptions);

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Operator } from "karikarihelper";
+import { Ingredient, Operator } from "karikarihelper";
 
 // Types
 import { ProductErrors } from "@models";
@@ -35,6 +35,7 @@ router.post("/", async (req, res) => {
     try {
         const name = RequestService.queryParamToString(req.body.name);
         const realmId = RequestService.queryParamToString(req.body.realmId);
+        const ingredients = req.body.ingredients as Ingredient[];
 
         if (!name) {
             throw new InHouseError(ProductErrors.INVALID, 400);
@@ -45,6 +46,7 @@ router.post("/", async (req, res) => {
             {
                 name: name,
                 realmId: realmId,
+                ingredients: ingredients,
             }
         );
 
@@ -62,6 +64,7 @@ router.patch("/:id", async (req, res) => {
     try {
         const id = req.params.id;
         const name = RequestService.queryParamToString(req.body.name);
+        const ingredients = req.body.ingredients as Ingredient[];
 
         if (!id) {
             throw new InHouseError(ProductErrors.INVALID, 400);
@@ -70,7 +73,7 @@ router.patch("/:id", async (req, res) => {
         const response = await ProductService.update(
             res.locals.operator as Operator,
             id,
-            { name: name }
+            { name: name, ingredients: ingredients }
         );
 
         res.status(200).json(

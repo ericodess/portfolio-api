@@ -15,7 +15,7 @@ import { InHouseError } from "@types";
 import { DatabaseService, StringService } from "@services";
 
 export class ProductService {
-    public static visibleParameters = ["name", "realm"];
+    public static visibleParameters = ["name", "realm", "ingredients"];
 
     private static _populateOptions = [
         {
@@ -89,6 +89,7 @@ export class ProductService {
                 ? values.realmId
                 : operator.realm._id
         );
+        newEntry.ingredients = values.ingredients ?? [];
 
         await newEntry.save();
 
@@ -121,10 +122,11 @@ export class ProductService {
             StringService.toObjectId(id),
             {
                 $set: {
-                    name: values.name,
+                    name: values.name ?? undefined,
+                    ingredients: values.ingredients ?? undefined,
                 },
             },
-            { new: true, runValidators: true }
+            { runValidators: true }
         )
             .select(ProductService.visibleParameters)
             .populate(ProductService._populateOptions);

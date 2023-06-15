@@ -89,7 +89,7 @@ export class RealmService {
                     name: values.name?.trim(),
                 },
             },
-            { new: true, runValidators: true }
+            { runValidators: true }
         ).select(RealmService.visibleParameters);
     }
 
