@@ -3,15 +3,10 @@ import QRCode from "qrcode";
 import { Operator, OrderItemParam, QrCodeRseponse } from "karikarihelper";
 
 // Services
-import {
-    OrderService,
-    RequestService,
-    ResponseService,
-    StringService,
-} from "@services";
+import { OrderService, RequestService, ResponseService } from "@services";
 
 // Types
-import { OrderErrors, OrderModel } from "@models";
+import { OrderErrors } from "@models";
 import { InHouseError } from "@types";
 
 // Enums
@@ -39,21 +34,6 @@ router.get("/", async (req, res) => {
                 ),
             }
         );
-
-        for (const order of foundEventOrders) {
-            const newOrderItems: any[] = [];
-
-            newOrderItems.push({
-                product: StringService.toObjectId("646c159f33e672e1118a23c9"),
-                modifications: [],
-            });
-
-            await OrderModel.findByIdAndUpdate(order._id, {
-                $set: {
-                    items: newOrderItems,
-                },
-            });
-        }
 
         res.status(200).json(
             ResponseService.generateSucessfulResponse(foundEventOrders)
