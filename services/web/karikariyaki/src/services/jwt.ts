@@ -249,8 +249,8 @@ export class JWTService {
             sameSite: RequestService.queryParamToBoolean(
                 process.env.IS_PRODUCTION
             )
-                ? "None"
-                : "Strict",
+                ? "none"
+                : "strict",
             secure: RequestService.queryParamToBoolean(
                 process.env.IS_PRODUCTION
             ),
