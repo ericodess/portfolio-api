@@ -1,4 +1,5 @@
 import { Schema, Types, model } from "mongoose";
+import { EventOrder, Ingredient } from "karikarihelper";
 
 // Types
 import { InHouseError, Statics } from "@types";
@@ -104,8 +105,11 @@ const OrderSchema = new Schema(
         items: {
             type: [
                 {
-                    type: Schema.Types.ObjectId,
-                    ref: Statics.PRODUCT_COLLECTION_NAME,
+                    product: {
+                        type: Schema.Types.ObjectId,
+                        ref: Statics.PRODUCT_COLLECTION_NAME,
+                    },
+                    modifications: Array<Ingredient>,
                 },
             ],
             default: [],

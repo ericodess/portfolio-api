@@ -3,6 +3,7 @@ import {
     EventOrderCreatableParams,
     EventOrderEditableParams,
     EventOrderQueryableParams,
+    IngredientType,
     Operator,
     OperatorRole,
 } from "karikarihelper";
@@ -37,14 +38,17 @@ export class OrderService {
         },
         {
             path: "items",
-            select: "name",
+            select: ["product", "modifications"],
+            populate: {
+                path: "product",
+                select: "name",
+            },
         },
     ] as PopulateOptions[];
 
     public static async query(
         operator: Operator,
-        values: EventOrderQueryableParams,
-        willPopulate = true
+        values: EventOrderQueryableParams
     ) {
         await DatabaseService.getConnection();
 
@@ -90,19 +94,9 @@ export class OrderService {
             query.push({ client: values.clientName });
         }
 
-        if (values.itemsId) {
-            query.push({ items: values.itemsId });
-        }
-
-        if (willPopulate) {
-            return OrderModel.find(query.length === 0 ? null : { $and: query })
-                .select(OrderService.visibleParameters)
-                .populate(OrderService._populateOptions);
-        }
-
-        return OrderModel.find(
-            query.length === 0 ? null : { $and: query }
-        ).select(OrderService.visibleParameters);
+        return OrderModel.find(query.length === 0 ? null : { $and: query })
+            .select(OrderService.visibleParameters)
+            .populate(OrderService._populateOptions);
     }
 
     public static async queryById(id: string) {
@@ -124,15 +118,13 @@ export class OrderService {
         newEntry.event = StringService.toObjectId(values.eventId);
         newEntry.status = newEntry.status;
 
-        const foundOperator = await OperatorService.queryById(
-            values.operatorId
-        );
+        const foundOperator = await OperatorService.queryById(operator._id);
 
-        if (operator.role === OperatorRole.ADMIN) {
-            if (!foundOperator) {
-                throw new InHouseError(OperatorErrors.NOT_FOUND, 404);
-            }
+        if (!foundOperator) {
+            throw new InHouseError(OperatorErrors.NOT_FOUND, 404);
+        }
 
+        if (operator.role === OperatorRole.ADMIN && values.operatorId) {
             newEntry.operator = foundOperator._id;
             newEntry.realm = foundOperator.realm._id;
         } else {
@@ -142,8 +134,17 @@ export class OrderService {
 
         newEntry.client = values.clientName?.trim();
 
-        for (const itemId of values.itemsId) {
-            const foundItem = await ProductService.queryById(itemId);
+        for (const item of values.items) {
+            const isModificationValid =
+                item.modifications.filter(
+                    (entry) => entry.type === IngredientType.BASE
+                ).length === 0;
+
+            if (isModificationValid === false) {
+                throw new InHouseError(OrderErrors.REALM_INVALID, 400);
+            }
+
+            const foundItem = await ProductService.queryById(item.productId);
 
             if (
                 foundItem.realm._id.toString() !==
@@ -151,9 +152,12 @@ export class OrderService {
             ) {
                 throw new InHouseError(OrderErrors.REALM_INVALID, 400);
             }
-        }
 
-        newEntry.items = StringService.toObjectIds(values.itemsId);
+            newEntry.items.push({
+                product: StringService.toObjectId(item.productId),
+                modifications: item.modifications ?? [],
+            });
+        }
 
         await EventModel.findByIdAndUpdate(
             newEntry.event,

@@ -1,16 +1,16 @@
 import { Router } from "express";
 import QRCode from "qrcode";
-import { Operator, QrCodeRseponse } from "karikarihelper";
+import { Operator, OrderItemParam, QrCodeRseponse } from "karikarihelper";
 
 // Services
 import { OrderService, RequestService, ResponseService } from "@services";
 
-// Models
+// Types
 import { OrderErrors } from "@models";
+import { InHouseError } from "@types";
 
 // Enums
 import { OrderStatus } from "@enums";
-import { InHouseError } from "@types";
 
 const router = Router();
 
@@ -32,10 +32,24 @@ router.get("/", async (req, res) => {
                 clientName: RequestService.queryParamToString(
                     req.query.clientName
                 ),
-                itemsId: RequestService.queryParamToStrings(req.query.itemId),
             }
         );
+        /* TOOL FOR CONVERSION - TO-DO REMOVE
+        for (const order of foundEventOrders) {
+            const newOrderItems: any[] = [];
 
+            newOrderItems.push({
+                product: StringService.toObjectId("646c159f33e672e1118a23c9"),
+                modifications: [],
+            });
+
+            await OrderModel.findByIdAndUpdate(order._id, {
+                $set: {
+                    items: newOrderItems,
+                },
+            });
+        }
+        */
         res.status(200).json(
             ResponseService.generateSucessfulResponse(foundEventOrders)
         );
@@ -106,7 +120,7 @@ router.post("/", async (req, res) => {
         const clientName = RequestService.queryParamToString(
             req.body.clientName
         );
-        const itemsId = RequestService.queryParamToStrings(req.body.itemsId);
+        const items = req.body.items as OrderItemParam[];
 
         // Non obligatory params
         const operatorId = RequestService.queryParamToString(
@@ -114,7 +128,7 @@ router.post("/", async (req, res) => {
         );
         const status = RequestService.queryParamToString(req.body.status);
 
-        if (!eventId || !clientName || !itemsId || itemsId.length === 0) {
+        if (!eventId || !clientName || !items || items.length === 0) {
             throw new InHouseError(OrderErrors.INVALID, 400);
         }
 
@@ -125,7 +139,7 @@ router.post("/", async (req, res) => {
                 status: status,
                 operatorId: operatorId,
                 clientName: clientName,
-                itemsId: itemsId,
+                items: items,
             }
         );
 
