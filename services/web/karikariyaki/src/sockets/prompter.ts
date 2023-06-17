@@ -43,6 +43,8 @@ export class PrompterSocket {
                 return;
             }
 
+            socket.data.operator = loggedOperator;
+
             /**
              * Events
              */
@@ -52,8 +54,6 @@ export class PrompterSocket {
             /**
              * Event
              */
-            socket.data.operator = loggedOperator;
-
             joinEvent(socket);
             leaveEvent(socket);
         });
