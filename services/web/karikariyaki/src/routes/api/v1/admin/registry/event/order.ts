@@ -3,10 +3,15 @@ import QRCode from "qrcode";
 import { Operator, OrderItemParam, QrCodeRseponse } from "karikarihelper";
 
 // Services
-import { OrderService, RequestService, ResponseService } from "@services";
+import {
+    OrderService,
+    RequestService,
+    ResponseService,
+    StringService,
+} from "@services";
 
 // Types
-import { OrderErrors } from "@models";
+import { OrderErrors, OrderModel } from "@models";
 import { InHouseError } from "@types";
 
 // Enums
@@ -34,7 +39,7 @@ router.get("/", async (req, res) => {
                 ),
             }
         );
-        /* TOOL FOR CONVERSION - TO-DO REMOVE
+
         for (const order of foundEventOrders) {
             const newOrderItems: any[] = [];
 
@@ -49,7 +54,7 @@ router.get("/", async (req, res) => {
                 },
             });
         }
-        */
+
         res.status(200).json(
             ResponseService.generateSucessfulResponse(foundEventOrders)
         );
