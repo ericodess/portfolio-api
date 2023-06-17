@@ -1,4 +1,5 @@
 import { Schema, Types, model } from "mongoose";
+import { Ingredient } from "karikarihelper";
 
 // Types
 import { InHouseError, Statics } from "@types";
@@ -35,15 +36,6 @@ const validateProductName = async (name: string) => {
 
         throw new InHouseError(ProductErrors.NAME_GREATER_THAN_MAX_LENGTH);
     }
-
-    const entry = await ProductModel.findOne({
-        name: DatabaseService.generateExactInsensitiveQuery(name),
-        parent: null,
-    });
-
-    if (entry) {
-        throw new InHouseError(ProductErrors.NAME_DUPLICATED);
-    }
 };
 
 const validateProductRealm = async (realmId: Types.ObjectId) => {
@@ -51,18 +43,6 @@ const validateProductRealm = async (realmId: Types.ObjectId) => {
 
     if (!foundRealm) {
         throw new InHouseError(ProductErrors.REALM_INVALID);
-    }
-};
-
-const validateProductParent = async (parentProductId: Types.ObjectId) => {
-    if (!parentProductId) {
-        return;
-    }
-
-    const foundRealm = await ProductModel.findById(parentProductId);
-
-    if (!foundRealm) {
-        throw new InHouseError(ProductErrors.PARENT_INVALID);
     }
 };
 
@@ -78,18 +58,8 @@ const ProductSchema = new Schema({
         required: [true, ProductErrors.REALM_REQUIRED],
         validate: validateProductRealm,
     },
-    parent: {
-        type: Schema.Types.ObjectId,
-        ref: Statics.PRODUCT_COLLECTION_NAME,
-        validate: validateProductParent,
-    },
-    variants: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: Statics.PRODUCT_COLLECTION_NAME,
-            },
-        ],
+    ingredients: {
+        type: Array<Ingredient>,
         default: [],
     },
 });

@@ -22,12 +22,12 @@ import {
 const createOrder = (socket: Socket) =>
     socket.on("order:create", async (values: EventOrderCreatableParams) => {
         const operator = socket.data.operator as Operator;
-        const eventId = socket.data.eventId;
-        const itemsIds = values.itemsId;
+        const eventId = values.eventId;
+        const items = values.items;
         const clientName = values.clientName;
 
         try {
-            if (!operator || !eventId || !clientName || itemsIds.length === 0) {
+            if (!operator || !eventId || !clientName || items.length === 0) {
                 throw new InHouseError(OrderErrors.INVALID);
             }
 
@@ -45,7 +45,7 @@ const createOrder = (socket: Socket) =>
                 eventId: eventId,
                 status: OrderStatus.COOKING,
                 clientName: clientName,
-                itemsId: itemsIds,
+                items: items,
             });
 
             await SocketService.refreshOrders(eventId, operator);
@@ -60,14 +60,21 @@ const createOrder = (socket: Socket) =>
 const deleteOrder = (socket: Socket) =>
     socket.on("order:delete", async (id: string) => {
         const operator = socket.data.operator as Operator;
-        const eventId = socket.data.eventId;
 
         try {
-            if (!operator || !eventId) {
+            if (!operator) {
                 throw new InHouseError(OrderErrors.INVALID);
             }
 
-            const foundEvent = await EventService.queryById(eventId);
+            const foundOrder = await OrderService.queryById(id);
+
+            if (!foundOrder) {
+                throw new InHouseError(OrderErrors.NOT_FOUND);
+            }
+
+            const foundEvent = await EventService.queryById(
+                foundOrder.event._id.toString()
+            );
 
             if (!foundEvent) {
                 throw new InHouseError(EventErrors.NOT_FOUND);
@@ -77,19 +84,16 @@ const deleteOrder = (socket: Socket) =>
                 throw new InHouseError(EventErrors.NOT_ACTIVE);
             }
 
-            const foundOrder = await OrderService.queryById(id);
-
-            if (!foundOrder) {
-                throw new InHouseError(OrderErrors.NOT_FOUND);
-            }
-
             if (foundOrder.status !== OrderStatus.COOKING) {
                 throw new InHouseError(OrderErrors.INVALID);
             }
 
             await OrderService.delete(operator, id);
 
-            await SocketService.refreshOrders(eventId, operator);
+            await SocketService.refreshOrders(
+                foundOrder.event._id.toString(),
+                operator
+            );
 
             await SocketService.refreshOrder(id);
         } catch (error) {
@@ -105,14 +109,21 @@ const editOrder = (socket: Socket) =>
         "order:edit",
         async (order: { id: string; values: EventOrderEditableParams }) => {
             const operator = socket.data.operator as Operator;
-            const eventId = socket.data.eventId;
 
             try {
-                if (!operator || !eventId) {
+                if (!operator) {
                     throw new InHouseError(OrderErrors.INVALID);
                 }
 
-                const foundEvent = await EventService.queryById(eventId);
+                const foundOrder = await OrderService.queryById(order.id);
+
+                if (!foundOrder) {
+                    throw new InHouseError(OrderErrors.NOT_FOUND);
+                }
+
+                const foundEvent = await EventService.queryById(
+                    foundOrder.event._id.toString()
+                );
 
                 if (!foundEvent) {
                     throw new InHouseError(EventErrors.NOT_FOUND);
@@ -122,19 +133,16 @@ const editOrder = (socket: Socket) =>
                     throw new InHouseError(EventErrors.NOT_ACTIVE);
                 }
 
-                const foundOrder = await OrderService.queryById(order.id);
-
-                if (!foundOrder) {
-                    throw new InHouseError(OrderErrors.NOT_FOUND);
-                }
-
                 if (foundOrder.status === OrderStatus.PICKED_UP) {
                     throw new InHouseError(OrderErrors.PICKED_UP);
                 }
 
                 await OrderService.update(operator, order.id, order.values);
 
-                await SocketService.refreshOrders(eventId, operator);
+                await SocketService.refreshOrders(
+                    foundEvent._id.toString(),
+                    operator
+                );
 
                 await SocketService.refreshOrder(order.id);
             } catch (error) {

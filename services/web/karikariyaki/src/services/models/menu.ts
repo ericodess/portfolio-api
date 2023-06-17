@@ -138,7 +138,7 @@ export class MenuService {
                         children: newEntry._id,
                     },
                 },
-                { new: true, runValidators: true }
+                { runValidators: true }
             );
         }
 
@@ -182,7 +182,7 @@ export class MenuService {
                             : values.route ?? undefined,
                 },
             },
-            { new: true, runValidators: true }
+            { runValidators: true }
         )
             .select(MenuService.visibleParameters)
             .populate(MenuService._populateOptions);

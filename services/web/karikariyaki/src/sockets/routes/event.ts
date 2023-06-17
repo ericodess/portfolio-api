@@ -14,6 +14,42 @@ import {
     SocketService,
 } from "@services";
 
+// Sockets
+import { PrompterSocket, RejiSocket } from "@sockets";
+
+const createEvent = (socket: Socket) =>
+    socket.on("event:create", async (values: EventCreatableParams) => {
+        try {
+            const operator = socket.data.operator as Operator;
+
+            if (!operator) {
+                throw new InHouseError(EventErrors.INVALID);
+            }
+
+            await EventService.save(operator, values);
+
+            const updatedEvents = await EventService.query({}, false);
+
+            RejiSocket.namespace
+                .to("events")
+                .emit(
+                    "events:refresh",
+                    ResponseService.generateSucessfulResponse(updatedEvents)
+                );
+            PrompterSocket.namespace
+                .to("events")
+                .emit(
+                    "events:refresh",
+                    ResponseService.generateSucessfulResponse(updatedEvents)
+                );
+        } catch (error) {
+            socket.emit(
+                "event:error",
+                ResponseService.generateFailedResponse(error.message)
+            );
+        }
+    });
+
 const joinEvent = (socket: Socket) =>
     socket.on("event:join", async (eventId) => {
         const operator = socket.data.operator as Operator;
@@ -23,7 +59,7 @@ const joinEvent = (socket: Socket) =>
         }
 
         try {
-            let foundEvent = await EventService.queryById(eventId);
+            const foundEvent = await EventService.queryById(eventId);
 
             if (!foundEvent) {
                 throw new InHouseError(EventErrors.NOT_FOUND);
@@ -41,8 +77,6 @@ const joinEvent = (socket: Socket) =>
 
             socket.join(`event/${eventId}/${operator.realm._id}`);
 
-            socket.data.eventId = eventId;
-
             socket.emit(
                 "event:refresh",
                 ResponseService.generateSucessfulResponse(selectedEvent)
@@ -51,8 +85,6 @@ const joinEvent = (socket: Socket) =>
             const eventOrders = await OrderService.query(operator, {
                 eventId: eventId,
             });
-
-            socket.data.eventId = eventId;
 
             socket.emit(
                 "orders:refresh",
@@ -68,8 +100,6 @@ const joinEvent = (socket: Socket) =>
 
 const leaveEvent = (socket: Socket) =>
     socket.on("event:leave", () => {
-        socket.data.eventId = null;
-
         SocketService.leaveRooms(socket, "event");
 
         socket.emit(
@@ -78,4 +108,4 @@ const leaveEvent = (socket: Socket) =>
         );
     });
 
-export { joinEvent, leaveEvent };
+export { createEvent, joinEvent, leaveEvent };
