@@ -1,11 +1,9 @@
-[submodule "karikariyaki"]
+[submodule "services/web/karikariyaki"]
 	path = services/web/karikariyaki
 	url = https://github.com/pepeien/karikariyaki-api
-
-[submodule "namah"]
+[submodule "services/web/namah"]
 	path = services/web/namah
 	url = https://github.com/pepeien/namah-api
-
-[submodule "projects"]
+[submodule "services/web/projects"]
 	path = services/web/projects
 	url = https://github.com/pepeien/projects-api
