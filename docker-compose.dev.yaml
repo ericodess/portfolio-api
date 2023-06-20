@@ -45,45 +45,6 @@ services:
             - mongodb
         restart: unless-stopped
 
-    gifter:
-        container_name: portfolio_web_api_gifter
-        build:
-            context: ./services/web/gifter
-            dockerfile: Dockerfile
-        networks:
-            - web-network
-        volumes:
-            - ./node_modules/gifter:/app/node_modules
-        depends_on:
-            - mongodb
-        restart: unless-stopped
-
-    dashboard:
-        container_name: portfolio_web_api_dashboard
-        build:
-            context: ./services/web/dashboard
-            dockerfile: Dockerfile
-        networks:
-            - web-network
-        volumes:
-            - ./node_modules/dashboard:/app/node_modules
-        depends_on:
-            - mongodb
-        restart: unless-stopped
-
-    cors-anywhere:
-        container_name: portfolio_web_api_cors-anywhere
-        build:
-           context: ./services/web/cors-anywhere
-           dockerfile: Dockerfile
-        networks:
-            - web-network
-        volumes:
-            - ./node_modules/cors-anywhere:/app/node_modules
-        depends_on:
-            - mongodb
-        restart: unless-stopped
-
     karikariyaki:
         container_name: portfolio_web_api_karikariyaki
         build:
