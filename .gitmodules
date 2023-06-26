@@ -1,0 +1,9 @@
+[submodule "services/web/karikariyaki"]
+	path = services/web/karikariyaki
+	url = https://github.com/pepeien/karikariyaki-api
+[submodule "services/web/namah"]
+	path = services/web/namah
+	url = https://github.com/pepeien/namah-api
+[submodule "services/web/projects"]
+	path = services/web/projects
+	url = https://github.com/pepeien/projects-api
