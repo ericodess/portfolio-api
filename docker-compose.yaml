@@ -15,9 +15,6 @@ services:
             - proxy_certbot
             - projects
             - namah
-            - gifter
-            - dashboard
-            - cors-anywhere
             - karikariyaki
         restart: unless-stopped
         volumes:

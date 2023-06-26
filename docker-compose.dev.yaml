@@ -15,9 +15,6 @@ services:
         depends_on:
             - projects
             - namah
-            - gifter
-            - dashboard
-            - cors-anywhere
             - karikariyaki
         restart: unless-stopped
 
@@ -61,6 +58,8 @@ services:
     mongodb:
         container_name: portfolio_database_mongo
         image: mongo:6-jammy
+        ports:
+            - "27017:27017"
         networks:
             - web-network
             - database-network
