@@ -1,0 +1,39 @@
+.navbar {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	height: 100vh;
+
+	&__content {
+		width: 80vw;
+		height: 100%;
+		background-color: $foreground;
+	}
+
+	&__logo {
+		h3 {
+			color: $foreground-brighter;
+			padding-bottom: 0.2rem;
+			font-family: 'Roboto-Medium';
+			font-size: 1.5rem;
+		}
+
+		& .app-button__container, .app-button__background {
+			background-color: transparent !important;
+		}
+	}
+
+	&__hamburguer {
+		height: 10vh;
+		height: 10vh;
+	}
+}
+
+@media (min-width: 810px) {
+	.navbar {
+
+		&__content {
+			width: 20vw;
+		}
+	}
+}

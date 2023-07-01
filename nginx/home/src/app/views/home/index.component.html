@@ -3,11 +3,6 @@
 		<app-button class="header__logo --flex --flex-row" [onClick]="logoOnClick">
 			<h3>ericodesu API</h3>
 		</app-button>
-		<a class="header__login --flex" href="/dashboard">
-			<app-button>
-				<span>Login</span>
-			</app-button>
-		</a>
 	</nav>
 </header>
 <main class="content --flex --flex-column --flex-horizontal-centralized">
@@ -36,35 +31,25 @@
 						<span class="--button-text">{{ apiSource.name }}</span>
 					</li>
 				</ul>
+				<ul class="content__api__options --flex --flex-horizontal-centralized">
+					<li
+						class="content__api__option --flex --flex-horizontal-centralized --hoverable-button"
+						*ngFor="let apiEndpointSource of activeApiSource.endpoints"
+						[attr.active-api]="apiEndpointSource.name === activeEndpointSource.name"
+						(click)="onApiEndpointSourceClick(apiEndpointSource)"
+					>
+						<div class="--button-text">{{ apiEndpointSource.name }}</div>
+					</li>
+				</ul>
 				<app-code-block [code]="generateCodeExample()" language="javascript"></app-code-block>
 				<ul class="content__api__sub-options">
 					<li
-						class="content__api__sub-option"
-						*ngFor="let apiEndpointSource of activeApiSource.endpoints"
+						class="--flex --flex-horizontal-centralized --hoverable-button"
+						*ngFor="let apiEndpointSourceVariant of activeEndpointSource.variants"
+						[attr.active-api]="apiEndpointSourceVariant.name === activeEndpointSourceVariant?.name"
+						(click)="onApiEndpointSourceVariantClick(apiEndpointSourceVariant)"
 					>
-						<div
-							class="--flex --flex-column --flex-horizontal-centralized --hoverable-button"
-							[attr.active-api]="apiEndpointSource.name === activeEndpointSource.name"
-							(click)="onApiEndpointSourceClick(apiEndpointSource)"
-						>
-							<div class="--button-text">{{ apiEndpointSource.name }}</div>
-						</div>
-						<ul
-							class="content__api__sub-option__variants --flex --flex-column --flex-full-centralized"
-							*ngIf="
-								apiEndpointSource.name === activeEndpointSource.name &&
-								apiEndpointSource.variants && apiEndpointSource.variants.length > 0
-							"
-						>
-							<li
-								class="--flex --flex-horizontal-centralized --hoverable-button"
-								*ngFor="let apiEndpointSourceVariant of apiEndpointSource.variants"
-								[attr.active-api]="apiEndpointSourceVariant.name === activeEndpointSourceVariant?.name"
-								(click)="onApiEndpointSourceVariantClick(apiEndpointSourceVariant)"
-							>
-								<span class="--button-text">{{ apiEndpointSourceVariant.name }}</span>
-							</li>
-						</ul>
+						<span class="--button-text">{{ apiEndpointSourceVariant.name }}</span>
 					</li>
 				</ul>
 			</app-separator-block>

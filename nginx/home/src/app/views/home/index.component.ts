@@ -78,6 +78,8 @@ export class HomeViewComponent {
 		)}', {${this.getRequestParams(this.activeEndpointSource)}})`;
 
 		if (this.activeEndpointSourceVariant) {
+			this.activeEndpointSourceVariant.credentials = this.activeEndpointSource.credentials;
+
 			fetchTemplate = `fetch('${this.getUrl(
 				this.activeEndpointSourceVariant,
 				this.activeEndpointSource,
@@ -107,6 +109,7 @@ ${fetchTemplate}
 				method: this.activeEndpointSourceVariant.method,
 				body: this.activeEndpointSourceVariant.requestParams?.body,
 				headers: this.activeEndpointSourceVariant.requestParams?.headers,
+				credentials: this.activeEndpointSource.credentials,
 			})
 				.then((response) => {
 					return response.json();
@@ -120,25 +123,26 @@ ${fetchTemplate}
 						'\n' +
 						JSON.stringify({ wasSuccess: false, error: error.message }, null, '   ');
 				});
-		} else {
-			fetch(this.getUrl(this.activeEndpointSource, undefined), {
-				method: this.activeEndpointSource.method,
-				body: this.activeEndpointSource.requestParams?.body,
-				headers: this.activeEndpointSource.requestParams?.headers,
-			})
-				.then((response) => {
-					return response.json();
-				})
-				.then((data) => {
-					this.responseCode =
-						'\n' + JSON.stringify(data, this.truncateBase64Strings, '   ');
-				})
-				.catch((error) => {
-					this.responseCode =
-						'\n' +
-						JSON.stringify({ wasSuccess: false, error: error.message }, null, '   ');
-				});
+
+			return;
 		}
+
+		fetch(this.getUrl(this.activeEndpointSource, undefined), {
+			method: this.activeEndpointSource.method,
+			body: this.activeEndpointSource.requestParams?.body,
+			headers: this.activeEndpointSource.requestParams?.headers,
+			credentials: this.activeEndpointSource.credentials,
+		})
+			.then((response) => {
+				return response.json();
+			})
+			.then((data) => {
+				this.responseCode = '\n' + JSON.stringify(data, this.truncateBase64Strings, '   ');
+			})
+			.catch((error) => {
+				this.responseCode =
+					'\n' + JSON.stringify({ wasSuccess: false, error: error.message }, null, '   ');
+			});
 	}
 
 	public logoOnClick(): void {
@@ -222,6 +226,11 @@ ${fetchTemplate}
 		if (body.length > bodyTextDefaultSize + 1) {
 			result += `
 	${body}`;
+		}
+
+		if (target.credentials) {
+			result += `
+	credentials: '${target.credentials}',`;
 		}
 
 		result += `

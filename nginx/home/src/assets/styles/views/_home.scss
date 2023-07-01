@@ -12,6 +12,7 @@
 
 		& button {
 			& h3 {
+				color: white;
 				padding-bottom: 0.2rem;
 				font-family: 'Roboto-Medium';
 				font-size: 1.5rem;
@@ -21,6 +22,10 @@
 				-ms-transition: 	color ease-in-out .2s;
 				-o-transition: 		color ease-in-out .2s;
 				transition: 		color ease-in-out .2s;
+			}
+
+			& .app-button__container {
+				background-color: #73A8A0;
 			}
 		}
 	}
@@ -98,8 +103,11 @@
 			display: grid;
 			grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
 			margin: 1rem 0 .6rem 0;
-			justify-content: center;
 			gap: 1rem .6rem;
+
+			li {
+				width: 100%;
+			}
 
 			& .content__api__sub-option {
 				position: relative;
@@ -237,23 +245,8 @@
 
 			& button {
 				& h3 {
-					color: white;
 					padding-bottom: 0.3vh;
 					font-size: 3vh;
-				}
-
-				& .app-button__background {
-					background-color: black;
-
-					-webkit-transform: translateX(0); 
-					-moz-transform:    translateX(0); 
-					-ms-transform:     translateX(0); 
-					-o-transform: 	   translateX(0); 
-					transform:         translateX(0);
-				}
-	
-				& .app-button__container {
-					background-color: #73A8A0;
 				}
 			}
 		}
@@ -302,6 +295,9 @@
 					& .block__separator {
 						margin: 8vh 0 3vh 0 !important;
 	
+						&__title {
+							margin-bottom: 7vh;
+						}
 						& .content__api__options {
 							display: flex;
 						}
@@ -351,7 +347,7 @@
 	
 			& > .block__separator >.block__separator__content {
 				grid-template-columns: repeat(auto-fit, minmax(30vh, 1fr));
-				gap: 2vh 1vh;
+				gap: 5vh 1vh;
 			}
 	
 			& .content__endpoint {

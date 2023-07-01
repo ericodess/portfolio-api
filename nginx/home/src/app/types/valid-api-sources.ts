@@ -8,6 +8,99 @@ const isSecure = environment.production;
 
 export default [
 	{
+		name: 'Karikariyaki',
+		rootUrl: rootUrl,
+		rootPath: 'karikariyaki',
+		isSecure: isSecure,
+		endpoints: [
+			{
+				name: 'Sign In',
+				method: 'POST',
+				path: 'operator/sign-in',
+				version: 1,
+				requestParams: {
+					body: {
+						userName: 'demo_operator',
+					},
+				},
+			},
+			{
+				name: 'Sign Out',
+				method: 'POST',
+				path: 'operator/sign-out',
+				version: 1,
+			},
+			{
+				name: 'Menus',
+				method: 'GET',
+				path: 'registry/menu',
+				version: 1,
+				credentials: 'include',
+				variants: [
+					{
+						name: 'Operator Menus',
+						method: 'GET',
+						path: 'self',
+						version: 1,
+					},
+					{
+						name: 'Menus by Id',
+						method: 'GET',
+						version: 1,
+						requestParams: {
+							searchParams: {
+								id: '6459169e414bf5d047eeb4c3',
+							},
+						},
+					},
+					{
+						name: 'Menus by Title',
+						method: 'GET',
+						version: 1,
+						requestParams: {
+							searchParams: {
+								title: 'MENU_HOME_TITLE',
+							},
+						},
+					},
+					{
+						name: 'Menu by Parent Id',
+						method: 'GET',
+						version: 1,
+						requestParams: {
+							searchParams: {
+								parentId: '6459169e414bf5d047eeb4c3',
+							},
+						},
+					},
+					{
+						name: 'Create Menu',
+						method: 'POST',
+						version: 1,
+						requestParams: {
+							body: {
+								title: '',
+								icon: '',
+								route: '',
+								parentId: '',
+							},
+						},
+					},
+					{
+						name: 'Update Menu',
+						method: 'UPDATE',
+						version: 1,
+					},
+					{
+						name: 'Delete Menu',
+						method: 'DELETE',
+						version: 1,
+					},
+				],
+			},
+		],
+	},
+	{
 		name: 'Projects',
 		rootUrl: rootUrl,
 		rootPath: 'projects',

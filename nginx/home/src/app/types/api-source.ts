@@ -13,6 +13,7 @@ export interface EndpointSource {
 	method: RequestMethod;
 	variants?: Omit<EndpointSource, 'variants'>[];
 	requestParams?: EndpointRequest;
+	credentials?: RequestCredentials;
 }
 
 export interface ApiSource {

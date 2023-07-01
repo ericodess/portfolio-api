@@ -2,9 +2,11 @@
 @import 'base/reset';
 @import 'base/fonts-roboto';
 @import 'base/fonts-roboto-mono';
+@import 'base/variables';
 
 // Components Import
 @import "prismjs/themes/prism-okaidia.css";
+@import 'components/navbar';
 
 // Pages Import
 @import 'views/home';
