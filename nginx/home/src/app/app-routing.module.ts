@@ -11,12 +11,12 @@ const routes: Routes = [
 		component: HomeViewComponent,
 	},
 	{
-		path: ':rootPath',
+		path: 'service/:rootPath',
 		pathMatch: 'full',
 		component: ServiceViewComponent,
 	},
 	{
-		path: '404/:path',
+		path: '**',
 		component: NotFoundViewComponent,
 	},
 ];

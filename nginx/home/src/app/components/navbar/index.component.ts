@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router, RouterEvent } from '@angular/router';
+import { Router, RouterEvent } from '@angular/router';
 
 // Types
-import { ApiSource, ValidApiSources, ValidApiSourcesV2 } from 'src/app/types';
+import { ApiSource, ValidApiSourcesV2 } from 'src/app/types';
+
+// Services
+import { StringService } from 'src/app/services';
 
 @Component({
 	selector: 'app-navbar',
@@ -22,12 +25,12 @@ export class NavbarComponent {
 	/**
 	 * In House
 	 */
-	public availableSources = ValidApiSources;
+	public availableSources = ValidApiSourcesV2;
 	public currentApiSource: ApiSource | undefined;
 
 	private _touchOrigin: Touch | null = null;
 
-	constructor(private _router: Router) {}
+	constructor(private _router: Router, private _stringService: StringService) {}
 
 	ngOnInit(): void {
 		this._setupScapeMovements();
@@ -57,9 +60,15 @@ export class NavbarComponent {
 			return;
 		}
 
-		this._router.navigate([targetService.rootPath]).then(() => {
-			this.onHamburguerClick();
-		});
+		this._router
+			.navigateByUrl(
+				`/service/${this._stringService.removeLeadingAndTrailingSlashes(
+					targetService.rootPath,
+				)}`,
+			)
+			.then(() => {
+				this.onHamburguerClick();
+			});
 	}
 
 	private _doesHeritageContainClassname(classList: string[], element: HTMLElement): boolean {
@@ -151,7 +160,7 @@ export class NavbarComponent {
 				const splittedURL = changeEvent.url.split('/');
 				const currentPath = splittedURL[splittedURL.length - 1].toUpperCase();
 
-				this.currentApiSource = ValidApiSources.find(
+				this.currentApiSource = ValidApiSourcesV2.find(
 					(endpoint) => endpoint.rootPath.toUpperCase() === currentPath,
 				);
 			},

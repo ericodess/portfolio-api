@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 // Types
 import { ApiSource, ValidApiSourcesV2 } from 'src/app/types';
+
+// Services
+import { StringService } from 'src/app/services';
 
 @Component({
 	selector: 'app-endpoint-view',
@@ -11,35 +14,33 @@ import { ApiSource, ValidApiSourcesV2 } from 'src/app/types';
 export class ServiceViewComponent implements OnInit {
 	public currentApiSource!: ApiSource;
 
-	constructor(private _route: ActivatedRoute, private _router: Router) {}
+	constructor(
+		private _route: ActivatedRoute,
+		private _router: Router,
+		private _stringService: StringService,
+	) {}
 
 	ngOnInit(): void {
-		this._updateCurrentApiSource();
+		this._route.url.subscribe({
+			next: (url) => {
+				const currentPath = url[url.length - 1].path.trim();
+				const currentPathUpper = currentPath.toUpperCase().trim();
 
-		this._router.events.subscribe({
-			next: (event) => {
-				if (event instanceof NavigationEnd === false) {
+				const foundApiSource = ValidApiSourcesV2.find(
+					(endpoint) => endpoint.rootPath.toUpperCase().trim() === currentPathUpper,
+				);
+
+				if (!foundApiSource) {
+					this._router.navigate(
+						[this._stringService.removeLeadingAndTrailingSlashes(currentPath)],
+						{ replaceUrl: true },
+					);
+
 					return;
 				}
 
-				this._updateCurrentApiSource();
+				this.currentApiSource = foundApiSource;
 			},
 		});
-	}
-
-	private _updateCurrentApiSource() {
-		const currentPath = this._route.snapshot.params['rootPath'].toUpperCase().trim();
-
-		const foundApiSource = ValidApiSourcesV2.find(
-			(endpoint) => endpoint.rootPath.toUpperCase().trim() === currentPath,
-		);
-
-		if (!foundApiSource) {
-			this._router.navigate([`404/${currentPath}`]);
-
-			return;
-		}
-
-		this.currentApiSource = foundApiSource;
 	}
 }

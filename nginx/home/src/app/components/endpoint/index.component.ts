@@ -3,6 +3,9 @@ import { Component, Input } from '@angular/core';
 // Types
 import { EndpointSource } from 'src/app/types';
 
+// Services
+import { StringService } from 'src/app/services';
+
 @Component({
 	selector: 'app-endpoint',
 	templateUrl: './index.component.html',
@@ -15,9 +18,14 @@ export class EndpointComponent {
 	@Input()
 	public parentEndpoint: EndpointSource | undefined;
 
+	constructor(private _stringService: StringService) {}
 	public getPath() {
-		const rasterizedRootPath = this._removeLeadingAndTrailingSlashes(this.rootPath);
-		const rasterizedEndpointPath = this._removeLeadingAndTrailingSlashes(this.endpoint.path);
+		const rasterizedRootPath = this._stringService.removeLeadingAndTrailingSlashes(
+			this.rootPath,
+		);
+		const rasterizedEndpointPath = this._stringService.removeLeadingAndTrailingSlashes(
+			this.endpoint.path,
+		);
 
 		if (!this.parentEndpoint) {
 			if (rasterizedEndpointPath) {
@@ -27,7 +35,7 @@ export class EndpointComponent {
 			return `/${rasterizedRootPath}`;
 		}
 
-		const rasterizedParentEndpointPath = this._removeLeadingAndTrailingSlashes(
+		const rasterizedParentEndpointPath = this._stringService.removeLeadingAndTrailingSlashes(
 			this.parentEndpoint.path,
 		);
 
@@ -42,15 +50,5 @@ export class EndpointComponent {
 		}
 
 		return path;
-	}
-
-	private _removeLeadingAndTrailingSlashes(value: string) {
-		if (!value) {
-			return undefined;
-		}
-
-		const rasterizedRoute = value.trim().toLowerCase().replace(/^\/+/g, '');
-
-		return rasterizedRoute.replace(/\/+$/, '');
 	}
 }
