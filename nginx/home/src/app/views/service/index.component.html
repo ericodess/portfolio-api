@@ -1,4 +1,4 @@
-<main *ngIf="currentApiSource" class="service">
+<div class="service">
 	<div class="service__title">{{ currentApiSource.name }}</div>
 	<div class="service__endpoints">
 		<ul *ngFor="let endpoint of currentApiSource.endpoints">
@@ -19,4 +19,4 @@
 			</li>
 		</ul>
 	</div>
-</main>
+</div>

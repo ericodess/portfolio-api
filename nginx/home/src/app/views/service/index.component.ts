@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
 
 // Types
-import { ApiSource, ValidApiSources, ValidApiSourcesV2 } from 'src/app/types';
+import { ApiSource, ValidApiSourcesV2 } from 'src/app/types';
 
 @Component({
 	selector: 'app-endpoint-view',
 	templateUrl: './index.component.html',
 })
 export class ServiceViewComponent implements OnInit {
-	public currentApiSource: ApiSource | undefined;
+	public currentApiSource!: ApiSource;
 
 	constructor(private _route: ActivatedRoute, private _router: Router) {}
 
@@ -26,11 +26,18 @@ export class ServiceViewComponent implements OnInit {
 			},
 		});
 	}
+
 	private _updateCurrentApiSource() {
-		this.currentApiSource = ValidApiSourcesV2.find(
+		const foundApiSource = ValidApiSourcesV2.find(
 			(endpoint) =>
 				endpoint.rootPath.toUpperCase() ===
 				this._route.snapshot.params['rootPath'].toUpperCase(),
 		);
+
+		if (!foundApiSource) {
+			return;
+		}
+
+		this.currentApiSource = foundApiSource;
 	}
 }

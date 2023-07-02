@@ -2,9 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 // Components
-import { ServiceViewComponent } from './views';
+import { HomeViewComponent, ServiceViewComponent } from './views';
 
 const routes: Routes = [
+	{
+		path: '',
+		pathMatch: 'full',
+		component: HomeViewComponent,
+	},
 	{
 		path: ':rootPath',
 		pathMatch: 'full',

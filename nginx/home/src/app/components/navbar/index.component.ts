@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, RouterEvent } from '@angular/router';
+import { ActivatedRoute, Router, RouterEvent } from '@angular/router';
 
 // Types
-import { ApiSource, ValidApiSources } from 'src/app/types';
+import { ApiSource, ValidApiSources, ValidApiSourcesV2 } from 'src/app/types';
 
 @Component({
 	selector: 'app-navbar',
@@ -44,6 +44,12 @@ export class NavbarComponent {
 
 	public onHamburguerClick() {
 		this.isNavbarActive = !this.isNavbarActive;
+	}
+
+	public onLogoTitle() {
+		this._router.navigate(['']).then(() => {
+			this.onHamburguerClick();
+		});
 	}
 
 	public onServiceClick(targetService: ApiSource) {
@@ -143,11 +149,10 @@ export class NavbarComponent {
 				}
 
 				const splittedURL = changeEvent.url.split('/');
+				const currentPath = splittedURL[splittedURL.length - 1].toUpperCase();
 
 				this.currentApiSource = ValidApiSources.find(
-					(endpoint) =>
-						endpoint.rootPath.toUpperCase() ===
-						splittedURL[splittedURL.length - 1].toUpperCase(),
+					(endpoint) => endpoint.rootPath.toUpperCase() === currentPath,
 				);
 			},
 		});

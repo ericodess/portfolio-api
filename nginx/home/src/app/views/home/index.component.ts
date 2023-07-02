@@ -9,7 +9,6 @@ import { ApiSource, EndpointSource, ValidApiSources } from 'src/app/types';
 @Component({
 	selector: 'app-home-view',
 	templateUrl: './index.component.html',
-	styleUrls: ['../../../assets/styles/views/_home.scss'],
 })
 export class HomeViewComponent {
 	public apiSources = ValidApiSources;

@@ -1,6 +1,6 @@
 <nav class="navbar" [attr.data-is-active]="isNavbarActive">
 	<div class="navbar__content">
-		<div class="navbar__logo">
+		<div class="navbar__logo" (click)="onLogoTitle()">
 			<h3>Erick's API</h3>
 		</div>
 		<ul class="navbar__services">
