@@ -5,16 +5,11 @@ import { CommonModule } from '@angular/common';
 import { ServiceViewComponent } from './index.component';
 
 // Modules
-import {
-	AppButtonModule,
-	CodeBlockModule,
-	NavbarModule,
-	SeparatorBlockModule,
-} from 'src/app/components';
+import { EndpointModule, NavbarModule } from 'src/app/components';
 
 @NgModule({
 	declarations: [ServiceViewComponent],
-	imports: [CommonModule, NavbarModule],
+	imports: [CommonModule, EndpointModule, NavbarModule],
 	providers: [],
 })
 export class ServiceViewModule {}

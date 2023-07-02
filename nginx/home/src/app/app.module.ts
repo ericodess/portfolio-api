@@ -9,13 +9,15 @@ import { AppComponent } from './app.component';
 import { AppRouterService, HighlightService } from './services';
 
 // Modules
-import { HomeViewModule } from './views';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './app-shared.module';
 
+// Components
+import { NavbarModule } from './components';
+
 @NgModule({
 	declarations: [AppComponent],
-	imports: [AppRoutingModule, BrowserModule, HomeViewModule, SharedModule],
+	imports: [AppRoutingModule, BrowserModule, NavbarModule, SharedModule],
 	providers: [AppRouterService, HighlightService, RouterModule],
 	bootstrap: [AppComponent],
 })

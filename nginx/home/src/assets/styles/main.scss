@@ -1,3 +1,5 @@
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+
 // Base Import
 @import 'base/reset';
 @import 'base/fonts-roboto';
@@ -5,13 +7,35 @@
 @import 'base/variables';
 
 // Components Import
-@import "prismjs/themes/prism-okaidia.css";
+@import 'prismjs/themes/prism-okaidia.css';
+@import 'components/endpoint';
 @import 'components/navbar';
 
 // Pages Import
 @import 'views/home';
+@import 'views/services';
 
 // Themes Import
 
 // Layout Import
 @import 'layout/mods';
+
+app-endpoint-view, app-root {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+}
+
+main {
+	width: 100%;
+	height: 100%;
+}
+
+@media (min-width: 810px) {
+	app-endpoint-view, app-root {
+		width: auto;
+	}
+}

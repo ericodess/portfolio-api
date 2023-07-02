@@ -1,10 +1,13 @@
 $background: #ffffff;
-$foreground: #233142;
+$foreground: #0f0f0f;
 $foreground-bright: #34465C;
 $foreground-brighter: #ACC5E3;
 $foreground-disabled: #657385;
-$accent-dark: #ffffff99;
-$accent-bright: #ffffff;
+$accent-dark: rgb(2, 70, 64);
+$accent-bright: rgb(0, 200, 150);
 $yellow-dark: #C79D39;
 $red-dark: #F44336;
 $red-light: #E9564B;
+
+$border-radius: 14px;
+$max-z-index: 100;

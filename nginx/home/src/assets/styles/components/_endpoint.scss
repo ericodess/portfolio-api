@@ -1,0 +1,32 @@
+.endpoint {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+	height: 6vh;
+	border: 1px solid $foreground-disabled;
+
+	&__method, &__path {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		height: 100%;
+		width: 100%;
+		font-family: 'Roboto-Mono-Regular';
+		font-size: 0.7rem;
+	}
+
+	&__method {
+		justify-content: center;
+		width: 8vh;
+		color: $foreground;
+		background-color: $accent-bright;
+		text-transform: uppercase;
+	}
+
+	&__path {
+		color: $background;
+		background-color: $foreground-bright;
+		padding-left: 1vh;
+	}
+}

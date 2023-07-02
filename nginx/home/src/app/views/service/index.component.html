@@ -1,3 +1,22 @@
-<header>
-	<app-navbar></app-navbar>
-</header>
+<main *ngIf="currentApiSource" class="service">
+	<div class="service__title">{{ currentApiSource.name }}</div>
+	<div class="service__endpoints">
+		<ul *ngFor="let endpoint of currentApiSource.endpoints">
+			<li>
+				<app-endpoint
+					[rootPath]="currentApiSource.rootPath"
+					[endpoint]="endpoint"
+				>
+				</app-endpoint>
+			</li>
+			<li *ngFor="let variant of endpoint.variants">
+				<app-endpoint
+					[rootPath]="currentApiSource.rootPath"
+					[endpoint]="variant"
+					[parentEndpoint]="endpoint"
+				>
+				</app-endpoint>
+			</li>
+		</ul>
+	</div>
+</main>
