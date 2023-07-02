@@ -28,13 +28,15 @@ export class ServiceViewComponent implements OnInit {
 	}
 
 	private _updateCurrentApiSource() {
+		const currentPath = this._route.snapshot.params['rootPath'].toUpperCase().trim();
+
 		const foundApiSource = ValidApiSourcesV2.find(
-			(endpoint) =>
-				endpoint.rootPath.toUpperCase() ===
-				this._route.snapshot.params['rootPath'].toUpperCase(),
+			(endpoint) => endpoint.rootPath.toUpperCase().trim() === currentPath,
 		);
 
 		if (!foundApiSource) {
+			this._router.navigate([`404/${currentPath}`]);
+
 			return;
 		}
 
