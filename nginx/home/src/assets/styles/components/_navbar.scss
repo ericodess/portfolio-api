@@ -1,13 +1,13 @@
-$navbar-content-width: calc(100vw - 8vh);
+$navbar-hamburguer-size: 4rem;
+$navbar-content-width: calc(100vw - $navbar-hamburguer-size);
 $navbar-content-width-neg: calc($navbar-content-width * -1);
-$navbar-hamburguer-size: 8vh;
 
 .navbar {
 	position: absolute;
 	display: flex;
 	flex-direction: row;
 	align-items: flex-end;
-	height: 100vh;
+	height: 100dvh;
 	pointer-events: none;
 
 	-webkit-transition: transform ease-in-out .3s;
@@ -38,7 +38,7 @@ $navbar-hamburguer-size: 8vh;
 		box-shadow:         0px 10px 15px 3px rgba(0,0,0,0.1);
 	}
 
-	&__services{
+	&__services {
 		display: flex;
 		flex-direction: column-reverse;
 
@@ -47,7 +47,7 @@ $navbar-hamburguer-size: 8vh;
 			flex-direction: row;
 			align-items: center;
 			padding: 0 1vh;
-			height: 8vh;
+			height: clamp(8vh, 8vh + 2rem, 10vw);
 			color: $background;
 			font-family: "Roboto-Thin";
 			text-transform: uppercase;

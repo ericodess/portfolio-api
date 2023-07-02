@@ -13,7 +13,7 @@
 
 // Pages Import
 @import 'views/home';
-@import 'views/services';
+@import 'views/service';
 
 // Themes Import
 
@@ -24,7 +24,7 @@ app-endpoint-view, app-root {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
-	height: 100vh;
+	height: 100dvh;
 	width: 100vw;
 	overflow: hidden;
 }
