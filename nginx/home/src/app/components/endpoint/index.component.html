@@ -17,28 +17,52 @@
 					{{ variant.method }}
 				</li>
 			</ul>
-			<form *ngIf="selectedVariant.parameters?.search" [formGroup]="searchForm">
-				<span>Search</span>
-				<div *ngFor="let control of selectedVariant.parameters?.search">
-					<mat-label>{{ control.label }}</mat-label>
-					<input matInput [formControlName]="control.label" [type]="control.type === 'number' ? 'number' : 'text'">
+			<form *ngIf="canRenderSearchForm()" [formGroup]="searchForm">
+				<span class="endpoint__tester__title">Search Parameters</span>
+				<div *ngFor="let control of selectedVariant?.parameters?.search">
+					<span>{{ control.label }}</span>
+					<input
+						matInput
+						[formControlName]="control.label" 
+						[type]="control.type === 'number' ? 'number' : 'text'"
+						[min]="0"
+					>
+					<span>{{ control.type }}</span>
 				</div>
 			</form>
-			<form *ngIf="selectedVariant.parameters?.query" [formGroup]="queryForm">
-				<span>Query</span>
-				<div *ngFor="let control of selectedVariant.parameters?.query">
-					<label>{{ control.label }}</label>
-					<input matInput [formControlName]="control.label" [type]="control.type === 'number' ? 'number' : 'text'">
+			<form *ngIf="canRenderQueryForm()" [formGroup]="queryForm">
+				<span class="endpoint__tester__title">Query Parameters</span>
+				<div *ngFor="let control of selectedVariant?.parameters?.query">
+					<span>{{ control.label }}</span>
+					<input
+						matInput
+						[formControlName]="control.label"
+						[type]="control.type === 'number' ? 'number' : 'text'"
+						[min]="0"
+					>
+					<span>{{ control.type }}</span>
 				</div>
 			</form>
-			<form *ngIf="selectedVariant.parameters?.body" [formGroup]="bodyForm">
-				<span>Body</span>
-				<div *ngFor="let control of selectedVariant.parameters?.body">
-					<mat-label>{{ control.label }}</mat-label>
-					<input matInput [formControlName]="control.label" [type]="control.type === 'number' ? 'number' : 'text'">
+			<form *ngIf="canRenderBodyForm()" [formGroup]="bodyForm">
+				<span class="endpoint__tester__title">Body Parameters</span>
+				<div *ngFor="let control of selectedVariant?.parameters?.body">
+					<span>{{ control.label }}</span>
+					<input
+						matInput
+						[formControlName]="control.label"
+						[type]="control.type === 'number' ? 'number' : 'text'"
+						[min]="0"
+					>
+					<span>{{ control.type }}</span>
 				</div>
 			</form>
-			<button class="endpoint__tester__submit" (click)="onSubmitClick()">Fetch</button>
+			<button
+				class="endpoint__tester__submit"
+				[disabled]="canFetch || searchForm.invalid || queryForm.invalid || bodyForm.invalid"
+				(click)="onSubmitClick()"
+			>
+				Fetch
+			</button>
 		</div>
 		<div class="endpoint__tester__response">
 			<app-code-block [code]="responseCode" language="javascript"></app-code-block>

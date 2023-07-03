@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 // Types
 import { ApiSource, Endpoint, VariantEndpoint } from 'src/app/types';
@@ -23,13 +23,13 @@ export class EndpointComponent implements OnInit {
 	 * Primitives
 	 */
 	public isTesterVisible = false;
-
+	public canFetch = false;
 	public responseCode = '';
 
 	/**
 	 * In House
 	 */
-	public selectedVariant!: VariantEndpoint;
+	public selectedVariant: VariantEndpoint | undefined;
 
 	/**
 	 * Forms
@@ -90,7 +90,43 @@ export class EndpointComponent implements OnInit {
 	}
 
 	public isVariantActive(variant: VariantEndpoint) {
+		if (!this.selectedVariant) {
+			return false;
+		}
+
 		return this.selectedVariant.method === variant.method;
+	}
+
+	public canRenderSearchForm() {
+		if (!this.selectedVariant) {
+			return false;
+		}
+
+		return (
+			this.selectedVariant.parameters?.search &&
+			this.selectedVariant.parameters.search.length > 0
+		);
+	}
+
+	public canRenderQueryForm() {
+		if (!this.selectedVariant) {
+			return false;
+		}
+
+		return (
+			this.selectedVariant.parameters?.query &&
+			this.selectedVariant.parameters.query.length > 0
+		);
+	}
+
+	public canRenderBodyForm() {
+		if (!this.selectedVariant) {
+			return false;
+		}
+
+		return (
+			this.selectedVariant.parameters?.body && this.selectedVariant.parameters.body.length > 0
+		);
 	}
 
 	public onHeaderClick() {
@@ -103,10 +139,11 @@ export class EndpointComponent implements OnInit {
 		}
 
 		this.selectedVariant = variant;
+		this.canFetch = this.selectedVariant.method !== 'GET';
 	}
 
 	public onSubmitClick() {
-		if (!this.selectedVariant) {
+		if (!this.selectedVariant || this.canFetch) {
 			return;
 		}
 
@@ -183,7 +220,10 @@ export class EndpointComponent implements OnInit {
 			targetEndpoint.parameters.search.forEach((parameter) => {
 				this.searchForm.addControl(
 					parameter.label,
-					new FormControl(parameter.defaultValue ?? ''),
+					new FormControl(
+						parameter.defaultValue ?? '',
+						parameter.type === 'number' ? [Validators.min(0)] : [],
+					),
 				);
 			});
 		}
@@ -192,7 +232,10 @@ export class EndpointComponent implements OnInit {
 			targetEndpoint.parameters.query.forEach((parameter) => {
 				this.queryForm.addControl(
 					parameter.label,
-					new FormControl(parameter.defaultValue ?? ''),
+					new FormControl(
+						parameter.defaultValue ?? '',
+						parameter.type === 'number' ? [Validators.min(0)] : [],
+					),
 				);
 			});
 		}
@@ -201,7 +244,10 @@ export class EndpointComponent implements OnInit {
 			targetEndpoint.parameters.body.forEach((parameter) => {
 				this.bodyForm.addControl(
 					parameter.label,
-					new FormControl(parameter.defaultValue ?? ''),
+					new FormControl(
+						parameter.defaultValue ?? '',
+						parameter.type === 'number' ? [Validators.min(0)] : [],
+					),
 				);
 			});
 		}

@@ -1,8 +1,7 @@
 .endpoint {
 	display: flex;
 	flex-direction: column;
-	width: 95%;
-	margin: 0 auto;
+	width: 100%;
 	border-radius: $border-radius;
 	overflow: hidden;
 
@@ -97,6 +96,16 @@
 		-o-transition: 		height ease-in-out .3s;
 		transition: 		height ease-in-out .3s;
 
+		&__title {
+			display: flex;
+			align-items: center;
+			padding: 0 1vh;
+			background-color: $foreground-bright;
+			color: $background;
+			font-family: 'Roboto-Bold';
+			height: 5vh;
+		}
+
 		&__variants {
 			display: grid !important;
 			grid-template-columns: repeat(auto-fit, minmax(5vh, 1fr)) !important;
@@ -118,7 +127,7 @@
 				transition: 		background-color ease-in-out .3s, font-family ease-in-out .3s;
 
 				&[data-is-active="true"], &:hover {
-					background-color: $foreground-bright;
+					background-color: #464d57;
 				}
 
 				&:hover {
@@ -131,14 +140,69 @@
 
 		&__form {
 			display: flex;
-			flex-direction: column-reverse;
+			flex-direction: column;
 			width: 100%;
 			flex-grow: 2;
+			overflow: hidden;
+			overflow-y: auto;
+		}
+
+		& form {
+			display: flex;
+			flex-direction: column;
+			gap: 1vh 0;
+			font-family: 'Roboto-Regular';
+			margin-bottom: 1vh;
+
+			> div {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				width: 100%;
+
+				& span {
+					width: 100%;
+					padding-left: 2vh;
+					color: $background;
+				}
+
+				& input {
+					width: 88%;
+					padding: 2vh 1vh;
+					border-radius: $border-radius;
+					outline: none;
+					border: none;
+					background-color: $foreground-bright;
+					color: $background;
+				}
+			}
 		}
 
 		&__submit {
-			background-color: black;
-			color: white;
+			font-family: 'Roboto-Mono-Thin';
+			font-size: clamp(0.5rem, 0.5rem + 1vh, 4vh);
+			padding: 1.5vh 0;
+			background-color: $foreground;
+			color: $background;
+			margin-top: auto;
+
+			-webkit-transition: background-color ease-in-out .3s, color ease-in-out .3s;
+			-moz-transition: 	background-color ease-in-out .3s, color ease-in-out .3s;
+			-ms-transition: 	background-color ease-in-out .3s, color ease-in-out .3s;
+			-o-transition: 		background-color ease-in-out .3s, color ease-in-out .3s;
+			transition: 		background-color ease-in-out .3s, color ease-in-out .3s;
+
+			&:not(:disabled):hover {
+				cursor: pointer;
+
+				background-color: $accent-bright;
+				color: $foreground;
+			}
+
+			&:disabled {
+				background-color: #323436c2;
+				color: #696d70;
+			}
 		}
 
 		&__response {
@@ -169,17 +233,32 @@
 			flex-direction: row;
 			
 			&__form {
-				flex-direction: column;
-				width: 60%;
+				width: 100%;
+			}
+
+			& form {
+				> div {
+					flex-direction: row;
+
+					& span {
+						width: 15%;
+						padding-left: 1vh;
+					}
+	
+					& input {
+						flex-grow: 2;
+						padding: 1.5vh 1vh;
+					}
+				}
 			}
 
 			&__response {
-				width: 40%;
 				height: 100%;
 
 
 				& .code__block {
 					height: 40vh;
+					width: 30vw;
 				}
 			}
 		}
