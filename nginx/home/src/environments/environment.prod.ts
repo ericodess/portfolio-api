@@ -1,4 +1,4 @@
 export const environment = {
-	rootUrl: 'localhost',
-	production: false,
+	rootUrl: 'api.ericodesu.com',
+	production: true,
 };
