@@ -58,7 +58,7 @@
 			</form>
 			<button
 				class="endpoint__tester__submit"
-				[disabled]="canFetch || searchForm.invalid || queryForm.invalid || bodyForm.invalid"
+				[disabled]="canFetch === false || isSearchFormInvalid() || isQueryFormInvalid() || isBodyFormInvalid()"
 				(click)="onSubmitClick()"
 			>
 				Fetch

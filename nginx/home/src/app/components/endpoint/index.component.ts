@@ -129,6 +129,30 @@ export class EndpointComponent implements OnInit {
 		);
 	}
 
+	public isSearchFormInvalid() {
+		if (!this.selectedVariant) {
+			return false;
+		}
+
+		return this.searchForm.invalid || this.searchForm.disabled;
+	}
+
+	public isQueryFormInvalid() {
+		if (!this.selectedVariant) {
+			return false;
+		}
+
+		return this.queryForm.invalid || this.queryForm.disabled;
+	}
+
+	public isBodyFormInvalid() {
+		if (!this.selectedVariant) {
+			return false;
+		}
+
+		return this.bodyForm.invalid || this.bodyForm.disabled;
+	}
+
 	public onHeaderClick() {
 		this.isTesterVisible = !this.isTesterVisible;
 	}
@@ -139,11 +163,21 @@ export class EndpointComponent implements OnInit {
 		}
 
 		this.selectedVariant = variant;
-		this.canFetch = this.selectedVariant.method !== 'GET';
+		this.canFetch = this.selectedVariant.method === 'GET';
+
+		this._refreshSearchForm();
+		this._refreshQueryForm();
+		this._refreshBodyForm();
 	}
 
 	public onSubmitClick() {
-		if (!this.selectedVariant || this.canFetch) {
+		if (
+			!this.selectedVariant ||
+			this.canFetch === false ||
+			this.isSearchFormInvalid() ||
+			this.isQueryFormInvalid() ||
+			this.isBodyFormInvalid()
+		) {
 			return;
 		}
 
@@ -203,7 +237,7 @@ export class EndpointComponent implements OnInit {
 				return response.json();
 			})
 			.then((data) => {
-				this.responseCode = '\n' + JSON.stringify(data, this.truncateBase64Strings, '   ');
+				this.responseCode = '\n' + JSON.stringify(data, this._truncateBase64Strings, '   ');
 			})
 			.catch((error) => {
 				this.responseCode =
@@ -253,7 +287,37 @@ export class EndpointComponent implements OnInit {
 		}
 	}
 
-	private truncateBase64Strings(key: string, value: any) {
+	private _refreshSearchForm() {
+		if (this.canFetch) {
+			this.searchForm.enable();
+
+			return;
+		}
+
+		this.searchForm.disable();
+	}
+
+	private _refreshQueryForm() {
+		if (this.canFetch) {
+			this.queryForm.enable();
+
+			return;
+		}
+
+		this.queryForm.disable();
+	}
+
+	private _refreshBodyForm() {
+		if (this.canFetch) {
+			this.bodyForm.enable();
+
+			return;
+		}
+
+		this.bodyForm.disable();
+	}
+
+	private _truncateBase64Strings(key: string, value: any) {
 		if (
 			key.toLocaleLowerCase().includes('image') ||
 			key.toLocaleLowerCase().includes('markdown')
