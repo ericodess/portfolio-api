@@ -1,14 +1,17 @@
-.home {
+.not-found {
 	display: flex;
 	flex-direction: column;
-	gap: 2vh 0;
+	align-items: center;
+	justify-content: center;
+	gap: 4vh 0;
 	width: 80%;
+	height: 100%;
 	margin: 0 auto;
 	font-family: 'Roboto-Bold';
 	font-size: 1.75rem;
 	padding-top: 2vh;
 
-	& p {
+	p {
 		color: $accent-dark;
 
 		&.--big {
@@ -18,9 +21,9 @@
 	}
 
 	& span {
-		margin-top: 4vh;
-		color: $accent-bright;
+		margin-left: 3vh;
+		color: #50515321;
 		text-align: center;
-		font-size: 2rem;
+		font-size: 4rem;
 	}
 }

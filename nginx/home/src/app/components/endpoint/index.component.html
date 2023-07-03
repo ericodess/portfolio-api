@@ -1,0 +1,71 @@
+<div class="endpoint" [attr.data-is-active]="isTesterVisible">
+	<button class="endpoint__button" (click)="onHeaderClick()">
+		<div class="endpoint__method">V{{ endpoint.version }}</div>
+		<div class="endpoint__path">
+			<span>{{ getPath() }}</span>
+			<mat-icon>expand_more</mat-icon>
+		</div>
+	</button>
+	<div class="endpoint__tester">
+		<div class="endpoint__tester__form">
+			<ul class="endpoint__tester__variants">
+				<li
+					*ngFor="let variant of this.endpoint.variants"
+					[attr.data-is-active]="isVariantActive(variant)"
+					(click)="onVariantClick(variant)"
+				>
+					{{ variant.method }}
+				</li>
+			</ul>
+			<form *ngIf="canRenderSearchForm()" [formGroup]="searchForm">
+				<span class="endpoint__tester__title">Search Parameters</span>
+				<div *ngFor="let control of selectedVariant?.parameters?.search">
+					<span>{{ control.label }}</span>
+					<input
+						matInput
+						[formControlName]="control.label" 
+						[type]="control.type === 'number' ? 'number' : 'text'"
+						[min]="0"
+					>
+					<span>{{ control.type }}</span>
+				</div>
+			</form>
+			<form *ngIf="canRenderQueryForm()" [formGroup]="queryForm">
+				<span class="endpoint__tester__title">Query Parameters</span>
+				<div *ngFor="let control of selectedVariant?.parameters?.query">
+					<span>{{ control.label }}</span>
+					<input
+						matInput
+						[formControlName]="control.label"
+						[type]="control.type === 'number' ? 'number' : 'text'"
+						[min]="0"
+					>
+					<span>{{ control.type }}</span>
+				</div>
+			</form>
+			<form *ngIf="canRenderBodyForm()" [formGroup]="bodyForm">
+				<span class="endpoint__tester__title">Body Parameters</span>
+				<div *ngFor="let control of selectedVariant?.parameters?.body">
+					<span>{{ control.label }}</span>
+					<input
+						matInput
+						[formControlName]="control.label"
+						[type]="control.type === 'number' ? 'number' : 'text'"
+						[min]="0"
+					>
+					<span>{{ control.type }}</span>
+				</div>
+			</form>
+			<button
+				class="endpoint__tester__submit"
+				[disabled]="canFetch === false || isSearchFormInvalid() || isQueryFormInvalid() || isBodyFormInvalid()"
+				(click)="onSubmitClick()"
+			>
+				Fetch
+			</button>
+		</div>
+		<div class="endpoint__tester__response">
+			<app-code-block [code]="responseCode" language="javascript"></app-code-block>
+		</div>
+	</div>
+</div>

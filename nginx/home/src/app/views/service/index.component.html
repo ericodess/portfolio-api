@@ -1,0 +1,14 @@
+<div class="service">
+	<div class="service__title">{{ currentApiSource.name }}</div>
+	<div class="service__endpoints">
+		<ul *ngFor="let endpoint of currentApiSource.endpoints">
+			<li>
+				<app-endpoint
+					[source]="currentApiSource"
+					[endpoint]="endpoint"
+				>
+				</app-endpoint>
+			</li>
+		</ul>
+	</div>
+</div>

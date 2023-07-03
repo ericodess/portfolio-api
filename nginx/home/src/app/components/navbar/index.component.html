@@ -1,0 +1,20 @@
+<nav class="navbar" [attr.data-is-active]="isNavbarActive">
+	<div class="navbar__content">
+		<div class="navbar__logo" (click)="onLogoTitle()">
+			<h3>Erick's API</h3>
+		</div>
+		<ul class="navbar__services">
+			<li
+				*ngFor="let source of availableSources"
+				[attr.data-is-active]="isServiceActive(source.rootPath)"
+				(click)="onServiceClick(source)"
+			>
+				<span>{{ source.name }}</span>
+				<span class="--chibi">{{ source.description }}</span>
+			</li>
+		</ul>
+	</div>
+	<button class="navbar__hamburguer" (click)="onHamburguerClick()">
+		<mat-icon>menu</mat-icon>
+	</button>
+</nav>
