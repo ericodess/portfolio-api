@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // Types
-import { ApiSource, ValidApiSourcesV2 } from 'src/app/types';
+import { ApiSource, ValidApiSources } from 'src/app/types';
 
 // Services
 import { StringService } from 'src/app/services';
@@ -26,7 +26,7 @@ export class ServiceViewComponent implements OnInit {
 				const currentPath = url[url.length - 1].path.trim();
 				const currentPathUpper = currentPath.toUpperCase().trim();
 
-				const foundApiSource = ValidApiSourcesV2.find(
+				const foundApiSource = ValidApiSources.find(
 					(endpoint) => endpoint.rootPath.toUpperCase().trim() === currentPathUpper,
 				);
 

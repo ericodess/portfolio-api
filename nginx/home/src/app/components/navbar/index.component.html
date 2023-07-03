@@ -9,7 +9,8 @@
 				[attr.data-is-active]="isServiceActive(source.rootPath)"
 				(click)="onServiceClick(source)"
 			>
-				{{ source.name }}
+				<span>{{ source.name }}</span>
+				<span class="--chibi">{{ source.description }}</span>
 			</li>
 		</ul>
 	</div>

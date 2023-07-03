@@ -1,4 +1,47 @@
-<div class="endpoint">
-	<div class="endpoint__method">{{ endpoint.method }}</div>
-	<div class="endpoint__path">{{ getPath() }}</div>
+<div class="endpoint" [attr.data-is-active]="isTesterVisible">
+	<button class="endpoint__button" (click)="onHeaderClick()">
+		<div class="endpoint__method">V{{ endpoint.version }}</div>
+		<div class="endpoint__path">
+			<span>{{ getPath() }}</span>
+			<mat-icon>expand_more</mat-icon>
+		</div>
+	</button>
+	<div class="endpoint__tester">
+		<div class="endpoint__tester__form">
+			<ul class="endpoint__tester__variants">
+				<li
+					*ngFor="let variant of this.endpoint.variants"
+					[attr.data-is-active]="isVariantActive(variant)"
+					(click)="onVariantClick(variant)"
+				>
+					{{ variant.method }}
+				</li>
+			</ul>
+			<form *ngIf="selectedVariant.parameters?.search" [formGroup]="searchForm">
+				<span>Search</span>
+				<div *ngFor="let control of selectedVariant.parameters?.search">
+					<mat-label>{{ control.label }}</mat-label>
+					<input matInput [formControlName]="control.label" [type]="control.type === 'number' ? 'number' : 'text'">
+				</div>
+			</form>
+			<form *ngIf="selectedVariant.parameters?.query" [formGroup]="queryForm">
+				<span>Query</span>
+				<div *ngFor="let control of selectedVariant.parameters?.query">
+					<label>{{ control.label }}</label>
+					<input matInput [formControlName]="control.label" [type]="control.type === 'number' ? 'number' : 'text'">
+				</div>
+			</form>
+			<form *ngIf="selectedVariant.parameters?.body" [formGroup]="bodyForm">
+				<span>Body</span>
+				<div *ngFor="let control of selectedVariant.parameters?.body">
+					<mat-label>{{ control.label }}</mat-label>
+					<input matInput [formControlName]="control.label" [type]="control.type === 'number' ? 'number' : 'text'">
+				</div>
+			</form>
+			<button class="endpoint__tester__submit" (click)="onSubmitClick()">Fetch</button>
+		</div>
+		<div class="endpoint__tester__response">
+			<app-code-block [code]="responseCode" language="javascript"></app-code-block>
+		</div>
+	</div>
 </div>

@@ -9,6 +9,7 @@ $navbar-content-width-neg: calc($navbar-content-width * -1);
 	align-items: flex-end;
 	height: 100dvh;
 	pointer-events: none;
+	z-index: $max-z-index;
 
 	-webkit-transition: transform ease-in-out .3s;
 	-moz-transition: 	transform ease-in-out .3s;
@@ -44,12 +45,13 @@ $navbar-content-width-neg: calc($navbar-content-width * -1);
 
 		li {
 			display: flex;
-			flex-direction: row;
-			align-items: center;
+			flex-direction: column;
+			justify-content: center;
+			gap: 0.4vh 0;
 			padding: 0 1vh;
 			height: clamp(8vh, 8vh + 2rem, 10vw);
 			color: $background;
-			font-family: "Roboto-Thin";
+			font-family: "Roboto-Mono-Thin";
 			text-transform: uppercase;
 			border-bottom: 1px solid $accent-dark;
 
@@ -69,6 +71,12 @@ $navbar-content-width-neg: calc($navbar-content-width * -1);
 
 				border-color: $accent-dark;
 				background-color: $accent-dark;
+				font-family: "Roboto-Mono-Bold";
+			}
+
+			& .--chibi {
+				font-size: 0.6rem;
+				color: $accent-bright;
 				font-family: "Roboto-Bold";
 			}
 		}

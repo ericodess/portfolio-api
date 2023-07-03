@@ -1,25 +1,34 @@
 export type RequestMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
-export interface EndpointRequest {
-	headers?: Headers;
-	body?: any;
-	searchParams?: URLSearchParams;
+interface Parameter {
+	label: string;
+	defaultValue: string;
+	type: string;
 }
 
-export interface EndpointSource {
+export interface EndpointParameters {
+	search?: Parameter[];
+	query?: Parameter[];
+	body?: Parameter[];
+}
+
+export interface Endpoint {
 	name: string;
 	path: string;
 	version: number;
 	method: RequestMethod;
-	variants?: Omit<EndpointSource, 'variants'>[];
-	requestParams?: EndpointRequest;
+	variants?: VariantEndpoint[];
+	parameters?: EndpointParameters;
 	credentials?: RequestCredentials;
 }
 
+export type VariantEndpoint = Omit<Endpoint, 'version' | 'variants'>;
+
 export interface ApiSource {
 	name: string;
+	description: string;
 	rootUrl: string;
 	rootPath: string;
 	isSecure: boolean;
-	endpoints: EndpointSource[];
+	endpoints: Endpoint[];
 }

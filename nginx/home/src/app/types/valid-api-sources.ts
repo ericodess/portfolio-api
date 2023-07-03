@@ -9,92 +9,153 @@ const isSecure = environment.production;
 export default [
 	{
 		name: 'Karikariyaki',
+		description: 'Fast food management system',
 		rootUrl: rootUrl,
 		rootPath: 'karikariyaki',
 		isSecure: isSecure,
 		endpoints: [
 			{
 				name: 'Sign In',
-				method: 'POST',
 				path: 'operator/sign-in',
 				version: 1,
-				requestParams: {
-					body: {
-						userName: 'demo_operator',
+				credentials: 'include',
+				variants: [
+					{
+						method: 'POST',
+						parameters: {
+							body: [
+								{
+									label: 'userName',
+									defaultValue: '',
+									type: 'string',
+								},
+							],
+						},
 					},
-				},
+				],
 			},
 			{
 				name: 'Sign Out',
-				method: 'POST',
 				path: 'operator/sign-out',
 				version: 1,
+				credentials: 'include',
+				variants: [
+					{
+						method: 'POST',
+					},
+				],
 			},
 			{
 				name: 'Menus',
-				method: 'GET',
 				path: 'registry/menu',
+				version: 1,
+				credentials: 'include',
+				variants: [
+					{
+						name: 'Search Menus',
+						method: 'GET',
+						parameters: {
+							query: [
+								{
+									label: 'id',
+									defaultValue: '',
+									type: 'string',
+								},
+								{
+									label: 'title',
+									defaultValue: '',
+									type: 'string',
+								},
+								{
+									label: 'parentId',
+									defaultValue: '',
+									type: 'string',
+								},
+							],
+						},
+					},
+					{
+						name: 'Create Menu',
+						method: 'POST',
+						parameters: {
+							body: [
+								{
+									label: 'title',
+									defaultValue: '',
+									type: 'string',
+								},
+								{
+									label: 'icon',
+									defaultValue: '',
+									type: 'base64',
+								},
+								{
+									label: 'route',
+									defaultValue: '',
+									type: 'string',
+								},
+								{
+									label: 'parentId',
+									defaultValue: '',
+									type: 'string',
+								},
+							],
+						},
+					},
+					{
+						name: 'Update Menu',
+						method: 'UPDATE',
+						parameters: {
+							body: [
+								{
+									label: 'title',
+									defaultValue: '',
+									type: 'string',
+								},
+								{
+									label: 'icon',
+									defaultValue: '',
+									type: 'base64',
+								},
+								{
+									label: 'route',
+									defaultValue: '',
+									type: 'string',
+								},
+							],
+							search: [
+								{
+									label: 'id',
+									defaultValue: '',
+									type: 'string',
+								},
+							],
+						},
+					},
+					{
+						name: 'Delete Menu',
+						method: 'DELETE',
+						parameters: {
+							search: [
+								{
+									label: 'id',
+									defaultValue: '',
+									type: 'string',
+								},
+							],
+						},
+					},
+				],
+			},
+			{
+				name: 'Operator Menus',
+				path: 'registry/menu/self',
 				version: 1,
 				credentials: 'include',
 				variants: [
 					{
 						name: 'Operator Menus',
 						method: 'GET',
-						path: 'self',
-						version: 1,
-					},
-					{
-						name: 'Menus by Id',
-						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								id: '6459169e414bf5d047eeb4c3',
-							},
-						},
-					},
-					{
-						name: 'Menus by Title',
-						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								title: 'MENU_HOME_TITLE',
-							},
-						},
-					},
-					{
-						name: 'Menu by Parent Id',
-						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								parentId: '6459169e414bf5d047eeb4c3',
-							},
-						},
-					},
-					{
-						name: 'Create Menu',
-						method: 'POST',
-						version: 1,
-						requestParams: {
-							body: {
-								title: '',
-								icon: '',
-								route: '',
-								parentId: '',
-							},
-						},
-					},
-					{
-						name: 'Update Menu',
-						method: 'UPDATE',
-						version: 1,
-					},
-					{
-						name: 'Delete Menu',
-						method: 'DELETE',
-						version: 1,
 					},
 				],
 			},
@@ -102,27 +163,37 @@ export default [
 	},
 	{
 		name: 'Projects',
+		description: 'Listing of my projects',
 		rootUrl: rootUrl,
 		rootPath: 'projects',
 		isSecure: isSecure,
 		endpoints: [
 			{
-				name: 'List',
-				method: 'GET',
-				path: '',
+				name: 'All',
 				version: 1,
 				variants: [
 					{
-						name: 'Regular',
 						method: 'GET',
-						path: 'regular',
-						version: 1,
 					},
+				],
+			},
+			{
+				name: 'Regular',
+				path: 'regular',
+				version: 1,
+				variants: [
 					{
-						name: 'Testable',
 						method: 'GET',
-						path: 'testable',
-						version: 1,
+					},
+				],
+			},
+			{
+				name: 'Testable',
+				path: 'testable',
+				version: 1,
+				variants: [
+					{
+						method: 'GET',
 					},
 				],
 			},
@@ -130,215 +201,214 @@ export default [
 	},
 	{
 		name: 'Namah',
+		description: 'E-commerce / blog mock up',
 		rootUrl: rootUrl,
 		rootPath: 'namah',
 		isSecure: isSecure,
 		endpoints: [
 			{
 				name: 'Auth',
-				method: 'POST',
 				path: 'auth',
 				version: 1,
-				requestParams: {
-					body: {
-						email: 'namahcast@big-bang-web.br',
-						password: '123456',
+
+				variants: [
+					{
+						method: 'POST',
+						parameters: {
+							body: [
+								{
+									label: 'email',
+									defaultValue: 'namahcast@big-bang-web.br',
+									type: 'string',
+								},
+								{
+									label: 'password',
+									defaultValue: '123456',
+									type: 'string',
+								},
+							],
+						},
 					},
-				},
+				],
 			},
 			{
 				name: 'Courses',
-				method: 'GET',
 				path: 'courses',
 				version: 1,
 				variants: [
 					{
-						name: 'Courses by Id',
 						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								id: 12023154,
-							},
-						},
-					},
-					{
-						name: 'Courses by Author',
-						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								author: 'Fernanda Cunha',
-							},
-						},
-					},
-					{
-						name: 'Courses with limit',
-						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								limit: 2,
-							},
+						parameters: {
+							query: [
+								{
+									label: 'id',
+									defaultValue: '12023154',
+									type: 'string',
+								},
+								{
+									label: 'author',
+									defaultValue: 'Fernanda Cunha',
+									type: 'string',
+								},
+								{
+									label: 'limit',
+									defaultValue: '2',
+									type: 'number',
+								},
+							],
 						},
 					},
 				],
 			},
 			{
 				name: 'Podcasts',
-				method: 'GET',
 				path: 'podcasts',
 				version: 1,
 				variants: [
 					{
-						name: 'Podcasts by Id',
 						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								id: 121,
-							},
-						},
-					},
-					{
-						name: 'Podcasts by Author',
-						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								author: 'Namahcast',
-							},
-						},
-					},
-					{
-						name: 'Podcasts with limit',
-						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								limit: 2,
-							},
+						parameters: {
+							query: [
+								{
+									label: 'id',
+									defaultValue: '121',
+									type: 'string',
+								},
+								{
+									label: 'author',
+									defaultValue: 'Namahcast',
+									type: 'string',
+								},
+								{
+									label: 'limit',
+									defaultValue: '2',
+									type: 'number',
+								},
+							],
 						},
 					},
 				],
 			},
 			{
 				name: 'Posts',
-				method: 'GET',
 				path: 'posts',
 				version: 1,
 				variants: [
 					{
-						name: 'Posts by Id',
 						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								id: 681,
-							},
-						},
-					},
-					{
-						name: 'Posts by Author',
-						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								author: 'Namahblogger',
-							},
+						parameters: {
+							query: [
+								{
+									label: 'id',
+									defaultValue: '681',
+									type: 'string',
+								},
+								{
+									label: 'author',
+									defaultValue: 'Namahblogger',
+									type: 'string',
+								},
+							],
 						},
 					},
 				],
 			},
 			{
 				name: 'Products',
-				method: 'GET',
 				path: 'products',
 				version: 1,
 				variants: [
 					{
-						name: 'Products by Id',
 						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								id: 39,
-							},
-						},
-					},
-					{
-						name: 'Products with limit',
-						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								limit: 3,
-							},
+						parameters: {
+							query: [
+								{
+									label: 'id',
+									defaultValue: '39',
+									type: 'string',
+								},
+								{
+									label: 'limit',
+									defaultValue: '3',
+									type: 'number',
+								},
+							],
 						},
 					},
 				],
 			},
 			{
 				name: 'Users',
-				method: 'GET',
 				path: 'users',
 				version: 1,
 				variants: [
 					{
-						name: 'Users by Name',
 						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								name: 'Namahcast',
-							},
+						parameters: {
+							query: [
+								{
+									label: 'name',
+									defaultValue: 'Namahcast',
+									type: 'string',
+								},
+							],
 						},
 					},
 				],
 			},
 			{
 				name: 'Banners',
-				method: 'GET',
 				path: 'banners',
 				version: 1,
 				variants: [
 					{
-						name: 'Banner by Id',
 						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								id: 552,
-							},
+						parameters: {
+							query: [
+								{
+									label: 'id',
+									defaultValue: '552',
+									type: 'string',
+								},
+							],
 						},
 					},
 				],
 			},
 			{
 				name: 'Search',
-				method: 'GET',
 				path: 'search',
 				version: 1,
-				requestParams: {
-					searchParams: {
-						q: 'Namahblogger',
+				variants: [
+					{
+						method: 'GET',
+						parameters: {
+							query: [
+								{
+									label: 'q',
+									defaultValue: 'Namahblogger',
+									type: 'string',
+								},
+							],
+						},
 					},
-				},
+				],
 			},
 			{
 				name: 'Concepts',
-				method: 'GET',
 				path: 'concepts',
 				version: 1,
 				variants: [
 					{
-						name: 'Concepts with limit',
 						method: 'GET',
-						version: 1,
-						requestParams: {
-							searchParams: {
-								limit: 3,
-							},
+						parameters: {
+							query: [
+								{
+									label: 'limit',
+									defaultValue: '3',
+									type: 'number',
+								},
+							],
 						},
 					},
 				],

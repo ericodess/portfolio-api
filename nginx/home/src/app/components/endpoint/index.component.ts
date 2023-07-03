@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 // Types
-import { EndpointSource } from 'src/app/types';
+import { ApiSource, Endpoint, VariantEndpoint } from 'src/app/types';
 
 // Services
 import { StringService } from 'src/app/services';
@@ -10,19 +11,55 @@ import { StringService } from 'src/app/services';
 	selector: 'app-endpoint',
 	templateUrl: './index.component.html',
 })
-export class EndpointComponent {
+export class EndpointComponent implements OnInit {
 	@Input()
-	public rootPath!: string;
+	public source!: ApiSource;
 	@Input()
-	public endpoint!: EndpointSource;
+	public endpoint!: Endpoint;
 	@Input()
-	public parentEndpoint: EndpointSource | undefined;
+	public parentEndpoint: Endpoint | undefined;
+
+	/**
+	 * Primitives
+	 */
+	public isTesterVisible = false;
+
+	public responseCode = '';
+
+	/**
+	 * In House
+	 */
+	public selectedVariant!: VariantEndpoint;
+
+	/**
+	 * Forms
+	 */
+	public searchForm: FormGroup = new FormGroup({});
+	public queryForm: FormGroup = new FormGroup({});
+	public bodyForm: FormGroup = new FormGroup({});
 
 	constructor(private _stringService: StringService) {}
+
+	ngOnInit(): void {
+		if (!this.endpoint.variants || this.endpoint.variants.length === 0) {
+			return;
+		}
+
+		this.endpoint.variants.forEach((variant) => {
+			if (!variant.parameters) {
+				return;
+			}
+
+			this._setupForm(variant);
+		});
+
+		this.onVariantClick(this.endpoint.variants[0]);
+	}
+
 	public getPath() {
-		const rasterizedRootPath = this._stringService.removeLeadingAndTrailingSlashes(
-			this.rootPath,
-		);
+		const rasterizedRootPath = `${this._stringService.removeLeadingAndTrailingSlashes(
+			this.source.rootPath,
+		)}/api/v${this.endpoint.version}`;
 		const rasterizedEndpointPath = this._stringService.removeLeadingAndTrailingSlashes(
 			this.endpoint.path,
 		);
@@ -50,5 +87,134 @@ export class EndpointComponent {
 		}
 
 		return path;
+	}
+
+	public isVariantActive(variant: VariantEndpoint) {
+		return this.selectedVariant.method === variant.method;
+	}
+
+	public onHeaderClick() {
+		this.isTesterVisible = !this.isTesterVisible;
+	}
+
+	public onVariantClick(variant: VariantEndpoint) {
+		if (this.selectedVariant && this.isVariantActive(variant)) {
+			return;
+		}
+
+		this.selectedVariant = variant;
+	}
+
+	public onSubmitClick() {
+		if (!this.selectedVariant) {
+			return;
+		}
+
+		const url = new URL(
+			`${this.source.isSecure ? 'https' : 'http'}://${this.source.rootUrl}${this.getPath()}`,
+		);
+
+		const parameters = this.selectedVariant.parameters;
+
+		if (parameters?.search) {
+			parameters.search.forEach((parameter) => {
+				const parameterValue =
+					this.searchForm.controls[parameter.label].value ?? parameter.defaultValue;
+
+				if (!parameterValue) {
+					return;
+				}
+
+				url.pathname = url.pathname.concat(
+					`/${this.searchForm.controls[parameter.label].value ?? parameter.defaultValue}`,
+				);
+			});
+		}
+
+		if (parameters?.query) {
+			parameters.query.forEach((parameter) => {
+				const parameterValue =
+					this.queryForm.controls[parameter.label].value ?? parameter.defaultValue;
+
+				if (!parameterValue) {
+					return;
+				}
+
+				url.searchParams.append(parameter.label, parameterValue);
+			});
+		}
+
+		let body: any = {};
+
+		if (parameters?.body) {
+			parameters.body.forEach((parameter) => {
+				const parameterValue =
+					this.bodyForm.controls[parameter.label].value ?? parameter.defaultValue;
+
+				if (!parameterValue) {
+					return;
+				}
+
+				body[parameter.label] = parameterValue;
+			});
+		}
+
+		fetch(url.href, {
+			body: parameters?.body ? body : undefined,
+		})
+			.then((response) => {
+				return response.json();
+			})
+			.then((data) => {
+				this.responseCode = '\n' + JSON.stringify(data, this.truncateBase64Strings, '   ');
+			})
+			.catch((error) => {
+				this.responseCode =
+					'\n' + JSON.stringify({ wasSuccess: false, error: error.message }, null, '   ');
+			});
+	}
+
+	private _setupForm(targetEndpoint: VariantEndpoint) {
+		if (!targetEndpoint.parameters) {
+			return;
+		}
+
+		if (targetEndpoint.parameters.search) {
+			targetEndpoint.parameters.search.forEach((parameter) => {
+				this.searchForm.addControl(
+					parameter.label,
+					new FormControl(parameter.defaultValue ?? ''),
+				);
+			});
+		}
+
+		if (targetEndpoint.parameters.query) {
+			targetEndpoint.parameters.query.forEach((parameter) => {
+				this.queryForm.addControl(
+					parameter.label,
+					new FormControl(parameter.defaultValue ?? ''),
+				);
+			});
+		}
+
+		if (targetEndpoint.parameters.body) {
+			targetEndpoint.parameters.body.forEach((parameter) => {
+				this.bodyForm.addControl(
+					parameter.label,
+					new FormControl(parameter.defaultValue ?? ''),
+				);
+			});
+		}
+	}
+
+	private truncateBase64Strings(key: string, value: any) {
+		if (
+			key.toLocaleLowerCase().includes('image') ||
+			key.toLocaleLowerCase().includes('markdown')
+		) {
+			return value.substring(0, 25) + '...';
+		}
+
+		return value;
 	}
 }

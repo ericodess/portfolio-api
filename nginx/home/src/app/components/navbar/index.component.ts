@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
 
 // Types
-import { ApiSource, ValidApiSourcesV2 } from 'src/app/types';
+import { ApiSource, ValidApiSources } from 'src/app/types';
 
 // Services
 import { StringService } from 'src/app/services';
@@ -25,7 +25,7 @@ export class NavbarComponent {
 	/**
 	 * In House
 	 */
-	public availableSources = ValidApiSourcesV2;
+	public availableSources = ValidApiSources;
 	public currentApiSource: ApiSource | undefined;
 
 	private _touchOrigin: Touch | null = null;
@@ -160,7 +160,7 @@ export class NavbarComponent {
 				const splittedURL = changeEvent.url.split('/');
 				const currentPath = splittedURL[splittedURL.length - 1].toUpperCase();
 
-				this.currentApiSource = ValidApiSourcesV2.find(
+				this.currentApiSource = this.availableSources.find(
 					(endpoint) => endpoint.rootPath.toUpperCase() === currentPath,
 				);
 			},

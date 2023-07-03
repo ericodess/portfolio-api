@@ -4,16 +4,8 @@
 		<ul *ngFor="let endpoint of currentApiSource.endpoints">
 			<li>
 				<app-endpoint
-					[rootPath]="currentApiSource.rootPath"
+					[source]="currentApiSource"
 					[endpoint]="endpoint"
-				>
-				</app-endpoint>
-			</li>
-			<li *ngFor="let variant of endpoint.variants">
-				<app-endpoint
-					[rootPath]="currentApiSource.rootPath"
-					[endpoint]="variant"
-					[parentEndpoint]="endpoint"
 				>
 				</app-endpoint>
 			</li>
