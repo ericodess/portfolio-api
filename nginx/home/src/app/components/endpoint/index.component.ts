@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 // Types
-import { ApiSource, Endpoint, VariantEndpoint } from 'src/app/types';
+import { ApiSource, Endpoint, EndpointParameters, Parameter, VariantEndpoint } from 'src/app/types';
 
 // Services
 import { StringService } from 'src/app/services';
@@ -127,6 +127,25 @@ export class EndpointComponent implements OnInit {
 		return (
 			this.selectedVariant.parameters?.body && this.selectedVariant.parameters.body.length > 0
 		);
+	}
+
+	public getInputType(type: string): string {
+		switch (type) {
+			case 'number':
+				return 'number';
+			case 'boolean':
+				return 'checkbox';
+			default:
+				return 'text';
+		}
+	}
+
+	public getBooleanParameters(parameters: Parameter[] | undefined): Parameter[] {
+		if (!parameters) {
+			return [];
+		}
+
+		return parameters.filter((parameter) => parameter.type === 'boolean');
 	}
 
 	public isSearchFormInvalid() {
