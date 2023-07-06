@@ -1,2 +1,9 @@
-export type { RequestMethod, Endpoint, VariantEndpoint, ApiSource } from './api-source';
+export type {
+	ApiSource,
+	Endpoint,
+	EndpointParameters,
+	Parameter,
+	RequestMethod,
+	VariantEndpoint,
+} from './api-source';
 export { default as ValidApiSources } from './valid-api-sources';

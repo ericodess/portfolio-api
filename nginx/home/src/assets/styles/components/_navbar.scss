@@ -149,7 +149,7 @@ $navbar-content-width-neg: calc($navbar-content-width * -1);
 			flex-direction: column;
 
 			li {
-				height: 6vh;
+				height: clamp(6vh, 6vh + 1rem, 10vw);
 			}
 		}
 

@@ -17,43 +17,88 @@
 					{{ variant.method }}
 				</li>
 			</ul>
+			<div *ngIf="canRenderSearchForm()" class="endpoint__tester__title">Search Parameters</div>
 			<form *ngIf="canRenderSearchForm()" [formGroup]="searchForm">
-				<span class="endpoint__tester__title">Search Parameters</span>
-				<div *ngFor="let control of selectedVariant?.parameters?.search">
-					<span>{{ control.label }}</span>
-					<input
-						matInput
-						[formControlName]="control.label" 
-						[type]="control.type === 'number' ? 'number' : 'text'"
-						[min]="0"
+				<div class="endpoint__tester__inputs">
+					<div
+						*ngFor="let control of selectedVariant?.parameters?.search"
+						class="endpoint__tester__input"
 					>
-					<span>{{ control.type }}</span>
+						<mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
+							<mat-label>{{ control.label }}</mat-label>
+							<input
+								matInput
+								[formControlName]="control.label"
+								[type]="getInputType(control.type)"
+								[min]="0"
+							>
+							<mat-hint>{{ control.type }}</mat-hint>
+						</mat-form-field>
+					</div>
+				</div>
+				<div
+					*ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.search)"
+					class="endpoint__tester__checks"
+				>
+					<mat-checkbox>
+						{{ control.label }}
+					</mat-checkbox>
 				</div>
 			</form>
+			<div *ngIf="canRenderQueryForm()" class="endpoint__tester__title">Query Parameters</div>
 			<form *ngIf="canRenderQueryForm()" [formGroup]="queryForm">
-				<span class="endpoint__tester__title">Query Parameters</span>
-				<div *ngFor="let control of selectedVariant?.parameters?.query">
-					<span>{{ control.label }}</span>
-					<input
-						matInput
-						[formControlName]="control.label"
-						[type]="control.type === 'number' ? 'number' : 'text'"
-						[min]="0"
+				<div class="endpoint__tester__inputs">
+					<div
+						*ngFor="let control of selectedVariant?.parameters?.query"
+						class="endpoint__tester__input"
 					>
-					<span>{{ control.type }}</span>
+						<mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
+							<mat-label>{{ control.label }}</mat-label>
+							<input
+								matInput
+								[formControlName]="control.label"
+								[type]="getInputType(control.type)"
+								[min]="0"
+							>
+							<mat-hint>{{ control.type }}</mat-hint>
+						</mat-form-field>
+					</div>
+				</div>
+				<div
+					*ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.query)"
+					class="endpoint__tester__checks"
+				>
+					<mat-checkbox>
+						{{ control.label }}
+					</mat-checkbox>
 				</div>
 			</form>
+			<div *ngIf="canRenderBodyForm()" class="endpoint__tester__title">Body Parameters</div>
 			<form *ngIf="canRenderBodyForm()" [formGroup]="bodyForm">
-				<span class="endpoint__tester__title">Body Parameters</span>
-				<div *ngFor="let control of selectedVariant?.parameters?.body">
-					<span>{{ control.label }}</span>
-					<input
-						matInput
-						[formControlName]="control.label"
-						[type]="control.type === 'number' ? 'number' : 'text'"
-						[min]="0"
+				<div class="endpoint__tester__inputs">
+					<div
+						*ngFor="let control of selectedVariant?.parameters?.body"
+						class="endpoint__tester__input"
 					>
-					<span>{{ control.type }}</span>
+						<mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
+							<mat-label>{{ control.label }}</mat-label>
+							<input
+								matInput
+								[formControlName]="control.label"
+								[type]="getInputType(control.type)"
+								[min]="0"
+							>
+							<mat-hint>{{ control.type }}</mat-hint>
+						</mat-form-field>
+					</div>
+				</div>
+				<div
+					*ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.body)"
+					class="endpoint__tester__checks"
+				>
+					<mat-checkbox>
+						{{ control.label }}
+					</mat-checkbox>
 				</div>
 			</form>
 			<button

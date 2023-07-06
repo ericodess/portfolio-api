@@ -1,6 +1,6 @@
 export type RequestMethod = 'GET' | 'POST' | 'DELETE' | 'PUT' | 'PATCH';
 
-interface Parameter {
+export interface Parameter {
 	label: string;
 	defaultValue: string;
 	type: string;
