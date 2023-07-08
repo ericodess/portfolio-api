@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Endpoint, Parameter, VariantEndpoint } from 'pepefolio';
 
 // Types
-import { ApiSource, Endpoint, EndpointParameters, Parameter, VariantEndpoint } from 'src/app/types';
+import { ApiSource } from 'src/app/types';
 
 // Services
 import { StringService } from 'src/app/services';

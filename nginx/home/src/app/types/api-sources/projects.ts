@@ -12,35 +12,6 @@ export default {
 	rootUrl: rootUrl,
 	rootPath: 'projects',
 	isSecure: isSecure,
-	endpoints: [
-		{
-			name: 'All',
-			version: 1,
-			variants: [
-				{
-					method: 'GET',
-				},
-			],
-		},
-		{
-			name: 'Regular',
-			path: 'regular',
-			version: 1,
-			variants: [
-				{
-					method: 'GET',
-				},
-			],
-		},
-		{
-			name: 'Testable',
-			path: 'testable',
-			version: 1,
-			variants: [
-				{
-					method: 'GET',
-				},
-			],
-		},
-	],
+	responseTimeInMs: -1,
+	endpoints: [],
 } as ApiSource;

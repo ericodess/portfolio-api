@@ -9,7 +9,10 @@
 				[attr.data-is-active]="isServiceActive(source.rootPath)"
 				(click)="onServiceClick(source)"
 			>
-				<span>{{ source.name }}</span>
+				<div>
+					<span>{{ source.name }}</span>
+					<app-latency-meter [latency]="source.responseTimeInMs"></app-latency-meter>
+				</div>
 				<span class="--chibi">{{ source.description }}</span>
 			</li>
 		</ul>

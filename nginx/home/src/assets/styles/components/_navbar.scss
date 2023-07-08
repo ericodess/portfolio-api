@@ -74,6 +74,12 @@ $navbar-content-width-neg: calc($navbar-content-width * -1);
 				font-weight: bold;
 			}
 
+			div {
+				display: flex;
+				flex-direction: row;
+				gap: 0 1vh;
+			}
+
 			& .--chibi {
 				font-size: 0.6rem;
 				color: $accent-bright;
