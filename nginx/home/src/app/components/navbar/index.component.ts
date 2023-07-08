@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
+import { Endpoint } from 'pepefolio';
 
 // Types
 import { ApiSource, ValidApiSources } from 'src/app/types';
@@ -33,6 +34,27 @@ export class NavbarComponent {
 	constructor(private _router: Router, private _stringService: StringService) {}
 
 	ngOnInit(): void {
+		this.availableSources.forEach((source, index) => {
+			const url = new URL(
+				`${source.isSecure ? 'https' : 'http'}://${source.rootUrl}/${
+					source.rootPath
+				}/api/specs`,
+			);
+
+			const timerStart = new Date();
+
+			fetch(url.href)
+				.then((raw) => raw.json())
+				.then((res) => {
+					const timerEnd = new Date();
+
+					this.availableSources[index].endpoints = res.result as Endpoint[];
+					this.availableSources[index].responseTimeInMs = Math.abs(
+						timerEnd.getMilliseconds() - timerStart.getMilliseconds(),
+					);
+				});
+		});
+
 		this._setupScapeMovements();
 		this._setupCurrentEndpoint();
 	}
