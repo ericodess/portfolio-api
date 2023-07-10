@@ -175,6 +175,8 @@ export class EndpointComponent implements OnInit {
 
 	public onHeaderClick() {
 		this.isTesterVisible = !this.isTesterVisible;
+
+		this._onCleanUp();
 	}
 
 	public onVariantClick(variant: VariantEndpoint) {
@@ -346,5 +348,9 @@ export class EndpointComponent implements OnInit {
 		}
 
 		return value;
+	}
+
+	private _onCleanUp() {
+		this.responseCode = '';
 	}
 }

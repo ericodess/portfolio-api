@@ -66,12 +66,26 @@ $navbar-content-width-neg: calc($navbar-content-width * -1);
 				background-color: $accent-dark;
 			}
 
-			&:hover {
-				cursor: pointer;
+			&[data-is-enabled="false"] {
+				color: $foreground-disabled;
 
-				border-color: $accent-dark;
-				background-color: $accent-dark;
-				font-weight: bold;
+				& .--chibi {
+					color: $foreground-disabled;
+				}
+			}
+
+			&[data-is-enabled="true"] {
+				&:hover {
+					cursor: pointer;
+	
+					border-color: $accent-dark;
+					background-color: $accent-dark;
+					font-weight: bold;
+				}
+
+				& .--chibi {
+					color: $accent-bright;
+				}
 			}
 
 			div {
@@ -82,7 +96,6 @@ $navbar-content-width-neg: calc($navbar-content-width * -1);
 
 			& .--chibi {
 				font-size: 0.6rem;
-				color: $accent-bright;
 				font-family: "Roboto-Bold";
 			}
 		}

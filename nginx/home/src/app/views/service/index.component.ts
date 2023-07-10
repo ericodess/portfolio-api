@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Endpoint } from 'pepefolio';
 
 // Types
 import { ApiSource, ValidApiSources } from 'src/app/types';
@@ -12,7 +13,10 @@ import { StringService } from 'src/app/services';
 	templateUrl: './index.component.html',
 })
 export class ServiceViewComponent implements OnInit {
-	public currentApiSource!: ApiSource;
+	public apiSource: ApiSource | undefined;
+	public apiSouceEndpoints: Endpoint[] = [];
+
+	public dummyArray = Array<number>(3);
 
 	constructor(
 		private _route: ActivatedRoute,
@@ -31,16 +35,36 @@ export class ServiceViewComponent implements OnInit {
 				);
 
 				if (!foundApiSource) {
-					this._router.navigate(
-						[this._stringService.removeLeadingAndTrailingSlashes(currentPath)],
-						{ replaceUrl: true },
-					);
+					this._routeTo404(currentPath);
 
 					return;
 				}
 
-				this.currentApiSource = foundApiSource;
+				this.apiSource = undefined;
+				this.apiSouceEndpoints = [];
+
+				const fetchURL = new URL(
+					`${foundApiSource.isSecure ? 'https' : 'http'}://${foundApiSource.rootUrl}/${
+						foundApiSource.rootPath
+					}/api/specs`,
+				);
+
+				fetch(fetchURL.href)
+					.then((raw) => raw.json())
+					.then((res) => {
+						this.apiSource = foundApiSource;
+						this.apiSouceEndpoints = res.result as Endpoint[];
+					})
+					.catch(() => {
+						this._routeTo404(currentPath);
+					});
 			},
+		});
+	}
+
+	private _routeTo404(path: string) {
+		this._router.navigate([this._stringService.removeLeadingAndTrailingSlashes(path)], {
+			replaceUrl: true,
 		});
 	}
 }

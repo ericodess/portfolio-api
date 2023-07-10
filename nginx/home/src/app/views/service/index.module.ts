@@ -6,10 +6,11 @@ import { ServiceViewComponent } from './index.component';
 
 // Modules
 import { EndpointModule, NavbarModule } from 'src/app/components';
+import { ContentLoaderModule } from '@ngneat/content-loader';
 
 @NgModule({
 	declarations: [ServiceViewComponent],
-	imports: [CommonModule, EndpointModule, NavbarModule],
+	imports: [CommonModule, ContentLoaderModule, EndpointModule, NavbarModule],
 	providers: [],
 })
 export class ServiceViewModule {}
