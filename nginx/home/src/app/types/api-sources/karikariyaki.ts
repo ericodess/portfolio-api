@@ -13,5 +13,4 @@ export default {
 	rootPath: 'karikariyaki',
 	isSecure: isSecure,
 	responseTimeInMs: -1,
-	endpoints: [],
 } as ApiSource;

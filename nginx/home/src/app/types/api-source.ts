@@ -1,5 +1,3 @@
-import { Endpoint } from 'pepefolio';
-
 export interface ApiSource {
 	name: string;
 	description: string;
@@ -7,5 +5,4 @@ export interface ApiSource {
 	rootPath: string;
 	isSecure: boolean;
 	responseTimeInMs: number;
-	endpoints: Endpoint[];
 }

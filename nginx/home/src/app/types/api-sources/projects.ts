@@ -13,5 +13,4 @@ export default {
 	rootPath: 'projects',
 	isSecure: isSecure,
 	responseTimeInMs: -1,
-	endpoints: [],
 } as ApiSource;
