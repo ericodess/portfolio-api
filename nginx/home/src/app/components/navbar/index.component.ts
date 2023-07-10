@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
-import { Endpoint } from 'pepefolio';
 
 // Types
 import { ApiSource, ValidApiSources } from 'src/app/types';
@@ -26,7 +25,7 @@ export class NavbarComponent {
 	/**
 	 * In House
 	 */
-	public availableSources = ValidApiSources;
+	public availableSources: ApiSource[] = [];
 	public currentApiSource: ApiSource | undefined;
 
 	private _touchOrigin: Touch | null = null;
@@ -34,7 +33,7 @@ export class NavbarComponent {
 	constructor(private _router: Router, private _stringService: StringService) {}
 
 	ngOnInit(): void {
-		this.availableSources.forEach((source, index) => {
+		ValidApiSources.forEach((source) => {
 			const url = new URL(
 				`${source.isSecure ? 'https' : 'http'}://${source.rootUrl}/${
 					source.rootPath
@@ -43,15 +42,31 @@ export class NavbarComponent {
 
 			const timerStart = new Date();
 
+			this.availableSources.push(source);
+
 			fetch(url.href)
 				.then((raw) => raw.json())
-				.then((res) => {
+				.then(() => {
 					const timerEnd = new Date();
 
-					this.availableSources[index].endpoints = res.result as Endpoint[];
-					this.availableSources[index].responseTimeInMs = Math.abs(
+					const sourceIndex = this.availableSources.findIndex(
+						(target) => source.name === target.name,
+					);
+
+					this.availableSources[sourceIndex].responseTimeInMs = Math.abs(
 						timerEnd.getMilliseconds() - timerStart.getMilliseconds(),
 					);
+
+					this._refreshAvailableSources();
+				})
+				.catch(() => {
+					const sourceIndex = this.availableSources.findIndex(
+						(target) => source.name === target.name,
+					);
+
+					this.availableSources[sourceIndex].responseTimeInMs = -1;
+
+					this._refreshAvailableSources();
 				});
 		});
 
@@ -67,6 +82,10 @@ export class NavbarComponent {
 		return this.currentApiSource.rootPath.toUpperCase() === rootPath.toUpperCase();
 	}
 
+	public isServiceLive(latency: number) {
+		return latency > -1;
+	}
+
 	public onHamburguerClick() {
 		this.isNavbarActive = !this.isNavbarActive;
 	}
@@ -78,7 +97,10 @@ export class NavbarComponent {
 	}
 
 	public onServiceClick(targetService: ApiSource) {
-		if (this.isServiceActive(targetService.rootPath)) {
+		if (
+			this.isServiceActive(targetService.rootPath) ||
+			this.isServiceLive(targetService.responseTimeInMs) === false
+		) {
 			return;
 		}
 
@@ -113,6 +135,10 @@ export class NavbarComponent {
 		}
 
 		return this._doesHeritageContainClassname(classList, element.parentElement);
+	}
+
+	private _refreshAvailableSources() {
+		this.availableSources = this.availableSources.sort(this._sortByLiveStatus);
 	}
 
 	private _setupScapeMovements() {
@@ -187,5 +213,21 @@ export class NavbarComponent {
 				);
 			},
 		});
+	}
+
+	private _sortByLiveStatus(a: ApiSource, b: ApiSource): number {
+		if (a.responseTimeInMs > 0 && b.responseTimeInMs > 0) {
+			return a.name.localeCompare(b.name);
+		}
+
+		if (a.responseTimeInMs > 0 && b.responseTimeInMs < 0) {
+			return -1;
+		}
+
+		if (a.responseTimeInMs < 0 && b.responseTimeInMs > 0) {
+			return 1;
+		}
+
+		return 0;
 	}
 }
