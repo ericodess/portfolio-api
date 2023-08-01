@@ -244,6 +244,7 @@
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(15vh, 1fr));
 
+                
                 mat-checkbox {
                     margin-right: auto;
                     background-color: $foreground-bright;
@@ -254,6 +255,11 @@
 
                 label {
                     color: $foreground-brighter;
+                }
+
+                .mdc-checkbox--disabled {
+                    color: $foreground-bright;
+                    background-color: $foreground-disabled-dark;
                 }
             }
         }

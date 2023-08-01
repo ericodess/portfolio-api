@@ -44,7 +44,7 @@
                     "
                     class="endpoint__tester__checks"
                 >
-                    <mat-checkbox>
+                    <mat-checkbox [disabled]="searchForm.disabled">
                         {{ control.label }}
                     </mat-checkbox>
                 </div>
@@ -72,7 +72,7 @@
                     *ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.query)"
                     class="endpoint__tester__checks"
                 >
-                    <mat-checkbox>
+                    <mat-checkbox [disabled]="queryForm.disabled">
                         {{ control.label }}
                     </mat-checkbox>
                 </div>
@@ -100,7 +100,7 @@
                     *ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.body)"
                     class="endpoint__tester__checks"
                 >
-                    <mat-checkbox>
+                    <mat-checkbox [disabled]="bodyForm.disabled">
                         {{ control.label }}
                     </mat-checkbox>
                 </div>
