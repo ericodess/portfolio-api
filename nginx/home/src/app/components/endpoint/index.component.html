@@ -1,116 +1,125 @@
 <div class="endpoint" [attr.data-is-active]="isTesterVisible">
-	<button class="endpoint__button" (click)="onHeaderClick()">
-		<div class="endpoint__method">V{{ endpoint.version }}</div>
-		<div class="endpoint__path">
-			<span>{{ getPath() }}</span>
-			<mat-icon>expand_more</mat-icon>
-		</div>
-	</button>
-	<div class="endpoint__tester">
-		<div class="endpoint__tester__form">
-			<ul class="endpoint__tester__variants">
-				<li
-					*ngFor="let variant of this.endpoint.variants"
-					[attr.data-is-active]="isVariantActive(variant)"
-					(click)="onVariantClick(variant)"
-				>
-					{{ variant.method }}
-				</li>
-			</ul>
-			<div *ngIf="canRenderSearchForm()" class="endpoint__tester__title">Search Parameters</div>
-			<form *ngIf="canRenderSearchForm()" [formGroup]="searchForm">
-				<div class="endpoint__tester__inputs">
-					<div
-						*ngFor="let control of selectedVariant?.parameters?.search"
-						class="endpoint__tester__input"
-					>
-						<mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
-							<mat-label>{{ control.label }}</mat-label>
-							<input
-								matInput
-								[formControlName]="control.label"
-								[type]="getInputType(control.type)"
-								[min]="0"
-							>
-							<mat-hint>{{ control.type }}</mat-hint>
-						</mat-form-field>
-					</div>
-				</div>
-				<div
-					*ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.search)"
-					class="endpoint__tester__checks"
-				>
-					<mat-checkbox>
-						{{ control.label }}
-					</mat-checkbox>
-				</div>
-			</form>
-			<div *ngIf="canRenderQueryForm()" class="endpoint__tester__title">Query Parameters</div>
-			<form *ngIf="canRenderQueryForm()" [formGroup]="queryForm">
-				<div class="endpoint__tester__inputs">
-					<div
-						*ngFor="let control of selectedVariant?.parameters?.query"
-						class="endpoint__tester__input"
-					>
-						<mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
-							<mat-label>{{ control.label }}</mat-label>
-							<input
-								matInput
-								[formControlName]="control.label"
-								[type]="getInputType(control.type)"
-								[min]="0"
-							>
-							<mat-hint>{{ control.type }}</mat-hint>
-						</mat-form-field>
-					</div>
-				</div>
-				<div
-					*ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.query)"
-					class="endpoint__tester__checks"
-				>
-					<mat-checkbox>
-						{{ control.label }}
-					</mat-checkbox>
-				</div>
-			</form>
-			<div *ngIf="canRenderBodyForm()" class="endpoint__tester__title">Body Parameters</div>
-			<form *ngIf="canRenderBodyForm()" [formGroup]="bodyForm">
-				<div class="endpoint__tester__inputs">
-					<div
-						*ngFor="let control of selectedVariant?.parameters?.body"
-						class="endpoint__tester__input"
-					>
-						<mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
-							<mat-label>{{ control.label }}</mat-label>
-							<input
-								matInput
-								[formControlName]="control.label"
-								[type]="getInputType(control.type)"
-								[min]="0"
-							>
-							<mat-hint>{{ control.type }}</mat-hint>
-						</mat-form-field>
-					</div>
-				</div>
-				<div
-					*ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.body)"
-					class="endpoint__tester__checks"
-				>
-					<mat-checkbox>
-						{{ control.label }}
-					</mat-checkbox>
-				</div>
-			</form>
-			<button
-				class="endpoint__tester__submit"
-				[disabled]="canFetch === false || isSearchFormInvalid() || isQueryFormInvalid() || isBodyFormInvalid()"
-				(click)="onSubmitClick()"
-			>
-				Fetch
-			</button>
-		</div>
-		<div class="endpoint__tester__response">
-			<app-code-block [code]="responseCode" language="javascript"></app-code-block>
-		</div>
-	</div>
+    <button class="endpoint__button" (click)="onHeaderClick()">
+        <div class="endpoint__method">V{{ endpoint.version }}</div>
+        <div class="endpoint__path">
+            <span>{{ getPath() }}</span>
+            <mat-icon>expand_more</mat-icon>
+        </div>
+    </button>
+    <div class="endpoint__tester">
+        <div class="endpoint__tester__form">
+            <ul class="endpoint__tester__variants">
+                <li
+                    *ngFor="let variant of this.endpoint.variants"
+                    [attr.data-is-active]="isVariantActive(variant)"
+                    (click)="onVariantClick(variant)"
+                >
+                    {{ variant.method }}
+                </li>
+            </ul>
+            <div *ngIf="canRenderSearchForm()" class="endpoint__tester__title">
+                Search Parameters
+            </div>
+            <form *ngIf="canRenderSearchForm()" [formGroup]="searchForm">
+                <div class="endpoint__tester__inputs">
+                    <div
+                        *ngFor="let control of selectedVariant?.parameters?.search"
+                        class="endpoint__tester__input"
+                    >
+                        <mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
+                            <mat-label>{{ control.label }}</mat-label>
+                            <input
+                                matInput
+                                [formControlName]="control.label"
+                                [type]="getInputType(control.type)"
+                                [min]="0"
+                            />
+                            <mat-hint>{{ control.type }}</mat-hint>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div
+                    *ngFor="
+                        let control of getBooleanParameters(selectedVariant?.parameters?.search)
+                    "
+                    class="endpoint__tester__checks"
+                >
+                    <mat-checkbox [disabled]="searchForm.disabled">
+                        {{ control.label }}
+                    </mat-checkbox>
+                </div>
+            </form>
+            <div *ngIf="canRenderQueryForm()" class="endpoint__tester__title">Query Parameters</div>
+            <form *ngIf="canRenderQueryForm()" [formGroup]="queryForm">
+                <div class="endpoint__tester__inputs">
+                    <div
+                        *ngFor="let control of selectedVariant?.parameters?.query"
+                        class="endpoint__tester__input"
+                    >
+                        <mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
+                            <mat-label>{{ control.label }}</mat-label>
+                            <input
+                                matInput
+                                [formControlName]="control.label"
+                                [type]="getInputType(control.type)"
+                                [min]="0"
+                            />
+                            <mat-hint>{{ control.type }}</mat-hint>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div
+                    *ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.query)"
+                    class="endpoint__tester__checks"
+                >
+                    <mat-checkbox [disabled]="queryForm.disabled">
+                        {{ control.label }}
+                    </mat-checkbox>
+                </div>
+            </form>
+            <div *ngIf="canRenderBodyForm()" class="endpoint__tester__title">Body Parameters</div>
+            <form *ngIf="canRenderBodyForm()" [formGroup]="bodyForm">
+                <div class="endpoint__tester__inputs">
+                    <div
+                        *ngFor="let control of selectedVariant?.parameters?.body"
+                        class="endpoint__tester__input"
+                    >
+                        <mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
+                            <mat-label>{{ control.label }}</mat-label>
+                            <input
+                                matInput
+                                [formControlName]="control.label"
+                                [type]="getInputType(control.type)"
+                                [min]="0"
+                            />
+                            <mat-hint>{{ control.type }}</mat-hint>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div
+                    *ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.body)"
+                    class="endpoint__tester__checks"
+                >
+                    <mat-checkbox [disabled]="bodyForm.disabled">
+                        {{ control.label }}
+                    </mat-checkbox>
+                </div>
+            </form>
+            <button
+                class="endpoint__tester__submit"
+                [disabled]="
+                    canFetch === false ||
+                    isSearchFormInvalid() ||
+                    isQueryFormInvalid() ||
+                    isBodyFormInvalid()
+                "
+                (click)="onSubmitClick()"
+            >
+                Fetch
+            </button>
+        </div>
+        <div class="endpoint__tester__response">
+            <app-code-block [code]="responseCode" language="javascript"></app-code-block>
+        </div>
+    </div>
 </div>

@@ -9,8 +9,8 @@ import { CodeBlockModule } from '../code-block/index.module';
 import { FormsBundle, MaterialBundle } from 'src/app/imports';
 
 @NgModule({
-	declarations: [EndpointComponent],
-	imports: [CodeBlockModule, CommonModule, FormsBundle, MaterialBundle],
-	exports: [EndpointComponent],
+    declarations: [EndpointComponent],
+    imports: [CodeBlockModule, CommonModule, FormsBundle, MaterialBundle],
+    exports: [EndpointComponent],
 })
 export class EndpointModule {}

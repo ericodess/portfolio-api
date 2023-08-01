@@ -8,8 +8,8 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-json';
 
 @NgModule({
-	declarations: [],
-	imports: [CommonModule],
-	exports: [],
+    declarations: [],
+    imports: [CommonModule],
+    exports: [],
 })
 export class SharedModule {}

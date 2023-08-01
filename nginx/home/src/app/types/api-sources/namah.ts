@@ -7,10 +7,10 @@ const rootUrl = environment.rootUrl;
 const isSecure = environment.production;
 
 export default {
-	name: 'Namah',
-	description: 'E-commerce / blog mock up',
-	rootUrl: rootUrl,
-	rootPath: 'namah',
-	isSecure: isSecure,
-	responseTimeInMs: -1,
+    name: 'Namah',
+    description: 'E-commerce / blog mock up',
+    rootUrl: rootUrl,
+    rootPath: 'namah',
+    isSecure: isSecure,
+    responseTimeInMs: -1,
 } as ApiSource;

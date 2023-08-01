@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
 import { LatencyMeterComponent } from './index.component';
 
 @NgModule({
-	declarations: [LatencyMeterComponent],
-	imports: [CommonModule],
-	exports: [LatencyMeterComponent],
+    declarations: [LatencyMeterComponent],
+    imports: [CommonModule],
+    exports: [LatencyMeterComponent],
 })
 export class LatencyMeterModule {}

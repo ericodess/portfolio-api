@@ -1,34 +1,34 @@
 app-latency-meter {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 0 0.25vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0 0.25vh;
 
-	span {
-		font-size: 0.6rem;
-		color: $foreground-disabled;
-		font-family: "Roboto-Bold";
-	}
+    span {
+        font-size: 0.6rem;
+        color: $foreground-disabled;
+        font-family: 'Roboto-Bold';
+    }
 
-	> div {
-		width: 1vh;
-		height: 1vh;
-		border-radius: 50%;
-	}
+    > div {
+        width: 1vh;
+        height: 1vh;
+        border-radius: 50%;
+    }
 
-	.--normal {
-		background-color: rgb(28, 207, 28);
-	}
+    .--normal {
+        background-color: rgb(28, 207, 28);
+    }
 
-	.--mid {
-		background-color: yellow;
-	}
+    .--mid {
+        background-color: yellow;
+    }
 
-	.--high {
-		background-color: red;
-	}
+    .--high {
+        background-color: red;
+    }
 
-	.--dead {
-		background-color: gray;
-	}
+    .--dead {
+        background-color: gray;
+    }
 }

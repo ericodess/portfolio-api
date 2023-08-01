@@ -8,8 +8,8 @@ import { AppButtonModule } from '../common/app-button/index.module';
 import { LatencyMeterModule } from '../latency-meter/index.module';
 
 @NgModule({
-	declarations: [NavbarComponent],
-	imports: [AppButtonModule, CommonModule, LatencyMeterModule, MatIconModule],
-	exports: [NavbarComponent],
+    declarations: [NavbarComponent],
+    imports: [AppButtonModule, CommonModule, LatencyMeterModule, MatIconModule],
+    exports: [NavbarComponent],
 })
 export class NavbarModule {}

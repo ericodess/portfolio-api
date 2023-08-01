@@ -1,51 +1,51 @@
 .service {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 4vh 0;
-	width: 80vw;
-	margin: 0 auto;
-	overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4vh 0;
+    width: 80vw;
+    margin: 0 auto;
+    overflow: hidden;
 
-	&__title {
-		display: flex;
-		align-self: flex-start;
-		font-family: 'Roboto-Mono-Regular';
-		font-size: 2rem;
-		text-transform: uppercase;
-		margin-top: 4vh;
-		width: calc(100% - 2vh);
-		padding: 1vh;
-		border-radius: $border-radius;
-	}
+    &__title {
+        display: flex;
+        align-self: flex-start;
+        font-family: 'Roboto-Mono-Regular';
+        font-size: 2rem;
+        text-transform: uppercase;
+        margin-top: 4vh;
+        width: calc(100% - 2vh);
+        padding: 1vh;
+        border-radius: $border-radius;
+    }
 
-	&__endpoints {
-		display: flex;
-		flex-direction: column;
-		gap: 1vh 0;
-		width: 100%;
-		padding-bottom: 4vh;
-		overflow-y: auto;
+    &__endpoints {
+        display: flex;
+        flex-direction: column;
+        gap: 1vh 0;
+        width: 100%;
+        padding-bottom: 4vh;
+        overflow-y: auto;
 
-		content-loader {
-			height: 5.5vh;
-		}
-	}
+        content-loader {
+            height: 5.5vh;
+        }
+    }
 
-	> content-loader {
-		margin-top: 4vh;
-		height: 6vh;
-	}
+    > content-loader {
+        margin-top: 4vh;
+        height: 6vh;
+    }
 
-	content-loader {
-		width: 100%;
-		overflow: hidden;
-		border-radius: $border-radius;
-	}
+    content-loader {
+        width: 100%;
+        overflow: hidden;
+        border-radius: $border-radius;
+    }
 }
 
 @media (min-width: 810px) {
-	.service {
-		width: 90%;
-	}
+    .service {
+        width: 90%;
+    }
 }

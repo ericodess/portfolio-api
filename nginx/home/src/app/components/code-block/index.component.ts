@@ -2,31 +2,31 @@ import { AfterViewInit, Component, ElementRef, Input, OnChanges, ViewChild } fro
 import * as Prism from 'prismjs';
 
 @Component({
-	selector: 'app-code-block',
-	templateUrl: './index.component.html',
-	styleUrls: ['../../../assets/styles/components/_code-block.scss'],
+    selector: 'app-code-block',
+    templateUrl: './index.component.html',
+    styleUrls: ['../../../assets/styles/components/_code-block.scss'],
 })
 export class CodeBlockComponent implements AfterViewInit, OnChanges {
-	@ViewChild('codeBlock')
-	public codeElement!: ElementRef;
+    @ViewChild('codeBlock')
+    public codeElement!: ElementRef;
 
-	@Input()
-	public code?: string;
+    @Input()
+    public code?: string;
 
-	@Input()
-	public language: 'javascript' | 'json' = 'javascript';
+    @Input()
+    public language: 'javascript' | 'json' = 'javascript';
 
-	public ngAfterViewInit() {
-		Prism.highlightElement(this.codeElement.nativeElement);
-	}
+    public ngAfterViewInit() {
+        Prism.highlightElement(this.codeElement.nativeElement);
+    }
 
-	public ngOnChanges(changes: any): void {
-		if (changes?.code) {
-			if (this.codeElement?.nativeElement) {
-				this.codeElement.nativeElement.textContent = this.code;
+    public ngOnChanges(changes: any): void {
+        if (changes?.code) {
+            if (this.codeElement?.nativeElement) {
+                this.codeElement.nativeElement.textContent = this.code;
 
-				Prism.highlightElement(this.codeElement.nativeElement);
-			}
-		}
-	}
+                Prism.highlightElement(this.codeElement.nativeElement);
+            }
+        }
+    }
 }
