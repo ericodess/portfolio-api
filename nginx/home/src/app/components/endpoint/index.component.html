@@ -26,7 +26,7 @@
                         *ngFor="let control of selectedVariant?.parameters?.search"
                         class="endpoint__tester__input"
                     >
-                        <mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
+                        <mat-form-field *ngIf="isTextInput(control)" appearance="outline">
                             <mat-label>{{ control.label }}</mat-label>
                             <input
                                 matInput
@@ -44,7 +44,7 @@
                     "
                     class="endpoint__tester__checks"
                 >
-                    <mat-checkbox [disabled]="searchForm.disabled">
+                    <mat-checkbox [formControlName]="control.label">
                         {{ control.label }}
                     </mat-checkbox>
                 </div>
@@ -56,7 +56,7 @@
                         *ngFor="let control of selectedVariant?.parameters?.query"
                         class="endpoint__tester__input"
                     >
-                        <mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
+                        <mat-form-field *ngIf="isTextInput(control)" appearance="outline">
                             <mat-label>{{ control.label }}</mat-label>
                             <input
                                 matInput
@@ -72,7 +72,7 @@
                     *ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.query)"
                     class="endpoint__tester__checks"
                 >
-                    <mat-checkbox [disabled]="queryForm.disabled">
+                    <mat-checkbox [formControlName]="control.label">
                         {{ control.label }}
                     </mat-checkbox>
                 </div>
@@ -84,7 +84,7 @@
                         *ngFor="let control of selectedVariant?.parameters?.body"
                         class="endpoint__tester__input"
                     >
-                        <mat-form-field *ngIf="control.type !== 'boolean'" appearance="outline">
+                        <mat-form-field *ngIf="isTextInput(control)" appearance="outline">
                             <mat-label>{{ control.label }}</mat-label>
                             <input
                                 matInput
@@ -100,7 +100,7 @@
                     *ngFor="let control of getBooleanParameters(selectedVariant?.parameters?.body)"
                     class="endpoint__tester__checks"
                 >
-                    <mat-checkbox [disabled]="bodyForm.disabled">
+                    <mat-checkbox [formControlName]="control.label">
                         {{ control.label }}
                     </mat-checkbox>
                 </div>

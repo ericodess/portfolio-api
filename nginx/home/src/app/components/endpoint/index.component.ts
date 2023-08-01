@@ -173,6 +173,10 @@ export class EndpointComponent implements OnInit {
         return this.bodyForm.invalid || this.bodyForm.disabled;
     }
 
+    public isTextInput(control: Parameter) {
+        return control.type !== 'boolean';
+    }
+
     public onHeaderClick() {
         this.isTesterVisible = !this.isTesterVisible;
 
@@ -218,15 +222,13 @@ export class EndpointComponent implements OnInit {
                     return;
                 }
 
-                url.pathname = url.pathname.concat(
-                    `/${this.searchForm.controls[parameter.label].value ?? parameter.defaultValue}`,
-                );
+                url.pathname = url.pathname.concat(`/${parameterValue}`);
             });
         }
 
         if (parameters?.query) {
             parameters.query.forEach((parameter) => {
-                const parameterValue =
+                const parameterValue: string =
                     this.queryForm.controls[parameter.label].value ?? parameter.defaultValue;
 
                 if (!parameterValue) {
