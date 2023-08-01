@@ -1,24 +1,24 @@
 <nav class="navbar" [attr.data-is-active]="isNavbarActive">
-	<div class="navbar__content">
-		<div class="navbar__logo" (click)="onLogoTitle()">
-			<h3>Erick's API</h3>
-		</div>
-		<ul class="navbar__services">
-			<li
-				*ngFor="let source of availableSources"
-				[attr.data-is-active]="isServiceActive(source.rootPath)"
-				[attr.data-is-enabled]="isServiceLive(source.responseTimeInMs)"
-				(click)="onServiceClick(source)"
-			>
-				<div>
-					<span>{{ source.name }}</span>
-					<app-latency-meter [latency]="source.responseTimeInMs"></app-latency-meter>
-				</div>
-				<span class="--chibi">{{ source.description }}</span>
-			</li>
-		</ul>
-	</div>
-	<button class="navbar__hamburguer" (click)="onHamburguerClick()">
-		<mat-icon>menu</mat-icon>
-	</button>
+    <div class="navbar__content">
+        <div class="navbar__logo" (click)="onLogoTitle()">
+            <h3>Erick's API</h3>
+        </div>
+        <ul class="navbar__services">
+            <li
+                *ngFor="let source of availableSources"
+                [attr.data-is-active]="isServiceActive(source.rootPath)"
+                [attr.data-is-enabled]="isServiceLive(source.responseTimeInMs)"
+                (click)="onServiceClick(source)"
+            >
+                <div>
+                    <span>{{ source.name }}</span>
+                    <app-latency-meter [latency]="source.responseTimeInMs"></app-latency-meter>
+                </div>
+                <span class="--chibi">{{ source.description }}</span>
+            </li>
+        </ul>
+    </div>
+    <button class="navbar__hamburguer" (click)="onHamburguerClick()">
+        <mat-icon>menu</mat-icon>
+    </button>
 </nav>

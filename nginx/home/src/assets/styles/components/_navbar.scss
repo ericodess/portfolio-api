@@ -3,177 +3,176 @@ $navbar-content-width: calc(100vw - $navbar-hamburguer-size);
 $navbar-content-width-neg: calc($navbar-content-width * -1);
 
 .navbar {
-	position: absolute;
-	display: flex;
-	flex-direction: row;
-	align-items: flex-end;
-	height: 100dvh;
-	pointer-events: none;
-	z-index: $max-z-index;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    height: 100dvh;
+    pointer-events: none;
+    z-index: $max-z-index;
 
-	-webkit-transition: transform ease-in-out .3s;
-	-moz-transition: 	transform ease-in-out .3s;
-	-ms-transition: 	transform ease-in-out .3s;
-	-o-transition: 		transform ease-in-out .3s;
-	transition: 		transform ease-in-out .3s;
+    -webkit-transition: transform ease-in-out 0.3s;
+    -moz-transition: transform ease-in-out 0.3s;
+    -ms-transition: transform ease-in-out 0.3s;
+    -o-transition: transform ease-in-out 0.3s;
+    transition: transform ease-in-out 0.3s;
 
-	&[data-is-active="false"] {
-		-webkit-transform: translateX($navbar-content-width-neg);
-		-moz-transform:    translateX($navbar-content-width-neg);
-		-ms-transform: 	   translateX($navbar-content-width-neg);
-		-o-transform: 	   translateX($navbar-content-width-neg);
-		transform: 		   translateX($navbar-content-width-neg);
-	}
+    &[data-is-active='false'] {
+        -webkit-transform: translateX($navbar-content-width-neg);
+        -moz-transform: translateX($navbar-content-width-neg);
+        -ms-transform: translateX($navbar-content-width-neg);
+        -o-transform: translateX($navbar-content-width-neg);
+        transform: translateX($navbar-content-width-neg);
+    }
 
-	&__content {
-		display: flex;
-		flex-direction: column-reverse;
-		width: $navbar-content-width;
-		height: 100%;
-		background-color: $foreground;
-		pointer-events: all;
+    &__content {
+        display: flex;
+        flex-direction: column-reverse;
+        width: $navbar-content-width;
+        height: 100%;
+        background-color: $foreground;
+        pointer-events: all;
 
-		-webkit-box-shadow: 0px 10px 15px 3px rgba(0,0,0,0.1); 
-		-moz-box-shadow:    0px 10px 15px 3px rgba(0,0,0,0.1); 
-		-o-box-shadow:   	0px 10px 15px 3px rgba(0,0,0,0.1);
-		box-shadow:         0px 10px 15px 3px rgba(0,0,0,0.1);
-	}
+        -webkit-box-shadow: 0px 10px 15px 3px rgba(0, 0, 0, 0.1);
+        -moz-box-shadow: 0px 10px 15px 3px rgba(0, 0, 0, 0.1);
+        -o-box-shadow: 0px 10px 15px 3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 10px 15px 3px rgba(0, 0, 0, 0.1);
+    }
 
-	&__services {
-		display: flex;
-		flex-direction: column-reverse;
+    &__services {
+        display: flex;
+        flex-direction: column-reverse;
 
-		li {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			gap: 0.4vh 0;
-			padding: 0 1vh;
-			height: clamp(8vh, 8vh + 2rem, 10vw);
-			color: $background;
-			font-family: "Roboto-Mono-Thin";
-			text-transform: uppercase;
-			border-bottom: 1px solid $accent-dark;
+        li {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.4vh 0;
+            padding: 0 1vh;
+            height: clamp(8vh, 8vh + 2rem, 10vw);
+            color: $background;
+            font-family: 'Roboto-Mono-Thin';
+            text-transform: uppercase;
+            border-bottom: 1px solid $accent-dark;
 
-			-webkit-transition: border-color ease-in-out .3s, background-color ease-in-out .3s;
-			-moz-transition: 	border-color ease-in-out .3s, background-color ease-in-out .3s;
-			-ms-transition: 	border-color ease-in-out .3s, background-color ease-in-out .3s;
-			-o-transition: 		border-color ease-in-out .3s, background-color ease-in-out .3s;
-			transition: 		border-color ease-in-out .3s, background-color ease-in-out .3s;
+            -webkit-transition: border-color ease-in-out 0.3s, background-color ease-in-out 0.3s;
+            -moz-transition: border-color ease-in-out 0.3s, background-color ease-in-out 0.3s;
+            -ms-transition: border-color ease-in-out 0.3s, background-color ease-in-out 0.3s;
+            -o-transition: border-color ease-in-out 0.3s, background-color ease-in-out 0.3s;
+            transition: border-color ease-in-out 0.3s, background-color ease-in-out 0.3s;
 
-			&[data-is-active="true"] {
-				border-color: $accent-dark;
-				background-color: $accent-dark;
-			}
+            &[data-is-active='true'] {
+                border-color: $accent-dark;
+                background-color: $accent-dark;
+            }
 
-			&[data-is-enabled="false"] {
-				color: $foreground-disabled;
+            &[data-is-enabled='false'] {
+                color: $foreground-disabled;
 
-				& .--chibi {
-					color: $foreground-disabled;
-				}
-			}
+                & .--chibi {
+                    color: $foreground-disabled;
+                }
+            }
 
-			&[data-is-enabled="true"] {
-				&:hover {
-					cursor: pointer;
-	
-					border-color: $accent-dark;
-					background-color: $accent-dark;
-					font-weight: bold;
-				}
+            &[data-is-enabled='true'] {
+                &:hover {
+                    cursor: pointer;
 
-				& .--chibi {
-					color: $accent-bright;
-				}
-			}
+                    border-color: $accent-dark;
+                    background-color: $accent-dark;
+                    font-weight: bold;
+                }
 
-			div {
-				display: flex;
-				flex-direction: row;
-				gap: 0 1vh;
-			}
+                & .--chibi {
+                    color: $accent-bright;
+                }
+            }
 
-			& .--chibi {
-				font-size: 0.6rem;
-				font-family: "Roboto-Bold";
-			}
-		}
-	}
+            div {
+                display: flex;
+                flex-direction: row;
+                gap: 0 1vh;
+            }
 
-	&__logo {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: calc($navbar-hamburguer-size - 1px);
-		width: 100%;
+            & .--chibi {
+                font-size: 0.6rem;
+                font-family: 'Roboto-Bold';
+            }
+        }
+    }
 
-		h3 {
-			color: $accent-bright;
-			padding-bottom: 0.2rem;
-			font-family: 'Roboto-Medium';
-			font-size: 1.5rem;
+    &__logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: calc($navbar-hamburguer-size - 1px);
+        width: 100%;
 
-			-webkit-transition: color ease-in-out .3s;
-			-moz-transition: 	color ease-in-out .3s;
-			-ms-transition: 	color ease-in-out .3s;
-			-o-transition: 		color ease-in-out .3s;
-			transition: 		color ease-in-out .3s;
-		}
+        h3 {
+            color: $accent-bright;
+            padding-bottom: 0.2rem;
+            font-family: 'Roboto-Medium';
+            font-size: 1.5rem;
 
-		&:hover {
-			cursor: pointer;
+            -webkit-transition: color ease-in-out 0.3s;
+            -moz-transition: color ease-in-out 0.3s;
+            -ms-transition: color ease-in-out 0.3s;
+            -o-transition: color ease-in-out 0.3s;
+            transition: color ease-in-out 0.3s;
+        }
 
-			h3 {
-				color: $accent-brighter;
-			}
-		}
-	}
+        &:hover {
+            cursor: pointer;
 
-	&__hamburguer {
-		height: $navbar-hamburguer-size;
-		width: $navbar-hamburguer-size;
-		color: $background;
-		background-color: $foreground;
-		border-top-right-radius: $border-radius;
-		pointer-events: all;
+            h3 {
+                color: $accent-brighter;
+            }
+        }
+    }
 
-		-webkit-box-shadow: 0px 0px 30px -3px rgba(0,0,0,0.2); 
-		-moz-box-shadow:    0px 0px 30px -3px rgba(0,0,0,0.2); 
-		-o-box-shadow:   	0px 0px 30px -3px rgba(0,0,0,0.2);
-		box-shadow:         0px 0px 30px -3px rgba(0,0,0,0.2);
-	}
-	
+    &__hamburguer {
+        height: $navbar-hamburguer-size;
+        width: $navbar-hamburguer-size;
+        color: $background;
+        background-color: $foreground;
+        border-top-right-radius: $border-radius;
+        pointer-events: all;
+
+        -webkit-box-shadow: 0px 0px 30px -3px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0px 0px 30px -3px rgba(0, 0, 0, 0.2);
+        -o-box-shadow: 0px 0px 30px -3px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 0px 30px -3px rgba(0, 0, 0, 0.2);
+    }
 }
 
 @media (min-width: 810px) {
-	.navbar {
-		position: relative;
+    .navbar {
+        position: relative;
 
-		&[data-is-active="false"] {
-			-webkit-transform: translateX(0);
-			-moz-transform:    translateX(0);
-			-ms-transform: 	   translateX(0);
-			-o-transform: 	   translateX(0);
-			transform: 		   translateX(0);
-		}
+        &[data-is-active='false'] {
+            -webkit-transform: translateX(0);
+            -moz-transform: translateX(0);
+            -ms-transform: translateX(0);
+            -o-transform: translateX(0);
+            transform: translateX(0);
+        }
 
-		&__content {
-			width: 30vh;
-			flex-direction: column;
-		}
-	
-		&__services{
-			display: flex;
-			flex-direction: column;
+        &__content {
+            width: 30vh;
+            flex-direction: column;
+        }
 
-			li {
-				height: clamp(6vh, 6vh + 1rem, 10vw);
-			}
-		}
+        &__services {
+            display: flex;
+            flex-direction: column;
 
-		&__hamburguer {
-			display: none;
-		}
-	}
+            li {
+                height: clamp(6vh, 6vh + 1rem, 10vw);
+            }
+        }
+
+        &__hamburguer {
+            display: none;
+        }
+    }
 }

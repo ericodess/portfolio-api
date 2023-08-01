@@ -9,8 +9,8 @@ import { EndpointModule, NavbarModule } from 'src/app/components';
 import { ContentLoaderModule } from '@ngneat/content-loader';
 
 @NgModule({
-	declarations: [ServiceViewComponent],
-	imports: [CommonModule, ContentLoaderModule, EndpointModule, NavbarModule],
-	providers: [],
+    declarations: [ServiceViewComponent],
+    imports: [CommonModule, ContentLoaderModule, EndpointModule, NavbarModule],
+    providers: [],
 })
 export class ServiceViewModule {}

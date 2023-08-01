@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
 import { SeparatorBlockComponent } from './index.component';
 
 @NgModule({
-	declarations: [SeparatorBlockComponent],
-	imports: [CommonModule],
-	exports: [SeparatorBlockComponent],
+    declarations: [SeparatorBlockComponent],
+    imports: [CommonModule],
+    exports: [SeparatorBlockComponent],
 })
 export class SeparatorBlockModule {}

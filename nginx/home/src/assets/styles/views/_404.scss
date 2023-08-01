@@ -1,29 +1,29 @@
 .not-found {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 4vh 0;
-	width: 80%;
-	height: 100%;
-	margin: 0 auto;
-	font-family: 'Roboto-Bold';
-	font-size: 1.75rem;
-	padding-top: 2vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4vh 0;
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+    font-family: 'Roboto-Bold';
+    font-size: 1.75rem;
+    padding-top: 2vh;
 
-	p {
-		color: $accent-dark;
+    p {
+        color: $accent-dark;
 
-		&.--big {
-			font-size: 3.5rem;
-			color: $accent-bright;
-		}
-	}
+        &.--big {
+            font-size: 3.5rem;
+            color: $accent-bright;
+        }
+    }
 
-	& span {
-		margin-left: 3vh;
-		color: #50515321;
-		text-align: center;
-		font-size: 4rem;
-	}
+    & span {
+        margin-left: 3vh;
+        color: #50515321;
+        text-align: center;
+        font-size: 4rem;
+    }
 }

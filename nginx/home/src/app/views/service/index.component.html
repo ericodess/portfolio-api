@@ -1,28 +1,24 @@
 <div class="service" *ngIf="!apiSource">
-	<content-loader>
-		<svg:rect x="0" y="0" width="100%" height="100%" />
-	</content-loader>
-	<div class="service__endpoints">
-		<ul *ngFor="let endpoint of dummyArray">
-			<li>
-				<content-loader>
-					<svg:rect x="0" y="0" width="100%" height="100%" />
-				</content-loader>
-			</li>
-		</ul>
-	</div>
+    <content-loader>
+        <svg:rect x="0" y="0" width="100%" height="100%" />
+    </content-loader>
+    <div class="service__endpoints">
+        <ul *ngFor="let endpoint of dummyArray">
+            <li>
+                <content-loader>
+                    <svg:rect x="0" y="0" width="100%" height="100%" />
+                </content-loader>
+            </li>
+        </ul>
+    </div>
 </div>
 <div class="service" *ngIf="apiSource">
-	<div class="service__title">{{ apiSource.name }}</div>
-	<div class="service__endpoints">
-		<ul *ngFor="let endpoint of apiSouceEndpoints">
-			<li>
-				<app-endpoint
-					[source]="apiSource"
-					[endpoint]="endpoint"
-				>
-				</app-endpoint>
-			</li>
-		</ul>
-	</div>
+    <div class="service__title">{{ apiSource.name }}</div>
+    <div class="service__endpoints">
+        <ul *ngFor="let endpoint of apiSouceEndpoints">
+            <li>
+                <app-endpoint [source]="apiSource" [endpoint]="endpoint"> </app-endpoint>
+            </li>
+        </ul>
+    </div>
 </div>

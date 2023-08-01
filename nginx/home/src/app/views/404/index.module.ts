@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
 import { NotFoundViewComponent } from './index.component';
 
 @NgModule({
-	declarations: [NotFoundViewComponent],
-	imports: [CommonModule],
-	providers: [],
+    declarations: [NotFoundViewComponent],
+    imports: [CommonModule],
+    providers: [],
 })
 export class NotFoundViewModule {}

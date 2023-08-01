@@ -1,9 +1,6 @@
-<button
-	class="app-button__wrapper --flex --flex-full-centralized"
-	(click)="onButtonClick($event)"
->
-	<div class="app-button__container">
-		<ng-content></ng-content>
-	</div>
-	<div class="app-button__background"></div>
+<button class="app-button__wrapper --flex --flex-full-centralized" (click)="onButtonClick($event)">
+    <div class="app-button__container">
+        <ng-content></ng-content>
+    </div>
+    <div class="app-button__background"></div>
 </button>

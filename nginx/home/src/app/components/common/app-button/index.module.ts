@@ -4,8 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppButtonComponent } from './index.component';
 
 @NgModule({
-	declarations: [AppButtonComponent],
-	imports: [],
-	exports: [AppButtonComponent],
+    declarations: [AppButtonComponent],
+    imports: [],
+    exports: [AppButtonComponent],
 })
 export class AppButtonModule {}

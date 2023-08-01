@@ -8,8 +8,8 @@ import { HomeViewComponent } from './index.component';
 import { AppButtonModule, CodeBlockModule, SeparatorBlockModule } from 'src/app/components';
 
 @NgModule({
-	declarations: [HomeViewComponent],
-	imports: [AppButtonModule, CodeBlockModule, CommonModule, SeparatorBlockModule],
-	providers: [],
+    declarations: [HomeViewComponent],
+    imports: [AppButtonModule, CodeBlockModule, CommonModule, SeparatorBlockModule],
+    providers: [],
 })
 export class HomeViewModule {}

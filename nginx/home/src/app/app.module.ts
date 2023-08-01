@@ -17,9 +17,9 @@ import { SharedModule } from './app-shared.module';
 import { NavbarModule } from './components';
 
 @NgModule({
-	declarations: [AppComponent],
-	imports: [AppRoutingModule, BrowserAnimationsModule, BrowserModule, NavbarModule, SharedModule],
-	providers: [AppRouterService, HighlightService, RouterModule],
-	bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [AppRoutingModule, BrowserAnimationsModule, BrowserModule, NavbarModule, SharedModule],
+    providers: [AppRouterService, HighlightService, RouterModule],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}

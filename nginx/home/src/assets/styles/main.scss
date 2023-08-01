@@ -1,5 +1,5 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
-@import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
 // Base Import
 @import 'base/reset';
@@ -23,22 +23,24 @@
 // Layout Import
 @import 'layout/mods';
 
-app-endpoint-view, app-root {
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
-	height: 100dvh;
-	width: 100vw;
-	overflow: hidden;
+app-endpoint-view,
+app-root {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
 }
 
 main {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 @media (min-width: 810px) {
-	app-endpoint-view, app-root {
-		width: auto;
-	}
+    app-endpoint-view,
+    app-root {
+        width: auto;
+    }
 }

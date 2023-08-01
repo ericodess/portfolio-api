@@ -16,11 +16,11 @@ declare var Prism: any;
 
 @Injectable()
 export class HighlightService {
-	constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-	public highlightAll() {
-		if (isPlatformBrowser(this.platformId)) {
-			Prism.highlightAll();
-		}
-	}
+    public highlightAll() {
+        if (isPlatformBrowser(this.platformId)) {
+            Prism.highlightAll();
+        }
+    }
 }

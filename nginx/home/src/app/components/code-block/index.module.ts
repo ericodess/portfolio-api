@@ -4,8 +4,8 @@ import { NgModule } from '@angular/core';
 import { CodeBlockComponent } from './index.component';
 
 @NgModule({
-	declarations: [CodeBlockComponent],
-	imports: [],
-	exports: [CodeBlockComponent],
+    declarations: [CodeBlockComponent],
+    imports: [],
+    exports: [CodeBlockComponent],
 })
 export class CodeBlockModule {}
