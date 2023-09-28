@@ -1,4 +1,4 @@
-[![portfolio-api](.github/images/project-thumbnail.png)](https://api.ericodesu.com)
+[![portfolio-api](.github/images/project-thumbnail.png)]()
 
 # portfolio-api
 
