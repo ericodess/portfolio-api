@@ -1,0 +1,26 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh 0;
+    width: 80%;
+    margin: 0 auto;
+    font-family: 'Roboto-Bold';
+    font-size: 1.75rem;
+    padding-top: 2vh;
+
+    & p {
+        color: $accent-dark;
+
+        &.--big {
+            font-size: 3.5rem;
+            color: $accent-bright;
+        }
+    }
+
+    & span {
+        margin-top: 4vh;
+        color: $accent-bright;
+        text-align: center;
+        font-size: 2rem;
+    }
+}

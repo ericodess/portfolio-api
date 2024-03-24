@@ -1,0 +1,46 @@
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+// Base Import
+@import 'base/reset';
+@import 'base/fonts-roboto';
+@import 'base/fonts-roboto-mono';
+@import 'base/variables';
+
+// Components Import
+@import 'prismjs/themes/prism-okaidia.css';
+@import 'components/latency-meter';
+@import 'components/endpoint';
+@import 'components/navbar';
+
+// Pages Import
+@import 'views/404';
+@import 'views/home';
+@import 'views/service';
+
+// Themes Import
+
+// Layout Import
+@import 'layout/mods';
+
+app-endpoint-view,
+app-root {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+main {
+    width: 100%;
+    height: 100%;
+}
+
+@media (min-width: 810px) {
+    app-endpoint-view,
+    app-root {
+        width: auto;
+    }
+}
