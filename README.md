@@ -52,4 +52,4 @@ Firstly, this project was to only provide [namah](https://github.com/pepeien/nam
 
 ## Documentation
 
-You can reach to the [Developer Portal](https://api.ericodesu.com) to a more hands-on driven information.
+You can reach to the [Developer Portal](https://api.erickfrederick.com) to a more hands-on driven information.

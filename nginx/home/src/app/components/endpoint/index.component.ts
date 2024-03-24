@@ -7,6 +7,7 @@ import { ApiSource } from 'src/app/types';
 
 // Services
 import { StringService } from 'src/app/services';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-endpoint',
@@ -24,6 +25,7 @@ export class EndpointComponent implements OnInit {
      * Primitives
      */
     public isTesterVisible = false;
+    public isMocking = environment.mocking;
     public canFetch = false;
     public responseCode = '';
 
@@ -194,6 +196,16 @@ export class EndpointComponent implements OnInit {
         this._refreshSearchForm();
         this._refreshQueryForm();
         this._refreshBodyForm();
+    }
+
+    public onSubmitClickMock() {
+        this.responseCode =
+            '\n' +
+            JSON.stringify(
+                { wasSuccess: false, error: 'This is running on mock mode' },
+                null,
+                '   ',
+            );
     }
 
     public onSubmitClick() {

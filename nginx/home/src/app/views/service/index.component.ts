@@ -8,6 +8,10 @@ import { ApiSource, ValidApiSources } from 'src/app/types';
 // Services
 import { StringService } from 'src/app/services';
 
+// Mock endpoints
+import MockEndpoints from 'src/mock/endpoints';
+import { environment } from 'src/environments/environment';
+
 @Component({
     selector: 'app-endpoint-view',
     templateUrl: './index.component.html',
@@ -25,6 +29,32 @@ export class ServiceViewComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        environment.mocking ? this._updateEndpointDataMock() : this._updateEndpointData();
+    }
+
+    private _updateEndpointDataMock() {
+        this._route.url.subscribe({
+            next: (url) => {
+                const currentPath = url[url.length - 1].path.trim();
+                const currentPathUpper = currentPath.toUpperCase().trim();
+
+                const foundApiSource = ValidApiSources.find(
+                    (endpoint) => endpoint.rootPath.toUpperCase().trim() === currentPathUpper,
+                );
+
+                if (!foundApiSource || !MockEndpoints[foundApiSource.rootPath]) {
+                    this._routeTo404(currentPath);
+
+                    return;
+                }
+
+                this.apiSource = foundApiSource;
+                this.apiSouceEndpoints = MockEndpoints[foundApiSource.rootPath];
+            },
+        });
+    }
+
+    private _updateEndpointData() {
         this._route.url.subscribe({
             next: (url) => {
                 const currentPath = url[url.length - 1].path.trim();

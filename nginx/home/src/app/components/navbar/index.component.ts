@@ -6,6 +6,7 @@ import { ApiSource, ValidApiSources } from 'src/app/types';
 
 // Services
 import { StringService } from 'src/app/services';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-navbar',
@@ -33,6 +34,39 @@ export class NavbarComponent {
     constructor(private _router: Router, private _stringService: StringService) {}
 
     ngOnInit(): void {
+        environment.mocking
+            ? this.updateEndpointsResponseTimeMock()
+            : this.updateEndpointsResponseTime();
+    }
+
+    public updateEndpointsResponseTimeMock() {
+        const timerStart = new Date();
+
+        fetch(window.location.href).then(() => {
+            const timerEnd = new Date();
+
+            const responseTime = Math.abs(
+                timerEnd.getMilliseconds() - timerStart.getMilliseconds(),
+            );
+
+            ValidApiSources.forEach((source) => {
+                this.availableSources.push(source);
+
+                const sourceIndex = this.availableSources.findIndex(
+                    (target) => source.name === target.name,
+                );
+
+                this.availableSources[sourceIndex].responseTimeInMs = responseTime;
+
+                this._refreshAvailableSources();
+            });
+        });
+
+        this._setupScapeMovements();
+        this._setupCurrentEndpoint();
+    }
+
+    public updateEndpointsResponseTime() {
         ValidApiSources.forEach((source) => {
             const url = new URL(
                 `${source.isSecure ? 'https' : 'http'}://${source.rootUrl}/${
